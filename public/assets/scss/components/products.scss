@@ -1,0 +1,79 @@
+
+.product-item {
+    // width: 160px;
+    position: relative;
+
+    .product-header {
+        position: relative;
+        width: 100%;
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #E5E7E9; 
+
+            img {
+                height: 100%;
+            }
+        }
+
+        .product-whatsapp {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 25px;
+            background-color: #F6F8FD;
+            color: $primary;
+            position: absolute;
+            bottom: -20px;
+            right: 15px;
+        }
+    }
+
+    .product-body {
+        padding-top: 2rem;
+
+        .product-merchant {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+
+            .merchant-img {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    height: 100%;
+                }
+            }
+
+            .merchant-info {
+                h6 {
+                    font-size: 14px;
+                }
+                span {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+
+    @media screen and (min-width: $screen-lg){
+        & {
+            width: 200px;
+        }
+    }
+}

@@ -1,0 +1,361 @@
+.button-search-filter{
+    display: block;
+    width: 100%;
+
+    @media screen and (min-width: $screen-xl){
+        & {
+            display: none;
+        }
+    }
+}
+
+.background-recomendation {
+    display: none;
+}
+
+@media screen and (min-width: $screen-xl) {
+    .background-recomendation {
+        display: block;
+        position: absolute;
+        z-index: -100;
+        top: 150px;
+        right: 0px;
+        width: 76%;
+        height: 300px;
+    }
+}
+
+.search {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    display: flex;
+
+    .search-filter {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        z-index: 1002;
+        width: 100%;
+        height: 100%;
+        transition: right .3s linear;
+
+        .navbar-search {
+            display: none;
+
+            .search-icon {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background-color: $primary;
+                color: #fff;
+                margin-left: auto;
+
+                i {
+                    font-size: 15px;
+                }
+
+                @media screen and (min-width: $screen-md) {
+                    & {
+                        width: 38px;
+                        height: 38px;
+                        justify-content: start;
+                        border-radius: 20px 0 0 20px;
+                        padding: .5rem 1rem;
+                        background-color: #fff;
+                        border: 1px solid rgba(229, 231, 233, 1);
+                        border-right: 0;
+                        color: $black;
+                        margin-left: 0;
+                    }
+                }
+            }
+
+            .search-content {
+                width: 100%;
+                position: absolute;
+                top: -100%;
+                left: 0;
+                background-color: #f8f8f8;
+                padding: .8rem 1rem;
+                transition: top .3s linear;
+                z-index: -1;
+                box-shadow: 0px 3px 4px rgb(114, 114, 114, 15%);
+
+                .form-control {
+                    border: 0;
+                    box-shadow: none;
+                    outline: none;
+
+                    &::placeholder {
+                        color: #b1b1b1;
+                    }
+
+                    @media screen and (min-width: $screen-md) {
+                        & {
+                            padding: .5rem 0;
+                            background-color: transparent;
+                            font-size: 14px;
+                        }
+                    }
+                }
+
+                &.show {
+                    top: 70px;
+                }
+
+                @media screen and (min-width: $screen-md) {
+                    & {
+                        height: 38px;
+                        position: unset;
+                        z-index: 1;
+                        box-shadow: none;
+                        padding: 0;
+                        border-radius: 0 20px 20px 0;
+                        border: 1px solid rgb(114, 114, 114, 15%);
+                        border-left: 0;
+                        overflow: hidden;
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            @media screen and (min-width: $screen-md) {
+                & {
+                    display: flex;
+                    width: 100%;
+                    // display: block;
+                }
+            }
+        }
+
+        .button-search-filter{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: auto;
+            background-color: #ebebeb;
+            color: #212529; 
+        }
+
+        &.show {
+            right: 0;
+            display: block;
+        }
+    
+        @media screen and (min-width: $screen-xl){
+            & {
+                position: unset;
+                box-shadow: none;
+                flex: 1;
+            }
+        }    
+
+    }
+
+    @media screen and (min-width: $screen-xl) {
+        .search-filter {
+            width: 25%;
+            position: relative;
+            z-index: 0;
+            padding-right: 15px;
+            right: 0;   
+        }
+    }
+
+    .search-result {
+        width: 100%;
+        padding-left: 0px;
+        
+        .recomendation {
+            margin-bottom: 30px;
+
+            .product-item {
+                // width: 160px;
+                position: relative;
+
+                .product-header {
+                    position: relative;
+                    width: 100%;
+
+                    .product-img {
+                        width: 100%;
+                        height: 180px;
+                        border-radius: 15px 15px 0px 0px;
+                        overflow: hidden;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #E5E7E9;
+
+                        img {
+                            height: 100%;
+                        }
+                    }
+
+                    .product-whatsapp {
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        font-size: 25px;
+                        background-color: #F6F8FD;
+                        color: $primary;
+                        position: absolute;
+                        bottom: -20px;
+                        right: 15px;
+                    }
+                }
+
+                .product-body {
+                    padding: 30px 15px 15px 15px;
+
+                    .product-merchant {
+                        display: flex;
+                        align-items: center;
+                        gap: .8rem;
+
+                        .merchant-img {
+                            width: 35px;
+                            height: 35px;
+                            border-radius: 50%;
+                            overflow: hidden;
+                        }
+                    }
+                }
+
+                @media screen and (max-width: $screen-md) {
+
+                    .product-body {
+                        padding: 20px 0px
+                    }
+
+                }
+
+                @media screen and (min-width: $screen-md) {
+                    & {
+                        width: calc(100%/4);
+                        background: white;
+                        border-radius: 10px;
+                    }
+                }
+            }
+
+            @media screen and (min-width: $screen-md) {
+                &{
+                    margin-bottom: 70px;
+                    position: relative;
+                }
+            }
+
+
+        }
+
+        .product-content-search {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            // flex-wrap: wrap;
+            gap: .8rem;
+            
+            @media screen and (min-width: $screen-md) {
+                & {
+                    gap: 1.2rem;
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+            }
+
+            @media screen and (min-width: $screen-lg) {
+                & {
+                    gap: 1.2rem;
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                }
+            }
+
+            .product-item-search {
+                // width: 160px;
+                position: relative;
+
+                .product-header {
+                    position: relative;
+                    width: 100%;
+
+                    .product-img {
+                        width: 100%;
+                        height: 180px;
+                        border-radius: 15px;
+                        overflow: hidden;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #E5E7E9;
+
+                        img {
+                            height: 100%;
+                        }
+                    }
+
+                    .product-whatsapp {
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        font-size: 25px;
+                        background-color: #F6F8FD;
+                        color: $primary;
+                        position: absolute;
+                        bottom: -20px;
+                        right: 15px;
+                    }
+                }
+
+                .product-body {
+                    padding: 2rem 0rem;
+
+                    .product-merchant {
+                        display: flex;
+                        align-items: center;
+                        gap: .8rem;
+
+                        .merchant-img {
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            overflow: hidden;
+                        }
+                    }
+                }
+
+                @media screen and (min-width: $screen-md) {
+                    & {
+                        width: 100%;
+                    }
+                }
+
+            }
+
+        }
+
+
+    }
+
+    @media screen and (min-width: $screen-xl) {
+        .search-result {
+            width: 75%;
+            padding-left: 15px;
+            position: relative;
+        }
+    }
+   
+}    
+
+@media screen and (max-width: $screen-md) {
+    .search {
+        padding-top: 10px;
+    }
+}

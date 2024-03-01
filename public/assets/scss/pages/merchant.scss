@@ -1,0 +1,103 @@
+.merchant{
+    padding-top: 20px;
+    
+    @media screen and (min-width: $screen-lg) {
+        padding-top: 50px;
+        margin-bottom: 30px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .photo{
+        width: 100%;
+        margin-bottom: 20px;
+        
+        @media screen and (min-width: $screen-lg) {
+            &{
+                width: 40%;
+                padding-right: 20px;
+            }
+        }
+
+
+        .preview-photo{
+            height: 200px;
+            width: 100%;
+            border: 1px solid #f1f1f1;
+            
+            @media screen and (min-width: $screen-lg) {
+                &{
+                    height: 550px;
+                }
+            }
+            
+            @media screen and (min-width: $screen-md) {
+                &{
+                    height: 400px;
+                }
+            }
+            
+            .preview-photo-item{
+                height: 200px;
+                width: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                
+                @media screen and (min-width: $screen-lg) {
+                    &{
+                        height: 550px;
+                    }
+                }
+                
+                @media screen and (min-width: $screen-md) {
+                    &{
+                        height: 400px;
+                    }
+                }
+                
+                img{
+                    height: 100%;
+                }
+
+            }
+        }
+
+        .list-photo{
+            display: none;
+
+            @media screen and (min-width: $screen-lg) {
+                &{
+                    display: block;
+                }
+            }
+
+            .list-photo-item{
+                width: 100px;
+                height: 100px;
+                background-position: center;
+                background-size: cover;
+                margin-right: 10px;
+            }
+
+        }
+        
+    }
+
+    .description{
+        width: 100%;
+
+        @media screen and (min-width: $screen-lg) {
+            &{
+                width: 60%;
+                padding-left: 20px;
+            }
+        }
+    }
+
+}
+
+.other-option{
+    margin-bottom: 30px;
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo File Upload</title>
+    <style>
+
+        body {
+            background: linear-gradient(to right, rgba(43,50,82,1) 0%, rgba(63,76,136,1) 100%);
+            background-color: #fff;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-size: cover;
+        }
+
+        .btn-clear {
+            display: block;
+            width: 100%;
+            padding: .8rem 1rem;
+            border: 0;
+            background: #ff5252;
+            margin: 1rem 0;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div>
+        <div id="demo-file-upload" style="width: 450px;"></div>
+
+        <button class="btn-clear">Clear</button>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+<script src="../file-upload.js"></script>
+<script>
+
+    let cardUpload = new FileUpload('#demo-file-upload', {
+        title: "Demo FileUpload",
+        accept: [
+            'png',
+            'jpg',
+        ],
+        maxFile: 1,
+        lang: 'en',
+        maxSize: 3,
+        // customs: {
+        //     primary: '#FF5900',
+        //     secondary: '#FFF1EA',
+        //     background: '#fff'
+        // }
+    })
+    cardUpload.setValue([
+        {
+            id: '-',
+            data: '/src/preview.png'
+        }
+    ])
+    $(document).on('upload','#demo-file-upload', function(){
+        console.log(cardUpload.getValue(true))
+    })
+    $(document).on('click','.btn-clear',function(e){
+        e.preventDefault()
+        cardUpload.clear()
+    })
+</script>
+</body>
+</html>
