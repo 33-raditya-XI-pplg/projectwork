@@ -1,0 +1,140 @@
+
+.auth-inner {
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    padding: 2rem 0;
+    align-items: end;
+
+    .auth-bg {
+        // max-width: 1200px;
+        display: none;
+        position: absolute;
+        top: auto;
+        width: 100%;
+        z-index: -1;
+        padding-top: 3rem;
+        
+        img {
+            width: 100%;
+        }
+        
+        @media screen and (min-width: $screen-lg){
+            & {
+                max-width: 1100px;
+                display: flex;
+                align-items: end;
+                justify-content: center;
+            }
+        }
+    }
+
+    .auth-wrapper {
+        width: 530px;
+
+        .auth-logo {
+            width: 100%;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+
+            img {
+                width: 200px;
+            }
+        }
+
+        .auth-card {
+            box-shadow: 0 0 10px 0px rgb(133,129,129,15%);
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+
+            @media screen and (min-width: $screen-md){
+                & {
+                    padding: 3rem;
+                }
+            }
+        }
+
+        @media screen and (min-width: $screen-sm){
+            & {
+                max-width: 420px;
+            }
+        }
+        @media screen and (min-width: $screen-md){
+            & {
+                max-width: 480px;
+            }
+        }
+        @media screen and (min-width: $screen-lg){
+            & {
+                max-width: 480px;
+            }
+        }
+
+    }
+
+}
+
+.registration-success{
+    width: 100%;
+    height: 100vh;
+    
+    @media screen and (min-width: $screen-lg) {
+        &{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            height: 100vh;
+        }
+    }
+
+    .logo-mobile{
+        display: block;
+
+        @media screen and (min-width: $screen-lg) {
+            &{
+                display: none;
+            }
+        }
+    }
+
+    .vector{
+        width: 100%;
+        padding: 20px;
+        
+        @media screen and (min-width: $screen-lg) {
+            &{
+                width: 40%;
+                padding: 20px;                
+            }
+        }
+    }
+    
+    .content{
+        width: 100%;
+        padding: 20px;
+
+        @media screen and (min-width: $screen-lg) {
+            &{
+                width: 60%;
+                padding: 20px;                
+            }
+        }
+        
+        .logo-desktop{
+            display: none;
+
+            @media screen and (min-width: $screen-lg) {
+                &{
+                    display: block;
+                }
+            }
+        }
+    }
+}

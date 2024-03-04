@@ -1,0 +1,174 @@
+.gallery{
+    padding-top: 30px;
+    
+    @media screen and (min-width: $screen-xl) {
+        &{
+            padding-top: 0px;
+        }
+    }
+
+    .gallery-photo{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        // flex-wrap: wrap;
+        gap: .8rem;
+        
+        @media screen and (min-width: $screen-md) {
+            & {
+                gap: 1.2rem;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        
+        @media screen and (min-width: $screen-lg) {
+            & {
+                gap: 1.2rem;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+    
+        @media screen and (min-width: $screen-xl) {
+            & {
+                gap: 1.2rem;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+    
+        .gallery-item{
+            width: 100%;
+            height: 330px;
+    
+            .banner{
+                width: 100%;
+                height: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                overflow: hidden;
+                margin-bottom: 20px;
+    
+                img{
+                    height: 100%;
+                }
+            }
+    
+            .body{
+
+                h6{
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                
+            }
+    
+        }
+    
+    }
+    
+    .gallery-video{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        // flex-wrap: wrap;
+        gap: .8rem;
+        
+        @media screen and (min-width: $screen-md) {
+            & {
+                gap: 1.2rem;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        
+        @media screen and (min-width: $screen-lg) {
+            & {
+                gap: 1.2rem;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+    
+        @media screen and (min-width: $screen-xl) {
+            & {
+                gap: 1.2rem;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+    
+        .gallery-item{
+            width: 100%;
+            height: 330px;
+    
+            .banner{
+                width: 100%;
+                height: 200px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                overflow: hidden;
+                margin-bottom: 20px;
+                position: relative;
+    
+                img{
+                    height: 100%;
+                }
+
+                .banner-animation{
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 200px;
+                    background: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+                    transition: 0.5s;
+                    
+                    @media screen and (min-width: $screen-xl) {
+                        &{
+                            position: absolute;
+                            right: 0;
+                            bottom: -100%;
+                            width: 100%;
+                            height: 200px;
+                            background: linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5));
+                            transition: 0.5s;
+                        }
+                    }
+
+                    .icon{
+                        font-size: 50px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 200px;
+                        color: #005267;
+                    }
+                }
+
+                &:hover .banner-animation{
+                    bottom: 0;
+                    display: block;
+                    width: 100%;
+                    height: 200px;
+                }
+            }
+                        
+    
+            .body{
+
+                h6{
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                
+            }
+    
+        }
+    
+    }
+
+}

@@ -1,0 +1,161 @@
+
+.footer {
+
+    .footer-content {
+        background-color: rgba(237, 243, 244, 1);
+        padding: .8rem 0;
+
+        .footer-list {
+            width: 100%;
+
+            @media screen and (min-width: $screen-md){
+                & {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 3rem;
+                }
+            }
+            
+            @media screen and (min-width: $screen-lg){
+                & {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                }
+            }
+
+            .footer-logo {
+                display: flex;
+                width: 100%;
+                align-items: start;
+                gap: .8rem;                
+            }
+
+            .footer-info {
+                p {
+                    font-size: 16px;
+                }
+                span {
+                    font-size: 14px;
+                }
+            }
+
+            .footer-logo {
+                margin-bottom: 1rem;
+            }
+
+            .footer-logo .logo-img {
+                width: 180px;
+
+                @media screen and (min-width: $screen-lg){
+                    & {
+                        width: 250px;
+                    }
+                }
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .footer-item {
+                width: 100%;
+                margin-bottom: 1rem;
+
+                #language_translator_footer {
+                    margin-left: auto;
+                }
+
+                // @media screen and (min-width: $screen-sm){
+                //     & {
+                //         gap: 1rem;
+                //         width: 300px;
+                //     }
+                // }
+
+                @media screen and (min-width: $screen-md){
+                    & {
+                        width: 300px;
+                    }
+                }
+
+                @media screen and (min-width: $screen-lg){
+                    & {
+                        width: 290px;
+                        // p {
+                        //     width: 350px;
+                        // }
+                    }
+                }
+                @media screen and (min-width: $screen-xl){
+                    & {
+                        width: 310px;
+                        // p {
+                        //     width: 350px;
+                        // }
+                    }
+                }
+
+
+                .item-menu {
+                    margin: 0;
+                    padding: 0; 
+                    list-style: none;
+
+                    li {
+                        margin-bottom: .2rem;
+
+                        &:first-child {
+                            font-size: 18px;
+                            font-weight: 600;
+                            margin-bottom: .3rem;
+
+                            @media screen and (min-width: $screen-md){
+                                & {
+                                    font-size: 20px;
+                                    margin-bottom: 1rem;
+                                }
+                            }
+                        }
+
+                        a {
+                            color: #212121;
+                            font-weight: 400;
+                            font-size: 16px;
+
+                            @media screen and (min-width: $screen-md){
+                                & {
+                                    font-size: 16px;
+                                }
+                            }
+
+                            .icon {
+                                color: #7F7F7F;
+                                font-size: 18px;
+                                margin-right: .3rem;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        
+    }
+
+    .footer-copyright {
+        padding: .5rem;
+        background: linear-gradient(90deg, #{$primary} 6.32%, #{$secondary} 94.65%);
+
+        span {
+            display: block;
+            white-space: pre-wrap;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+
+        }
+        
+    }
+
+}
