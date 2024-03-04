@@ -12,21 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_sertifikat', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_sertifikat');
             $table->string('nomor_sertifikat');
             $table->date('tanggal_terbit');
             $table->date('masa_berlaku');
             $table->string('keterangan')->nullable();
             $table->timestamps(); 
 
-            // Foreign key constraints
-            $table->unsignedBigInteger('id_event'); 
+            // Foreign key 
+            $table->unsignedBigInteger('id_event_skema'); 
             $table->unsignedBigInteger('id_user'); 
-            $table->unsignedBigInteger('id_background');
-
-            $table->index('id_event');
+            $table->index('id_event_skema');
             $table->index('id_user');
-            $table->index('id_background');
         });
     }
 

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_sertifikat_cetak', function (Blueprint $table) {
-            $table->id();
-            $table->string('path_file');
+        Schema::create('tb_background', function (Blueprint $table) {
+            $table->id('id_background');
+            $table->string('orientasi_bg');
+            $table->integer('has_lampiran');
+            $table->string('path_bg');
+            $table->string('nama_bg');
+            $table->text('rincian_bg')->nullable();
             $table->timestamps(); 
-
-            // Foreign key constraint
-            $table->unsignedBigInteger('id_sertifikat');
-            $table->index('id_sertifikat');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_sertifikat_cetak');
+        Schema::dropIfExists('tb_background');
     }
 };

@@ -12,15 +12,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_event', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_event');
             $table->string('nama_event');
             $table->dateTime('tanggal_event');
-            $table->string('penandatangan');
             $table->string('jenis_event');
-            $table->string('penguji');
             $table->timestamps();
 
-            // Set foreign key 
+            // Foreign key 
             $table->unsignedBigInteger('id_instansi');
             $table->index('id_instansi');
 

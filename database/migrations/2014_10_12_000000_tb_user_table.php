@@ -8,22 +8,10 @@ return new class extends Migration {
     /**
      * Run the migrations.
      */
-    // public function up(): void
-    // {
-    //     Schema::create('tb_user', function (Blueprint $table) {
-    //         $table->id();
-    //         $table->string('name');
-    //         $table->string('email');
-    //         $table->timestamp('email_verified_at')->nullable();
-    //         $table->string('password');
-    //         $table->rememberToken();
-    //         $table->timestamps();
-    //     });
-    // }
     public function up()
     {
         Schema::create('tb_user', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_user');
             $table->string('username');
             $table->string('email');
             $table->string('password');
@@ -35,14 +23,12 @@ return new class extends Migration {
             $table->string('foto')->nullable();
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
-            $table->char('jenis_kelamin', 1);
+            $table->char('jenis_kelamin');
             $table->string('no_telp')->nullable();
-            $table->string('role');
             $table->timestamps();
 
             // Foreign key 
             $table->unsignedBigInteger('id_instansi');
-            // $table->foreign('id_instansi');
             $table->index('id_instansi');
         });
     }

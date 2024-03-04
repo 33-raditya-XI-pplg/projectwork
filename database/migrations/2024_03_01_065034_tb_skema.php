@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_sub_skema', function (Blueprint $table) {
-            $table->id('id_sub_skema');
-            $table->string('judul_sub');
-            $table->string('nomor_sub');
-            $table->text('deskripsi_sub');
+        Schema::create('tb_skema', function (Blueprint $table) {
+            $table->id('id_skema');
+            $table->string('nama_skema');
+            $table->text('deskripsi_skema')->nullable();
+            $table->boolean('has_sub_skema')->default(false);
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_sub_skema');
+        Schema::dropIfExists('tb_skema');
     }
 };

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nama_ttd');
             $table->string('jabatan');
             $table->string('nomor_induk');
+
+            // Foreign key
             $table->unsignedBigInteger('id_instansi')->nullable();
             $table->index('id_instansi');
         });

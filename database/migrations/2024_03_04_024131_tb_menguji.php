@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_log', function (Blueprint $table) {
-            $table->id('id_log');
-            $table->unsignedBigInteger('id_user');
-            $table->timestamp('login_time');
-            $table->timestamps();
+        Schema::create('tb_menguji', function (Blueprint $table) {
+            $table->id('id_menguji');
+            $table->date('tanggal_event');
 
-            // $table->foreign('id_user');
-            $table->index('id_user');
+            // Non FK
+            $table->unsignedBigInteger('id_penguji');   
+            $table->unsignedBigInteger('id_event_skema');
         });
+
     }
 
     /**
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_log');
+        Schema::dropIfExists('tb_menguji');
     }
 };

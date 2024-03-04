@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tb_nilai_peserta', function (Blueprint $table) {
-            $table->id('id_nilai');
-    $table->unsignedBigInteger('id_user');
-    $table->unsignedBigInteger('id_event');
-    $table->unsignedBigInteger('id_sub_skema');
-    $table->float('nilai');
-    $table->timestamp('timestamp');
-    $table->index('id_user');
-    $table->index('id_event');
-    $table->index('id_sub_skema');
+            $table->id('id_nilai_peserta');
+            $table->float('nilai');
+            $table->timestamp('timestamp');
+
+            // Foreign key
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_sub_skema');
+            $table->unsignedBigInteger('id_event_skema');
+            $table->index('id_user');
+            $table->index('id_sub_skema');
+            $table->index('id_event_skema');
         });
     }
 
