@@ -182,7 +182,7 @@ function remove_session(key) {
 function log(...arguments) {
     console.log('%clog:',`padding: 2px 5px;
     border-radius: 4px;
-    color: #FFFFFF; background-color: #94AC3F; font-weight: bold`,...arguments)
+    color: #FFFFFF; background-color: #FD7702; font-weight: bold`,...arguments)
 }
 // custom randomString
 function randId(length) {

@@ -66,10 +66,10 @@ $('#panel-sidebar .sub-menu-content').each(function(i,el){
 })
 
 var FileUploadCustom = {
-    primary: '#94AC3F',
+    primary: '#FD7702',
     secondary: '#005267',
     background: '#fff',
-    tertiary: '#94AC3F'
+    tertiary: '#FD7702'
 }
 
 function passwordInputRender(){
