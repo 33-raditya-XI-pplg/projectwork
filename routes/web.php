@@ -1,6 +1,8 @@
 <?php
 
+
 use App\Http\Controllers\TandatanganController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,13 +20,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//event
-Route::resource('ttd',TandatanganController::class);
 
 
-// route khusus admin
-// Route::group(['prefix' => 'admin'], function() {
-//     Route::get('/dashboard', function() {
-//         return view('admin.dashboard');
-//     });
-// });
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard');
+    });
+    Route::resource('ttd',TandatanganController::class);
+});
+require __DIR__.'/auth.php';
