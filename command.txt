@@ -1,0 +1,20 @@
+#migration
+php artisan migrate --seed
+
+#migration clear
+php artisan migrate:fresh --seed
+
+#RUN
+php artisan serve
+
+#optimize
+php artisan optimize
+
+#style
+sass public/assets/scss/style.scss public/assets/css/style.css --watch
+sass public/assets/scss/panel/style.scss public/assets/css/panel.css --watch
+
+composer require phpoffice/phpspreadsheet
+
+27/07/2023
+composer require stichoza/google-translate-php
