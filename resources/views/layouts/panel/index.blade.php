@@ -32,7 +32,7 @@
             @yield('content')
         </div>
     </div>
-    
+
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>

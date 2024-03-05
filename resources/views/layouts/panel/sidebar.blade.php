@@ -28,7 +28,7 @@
                     <div class="sub-menu">
                         <ul class="sub-menu-content">
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link">Dropdown #1</a>
+                                <a href="" class="sub-menu-link">A #1</a>
                             </li>
                             <li class="sub-menu-item">
                                 <a href="" class="sub-menu-link">Dropdown #2</a>
