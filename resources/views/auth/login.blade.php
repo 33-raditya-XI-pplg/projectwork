@@ -13,10 +13,10 @@
 <body>
 
     <div class="container-fluid bg-white">
-        <div class="row">
-            <div class="col-8 d-flex justify-content-center align-items-center min-vh-100">
+        <div class="row min-vh-100">
+            <div class="col-md-8 d-flex justify-content-center align-items-center">
                 {{-- form --}}
-                <div class="container px-8 bg-white">
+                <div class="container mx-md-8 bg-white">
                     <h2 class="text-primary fw-bold mb-5 text-center">Sign In</h2>
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
@@ -29,7 +29,8 @@
                         <div class="input-group mt-4">
                             <input id="password" type="password" name="password" class="form-control form-control-sm"
                                 placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-                            <span class="input-group-text"><i class="fa-regular fa-eye-slash" id="toggle-pw" style="cursor: pointer;"></i></span>
+                            <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
+                                    id="toggle-pw" style="cursor: pointer;"></i></span>
                             <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
                         </div>
                         <div class="d-grid">
@@ -46,8 +47,10 @@
                 {{-- form --}}
             </div>
 
-            <div class="col-4 bg-primary d-flex d-flex justify-content-center align-items-center text-center">
-                <div class="mt-2 text-white">
+            <div class="col-md-4 bg-primary d-flex flex-column justify-content-center position-relative">
+                <a href="/"><img class="position-absolute mt-3 top-0 start-0 ms-4" src="{{ asset('assets/img/logo.png') }}"
+                    height="35" alt="logo"></a>
+                <div id="content" class="container text-white text-center">
                     <h2 class="fw-bold">Don't have an account ?</h2>
                     <p>Create your account !</p>
                     <div class="d-grid">
