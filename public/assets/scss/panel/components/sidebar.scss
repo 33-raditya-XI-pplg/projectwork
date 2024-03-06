@@ -26,7 +26,7 @@
 
         @media screen and (min-width: $screen-lg) {
             & {
-                
+
             }
         }
     }
@@ -95,14 +95,14 @@
                 }
             }
         }
-        
+
         .sidebar-menu-item {
             width: 100%;
             display: block;
             margin-bottom: 8px;
             padding: 0 1rem;
             position: relative;
-            
+
             .item-link {
                 display: block;
                 width: 100%;
@@ -142,7 +142,7 @@
 
                 }
             }
-            
+
             &.active {
                 .item-link {
                     background-color: rgba($primary,.2);
@@ -200,12 +200,12 @@
                             transition: all .2s linear;
                         }
 
-                        
+
                         .sub-menu-link {
                             transition: all .2s linear;
                             color: #686868;
                             display: block;
-                            
+
                         }
 
                         &:hover {
@@ -218,7 +218,7 @@
 
                             }
                         }
-                        
+
                         &.active {
                             &::before {
                                 color: $primary;

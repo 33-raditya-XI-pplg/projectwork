@@ -1,13 +1,14 @@
 <aside class="sidebar" id="panel-sidebar">
-    <button class="btn-close-sidebar" data-toggle="sidebar">
+    {{-- <button class="btn-close-sidebar" data-toggle="sidebar">
         <i class="fa fa-xmark"></i>
-    </button>
-    <a href="{{ url('') }}" class="sidebar-brand">
+    </button> --}}
+    <a class="sidebar-brand">
         <img src="{{ asset('assets/img/logo.png') }}" alt="">
     </a>
+        <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars" ></i></button>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
-            <li>Menu</li>
+            {{-- <li>Menu</li> --}}
             <li class="sidebar-menu-item {{ Request::segment(2) == 'dashboard'? 'active' : '' }}">
                 <a href="" class="item-link">
                     <i class="fa fa-home link-icon"></i>
@@ -16,31 +17,58 @@
             </li>
                 <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
                     <a href="" class="item-link">
-                        <i class="fa fa-user link-icon"></i>
-                        <span>Profil</span>
+                        <i class="fas fa-bullhorn link-icon"></i>
+                        <span>Event</span>
                     </a>
                 </li>
                 <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
                     <a href="" class="item-link">
-                        <i class="fa fa-home link-icon"></i>
-                        <span>Home</span>
+                        <i class="fas fa-tasks link-icon"></i>
+                        <span>Penilaian</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
+                    <a href="" class="item-link">
+                        <i class="fas fa-award link-icon"></i>
+                        <span>Sertifikat</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
+                    <a href="" class="item-link">
+                        <i class="fas fa-database link-icon"></i>
+                        <span>Master Data</span>
                     </a>
                     <div class="sub-menu">
                         <ul class="sub-menu-content">
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link">A #1</a>
+                                <a href="" class="sub-menu-link"><i class="far fa-building"></i> Instansi</a>
                             </li>
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link">Dropdown #2</a>
+                                <a href="" class="sub-menu-link"><i class="fa fa-user"></i> Penguji</a>
                             </li>
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link">Dropdown #3</a>
+                                <a href="" class="sub-menu-link"><i class="fas fa-pen-alt"></i> Tanda tangan</a>
                             </li>
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link">Dropdown #4</a>
+                                <a href="" class="sub-menu-link"><i class="fas fa-desktop"></i> Background</a>
+                            </li>
+                            <li class="sub-menu-item">
+                                <a href="" class="sub-menu-link"><i class="fas fa-bullhorn"></i> Jenis event</a>
+                            </li>
+                            <li class="sub-menu-item">
+                                <a href="" class="sub-menu-link"><i class="fas fa-retweet"></i> Skema</a>
+                            </li>
+                            <li class="sub-menu-item">
+                                <a href="" class="sub-menu-link"><i class="fas fa-users"></i> Pengguna</a>
                             </li>
                         </ul>
                     </div>
+                </li>
+                <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
+                    <a href="" class="item-link">
+                        <i class="fa fa-user link-icon"></i>
+                        <span>Profile</span>
+                    </a>
                 </li>
         </ul>
     </div>

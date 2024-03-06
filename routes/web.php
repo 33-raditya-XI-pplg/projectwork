@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\TandatanganController;
+use App\Http\Controllers\SignatureController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 //event
-Route::resource('ttd',TandatanganController::class);
+Route::resource('signature',SignatureController::class);
 
 
 // route khusus admin

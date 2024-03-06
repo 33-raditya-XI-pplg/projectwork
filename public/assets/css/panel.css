@@ -1986,20 +1986,27 @@ progress {
   --bs-table-hover-color: var(--bs-body-color);
   --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
   width: 100%;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   color: var(--bs-table-color);
   vertical-align: top;
   border-color: var(--bs-table-border-color);
+  background-color: #FFFFFF;
+  border-radius:  10px;
+  font-family: sans-serif;
+  text-align: left;
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
   background-color: var(--bs-table-bg);
-  border-bottom-width: 1px;
+  /* border-bottom-width: 1px; */
   box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
 }
 .table > tbody {
   vertical-align: inherit;
 }
+#line-bottom {
+    border-bottom-width:1px;
+  }
 .table > thead {
   vertical-align: bottom;
 }
@@ -17717,7 +17724,8 @@ body {
     width: 100%;
   }
 }
-.navbar .navbar-left .btn-show-sidebar {
+/* yg lama */
+/* .navbar .navbar-left .btn-show-sidebar {
   width: 40px;
   height: 40px;
   padding: 0;
@@ -17725,12 +17733,28 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 19px;
-  background-color: #94AC3F;
+  background-color: transparent;
   border-radius: 50%;
-  color: #fff;
+  color: #FD7702;
   border: 0;
   cursor: pointer;
+} */
+#btn-show-sidebar{
+    position: absolute;
+    color: #FD7702;
+    left:85%;
+    top:6px;
+    border:0;
+    font-size:19px;
+    height:50px;
+    width:50px;
+    background-color: transparent;
+    text-align: center;
+    line-height:50px;
+    transform:translate(-50%);
+    cursor: pointer;
 }
+
 .navbar .nav-dropdown {
   display: inline-block;
 }
@@ -17739,10 +17763,56 @@ body {
   align-items: center;
   gap: 0.6rem;
   border: 0;
-  background-color: #94AC3F;
+  background-color: transparent;
   border-radius: 20px;
   padding: 0.3rem 0.5rem;
 }
+/* dedi */
+#roles{
+    text-align:left;
+    font-size:12px;
+}
+#colom-1{
+    width: 25%;
+}
+#colom-2{
+    width: 15%;
+}
+#colom-3{
+    width: 30%;
+}
+#colom-4{
+    width: 15%;
+}
+#colom-5{
+    width: 15%;
+}
+#btn-sertifikat{
+    background-color: #FD7702;
+    color:white;
+    border-radius: 10px;
+}
+#btn-search{
+    width:180px;
+    height:30px;
+}
+#icon-status{
+    background-color: #FD7702;
+    padding: 5px;
+    border-radius: 5px;
+    color:#FFFFFF;
+}
+#icon-status-trash{
+    background-color: #FD7702;
+    padding: 5px;
+    border-radius: 5px;
+    color:#FFFFFF;
+    margin-left: 10px;
+}
+#text-tittle-card{
+    font-size: 40px;
+}
+/* end dedi */
 .navbar .nav-dropdown .nav-dropdown-btn .nav-dropdown-img {
   width: 30px;
   height: 30px;
@@ -17756,12 +17826,13 @@ body {
   height: 100%;
 }
 .navbar .nav-dropdown .nav-dropdown-btn .nav-dropdown-title {
-  color: #fff;
+  /* color: #fff; */
+  color:transparent;
   padding-right: 0.5rem;
 }
 .navbar .nav-dropdown .nav-dropdown-content {
   min-width: 200px;
-  background-color: #94AC3F;
+  background-color: #FD7702;
   border-radius: 0 0 10px 10px;
   position: absolute;
   top: 100%;
@@ -17804,6 +17875,8 @@ body {
   background-color: #fff;
   z-index: 1024;
   transition: left 0.2s linear;
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
 }
 @media screen and (min-width: 576px) {
   .sidebar {
@@ -17910,14 +17983,14 @@ body {
 }
 .sidebar .sidebar-menu .sidebar-menu-item .item-link:hover {
   background-color: rgba(148, 172, 63, 0.2);
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item .item-link:hover::after {
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item.active .item-link {
   background-color: rgba(148, 172, 63, 0.2);
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item.active .sub-menu {
   height: auto;
@@ -17972,16 +18045,16 @@ body {
   display: block;
 }
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item:hover::before {
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item:hover .sub-menu-link {
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item.active::before {
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item.active .sub-menu-link {
-  color: #94AC3F;
+  color: #FD7702;
 }
 .sidebar .sidebar-menu .sidebar-menu-item.dropdown .item-link {
   position: relative;
