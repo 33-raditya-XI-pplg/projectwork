@@ -6,7 +6,7 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0" id="text-tittle-card">Tanda Tangan</h6>
                 {{-- <input placeholder="Search" id="btn-search" type="search" class="form-control"/> --}}
-                <button type="button" class="btn btn-sm btn-warning" id="btn-sertifikat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-plus"></i> Tambah</button>
+                <button type="button" class="btn btn-sm btn-primary rounded" id="btn-sertifikat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-plus"></i> Tambah</button>
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -58,8 +58,6 @@
         </div>
     </div>
     <!-- Recent Sales End -->
-    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-        data-bs-whatever="@fat">Open modal for @fat</button> --}}
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -86,11 +84,11 @@
                             <label for="recipient-name" class="col-form-label">Instansi</label>
                             <input type="text" class="form-control" id="recipient-name">
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger rounded" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-success rounded">Tambah</button>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Tambah</button>
                 </div>
             </div>
         </div>

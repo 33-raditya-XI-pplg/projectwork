@@ -22,7 +22,7 @@
             }
         }
     }
-    
+
 
     .navbar-left {
 
@@ -50,7 +50,7 @@
             align-items: center;
             gap: .6rem;
             border: 0;
-            background-color: $primary;
+            background-color: transparent;
             border-radius: 20px;
             padding: .3rem .5rem;
 
@@ -73,6 +73,10 @@
                 padding-right: .5rem;
                 // display: none;
             }
+        }
+        #roles{
+            text-align: left;
+            font-size: 14px;
         }
 
         .nav-dropdown-content {
