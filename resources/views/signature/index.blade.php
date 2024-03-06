@@ -6,7 +6,7 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0" id="text-tittle-card">Tanda Tangan</h6>
                 {{-- <input placeholder="Search" id="btn-search" type="search" class="form-control"/> --}}
-                <a href="" class="btn btn-sm btn-warning" id="btn-sertifikat"><i class="fas fa-plus"></i> Tambah</a>
+                <button type="button" class="btn btn-sm btn-warning" id="btn-sertifikat" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-plus"></i> Tambah</button>
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -58,4 +58,41 @@
         </div>
     </div>
     <!-- Recent Sales End -->
+    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        data-bs-whatever="@fat">Open modal for @fat</button> --}}
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Tanda Tangan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-2">
+                            <label for="recipient-name" class="col-form-label">Nama TTD</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="mb-2">
+                            <label for="recipient-name" class="col-form-label">Jabatan</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="mb-2">
+                            <label for="recipient-name" class="col-form-label">NIK</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="mb-2">
+                            <label for="recipient-name" class="col-form-label">Instansi</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary">Tambah</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

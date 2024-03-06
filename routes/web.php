@@ -15,11 +15,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::resource('signature',SignatureController::class);
+Route::get('/',function(){
+    return view('welcome');
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard', function() {
         return view('admin.dashboard');
     });
-    Route::resource('signature',SignatureController::class);
 });
+
 require __DIR__.'/auth.php';

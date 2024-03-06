@@ -3,7 +3,7 @@
         <i class="fa fa-xmark"></i>
     </button> --}}
     <a class="sidebar-brand">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="0">
     </a>
         <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars" ></i></button>
     <div class="sidebar-menu-content">
