@@ -1,6 +1,8 @@
 <?php
 
+
 use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
+    Route::get('/dashboard', function() {
+        return view('admin.dashboard');
+    });
+    Route::resource('signature',SignatureController::class);
 });
-
-//event
-Route::resource('signature',SignatureController::class);
-
-
-// route khusus admin
-// Route::group(['prefix' => 'admin'], function() {
-//     Route::get('/dashboard', function() {
-//         return view('admin.dashboard');
-//     });
-// });
+require __DIR__.'/auth.php';

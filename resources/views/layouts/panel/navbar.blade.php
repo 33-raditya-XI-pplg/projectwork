@@ -17,7 +17,12 @@
                         <a href="" class="nav-dropdown-item-link">Profil</a>
                     </li>
                     <li class="nav-dropdown-item">
-                        <a href="#" class="nav-dropdown-item-link text-danger">Logout</a>
+                        {{-- <a href="#" class="nav-dropdown-item-link text-danger">Logout</a> --}}
+                        <a href="{{ url('/logout') }}" onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();" class="nav-dropdown-item-link text-danger">Logout</a>
+                                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                        </form>
                     </li>
                 </ul>
             </div>
