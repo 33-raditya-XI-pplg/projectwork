@@ -4,6 +4,7 @@
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard', function() {
         return view('admin.dashboard');
     });
+
+    Route::resource('/event', EventController::class);
 });
 
 require __DIR__.'/auth.php';

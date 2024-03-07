@@ -25,6 +25,8 @@
 </head>
 <body>
 
+    @include('sweetalert::alert')
+
     <div id="app">
         @include('layouts.panel.sidebar')
         @include('layouts.panel.navbar')
@@ -43,6 +45,9 @@
 <script src="{{ asset('') }}vendor/simditor/lib/simditor.js"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/panel.js') }}"></script>
+<script>
+    new DataTable('#example');
+</script>
 @stack('script')
 </body>
 </html>

@@ -16993,7 +16993,7 @@ body {
   outline: none;
   box-shadow: none;
   border: 1px solid #E5E7E9;
-  padding: 1rem 0.8rem;
+  padding: 0.8rem 0.8rem;
   border-radius: 10px;
 }
 .form-control::placeholder {

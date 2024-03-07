@@ -21,13 +21,13 @@
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <input type="email" name="email" class="form-control form-control-sm"
+                            <input type="email" name="email" class="form-control"
                                 id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
                             <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger" />
                         </div>
 
                         <div class="input-group mt-4">
-                            <input id="password" type="password" name="password" class="form-control form-control-sm"
+                            <input id="password" type="password" name="password" class="form-control"
                                 placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
                             <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
                                     id="toggle-pw" style="cursor: pointer;"></i></span>

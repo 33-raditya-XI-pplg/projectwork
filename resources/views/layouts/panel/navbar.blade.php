@@ -6,7 +6,7 @@
         <div class="nav-dropdown">
             <button class="nav-dropdown-btn">
                 <div class="nav-dropdown-img">
-                    <img src="{{ asset(auth()->user()->photo?? 'assets/img/Icon.png') }}" alt="0">
+                    <img src="{{ asset('assets/img/icon.png') }}" alt="0">
                 </div>
                 <div class="users-login ml-10">Dedi hariyanto <h6 id="roles">admin</h6></div>
                 {{-- <span class="nav-dropdown-title">{{ auth()->user()->name }}</span> --}}

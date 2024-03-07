@@ -10,13 +10,13 @@
         <ul class="sidebar-menu">
             {{-- <li>Menu</li> --}}
             <li class="sidebar-menu-item {{ Request::segment(2) == 'dashboard'? 'active' : '' }}">
-                <a href="" class="item-link">
+                <a href="{{ url('admin/dashboard') }}" class="item-link">
                     <i class="fa fa-home link-icon"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-                <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
-                    <a href="" class="item-link">
+                <li class="sidebar-menu-item {{ Request::segment(2) == 'event'? 'active' : '' }}">
+                    <a href="{{ route('event.index') }}" class="item-link">
                         <i class="fas fa-bullhorn link-icon"></i>
                         <span>Event</span>
                     </a>
