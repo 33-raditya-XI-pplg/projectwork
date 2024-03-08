@@ -3,10 +3,10 @@
     <div class="container mt-5">
         <div class="d-flex justify-content-between mb-3">
             <div>
-                <h1>Tanda Tangan</h1>
+                <h1>Skema</h1>
             </div>
             <div>
-                <button class="btn btn-primary rounded-4" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
+                <button class="btn btn-primary rounded-4" data-bs-toggle="modal" data-bs-target="#add" >+ Tambah</button>
             </div>
         </div>
 
@@ -14,10 +14,7 @@
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
                 <thead class="fw-normal">
-                    <th scope="col ">Nama TTD</th>
-                    <th scope="col">Jabatan</th>
-                    <th scope="col">NIK</th>
-                    <th scope="col">Instansi</th>
+                    <th scope="col ">Nama Skema</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                 </thead>
@@ -25,9 +22,6 @@
                     @for ($i = 0; $i < 10; $i++)
                         <tr>
                             <td>Pematik {{ $i }}</td>
-                            <td>Seminar</td>
-                            <td>8650295</td>
-                            <td>Mascitra.COM</td>
                             <td><a class="btn btn-sm btn-outline-success rounded disabled">Aktif</a></td>
                             <td>
                                 <div class="dropdown">
@@ -59,7 +53,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Tanda Tangan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Skema</h5>
                     <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -73,38 +67,26 @@
                                 <form action="{{ route('event.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="nama_ttd" class="form-label">Nama TTD</label>
-                                        <input type="text" class="form-control" name="nama_ttd" id="nama_ttd"
+                                        <label for="nama_skema" class="form-label">Nama Skema</label>
+                                        <input type="text" class="form-control" name="nama_skema" id="nama_skema"
                                             required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="jabatan" class="form-label">Jabatan</label>
-                                        <input type="text" class="form-control" name="jabatan" id="jabatan"
+                                        <label for="nama_skema" class="form-label">Sub Skema</label>
+                                        <input type="text" class="form-control" name="nama_skema" id="nama_skema"
                                             required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="nik" class="form-label">NIK</label>
-                                        <input type="text" class="form-control" name="nik" id="nik"
-                                            required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="instansi" class="form-label">Instansi</label>
-                                        <input type="text" class="form-control" name="instansi" id="instansi"
-                                            required>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                      </div>
+
                             </div>
                         </div>
+                        <button type="submit" class="btn btn-primary rounded-3 text-white">Tambah Sub Skema</button>
                     </div>
                     {{-- end form --}}
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                 </div>
                 </form>
             </div>
@@ -117,7 +99,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Skema</h5>
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -132,32 +114,19 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="mb-3">
-                                            <label for="nama_ttd" class="form-label">Nama TTD</label>
-                                            <input type="text" class="form-control" name="nama_ttd" id="nama_ttd"
+                                            <label for="nama_skema" class="form-label">Nama Skema</label>
+                                            <input type="text" class="form-control" name="nama_skema" id="nama_skema"
                                                 required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="jabatan" class="form-label">Jabatan</label>
-                                            <input type="text" class="form-control" name="jabatan" id="jabatan"
+                                            <label for="nama_skema" class="form-label">Sub Skema</label>
+                                            <input type="text" class="form-control" name="nama_skema" id="nama_skema"
                                                 required>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="nik" class="form-label">NIK</label>
-                                            <input type="text" class="form-control" name="nik" id="nik"
-                                                required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="instansi" class="form-label">Instansi</label>
-                                            <input type="text" class="form-control" name="instansi" id="instansi"
-                                                required>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                          </div>
-                                </div>
 
+                                </div>
                             </div>
+                            <button type="submit" class="btn btn-primary rounded-3 text-white">Tambah Sub Skema</button>
                         </div>
                         {{-- end form --}}
 

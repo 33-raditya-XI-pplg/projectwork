@@ -47,7 +47,7 @@
                                 <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i> Penguji</a>
                             </li>
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link"><i class="fas fa-pen-alt"></i> Tanda tangan</a>
+                                <a href="{{ route('signature.index') }}" class="sub-menu-link"><i class="fas fa-pen-alt"></i> Tanda tangan</a>
                             </li>
                             <li class="sub-menu-item">
                                 <a href="" class="sub-menu-link"><i class="fas fa-desktop"></i> Background</a>
@@ -56,7 +56,7 @@
                                 <a href="" class="sub-menu-link"><i class="fas fa-bullhorn"></i> Jenis event</a>
                             </li>
                             <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link"><i class="fas fa-retweet"></i> Skema</a>
+                                <a href="{{route('scheme.index')}}" class="sub-menu-link"><i class="fas fa-retweet"></i> Skema</a>
                             </li>
                             <li class="sub-menu-item {{ Request::segment(3) == 'user'? 'active' : '' }}">
                                 <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i> Pengguna</a>
