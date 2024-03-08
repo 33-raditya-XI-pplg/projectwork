@@ -1,5 +1,5 @@
 @extends('layouts.panel.index')
-@section('title', 'Agenda')
+@section('title', 'Kegiatan')
 @section('content')
 
     <div class="container mt-5">
@@ -24,7 +24,7 @@
                     <th scope="col">Aksi</th>
                 </thead>
                 <tbody class="" style="vertical-align: middle">
-                    @for ($i = 0; $i < 900; $i++)
+                    @for ($i = 0; $i < 5; $i++)
                         <tr>
                             <td>Pematik {{ $i }}</td>
                             <td>Seminar</td>
@@ -72,7 +72,7 @@
                         <div class="row">
                             <div class="col">
                                 {{-- kanan --}}
-                                <form action="{{ route('event.store') }}" method="POST">
+                                <form action="{{ route('user.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="nama_event" class="form-label">Nama Event</label>
@@ -122,7 +122,7 @@
     </div>
 
     <!-- edit -->
-    @for ($i = 0; $i < 900; $i++)
+    @for ($i = 0; $i < 5; $i++)
         <div class="modal fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -138,7 +138,7 @@
                             <div class="row">
                                 <div class="col">
                                     {{-- kanan --}}
-                                    <form action="{{ route('event.update', $i) }}" method="POST">
+                                    <form action="{{ route('user.update', $i) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="mb-3">

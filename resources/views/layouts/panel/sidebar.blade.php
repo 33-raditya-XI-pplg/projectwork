@@ -33,18 +33,18 @@
                         <span>Sertifikat</span>
                     </a>
                 </li>
-                <li class="sidebar-menu-item {{ Request::segment(2) == 'profile'? 'active' : '' }}">
+                <li class="sidebar-menu-item {{ Request::segment(2) == 'master'? 'active' : '' }}">
                     <a href="" class="item-link">
                         <i class="fas fa-database link-icon"></i>
                         <span>Master Data</span>
                     </a>
                     <div class="sub-menu">
                         <ul class="sub-menu-content">
-                            <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link"><i class="far fa-building"></i> Instansi</a>
+                            <li class="sub-menu-item {{ Request::segment(3) == 'instansi'? 'active' : '' }}">
+                                <a href="{{ route('instansi.index') }}" class="sub-menu-link"><i class="far fa-building"></i> Instansi</a>
                             </li>
-                            <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link"><i class="fa fa-user"></i> Penguji</a>
+                            <li class="sub-menu-item {{ Request::segment(3) == 'penguji'? 'active' : '' }}">
+                                <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i> Penguji</a>
                             </li>
                             <li class="sub-menu-item">
                                 <a href="" class="sub-menu-link"><i class="fas fa-pen-alt"></i> Tanda tangan</a>
@@ -58,8 +58,8 @@
                             <li class="sub-menu-item">
                                 <a href="" class="sub-menu-link"><i class="fas fa-retweet"></i> Skema</a>
                             </li>
-                            <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link"><i class="fas fa-users"></i> Pengguna</a>
+                            <li class="sub-menu-item {{ Request::segment(3) == 'user'? 'active' : '' }}">
+                                <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i> Pengguna</a>
                             </li>
                         </ul>
                     </div>

@@ -17498,7 +17498,7 @@ body {
   outline: none;
   box-shadow: none;
   border: 1px solid #E5E7E9;
-  padding: 0.6rem 0.8rem;
+  padding: 1rem 0.8rem;
   border-radius: 10px;
 }
 .form-control::placeholder {
@@ -17738,7 +17738,7 @@ body {
   align-items: center;
   gap: 0.6rem;
   border: 0;
-  background-color: #FD7702;
+  background-color: transparent;
   border-radius: 20px;
   padding: 0.3rem 0.5rem;
 }

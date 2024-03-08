@@ -25,8 +25,6 @@
 </head>
 <body>
 
-    @include('sweetalert::alert')
-
     <div id="app">
         @include('layouts.panel.sidebar')
         @include('layouts.panel.navbar')
@@ -49,5 +47,7 @@
     new DataTable('#example');
 </script>
 @stack('script')
+@include('sweetalert::alert')
+
 </body>
 </html>
