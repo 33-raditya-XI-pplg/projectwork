@@ -14,7 +14,7 @@
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
                 <thead class="fw-normal">
-                    <th scope="col ">Nama Skema</th>
+                    <th class="w-75" scope="col ">Nama Skema</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                 </thead>
@@ -49,7 +49,7 @@
 
 
     <!-- insert -->
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -94,8 +94,8 @@
     </div>
 
     <!-- edit -->
-    @for ($i = 0; $i < 900; $i++)
-        <div class="modal fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
+    @for ($i = 0; $i < 9; $i++)
+        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">

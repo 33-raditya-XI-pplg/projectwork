@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 
+use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\InstansiController;
@@ -28,7 +29,7 @@ Route::get('/',function(){
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin'], function(){
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard', function() {
         return view('admin.dashboard');
     });
@@ -42,6 +43,7 @@ Route::group(['prefix' => 'admin'], function(){
         Route::resource('/user', UserController::class);
         Route::resource('/penguji', PengujiController::class);
         Route::resource('/instansi', InstansiController::class);
+        Route::resource('/jenis-event', JenisEventController::class);
     });
 
 

@@ -123,7 +123,7 @@
 
     <!-- edit -->
     @for ($i = 0; $i < 5; $i++)
-        <div class="modal fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
+        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">

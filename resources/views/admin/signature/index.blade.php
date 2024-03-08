@@ -1,4 +1,5 @@
 @extends('layouts.panel.index')
+@section('title', 'Tanda Tangan')
 @section('content')
     <div class="container mt-5">
         <div class="d-flex justify-content-between mb-3">
@@ -55,7 +56,7 @@
 
 
     <!-- insert -->
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -112,8 +113,8 @@
     </div>
 
     <!-- edit -->
-    @for ($i = 0; $i < 900; $i++)
-        <div class="modal fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
+    @for ($i = 0; $i < 9; $i++)
+        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">

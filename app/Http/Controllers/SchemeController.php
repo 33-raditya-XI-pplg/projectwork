@@ -11,7 +11,7 @@ class SchemeController extends Controller
      */
     public function index()
     {
-        return view('scheme.index');
+        return view('admin.scheme.index');
     }
 
     /**

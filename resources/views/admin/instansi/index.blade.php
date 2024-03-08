@@ -57,7 +57,7 @@
 
 
     <!-- insert -->
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
@@ -117,7 +117,7 @@
     @for ($i = 0; $i < 9; $i++ )
         
     <!-- edit -->
-    <div class="modal fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+    <div class="modal modal-lgfade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">

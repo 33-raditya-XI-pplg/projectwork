@@ -46,16 +46,16 @@
                             <li class="sub-menu-item {{ Request::segment(3) == 'penguji'? 'active' : '' }}">
                                 <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i> Penguji</a>
                             </li>
-                            <li class="sub-menu-item">
+                            <li class="sub-menu-item {{ Request::segment(3) == 'signature'? 'active' : '' }}">
                                 <a href="{{ route('signature.index') }}" class="sub-menu-link"><i class="fas fa-pen-alt"></i> Tanda tangan</a>
                             </li>
-                            <li class="sub-menu-item">
+                            <li class="sub-menu-item pe-none">
                                 <a href="" class="sub-menu-link"><i class="fas fa-desktop"></i> Background</a>
                             </li>
-                            <li class="sub-menu-item">
-                                <a href="" class="sub-menu-link"><i class="fas fa-bullhorn"></i> Jenis event</a>
+                            <li class="sub-menu-item {{ Request::segment(3) == 'jenis-event'? 'active' : '' }}">
+                                <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i class="fas fa-bullhorn"></i> Jenis event</a>
                             </li>
-                            <li class="sub-menu-item">
+                            <li class="sub-menu-item {{ Request::segment(3) == 'scheme'? 'active' : '' }}">
                                 <a href="{{route('scheme.index')}}" class="sub-menu-link"><i class="fas fa-retweet"></i> Skema</a>
                             </li>
                             <li class="sub-menu-item {{ Request::segment(3) == 'user'? 'active' : '' }}">
