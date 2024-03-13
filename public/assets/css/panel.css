@@ -17750,8 +17750,7 @@ body {
 }
 .navbar .nav-dropdown .nav-dropdown-content {
   min-width: 200px;
-  background-color: #FD7702;
-  border-radius: 0 0 10px 10px;
+  background-color: #FFF;
   position: absolute;
   top: 100%;
   right: 10px;

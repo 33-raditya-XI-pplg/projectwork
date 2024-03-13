@@ -12,23 +12,23 @@ return new class extends Migration {
     {
         Schema::create('tb_user', function (Blueprint $table) {
             $table->id('id_user');
-            $table->string('username');
+            $table->string('username')->nullable();
             $table->string('email');
             $table->string('password');
             $table->string('nama_lengkap');
-            $table->string('nomor_induk');
-            $table->date('tgl_lahir');
-            $table->string('tempat_lahir');
+            $table->string('nomor_induk')->nullable();
+            $table->date('tgl_lahir')->nullable();
+            $table->string('tempat_lahir')->nullable();
             $table->string('pekerjaan')->nullable();
             $table->string('foto')->nullable();
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
-            $table->char('jenis_kelamin');
+            $table->char('jenis_kelamin')->nullable();
             $table->string('no_telp')->nullable();
             $table->timestamps();
 
-            // Foreign key 
-            $table->unsignedBigInteger('id_instansi');
+            // Foreign key
+            $table->unsignedBigInteger('id_instansi')->nullable();
             $table->index('id_instansi');
         });
     }

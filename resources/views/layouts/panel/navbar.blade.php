@@ -14,12 +14,12 @@
             <div class="nav-dropdown-content">
                 <ul class="nav-dropdown-menu">
                     <li class="nav-dropdown-item">
-                        <a href="" class="nav-dropdown-item-link">Profil</a>
+                        <a href="" class="nav-dropdown-item-link"><i class="fas fa-user-alt"></i> Profil</a>
                     </li>
                     <li class="nav-dropdown-item">
                         {{-- <a href="#" class="nav-dropdown-item-link text-danger">Logout</a> --}}
                         <a href="{{ url('/logout') }}" onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();" class="nav-dropdown-item-link text-danger">Logout</a>
+                                        document.getElementById('logout-form').submit();" class="nav-dropdown-item-link text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
                                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>

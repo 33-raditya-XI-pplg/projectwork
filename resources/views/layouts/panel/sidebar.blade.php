@@ -49,8 +49,8 @@
                             <li class="sub-menu-item {{ Request::segment(3) == 'signature'? 'active' : '' }}">
                                 <a href="{{ route('signature.index') }}" class="sub-menu-link"><i class="fas fa-pen-alt"></i> Tanda tangan</a>
                             </li>
-                            <li class="sub-menu-item pe-none">
-                                <a href="" class="sub-menu-link"><i class="fas fa-desktop"></i> Background</a>
+                            <li class="sub-menu-item {{ Request::segment(3) == 'background'? 'active' : '' }}">
+                                <a href="{{ route('background.index') }}" class="sub-menu-link"><i class="fas fa-desktop"></i> Background</a>
                             </li>
                             <li class="sub-menu-item {{ Request::segment(3) == 'jenis-event'? 'active' : '' }}">
                                 <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i class="fas fa-bullhorn"></i> Jenis event</a>
