@@ -1,7 +1,7 @@
 <nav class="navbar" id="panel-navbar">
     <div class="navbar-left">
         {{-- <button class="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars" ></i></button> --}}
-        <div style="--bs-breadcrumb-divider: '>';">
+        <div style="{{ count(Request::segments()) > 2 ? "--bs-breadcrumb-divider: '>'" : "--bs-breadcrumb-divider: ''" }};">
             <ol class="breadcrumb">
               <li class="breadcrumb-item text-primary text-capitalize h4">{{ Request::segment(2) }}</li>
               <li class="breadcrumb-item text-capitalize h4">{{ Str::replace('-', ' ', Request::segment(3)); }}</li>
