@@ -47,8 +47,8 @@
                 {{-- form --}}
             </div>
 
-            <div class="col-md-4 bg-primary d-flex flex-column justify-content-center position-relative">
-                <a href="/"><img class="position-absolute mt-3 top-0 start-0 ms-4" src="{{ asset('assets/img/logo.png') }}"
+            <div class="col-md-4 d-flex flex-column justify-content-center position-relative" style="background: url({{ asset('assets/img/bg-login.png') }});background-size: cover;background-repeat: no-repeat;">
+                <a href="/"><img class="position-absolute mt-3 top-0 start-0 ms-4" src="{{ asset('assets/img/logo2.png') }}"
                     height="35" alt="logo"></a>
                 <div id="content" class="container text-white text-center">
                     <h2 class="fw-bold">Don't have an account ?</h2>

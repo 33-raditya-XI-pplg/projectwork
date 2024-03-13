@@ -1,7 +1,14 @@
 <nav class="navbar" id="panel-navbar">
     <div class="navbar-left">
         {{-- <button class="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars" ></i></button> --}}
+        <div style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item text-primary text-capitalize h4">{{ Request::segment(2) }}</li>
+              <li class="breadcrumb-item text-capitalize h4">{{ Str::replace('-', ' ', Request::segment(3)); }}</li>
+            </ol>
+        </div>
     </div>
+        
     <div class="navbar-right">
         <div class="nav-dropdown">
             <button class="nav-dropdown-btn">

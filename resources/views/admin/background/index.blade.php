@@ -11,7 +11,7 @@
         </div>
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            @for ($i = 0; $i < 10; $i++)
+            @for ($i = 0; $i < 6; $i++)
                 <div class="col">
                     <div class="card h-100">
                         <img src="{{ asset('assets/img/country/AE@3x.png') }}" class="card-img-top" alt="...">
@@ -21,7 +21,7 @@
                             <h6 class="card-text">2 minutes ago
                             <p style="float: right">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#show{{ $i }}"><i class="far fa-edit"></i></a>
-                                <i class="far fa-trash-alt text-danger"></i>
+                                <a href="{{ route('background.destroy', $i) }}" data-confirm-delete="true"><i class="far fa-trash-alt text-danger pe-none"></i></a>
                             </p>
                             </h6>
                         </div>

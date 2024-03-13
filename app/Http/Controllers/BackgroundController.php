@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BackgroundController extends Controller
 {
@@ -11,7 +12,8 @@ class BackgroundController extends Controller
      */
     public function index()
     {
-        return view('background.index');
+        confirmDelete('Hapus Background', 'Apakah kamu yakin untuk menghapus?');
+        return view('admin.background.index');
     }
 
     /**
@@ -59,6 +61,7 @@ class BackgroundController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        toast('Background terhapus!','success');
+        return redirect()->back();
     }
 }
