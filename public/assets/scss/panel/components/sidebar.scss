@@ -64,6 +64,43 @@
         transform: translate(-50%);
     }
 
+    .footer h6{
+    position: static;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    text-align: left;
+    font-family: sans-serif;
+    font-size: 12px;
+    margin-top: 1px;
+
+    }
+    .triangle {
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 40px solid rgba(255, 149, 28, 1);
+        position: static;
+        bottom: 120px;
+        // right: 20px;
+        margin-left: 185px;
+        margin-top: 88px;
+    }
+    .triangles{
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 40px solid rgba(255, 149, 28, 1);
+        position: static;
+        bottom: 60px;
+        // right: 20px;
+        margin-top: 15px;
+        margin-left: 185px;
+    }
+
     .btn-close-sidebar {
         position: absolute;
         top: 10px;
@@ -88,7 +125,7 @@
     }
 
     .sidebar-menu-content {
-        max-height: 88vh;
+        max-height: 99vh;
         overflow-y: auto;
     }
 

@@ -130,24 +130,7 @@
                             </form>
                         </div>
                     </div>
-                    <script>
-                        function previewFile() {
-                            const file = document.querySelector('#formFileSm').files[0];
-                            const preview = document.querySelector('#preview');
-
-                            const reader = new FileReader();
-
-                            reader.onloadend = function() {
-                                preview.src = reader.result;
-                            }
-
-                            if (file) {
-                                reader.readAsDataURL(file);
-                            } else {
-                                preview.src = "";
-                            }
-                        }
-                    </script>
+                    {{-- js --}}
                 </div>
                 {{-- end form --}}
 

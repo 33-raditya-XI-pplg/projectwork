@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\BackgroundController;
-use App\Http\Controllers\SignatureController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\SchemeController;
+use App\Http\Controllers\PengujiController;
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\InstansiController;
+use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\BackgroundController;
 
 use App\Http\Controllers\JenisEventController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PengujiController;
-use App\Http\Controllers\InstansiController;
-
-use App\Http\Controllers\SchemeController;
+use App\Http\Controllers\SertifikatController;
 
 
 /*
@@ -45,6 +46,7 @@ Route::get('/',function(){
         Route::resource('/penguji', PengujiController::class);
         Route::resource('/instansi', InstansiController::class);
         Route::resource('/jenis-event', JenisEventController::class);
+        Route::resource('sertifikat', SertifikatController::class);
     });
 
 
