@@ -79,7 +79,8 @@
         var spans = document.querySelectorAll('.sidebar-menu span');
         var logo = document.getElementById('logo');
         var sidebar = document.getElementById('panel-sidebar');
-        var button = document.getElementById('btn-show-sidebar')
+        var button = document.getElementById('btn-show-sidebar');
+        var breadcrumb = document.getElementById('breadcrumb');
 
         // Melooping semua elemen <span> dan menghapus teksnya
         spans.forEach(function(span) {
@@ -87,6 +88,7 @@
             logo.style.visibility = 'hidden';
             sidebar.style.maxWidth = '80px';
             button.style.left = '50%';
+            breadcrumb.style.display = 'none';
         });
     });
 </script>
