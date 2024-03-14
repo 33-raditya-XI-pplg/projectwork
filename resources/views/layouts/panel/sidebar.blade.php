@@ -1,15 +1,12 @@
 <aside class="sidebar" id="panel-sidebar">
-    {{-- <button class="btn-close-sidebar" data-toggle="sidebar">
-        <i class="fa fa-xmark"></i>
-    </button> --}}
-    <a class="sidebar-brand">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="0">
-    </a>
+    <div class="sidebar-brand justify-content-center">
+        <img id="logo" id="logo" src="{{ asset('assets/img/logo.png') }}" alt="0">
+
         <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-primary" ></i></button>
+    </div>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
-            {{-- <li>Menu</li> --}}
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
+            <li class="sidebar-menu-item {{ Request::segment(2) == 'dashboard'? 'active' : '' }}">
                 <a href="{{ url('admin/dashboard') }}" class="item-link">
                     <i class="fa fa-home link-icon"></i>
                     <span>Dashboard</span>
@@ -42,7 +39,7 @@
                     <ul class="sub-menu-content">
                         <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
                             <a href="{{ route('instansi.index') }}" class="sub-menu-link"><i
-                                    class="far fa-building"></i> Instansi</a>
+                                    class="far fa-building"></i><span> Instansi</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'penguji' ? 'active' : '' }}">
                             <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
@@ -85,3 +82,26 @@
         </div>
     </div>
 </aside>
+
+@push('script')
+<script>
+    // Fungsi untuk menangani klik tombol sidebar
+    document.getElementById("btn-show-sidebar").addEventListener("click", function() {
+        // Mengambil semua elemen <span> di dalam sidebar
+        var spans = document.querySelectorAll('.sidebar-menu span');
+        var logo = document.getElementById('logo');
+        var sidebar = document.getElementById('panel-sidebar');
+        var button = document.getElementById('btn-show-sidebar');
+        var breadcrumb = document.getElementById('breadcrumb');
+
+        // Melooping semua elemen <span> dan menghapus teksnya
+        spans.forEach(function(span) {
+            span.textContent = ''; // Menghilangkan teks
+            logo.style.visibility = 'hidden';
+            sidebar.style.maxWidth = '90px';
+            button.style.left = '50%';
+            breadcrumb.style.display = 'none';
+        });
+    });
+</script>
+@endpush

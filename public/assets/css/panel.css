@@ -17790,7 +17790,6 @@ body {
   height: 100%;
   position: fixed;
   top: 0;
-  left: -100%;
   background-color: #fff;
   z-index: 1024;
   transition: left 0.2s linear;
