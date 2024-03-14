@@ -2,56 +2,136 @@
 @section('title', 'Kegiatan')
 @section('content')
 
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between mb-3">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-end mb-3">
             <div>
-                <h1>Event</h1>
-            </div>
-            <div>
-                <button class="btn btn-primary rounded-4" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
+                <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
             </div>
         </div>
 
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-            <table id="example" class="table">
-                <thead class="fw-normal">
-                    <th scope="col ">Nama Event</th>
-                    <th scope="col">Jenis Event</th>
-                    <th scope="col">Tanggal Event</th>
-                    <th scope="col">Tanggal Berakhir</th>
-                    <th scope="col">Nama Instansi</th>
-                    <th scope="col">Aksi</th>
-                </thead>
-                <tbody class="" style="vertical-align: middle">
-                    @for ($i = 0; $i < 5; $i++)
-                        <tr>
-                            <td>Pematik {{ $i }}</td>
-                            <td>Seminar</td>
-                            <td>18-10-2024</td>
-                            <td>22-10-2024</td>
-                            <td>Mascitra.com</td>
-                            <td>
-                                <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#edit{{ $i }}"><i
-                                                    class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                        <li><a href="{{ route('event.destroy', $i) }}" class="dropdown-item text-danger"
-                                                data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                                Delete</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    @endfor
-                </tbody>
-            </table>
+            <nav>
+                <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-home" aria-selected="true">All</button>
+                  <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-draft" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Draft</button>
+                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-publish" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Publish</button>
+                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-live" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Berlangsung</button>
+                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-end" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Selesai</button>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
+                    {{--  --}}
+
+                    <div class="mt-4">
+                        <table id="example" class="table">
+                            <thead class="fw-normal">
+                                <th scope="col ">Nama Event</th>
+                                <th scope="col">Jenis Event</th>
+                                <th scope="col">Tanggal Event</th>
+                                <th scope="col">Tanggal Berakhir</th>
+                                <th scope="col">Nama Instansi</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
+                            </thead>
+                            <tbody class="" style="vertical-align: middle">
+                                @for ($i = 0; $i < 5; $i++)
+                                    <tr>
+                                        <td>Pematik {{ $i }}</td>
+                                        <td>Seminar</td>
+                                        <td>18-10-2024</td>
+                                        <td>22-10-2024</td>
+                                        <td>Mascitra.com</td>
+                                        <td><button type="button" class="btn btn-outline-warning rounded-3" disabled>Draft</button></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa-solid fa-bars"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#edit{{ $i }}"><i
+                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                                    <li><a href="{{ route('event.destroy', $i) }}" class="dropdown-item text-danger"
+                                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                                            Delete</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{--  --}}
+                </div>
+                <div class="tab-pane fade" id="nav-draft" role="tabpanel" aria-labelledby="nav-home-tab">
+                    {{--  --}}
+
+                    <div class="mt-4">
+                        <table id="example" class="table">
+                            <thead class="fw-normal">
+                                <th scope="col ">Nama Event</th>
+                                <th scope="col">Jenis Event</th>
+                                <th scope="col">Tanggal Event</th>
+                                <th scope="col">Tanggal Berakhir</th>
+                                <th scope="col">Nama Instansi</th>
+                                <th scope="col">Aksi</th>
+                            </thead>
+                            <tbody class="" style="vertical-align: middle">
+                                @for ($i = 0; $i < 5; $i++)
+                                    <tr>
+                                        <td>Pematik {{ $i }}</td>
+                                        <td>Seminar</td>
+                                        <td>18-10-2024</td>
+                                        <td>22-10-2024</td>
+                                        <td>Mascitra.com</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton1"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa-solid fa-bars"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#edit{{ $i }}"><i
+                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                                    <li><a href="{{ route('event.destroy', $i) }}" class="dropdown-item text-danger"
+                                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                                            Delete</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endfor
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{--  --}}
+                </div>
+                <div class="tab-pane fade" id="nav-publish" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="mt-4 text-center">
+                        No data available!
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-live" role="tabpanel" aria-labelledby="nav-contact-tab">
+                    <div class="mt-4 text-center">
+                        No data available!
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-end" role="tabpanel" aria-labelledby="nav-contact-tab">
+                    <div class="mt-4 text-center">
+                        No data available!
+                    </div>
+                </div>
+              </div>
+
         </div>
     </div>
 

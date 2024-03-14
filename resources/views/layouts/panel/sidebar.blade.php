@@ -5,7 +5,7 @@
     <a class="sidebar-brand">
         <img src="{{ asset('assets/img/logo.png') }}" alt="0">
     </a>
-        <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars" ></i></button>
+        <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-primary" ></i></button>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
             {{-- <li>Menu</li> --}}

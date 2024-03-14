@@ -34,7 +34,7 @@ body {
     overflow-y: hidden;
     gap: .2rem;
     // padding-bottom: .8rem;
-    border-bottom: 0;
+    border-bottom: 1;
     // padding: 0 .8rem;
     position: relative;
 
@@ -90,6 +90,7 @@ body {
         &.active {
             color: $primary;
             font-weight: 500;
+            
 
             &::before {
                 background-color: $primary;

@@ -1,13 +1,10 @@
 @extends('layouts.panel.index')
 @section('title', 'Tanda Tangan')
 @section('content')
-    <div class="container mt-5">
-        <div class="d-flex justify-content-between mb-3">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-end mb-3">
             <div>
-                <h1>Tanda Tangan</h1>
-            </div>
-            <div>
-                <button class="btn btn-primary rounded-4" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
+                <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
             </div>
         </div>
 
