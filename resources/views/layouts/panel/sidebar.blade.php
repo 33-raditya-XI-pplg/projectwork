@@ -1,14 +1,11 @@
 <aside class="sidebar" id="panel-sidebar">
-    {{-- <button class="btn-close-sidebar" data-toggle="sidebar">
-        <i class="fa fa-xmark"></i>
-    </button> --}}
-    <a class="sidebar-brand">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="0">
-    </a>
+    <div class="sidebar-brand justify-content-center">
+        <img id="logo" id="logo" src="{{ asset('assets/img/logo.png') }}" alt="0">
+    
         <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-primary" ></i></button>
+    </div>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
-            {{-- <li>Menu</li> --}}
             <li class="sidebar-menu-item {{ Request::segment(2) == 'dashboard'? 'active' : '' }}">
                 <a href="{{ url('admin/dashboard') }}" class="item-link">
                     <i class="fa fa-home link-icon"></i>
@@ -73,3 +70,24 @@
         </ul>
     </div>
 </aside>
+
+@push('script')
+<script>
+    // Fungsi untuk menangani klik tombol sidebar
+    document.getElementById("btn-show-sidebar").addEventListener("click", function() {
+        // Mengambil semua elemen <span> di dalam sidebar
+        var spans = document.querySelectorAll('.sidebar-menu span');
+        var logo = document.getElementById('logo');
+        var sidebar = document.getElementById('panel-sidebar');
+        var button = document.getElementById('btn-show-sidebar')
+
+        // Melooping semua elemen <span> dan menghapus teksnya
+        spans.forEach(function(span) {
+            span.textContent = ''; // Menghilangkan teks
+            logo.style.visibility = 'hidden';
+            sidebar.style.maxWidth = '80px';
+            button.style.left = '50%';
+        });
+    });
+</script>
+@endpush
