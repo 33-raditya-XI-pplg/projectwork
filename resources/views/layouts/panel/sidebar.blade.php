@@ -35,6 +35,7 @@
                     <i class="fas fa-database link-icon"></i>
                     <span>Master Data</span>
                 </a>
+                <div class="card-header mt-2" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
                 <div class="sub-menu">
                     <ul class="sub-menu-content">
                         <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
@@ -66,6 +67,7 @@
                                 Pengguna</a>
                         </li>
                     </ul>
+                </div>
                 </div>
             </li>
             <li class="sidebar-menu-item {{ Request::segment(2) == 'profile' ? 'active' : '' }}">

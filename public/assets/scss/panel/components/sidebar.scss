@@ -65,9 +65,9 @@
     }
 
     .footer h6{
-    position: static;
+    position: absolute;
     bottom: 0;
-    left: 0;
+    left: 10px;
     right: 0;
     padding: 10px;
     text-align: left;
@@ -86,7 +86,7 @@
         bottom: 120px;
         // right: 20px;
         margin-left: 185px;
-        margin-top: 88px;
+        margin-top: 50px;
     }
     .triangles{
         width: 0;
@@ -125,8 +125,11 @@
     }
 
     .sidebar-menu-content {
+        // max-height: 99vh;
+        // overflow-y: auto;
         max-height: 99vh;
         overflow-y: auto;
+        margin-top: 30px;
     }
 
     .sidebar-menu {
@@ -210,8 +213,8 @@
                     &::before {
                         content: '';
                         position: absolute;
-                        width: 1px;
-                        height: calc(100% - 1rem);
+                        // width: 1px;
+                        // height: calc(100% - 1rem);
                         background-color: #f1f1f1;
                         left: .8rem;
                         top: 0;
@@ -240,18 +243,18 @@
                         padding: 0 1rem;
                         position: relative;
 
-                        &::before {
-                            content: '\f111';
-                            color: #f1f1f1;
-                            font-size: 8px;
-                            font-weight: 900;
-                            font-family: $font-family-icon;
-                            position: absolute;
-                            top: 50%;
-                            transform: translateY(-50%);
-                            left: -.43rem;
-                            transition: all .2s linear;
-                        }
+                        // &::before {
+                        //     content: '\f111';
+                        //     color: #f1f1f1;
+                        //     font-size: 8px;
+                        //     font-weight: 900;
+                        //     font-family: $font-family-icon;
+                        //     position: absolute;
+                        //     top: 50%;
+                        //     transform: translateY(-50%);
+                        //     left: -.43rem;
+                        //     transition: all .2s linear;
+                        // }
 
 
                         .sub-menu-link {
@@ -261,15 +264,24 @@
 
                         }
 
+                        // &:hover {
+                        //     &::before {
+                        //         color: $primary;
+                        //     }
+
+                        //     .sub-menu-link {
+                        //         color: $primary
+
+                        //     }
+                        // }
                         &:hover {
-                            &::before {
+                            background-color: rgba($primary,.2);
+                            color: $primary;
+
+                            &::after {
                                 color: $primary;
                             }
 
-                            .sub-menu-link {
-                                color: $primary
-
-                            }
                         }
 
                         &.active {
