@@ -1,12 +1,6 @@
 @extends('layouts.panel.index')
 @section('title', 'Tanda Tangan')
 @section('content')
-    <div class="container mt-4">
-        <div class="d-flex justify-content-end mb-3">
-            <div>
-                <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
-            </div>
-        </div>
 
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -49,7 +43,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
 
 
     <!-- insert -->

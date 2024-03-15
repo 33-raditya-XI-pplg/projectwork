@@ -1,11 +1,5 @@
 @extends('layouts.panel.index')
 @section('content')
-    <div class="container mt-4">
-        <div class="d-flex justify-content-end mb-3">
-            <div>
-                <a href="{{route('scheme.create')}}" class="btn btn-primary rounded">+ Tambah</a>
-            </div>
-        </div>
 
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -42,6 +36,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
+
 
 @endsection

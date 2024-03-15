@@ -44,27 +44,27 @@
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'penguji' ? 'active' : '' }}">
                             <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
-                                Penguji</a>
+                                <span> Penguji</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'signature' ? 'active' : '' }}">
                             <a href="{{ route('signature.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-pen-alt"></i> Tanda tangan</a>
+                                    class="fas fa-pen-alt"></i><span> Tanda Tangan</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'background' ? 'active' : '' }}">
                             <a href="{{ route('background.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-desktop"></i> Background</a>
+                                    class="fas fa-desktop"></i><span> Background</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'jenis-event' ? 'active' : '' }}">
                             <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-bullhorn"></i> Jenis event</a>
+                                    class="fas fa-bullhorn"></i><span> Jenis Event</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'scheme' ? 'active' : '' }}">
                             <a href="{{ route('scheme.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
-                                Skema</a>
+                                <span> Skema</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i>
-                                Pengguna</a>
+                                <span> Pengguna</span></a>
                         </li>
                     </ul>
                 </div>
@@ -94,7 +94,6 @@
         var logo = document.getElementById('logo');
         var sidebar = document.getElementById('panel-sidebar');
         var button = document.getElementById('btn-show-sidebar');
-        var breadcrumb = document.getElementById('breadcrumb');
 
         // Melooping semua elemen <span> dan menghapus teksnya
         spans.forEach(function(span) {
@@ -102,7 +101,6 @@
             logo.style.visibility = 'hidden';
             sidebar.style.maxWidth = '90px';
             button.style.left = '50%';
-            breadcrumb.style.display = 'none';
         });
     });
     </Script>

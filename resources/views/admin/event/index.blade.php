@@ -2,25 +2,22 @@
 @section('title', 'Kegiatan')
 @section('content')
 
-    <div class="container mt-4">
-        <div class="d-flex justify-content-end mb-3">
-            <div>
-                <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
-            </div>
-        </div>
-
-
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <nav>
                 <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
-                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-home" aria-selected="true">All</button>
-                  <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-draft" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Draft</button>
-                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-publish" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Publish</button>
-                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-live" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Berlangsung</button>
-                  <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-end" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Selesai</button>
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all"
+                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">All</button>
+                    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-draft"
+                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">Draft</button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-publish"
+                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Publish</button>
+                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-live"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Berlangsung</button>
+                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-end"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Selesai</button>
                 </div>
-              </nav>
-              <div class="tab-content" id="nav-tabContent">
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
                     {{--  --}}
 
@@ -43,19 +40,23 @@
                                         <td>18-10-2024</td>
                                         <td>22-10-2024</td>
                                         <td>Mascitra.com</td>
-                                        <td><button type="button" class="btn btn-outline-warning rounded-3" disabled>Draft</button></td>
+                                        <td><button type="button" class="btn btn-outline-warning rounded-3"
+                                                disabled>Draft</button></td>
                                         <td>
                                             <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton1"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
                                                     <i class="fa-solid fa-bars"></i>
                                                 </a>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                    <li><a class="dropdown-item text-info" href="#"
+                                                            data-bs-toggle="modal"
                                                             data-bs-target="#edit{{ $i }}"><i
                                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $i) }}" class="dropdown-item text-danger"
-                                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                                    <li><a href="{{ route('event.destroy', $i) }}"
+                                                            class="dropdown-item text-danger" data-confirm-delete="true"><i
+                                                                class="fa-regular fa-trash-can pe-none"></i>
                                                             Delete</a>
                                                     </li>
                                                 </ul>
@@ -92,16 +93,20 @@
                                         <td>Mascitra.com</td>
                                         <td>
                                             <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton1"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
                                                     <i class="fa-solid fa-bars"></i>
                                                 </a>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                    <li><a class="dropdown-item text-info" href="#"
+                                                            data-bs-toggle="modal"
                                                             data-bs-target="#edit{{ $i }}"><i
                                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $i) }}" class="dropdown-item text-danger"
-                                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                                    <li><a href="{{ route('event.destroy', $i) }}"
+                                                            class="dropdown-item text-danger"
+                                                            data-confirm-delete="true"><i
+                                                                class="fa-regular fa-trash-can pe-none"></i>
                                                             Delete</a>
                                                     </li>
                                                 </ul>
@@ -130,15 +135,15 @@
                         No data available!
                     </div>
                 </div>
-              </div>
+            </div>
 
         </div>
     </div>
 
 
     <!-- insert -->
-    <div class="modal fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Event</h5>
@@ -161,8 +166,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="tanggal_event" class="form-label">Tanggal Event</label>
-                                        <input type="date" class="form-control" name="tanggal_event" id="tanggal_event"
-                                            placeholder="DD/MM/YYYY" required>
+                                        <input type="date" class="form-control" name="tanggal_event"
+                                            id="tanggal_event" placeholder="DD/MM/YYYY" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="exampleFormControlInput1" class="form-label">Tanggal Berakhir</label>
@@ -174,7 +179,8 @@
                                 {{-- kiri --}}
                                 <div class="mb-3">
                                     <label for="id_instansi" class="form-label">Nama Instansi</label>
-                                    <input type="text" class="form-control" name="id_instansi" id="id_instansi" required>
+                                    <input type="text" class="form-control" name="id_instansi" id="id_instansi"
+                                        required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleFormControlInput1" class="form-label">Jenis Event</label>
@@ -186,6 +192,15 @@
                                         <option value="3">Seminar</option>
                                     </select>
                                 </div>
+                                <label for="status" class="form-label mt-3">Status</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked" name="status" checked>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="deskripsi" class="form-label">Deskripsi</label>
+                                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4"></textarea>
                             </div>
                         </div>
                     </div>
@@ -203,8 +218,9 @@
 
     <!-- edit -->
     @for ($i = 0; $i < 5; $i++)
-        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
-            <div class="modal-dialog">
+        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="exampleModalLabel">Edit Event</h5>
@@ -255,6 +271,15 @@
                                             <option value="3">Seminar</option>
                                         </select>
                                     </div>
+                                    <label for="status" class="form-label mt-3">Status</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked" name="status" checked>
+                                </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4"></textarea>
                                 </div>
                             </div>
                         </div>
