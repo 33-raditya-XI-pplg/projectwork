@@ -86,8 +86,8 @@
 </aside>
 
 @push('script')
-<script>
-    // Fungsi untuk menangani klik tombol sidebar
+    <Script>
+        // Fungsi untuk menangani klik tombol sidebar
     document.getElementById("btn-show-sidebar").addEventListener("click", function() {
         // Mengambil semua elemen <span> di dalam sidebar
         var spans = document.querySelectorAll('.sidebar-menu span');
@@ -105,5 +105,5 @@
             breadcrumb.style.display = 'none';
         });
     });
-</script>
+    </Script>
 @endpush

@@ -81,7 +81,7 @@
         height: 0;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
-        border-bottom: 40px solid rgba(255, 149, 28, 1);
+        border-bottom: 40px solid #007DFF;
         position: static;
         bottom: 120px;
         // right: 20px;
@@ -93,7 +93,7 @@
         height: 0;
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
-        border-bottom: 40px solid rgba(255, 149, 28, 1);
+        border-bottom: 40px solid #007DFF;
         position: static;
         bottom: 60px;
         // right: 20px;
@@ -280,6 +280,10 @@
 
                             &::after {
                                 color: $primary;
+                            }
+                                .sub-menu-link {
+                                color: $primary
+
                             }
 
                         }
