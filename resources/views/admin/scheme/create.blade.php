@@ -2,7 +2,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="card">
-            <div class="card-header" style="background-color: #FFFFFF">
+            <div class="card-header">
               <form action="">
                 <div class="mb-3">
                   <label for="formFileSm" class="form-label">Nama Skema</label>

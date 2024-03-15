@@ -51,7 +51,6 @@
     }
     #btn-show-sidebar {
         position: absolute;
-        color:#FD7702;
         background-color: transparent;
         border:0;
         left: 85%;
@@ -67,14 +66,13 @@
     .footer h6{
     position: absolute;
     bottom: 0;
-    left: 10px;
     right: 0;
     padding: 10px;
     text-align: left;
     font-family: sans-serif;
     font-size: 12px;
     margin-top: 1px;
-
+    left: 10px;
     }
     .triangle {
         width: 0;
@@ -210,6 +208,7 @@
                     overflow: unset;
                     animation: .3s fadeIn linear;
 
+<<<<<<< Updated upstream
                     &::before {
                         content: '';
                         position: absolute;
@@ -219,6 +218,17 @@
                         left: .8rem;
                         top: 0;
                     }
+=======
+                    // &::before {
+                    //     content: '';
+                    //     position: absolute;
+                    //     width: 1px;
+                    //     height: calc(100% - 1rem);
+                    //     background-color: #f1f1f1;
+                    //     left: .8rem;
+                    //     top: 0;
+                    // }
+>>>>>>> Stashed changes
                 }
             }
 
@@ -256,6 +266,15 @@
                         //     transition: all .2s linear;
                         // }
 
+                        &:hover {
+                            background-color: rgba($primary,.2);
+                            color: $primary;
+
+                            &::after {
+                                color: $primary;
+                            }
+
+                        }
 
                         .sub-menu-link {
                             transition: all .2s linear;
@@ -275,6 +294,7 @@
                         //     }
                         // }
                         &:hover {
+<<<<<<< Updated upstream
                             background-color: rgba($primary,.2);
                             color: $primary;
 
@@ -284,14 +304,24 @@
                                 .sub-menu-link {
                                 color: $primary
 
+=======
+                            // &::before {
+                            //     color: $primary;
+                            // }
+
+                            .sub-menu-link {
+                                // color: $primary
+                                background-color: rgba($primary,.2);
+                                color: $primary;
+>>>>>>> Stashed changes
                             }
 
                         }
 
                         &.active {
-                            &::before {
-                                color: $primary;
-                            }
+                            // &::before {
+                            //     color: $primary;
+                            // }
 
                             .sub-menu-link {
                                 color: $primary;

@@ -3,7 +3,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-end mb-3">
             <div>
-                <a href="{{route('scheme.create')}}" class="btn btn-primary rounded">+ Tambah</a>
+                <a href="{{route('scheme.create')}}" class="btn btn-primary rounded" >+ Tambah</a>
             </div>
         </div>
 

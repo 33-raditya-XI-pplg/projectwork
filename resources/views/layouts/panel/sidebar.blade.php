@@ -35,7 +35,7 @@
                     <i class="fas fa-database link-icon"></i>
                     <span>Master Data</span>
                 </a>
-                <div class="card-header mt-2" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
+                <div class="card-header mt-3" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
                 <div class="sub-menu">
                     <ul class="sub-menu-content">
                         <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
@@ -44,27 +44,27 @@
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'penguji' ? 'active' : '' }}">
                             <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
-                                Penguji</a>
+                               <span>Penguji</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'signature' ? 'active' : '' }}">
                             <a href="{{ route('signature.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-pen-alt"></i> Tanda tangan</a>
+                                    class="fas fa-pen-alt"></i><span> Tanda tangan</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'background' ? 'active' : '' }}">
                             <a href="{{ route('background.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-desktop"></i> Background</a>
+                                    class="fas fa-desktop"></i><span> Background</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'jenis-event' ? 'active' : '' }}">
                             <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-bullhorn"></i> Jenis event</a>
+                                    class="fas fa-bullhorn"></i><span> Jenis event</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'scheme' ? 'active' : '' }}">
                             <a href="{{ route('scheme.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
-                                Skema</a>
+                               <span> Skema</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i>
-                                Pengguna</a>
+                                <span> Pengguna</span></a>
                         </li>
                     </ul>
                 </div>
@@ -77,8 +77,12 @@
                 </a>
             </li>
         </ul>
+        <span>
         <div class="triangle"></div>
+        </span>
+        <span>
         <div class="triangles"></div>
+        </span>
         <div class="footer">
             <h6><i class="far fa-copyright"></i> 2024 Mascitra Konsultan IT</h6>
         </div>
