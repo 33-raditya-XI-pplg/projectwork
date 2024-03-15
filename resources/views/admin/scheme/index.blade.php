@@ -3,7 +3,7 @@
     <div class="container mt-4">
         <div class="d-flex justify-content-end mb-3">
             <div>
-                <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add" >+ Tambah</button>
+                <a href="{{route('scheme.create')}}" class="btn btn-primary rounded">+ Tambah</a>
             </div>
         </div>
 
@@ -44,97 +44,4 @@
         </div>
     </div>
 
-
-    <!-- insert -->
-    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Skema</h5>
-                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    {{-- form --}}
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                {{-- kanan --}}
-                                <form action="{{ route('event.store') }}" method="POST">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <label for="nama_skema" class="form-label">Nama Skema</label>
-                                        <input type="text" class="form-control" name="nama_skema" id="nama_skema"
-                                            required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nama_skema" class="form-label">Sub Skema</label>
-                                        <input type="text" class="form-control" name="nama_skema" id="nama_skema"
-                                            required>
-                                    </div>
-
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary rounded-3 text-white">Tambah Sub Skema</button>
-                    </div>
-                    {{-- end form --}}
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- edit -->
-    @for ($i = 0; $i < 9; $i++)
-        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Skema</h5>
-                        <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-                        {{-- form --}}
-                        <div class="container">
-                            <div class="row">
-                                <div class="col">
-                                    {{-- kanan --}}
-                                    <form action="{{ route('event.update', $i) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="mb-3">
-                                            <label for="nama_skema" class="form-label">Nama Skema</label>
-                                            <input type="text" class="form-control" name="nama_skema" id="nama_skema"
-                                                required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="nama_skema" class="form-label">Sub Skema</label>
-                                            <input type="text" class="form-control" name="nama_skema" id="nama_skema"
-                                                required>
-                                        </div>
-
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary rounded-3 text-white">Tambah Sub Skema</button>
-                        </div>
-                        {{-- end form --}}
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endfor
 @endsection
