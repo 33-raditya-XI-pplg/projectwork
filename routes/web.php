@@ -46,8 +46,8 @@ Route::get('/',function(){
         Route::resource('/penguji', PengujiController::class);
         Route::resource('/instansi', InstansiController::class);
         Route::resource('/jenis-event', JenisEventController::class);
-        Route::resource('sertifikat', SertifikatController::class);
     });
+    Route::resource('sertifikat', SertifikatController::class);
 
 
 });
