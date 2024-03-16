@@ -2,6 +2,7 @@
 @section('content')
     <div class="container mt-4">
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+            <div class="card-title mb-3">Pilih Even & Skema</div>
             <nav>
                 <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
                   <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Event</button>
@@ -51,6 +52,7 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-4 px-3 py-3 mt-5">
+                        <div class="card-title mb-3">Detail Event</div>
                         <table id="example" class="table">
                             <thead class="fw-normal">
                                 <th scope="col">Nama Perserta</th>

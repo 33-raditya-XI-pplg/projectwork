@@ -4,9 +4,9 @@
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <nav>
                 <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
-                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-home" aria-selected="true">All</button>
-                  <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-draft" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Draft</button>
-                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-publish" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Submit</button>
+                  <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Event</button>
+                  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Skema</button>
+                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Submit</button>
                 </div>
               </nav>
             <div class="tab-content" id="pills-tabContent">

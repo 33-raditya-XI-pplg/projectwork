@@ -13,7 +13,7 @@
                 <div class="users-login ml-10">Dedi hariyanto <h6 id="roles">admin</h6></div>
                 {{-- <span class="nav-dropdown-title">{{ auth()->user()->name }}</span> --}}
             </button>
-            <div class="nav-dropdown-content">
+            <div class="nav-dropdown-content" style="border-radius: 7px">
                 <ul class="nav-dropdown-menu">
                     <li class="nav-dropdown-item">
                         <a href="" class="nav-dropdown-item-link"><i class="fas fa-user-alt"></i> Profil</a>
