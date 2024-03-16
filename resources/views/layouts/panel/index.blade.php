@@ -18,9 +18,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
     <link href="{{ asset('') }}vendor/DataTables/datatables.css" rel="stylesheet">
+    <link href="{{ asset('') }}vendor/select2/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('vendor/simditor/styles/simditor.css') }}">
     @stack('style')
     <link rel="stylesheet" href="{{ asset('assets/css/panel.css?v=1.1') }}">
+    
     {{-- @include('layouts.env') --}}
 </head>
 <body>
@@ -47,6 +49,7 @@
             
         </div>
     </div>
+
 
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>

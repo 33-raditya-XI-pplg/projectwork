@@ -77,9 +77,11 @@
                 </a>
             </li>
         </ul>
-        <div class="triangle"></div>
-        <div class="triangles"></div>
-        <div class="footer">
+        <div id="segitiga">
+            <span class="triangle d-block"></span>
+        <span class="triangles d-block"></span>
+        </div>
+        <div id="footer" class="footer">
             <h6><i class="far fa-copyright"></i> 2024 Mascitra Konsultan IT</h6>
         </div>
     </div>
@@ -96,6 +98,8 @@
         var logo = document.getElementById('logo');
         var sidebar = document.getElementById('panel-sidebar');
         var button = document.getElementById('btn-show-sidebar');
+        var triangle = document.getElementById('segitiga');
+        var footer = document.getElementById('footer');
 
         // Jika sidebar sedang terbuka
         if (sidebarState) {
@@ -106,6 +110,8 @@
             logo.style.visibility = 'visible'; // Menampilkan kembali logo
             sidebar.style.maxWidth = '260px'; // Mengembalikan lebar sidebar ke kondisi semula
             button.style.left = '85%'; // Mengembalikan posisi tombol
+            triangle.style.display = '';
+            footer.style.display = '';
             sidebarState = false; // Menandakan sidebar kembali tertutup
         } else { // Jika sidebar sedang tertutup
             // Melooping semua elemen <span> dan menghapus teksnya
@@ -115,6 +121,8 @@
             logo.style.visibility = 'hidden'; // Menyembunyikan logo
             sidebar.style.maxWidth = '90px'; // Mengubah lebar sidebar
             button.style.left = '50%'; // Mengubah posisi tombol
+            triangle.style.display = 'none';
+            footer.style.display = 'none';
             sidebarState = true; // Menandakan sidebar sedang terbuka
         }
     });

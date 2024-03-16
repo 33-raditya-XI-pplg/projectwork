@@ -207,9 +207,17 @@
                     {{-- end form --}}
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                <div class="modal-footer justify-content-between mx-3">
+                    <div class="form-check form-switch">
+                        <label for="status" class="">Status</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                            name="status" checked>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-danger rounded-3"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    </div>
                 </div>
                 </form>
             </div>
@@ -271,11 +279,16 @@
                                             <option value="3">Seminar</option>
                                         </select>
                                     </div>
-                                    <label for="status" class="form-label mt-3">Status</label>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckChecked" name="status" checked>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label mt-3">Skema</label>
+                                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+                                            <option value="AL">Alabama</option>
+                                            <option value="WY">Wyoming</option>
+                                            <option value="AL">Alabama</option>
+                                            <option value="WY">Wyoming</option>
+                                          </select>
+                                    </div>
+
                                 </div>
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi</label>
@@ -286,9 +299,17 @@
                         {{-- end form --}}
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    <div class="modal-footer justify-content-between mx-3">
+                        <div class="form-check form-switch">
+                            <label for="status" class="">Status</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                                name="status" checked>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger rounded-3"
+                                data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                        </div>
                     </div>
                     </form>
                 </div>
@@ -297,3 +318,11 @@
     @endfor
 
 @endsection
+
+@push('script')
+<script>
+$(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
+</script>
+@endpush
