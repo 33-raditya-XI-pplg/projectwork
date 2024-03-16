@@ -18,8 +18,8 @@
                     <span>Event</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
-                <a href="" class="item-link">
+            <li class="sidebar-menu-item {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
+                <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-tasks link-icon"></i>
                     <span>Penilaian</span>
                 </a>
@@ -35,7 +35,7 @@
                     <i class="fas fa-database link-icon"></i>
                     <span>Master Data</span>
                 </a>
-                <div class="card-header mt-2" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
+                <div class="card-header mt-3" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
                 <div class="sub-menu">
                     <ul class="sub-menu-content">
                         <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
@@ -46,8 +46,8 @@
                             <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
                                 <span> Penguji</span></a>
                         </li>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'signature' ? 'active' : '' }}">
-                            <a href="{{ route('signature.index') }}" class="sub-menu-link"><i
+                        <li class="sub-menu-item {{ Request::segment(3) == 'tandatangan' ? 'active' : '' }}">
+                            <a href="{{ route('tandatangan.index') }}" class="sub-menu-link"><i
                                     class="fas fa-pen-alt"></i><span> Tanda Tangan</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'background' ? 'active' : '' }}">
@@ -58,8 +58,8 @@
                             <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i
                                     class="fas fa-bullhorn"></i><span> Jenis Event</span></a>
                         </li>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'scheme' ? 'active' : '' }}">
-                            <a href="{{ route('scheme.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'skema' ? 'active' : '' }}">
+                            <a href="{{ route('skema.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
                                 <span> Skema</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'active' : '' }}">

@@ -13,7 +13,7 @@ class SignatureController extends Controller
     public function index()
     {
         confirmDelete('Hapus TTD', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.signature.index');
+        return view('admin.tandatangan.index');
     }
 
     /**

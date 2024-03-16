@@ -12,6 +12,7 @@ use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\BackgroundController;
 
 use App\Http\Controllers\JenisEventController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SertifikatController;
 
 
@@ -37,10 +38,11 @@ Route::get('/',function(){
     });
 
     Route::resource('/event', EventController::class);
+    Route::resource('penilaian',PenilaianController::class);
 
     Route::group(['prefix' => 'master'], function () {
-        Route::resource('signature',SignatureController::class);
-        Route::resource('scheme', SchemeController::class);
+        Route::resource('tandatangan',SignatureController::class);
+        Route::resource('skema', SchemeController::class);
         Route::resource('background', BackgroundController::class);
         Route::resource('/user', UserController::class);
         Route::resource('/penguji', PengujiController::class);

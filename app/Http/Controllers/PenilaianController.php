@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 
-class SchemeController extends Controller
+class PenilaianController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        confirmDelete('Hapus TTD', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.skema.index');
+        return view('admin.penilaian.index');
     }
 
     /**
@@ -21,7 +19,7 @@ class SchemeController extends Controller
      */
     public function create()
     {
-        return view('admin.skema.create');
+        return view('admin.penilaian.inputnilai');
     }
 
     /**
@@ -29,8 +27,7 @@ class SchemeController extends Controller
      */
     public function store(Request $request)
     {
-        Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
-        return redirect()->back();
+        //
     }
 
     /**
@@ -54,8 +51,7 @@ class SchemeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
-        return redirect()->back();
+        //
     }
 
     /**
@@ -63,7 +59,6 @@ class SchemeController extends Controller
      */
     public function destroy(string $id)
     {
-        toast('Skema Terhapus', 'success');
-        return redirect()->back();
+        //
     }
 }

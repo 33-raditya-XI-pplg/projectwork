@@ -16208,7 +16208,7 @@ a {
 }
 
 :root {
-  --bs-body-font-family: "Work Sans", sans-serif;
+  --bs-body-font-family: "DM Sans", sans-serif;
 }
 
 .select2-container {
@@ -17820,7 +17820,6 @@ body {
 }
 .sidebar #btn-show-sidebar {
   position: absolute;
-  color: #FD7702;
   background-color: transparent;
   border: 0;
   left: 85%;
@@ -17835,13 +17834,13 @@ body {
 .sidebar .footer h6, .sidebar .footer .h6 {
   position: absolute;
   bottom: 0;
-  left: 10px;
   right: 0;
   padding: 10px;
   text-align: left;
   font-family: sans-serif;
   font-size: 12px;
   margin-top: 1px;
+  left: 10px;
 }
 .sidebar .triangle {
   width: 0;
@@ -17958,13 +17957,6 @@ body {
   overflow: unset;
   animation: 0.3s fadeIn linear;
 }
-.sidebar .sidebar-menu .sidebar-menu-item.active .sub-menu::before {
-  content: "";
-  position: absolute;
-  background-color: #f1f1f1;
-  left: 0.8rem;
-  top: 0;
-}
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu {
   width: 100%;
   position: relative;
@@ -17986,11 +17978,6 @@ body {
   padding: 0 1rem;
   position: relative;
 }
-.sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item .sub-menu-link {
-  transition: all 0.2s linear;
-  color: #686868;
-  display: block;
-}
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item:hover {
   background-color: rgba(0, 125, 255, 0.2);
   color: #007DFF;
@@ -17998,10 +17985,13 @@ body {
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item:hover::after {
   color: #007DFF;
 }
-.sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item:hover .sub-menu-link {
-  color: #007DFF;
+.sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item .sub-menu-link {
+  transition: all 0.2s linear;
+  color: #686868;
+  display: block;
 }
-.sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item.active::before {
+.sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item:hover .sub-menu-link {
+  background-color: rgba(0, 125, 255, 0.2);
   color: #007DFF;
 }
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item.active .sub-menu-link {

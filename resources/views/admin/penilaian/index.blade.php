@@ -2,11 +2,12 @@
 @section('content')
     <div class="container mt-4">
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+            <div class="card-title mb-3">Pilih Even & Skema</div>
             <nav>
                 <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
-                  <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Event</button>
-                  <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Skema</button>
-                  <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Submit</button>
+                  <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Event</button>
+                  <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-draft" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pilih Skema</button>
+                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-publish" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Submit</button>
                 </div>
               </nav>
             <div class="tab-content" id="pills-tabContent">
@@ -51,42 +52,22 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-4 px-3 py-3 mt-5">
+                        <div class="card-title mb-3">Detail Event</div>
                         <table id="example" class="table">
                             <thead class="fw-normal">
                                 <th scope="col">Nama Perserta</th>
-                                <th scope="col">Nomor Sertifikat</th>
-                                <th scope="col">Tanggal Terbit</th>
-                                <th scope="col">Masa Berlaku</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Nilai Peserta</th>
+                                <th scope="col">Tanggal</th>
                                 <th scope="col">Aksi</th>
                             </thead>
                             <tbody class="" style="vertical-align: middle">
                                 @for ($i = 0; $i < 5; $i++)
                                     <tr>
                                         <td>Dedi {{ $i }}</td>
-                                        <td>9240</td>
+                                        <td>90</td>
                                         <td>14-02-2024</td>
-                                        <td>14-052024</td>
-                                        <td><button type="button" class="btn btn-outline-success rounded-3"
-                                                disabled>Aktif</button></td>
                                         <td>
-                                            <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="sertifikat"><i
-                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('sertifikat.destroy', $i) }}"
-                                                            class="dropdown-item text-danger" data-confirm-delete="true"><i
-                                                                class="fa-regular fa-trash-can pe-none"></i>
-                                                            Delete</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <a href="{{route('penilaian.create')}}" class="btn btn-sm btn-primary rounded">+ Input Nilai</a>
                                         </td>
                                     </tr>
                                 @endfor
