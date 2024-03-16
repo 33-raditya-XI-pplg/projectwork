@@ -29,7 +29,22 @@
         @include('layouts.panel.sidebar')
         @include('layouts.panel.navbar')
         <div class="content-wrapper" id="panel-content">
-            @yield('content')
+            <div class="container mt-4">
+                <div class="d-flex justify-content-between  align-items-center  mb-3">
+                    <div id="breadcrumb " style="--bs-breadcrumb-divider: ''">
+                        <ol class="breadcrumb d-inline">
+                          <li class="breadcrumb-item text-primary text-capitalize h4 d-inline">{{ Request::segment(2) }}</li>
+                          <span class="h4 text-primary">{{ count(Request::segments()) > 2 ? '>' : ''}}</span>
+                          <li class="breadcrumb-item text-capitalize h4 d-inline">{{ Str::replace('-', ' ', Request::segment(3)); }}</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
+                    </div>
+                </div>
+                @yield('content')
+            </div>
+            
         </div>
     </div>
 

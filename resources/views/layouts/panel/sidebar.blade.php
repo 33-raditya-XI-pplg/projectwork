@@ -18,8 +18,8 @@
                     <span>Event</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
-                <a href="" class="item-link">
+            <li class="sidebar-menu-item {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
+                <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-tasks link-icon"></i>
                     <span>Penilaian</span>
                 </a>
@@ -44,11 +44,11 @@
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'penguji' ? 'active' : '' }}">
                             <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
-                               <span>Penguji</span></a>
+                                <span> Penguji</span></a>
                         </li>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'signature' ? 'active' : '' }}">
-                            <a href="{{ route('signature.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-pen-alt"></i><span> Tanda tangan</span></a>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'tandatangan' ? 'active' : '' }}">
+                            <a href="{{ route('tandatangan.index') }}" class="sub-menu-link"><i
+                                    class="fas fa-pen-alt"></i><span> Tanda Tangan</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'background' ? 'active' : '' }}">
                             <a href="{{ route('background.index') }}" class="sub-menu-link"><i
@@ -56,11 +56,11 @@
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'jenis-event' ? 'active' : '' }}">
                             <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i
-                                    class="fas fa-bullhorn"></i><span> Jenis event</span></a>
+                                    class="fas fa-bullhorn"></i><span> Jenis Event</span></a>
                         </li>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'scheme' ? 'active' : '' }}">
-                            <a href="{{ route('scheme.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
-                               <span> Skema</span></a>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'skema' ? 'active' : '' }}">
+                            <a href="{{ route('skema.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span> Skema</span></a>
                         </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'active' : '' }}">
                             <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i>
@@ -90,24 +90,38 @@
 </aside>
 
 @push('script')
-    <Script>
-        // Fungsi untuk menangani klik tombol sidebar
+<script>
+    // Fungsi untuk menangani klik tombol sidebar
+    var sidebarState = false; // Menyimpan status sidebar terbuka atau tertutup
+
     document.getElementById("btn-show-sidebar").addEventListener("click", function() {
         // Mengambil semua elemen <span> di dalam sidebar
         var spans = document.querySelectorAll('.sidebar-menu span');
         var logo = document.getElementById('logo');
         var sidebar = document.getElementById('panel-sidebar');
         var button = document.getElementById('btn-show-sidebar');
-        var breadcrumb = document.getElementById('breadcrumb');
 
-        // Melooping semua elemen <span> dan menghapus teksnya
-        spans.forEach(function(span) {
-            span.textContent = ''; // Menghilangkan teks
-            logo.style.visibility = 'hidden';
-            sidebar.style.maxWidth = '90px';
-            button.style.left = '50%';
-            breadcrumb.style.display = 'none';
-        });
+        // Jika sidebar sedang terbuka
+        if (sidebarState) {
+            // Melooping semua elemen <span> dan mengembalikan teksnya
+            spans.forEach(function(span) {
+                span.style.display = ''; // Mengembalikan teks
+            });
+            logo.style.visibility = 'visible'; // Menampilkan kembali logo
+            sidebar.style.maxWidth = '260px'; // Mengembalikan lebar sidebar ke kondisi semula
+            button.style.left = '85%'; // Mengembalikan posisi tombol
+            sidebarState = false; // Menandakan sidebar kembali tertutup
+        } else { // Jika sidebar sedang tertutup
+            // Melooping semua elemen <span> dan menghapus teksnya
+            spans.forEach(function(span) {
+                span.style.display = 'none'; // Menghilangkan teks
+            });
+            logo.style.visibility = 'hidden'; // Menyembunyikan logo
+            sidebar.style.maxWidth = '90px'; // Mengubah lebar sidebar
+            button.style.left = '50%'; // Mengubah posisi tombol
+            sidebarState = true; // Menandakan sidebar sedang terbuka
+        }
     });
-    </Script>
+</script>
+
 @endpush

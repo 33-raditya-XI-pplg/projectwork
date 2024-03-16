@@ -1,11 +1,5 @@
 @extends('layouts.panel.index')
 @section('content')
-    <div class="container mt-4">
-        <div class="d-flex justify-content-end mb-3">
-            <div>
-                <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+ Tambah</button>
-            </div>
-        </div>
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
             @for ($i = 0; $i < 6; $i++)
@@ -26,7 +20,7 @@
                 </div>
             @endfor
         </div>
-    </div>
+
     @for ($i = 0; $i < 9; $i++)
     <div class="modal modal-lg fade" id="show{{ $i }}" tabindex="-1" aria-labelledby="show" aria-hidden="true">
         <div class="modal-dialog">
