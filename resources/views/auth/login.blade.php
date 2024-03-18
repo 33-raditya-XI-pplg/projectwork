@@ -14,48 +14,53 @@
 
     <div class="container-fluid bg-white">
         <div class="row min-vh-100">
-            <div class="col-md-8 d-flex justify-content-center align-items-center">
+            {{-- <div class="col-md-8 d-flex justify-content-center align-items-center"> --}}
+            <div class="col-md-7 d-flex justify-content-center align-items-center">
                 {{-- form --}}
-                <div class="container mx-md-8 bg-white">
-                    <h2 class="text-primary fw-bold mb-5 text-center">Sign In</h2>
+                <div class="container mx-md-7 bg-white">
+                    <div class="title mb-5">
+                        <a href="/"><img class="mt-3 top-0 start-0 mb-5" src="{{ asset('assets/img/logo.png') }}" width="40%" alt="logo"></a>
+                        <h2 class=""><b> Login </b></h2>
+                        <p>Buat kamu yang sudah terdaftar, silakan masuk ke akunmu.</p>
+                    </div>
                     <form action="{{ route('login') }}" method="POST">
                         @csrf
-                        <div class="form-group">
+                        <div class="mb-4">
+                            <label for=""><b> Email </b></label>
                             <input type="email" name="email" class="form-control"
                                 id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
                             <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger" />
                         </div>
-
-                        <div class="input-group mt-4">
-                            <input id="password" type="password" name="password" class="form-control"
-                                placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
-                            <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
-                                    id="toggle-pw" style="cursor: pointer;"></i></span>
-                            <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
+                        <div class="mb-4">
+                            <label for=""><b> Password </b></label>
+                            <div class="input-group">
+                                <input id="password" type="password" name="password" class="form-control"
+                                    placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+                                <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
+                                        id="toggle-pw" style="cursor: pointer;"></i></span>
+                                <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
+                            </div>
                         </div>
                         <div class="d-grid">
                             <button type="submit"
-                                class="btn btn-primary rounded btn-lg mt-4 fs-6">{{ __('Masuk') }}</button>
+                                class="btn btn-primary rounded mt-4">{{ __('Login') }}</button>
                         </div>
-                        <div class="form-group form-check mt-4 text-start">
+                        {{-- <div class="form-group form-check mt-4 text-start">
                             <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
                             <label class="form-check-label" for="exampleCheck1">I agree to the <a href="#">Master
                                     Subscription Agreement</a></label>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
                 {{-- form --}}
             </div>
 
-            <div class="col-md-4 d-flex flex-column justify-content-center position-relative" style="background: url({{ asset('assets/img/bg-login.png') }});background-size: cover;background-repeat: no-repeat;">
-                <a href="/"><img class="position-absolute mt-3 top-0 start-0 ms-4" src="{{ asset('assets/img/logo2.png') }}"
-                    height="35" alt="logo"></a>
+            <div class="col-md-5 d-flex flex-column justify-content-center position-relative" style="background: url({{ asset('assets/img/bg-login.png') }});background-size: cover;background-repeat: no-repeat;">
                 <div id="content" class="container text-white text-center">
-                    <h2 class="fw-bold">Don't have an account ?</h2>
-                    <p>Create your account !</p>
+                    <h2 class="fw-bold">Belum Memiliki Akun ?</h2>
+                    <p>Ayo, Registrasi Sekarang!</p>
                     <div class="d-grid">
-                        <a class="btn btn-outline-light btn-lg rounded mx-5 fs-6" href="{{ route('register') }}">Sign
-                            Up</a>
+                        <a class="btn btn-outline-light btn-lg rounded mx-6 fs-6" href="{{ route('register') }}">Registrasi</a>
                     </div>
                 </div>
             </div>
