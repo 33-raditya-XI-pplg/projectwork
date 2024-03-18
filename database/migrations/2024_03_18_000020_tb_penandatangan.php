@@ -8,17 +8,19 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * 
+     * ====PIVOT TABLE====
+     * tb_user to tb_event_skema
      */
-    public function up(): void
+    public function up() 
     {
         Schema::create('tb_penandatangan', function (Blueprint $table) {
             $table->id('id_penandatangan');
-
             // Foreign Key
-            $table->unsignedBigInteger('id_event_skema');
-            $table->unsignedBigInteger('id_ttd');
-            $table->index('id_event_skema');
-            $table->index('id_ttd');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
+            $table->foreignId('ttd_id')->constrained('tb_ttd', 'id_ttd');
+
+            $table->timestamps();
         });
     }
 

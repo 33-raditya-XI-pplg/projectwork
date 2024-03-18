@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_menguji', function (Blueprint $table) {
-            $table->id('id_menguji');
-            $table->date('tanggal_event');
+        Schema::create("tb_kategori", function (Blueprint $table) {
+            $table->id('id_kategori');
+            $table->string('nama_kategori');
+            $table->text('deskripsi')->nullable();
 
-            // Non FK
-            $table->unsignedBigInteger('id_penguji');   
-            $table->unsignedBigInteger('id_event_skema');
+            $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_menguji');
+        Schema::dropIfExists('tb_kategori');
     }
 };

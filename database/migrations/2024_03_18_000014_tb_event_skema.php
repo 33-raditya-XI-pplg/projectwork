@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('tb_event_skema', function (Blueprint $table) {
             $table->id('id_event_skema');
+            // Foreign Key
+            $table->foreignId('event_id')->constrained('tb_event', 'id_event');
+            $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema');
+            $table->foreignId('background_id')->constrained('tb_background', 'id_background');
 
-            // Foreign key
-            $table->unsignedBigInteger('id_event');
-            $table->unsignedBigInteger('id_skema');
-            $table->unsignedBigInteger('id_background');
-            $table->index('id_event');
-            $table->index('id_skema');
-            $table->index('id_background');
+            $table->string('status');
+
+            $table->timestamps();
+            
         });
 
     }

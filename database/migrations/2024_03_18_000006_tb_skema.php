@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_jenis_event', function (Blueprint $table) {
-            $table->id('id_jenis_event');
-            $table->string('jenis_event');
-            $table->text('deskripsi')->nullable();
+        Schema::create('tb_skema', function (Blueprint $table) {
+            $table->id('id_skema');
+            $table->string('nama_skema');
+            $table->boolean('has_sub_skema')->default(false);
+            $table->string('status');
+
+            $table->timestamps();
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_jenis_event');
+        Schema::dropIfExists('tb_skema');
     }
 };

@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('tb_nilai_peserta', function (Blueprint $table) {
             $table->id('id_nilai_peserta');
-            $table->float('nilai');
-            $table->timestamp('timestamp');
+            // Foreign Key
+            $table->foreignId('user_id')->constrained('tb_user', 'id_user');
+            $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
 
-            // Foreign key
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_sub_skema');
-            $table->unsignedBigInteger('id_event_skema');
-            $table->index('id_user');
-            $table->index('id_sub_skema');
-            $table->index('id_event_skema');
+            $table->integer('nilai');
+            $table->string('status');
+
+            $table->timestamps();
         });
     }
 

@@ -9,13 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('tb_skema', function (Blueprint $table) {
-            $table->id('id_skema');
-            $table->string('nama_skema');
-            $table->text('deskripsi_skema')->nullable();
-            $table->boolean('has_sub_skema')->default(false);
+        Schema::create('tb_faq', function (Blueprint $table) {
+            $table->id('id_faq');
+            $table->string('judul');
+            $table->string('pertanyaan');
+            $table->string('jawaban');
+            
+            $table->timestamps();
         });
     }
 
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_skema');
+        Schema::dropIfExists('tb_faq');
     }
 };
