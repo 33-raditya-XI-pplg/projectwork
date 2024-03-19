@@ -23,12 +23,12 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="mb-3">
-                                                    <label for="nama_ttd" class="form-label">Nama Peserta</label>
+                                                    <label for="nama_ttd" class="form-label">Nama Event</label>
                                                     <input type="text" class="form-control" name="nama_ttd" id="nama_ttd" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="jabatan" class="form-label">Nomor Sertifikat</label>
-                                                    <input type="text" class="form-control" name="jabatan" id="jabatan" required>
+                                                    <label for="jabatan" class="form-label">Tanggal Selesai</label>
+                                                    <input type="date" class="form-control" name="jabatan" id="jabatan" required>
                                                 </div>
                                                 <div class="form-check form-switch mb-3">
                                                     <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
@@ -37,12 +37,12 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="mb-3">
-                                                    <label for="instansi" class="form-label">Tanggal Terbit</label>
+                                                    <label for="instansi" class="form-label">Jenis Event</label>
                                                     <input type="text" class="form-control" name="instansi" id="instansi" required>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="nik" class="form-label">Masa Berlaku</label>
-                                                    <input type="text" class="form-control" name="nik" id="nik" required>
+                                                    <label for="nik" class="form-label">Tanggal Event</label>
+                                                    <input type="date" class="form-control" name="nik" id="nik" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -52,6 +52,7 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-4 px-3 py-3 mt-5">
+
                         <div class="card-title mb-3">Detail Event</div>
                         <table id="example" class="table">
                             <thead class="fw-normal">
