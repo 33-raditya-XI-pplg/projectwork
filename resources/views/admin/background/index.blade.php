@@ -23,7 +23,7 @@
 
     @for ($i = 0; $i < 9; $i++)
     <div class="modal modal-lg fade" id="show{{ $i }}" tabindex="-1" aria-labelledby="show" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Read Background</h5>
@@ -79,7 +79,7 @@
 
     <!-- insert -->
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Background</h5>
@@ -142,7 +142,7 @@
     @for ($i = 0; $i < 9; $i++)
         <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="edit"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title" id="exampleModalLabel">Edit Background</h5>

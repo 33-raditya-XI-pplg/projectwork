@@ -48,7 +48,7 @@
 
     <!-- insert -->
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Event</h5>
@@ -102,10 +102,10 @@
     </div>
 
     @for ($i = 0; $i < 9; $i++ )
-        
+
     <!-- edit -->
     <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Pengguna</h5>
