@@ -25,7 +25,7 @@
     <div class="modal modal-lg fade" id="show{{ $i }}" tabindex="-1" aria-labelledby="show" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-primary-gradient text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Read Background</h5>
                     <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -81,7 +81,7 @@
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-primary-gradient text-white">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Background</h5>
                     <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -144,7 +144,7 @@
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
+                    <div class="modal-header bg-primary-gradient text-white">
                         <h5 class="modal-title" id="exampleModalLabel">Edit Background</h5>
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>

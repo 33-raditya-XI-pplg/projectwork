@@ -6,6 +6,10 @@ body {
     background-color: $bg-body;
 }
 
+.bg-primary-gradient{
+    background: linear-gradient(88.18deg, #007DFF -2.91%, #007DFF 69.23%, #0063CB 100.92%);
+}
+
 .content-wrapper {
     margin-top: 70px;
     padding: 1rem .8rem;
@@ -90,7 +94,6 @@ body {
         &.active {
             color: $primary;
             font-weight: 500;
-            
 
             &::before {
                 background-color: $primary;
