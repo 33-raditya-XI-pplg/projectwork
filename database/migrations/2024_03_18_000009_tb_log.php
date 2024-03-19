@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('tb_log', function (Blueprint $table) {
             $table->id('id_log');
-            $table->timestamp('login_time');
-            $table->timestamps();
+            // Foreign Key
+            $table->foreignId('user_id')->constrained('tb_user', 'id_user');
 
-            // Foreign key
-            $table->unsignedBigInteger('id_user');
-            $table->index('id_user');
+            $table->timestamp('login_at')->nullable();
+            $table->timestamp('logout_at')->nullable();
+            $table->integer('duration')->nullable();
+
+            $table->timestamps();
         });
     }
 

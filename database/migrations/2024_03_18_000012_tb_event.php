@@ -13,15 +13,21 @@ return new class extends Migration
     {
         Schema::create('tb_event', function (Blueprint $table) {
             $table->id('id_event');
+            // Foreign Key
+            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
+
             $table->string('nama_event');
-            $table->dateTime('tanggal_event');
+            $table->date('tgl_mulai');
+            $table->date('tgl_berakhir');
+
+            $table->integer('biaya_regis');
+            $table->string('path_icon');
+            $table->string('path_banner');
+
             $table->string('jenis_event');
+            $table->string('status');
+
             $table->timestamps();
-
-            // Foreign key 
-            $table->unsignedBigInteger('id_instansi');
-            $table->index('id_instansi');
-
         });
     }
 

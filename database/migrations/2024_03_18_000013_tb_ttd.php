@@ -13,13 +13,17 @@ return new class extends Migration
     {
         Schema::create('tb_ttd', function (Blueprint $table) {
             $table->id('id_ttd');
+            // Foreign Key
+            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
+            
+            $table->integer('nomor_induk');
             $table->string('nama_ttd');
             $table->string('jabatan');
-            $table->string('nomor_induk');
 
-            // Foreign key
-            $table->unsignedBigInteger('id_instansi')->nullable();
-            $table->index('id_instansi');
+            $table->string('path_ttd');
+            $table->string('status');
+
+            $table->timestamps();
         });
     }
 

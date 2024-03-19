@@ -13,11 +13,28 @@ return new class extends Migration
     {
         Schema::create('tb_instansi', function (Blueprint $table) {
             $table->id('id_instansi');
+            
+            $table->string('created_by');
+            $table->date('created_at');
+
+            $table->string('updated_by');
+            $table->date('updated_at');
+
             $table->string('nama_instansi');
-            $table->string('nomor_instansi');
+            $table->integer('nomor_instansi');
+            
             $table->string('nama_kepala_instansi');
             $table->string('jabatan_kepala');
-            $table->text('logo')->nullable();
+
+            $table->text('path_logo');
+            $table->string('status');
+
+            $table->text('alamat');
+            $table->string('alamat_kota');
+            $table->string('email')->unique();
+            $table->integer('no_telp')->unique();
+
+            // $table->timestamps();
         });
     }
 

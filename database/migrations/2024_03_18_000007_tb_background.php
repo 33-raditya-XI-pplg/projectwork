@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('tb_background', function (Blueprint $table) {
             $table->id('id_background');
-            $table->string('orientasi_bg');
-            $table->integer('has_lampiran');
-            $table->string('path_bg');
             $table->string('nama_bg');
+
+            $table->enum('orientasi_bg', ['potrait', 'landscape'])->nullable();
+            $table->string('path_bg');
+            $table->boolean('has_lampiran')->default(false);
             $table->text('rincian_bg')->nullable();
+
             $table->timestamps(); 
         });
     }

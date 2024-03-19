@@ -12,24 +12,29 @@ return new class extends Migration {
     {
         Schema::create('tb_user', function (Blueprint $table) {
             $table->id('id_user');
-            $table->string('username')->nullable();
-            $table->string('email');
-            $table->string('password');
+            // Foreign Key
+            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
+
             $table->string('nama_lengkap');
-            $table->string('nomor_induk')->nullable();
+            $table->string('email')->unique();
+            $table->string('password');
+
+            $table->integer('nomor_induk')->nullable();
             $table->date('tgl_lahir')->nullable();
             $table->string('tempat_lahir')->nullable();
             $table->string('pekerjaan')->nullable();
-            $table->string('foto')->nullable();
+            $table->string('path_foto')->nullable();
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
-            $table->char('jenis_kelamin')->nullable();
-            $table->string('no_telp')->nullable();
-            $table->timestamps();
+            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
+            $table->integer('no_telp')->nullable()->unique();
 
-            // Foreign key
-            $table->unsignedBigInteger('id_instansi')->nullable();
-            $table->index('id_instansi');
+            $table->string('status')->nullable();
+            $table->string('level')->nullable();
+            $table->string('jabatan_penguji')->nullable();
+            $table->string('type_penguji')->nullable();
+
+            $table->timestamps();
         });
     }
 
