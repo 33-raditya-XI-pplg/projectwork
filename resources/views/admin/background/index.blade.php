@@ -1,18 +1,17 @@
 @extends('layouts.panel.index')
 @section('content')
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
             @for ($i = 0; $i < 6; $i++)
                 <div class="col">
-                    <div class="card h-100">
-                        <img src="{{ asset('assets/img/country/AE@3x.png') }}" class="card-img-top" alt="...">
+                    <div class="card border-light shadow">
+                        <img src="{{ asset('assets/img/image-4.png') }}" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h6 class="text">Lanscape</h6>
+                            <h6 class="text text-warning">Lanscape</h6>
                             <h5 class="card-title">Background Certif</h5>
-                            <h6 class="card-text">2 minutes ago
+                            <h6 class="card-text text-muted">2 minute ago
                             <p style="float: right">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#show{{ $i }}"><i class="far fa-edit"></i></a>
-                                <a href="{{ route('background.destroy', $i) }}" data-confirm-delete="true"><i class="far fa-trash-alt text-danger pe-none"></i></a>
+                                <a class="btn btn-danger rounded" href="{{ route('background.destroy', $i) }}" data-confirm-delete="true"><i class="far fa-trash-alt text-white pe-none"></i></a>
                             </p>
                             </h6>
                         </div>

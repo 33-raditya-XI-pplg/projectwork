@@ -84,19 +84,28 @@
                                         <input type="text" class="form-control" name="instansi" id="instansi"
                                             required>
                                     </div>
-                                    <div class="form-check form-switch">
-                                        <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                      </div>
+                                    <div class="d-grid">
+                                        <label for="instansi" class="form-label">Tanda Tangan</label>
+                                        <button class="btn btn-primary rounded-3 text-start" type="button">Upload Foto <i
+                                                class="fa-solid fa-upload"></i></button>
+                                    </div>
                             </div>
                         </div>
                     </div>
                     {{-- end form --}}
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                <div class="modal-footer justify-content-between mx-3">
+                    <div class="form-check form-switch">
+                        <label for="status" class="">Status</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                            name="status" checked>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-danger rounded-3"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    </div>
                 </div>
                 </form>
             </div>
@@ -143,10 +152,11 @@
                                             <input type="text" class="form-control" name="instansi" id="instansi"
                                                 required>
                                         </div>
-                                        <div class="form-check form-switch">
-                                            <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                          </div>
+                                          <div class="d-grid">
+                                            <label for="instansi" class="form-label">Tanda Tangan</label>
+                                            <button class="btn btn-primary rounded-3 text-start" type="button">Upload Foto <i
+                                                    class="fa-solid fa-upload"></i></button>
+                                        </div>
                                 </div>
 
                             </div>
@@ -154,9 +164,17 @@
                         {{-- end form --}}
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    <div class="modal-footer justify-content-between mx-3">
+                        <div class="form-check form-switch">
+                            <label for="status" class="">Status</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                                name="status" checked>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger rounded-3"
+                                data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                        </div>
                     </div>
                     </form>
                 </div>
