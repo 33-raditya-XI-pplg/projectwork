@@ -26,11 +26,10 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('alamat_kota');
             $table->string('email')->unique();
-            $table->integer('no_telp')->unique();
+            $table->integer('no_telp');
             
             $table->string('created_by');
             $table->string('updated_by');
-            
             $table->timestamps();
         });
     }

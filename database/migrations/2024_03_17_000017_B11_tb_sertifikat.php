@@ -26,6 +26,8 @@ return new class extends Migration
             $table->integer('total_nilai');
             $table->integer('inisial_nilai');
 
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps(); 
         });
     }

@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id('id_background');
             $table->string('nama_bg');
 
-            $table->enum('orientasi_bg', ['potrait', 'landscape'])->nullable();
-            $table->string('path_bg');
+            $table->enum('orientasi_bg', ['potrait', 'landscape']);
             $table->boolean('has_lampiran')->default(false);
+            $table->string('path_bg');
             $table->text('rincian_bg')->nullable();
 
-            $table->timestamps(); 
+            $table->integer('created_by');
+            $table->integer('updated_by');
+            $table->timestamps();
         });
     }
 

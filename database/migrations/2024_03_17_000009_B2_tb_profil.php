@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create("tb_blog", function (Blueprint $table) {
-            $table->id('id_blog');
+        Schema::create("tb_profil", function (Blueprint $table) {
+            $table->id("id_profil");
             // Foreign Key
-            $table->foreignId('user_id')->constrained('tb_user', 'id_user');
             $table->foreignId('page_id')->constrained('tb_page', 'id_page');
-            $table->foreignId('kategori_id')->constrained('tb_kategori', 'id_kategori');
 
-            $table->string('judul');
-            $table->string('slug')->unique();
-            $table->text('ringkasan');
-            $table->text('body');
-            
+            $table->text('tentang_kami');
+            $table->string('path_struktur_organisasi');
+            $table->text('visi');
+            $table->text('misi');
+            $table->text('sejarah');
+
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_blog');
+        Schema::dropIfExists('tb_profil');
     }
 };

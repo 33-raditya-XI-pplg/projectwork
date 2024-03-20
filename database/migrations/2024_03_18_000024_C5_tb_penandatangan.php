@@ -20,7 +20,9 @@ return new class extends Migration
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
             $table->foreignId('ttd_id')->constrained('tb_ttd', 'id_ttd');
 
-            $table->timestamps();
+            $table->integer('created_by');
+            $table->integer('updated_by');
+            $table->timestamps(); 
         });
     }
 

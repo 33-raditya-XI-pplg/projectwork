@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('tb_event_skema', function (Blueprint $table) {
             $table->id('id_event_skema');
@@ -20,8 +20,9 @@ return new class extends Migration
 
             $table->string('status');
 
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
-            
         });
 
     }
@@ -29,7 +30,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('tb_event_skema');
     }

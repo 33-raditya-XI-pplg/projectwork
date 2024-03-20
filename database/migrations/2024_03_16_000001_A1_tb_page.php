@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_skema', function (Blueprint $table) {
-            $table->id('id_skema');
-            $table->string('nama_skema');
-            $table->boolean('has_sub_skema')->default(false);
-            $table->string('status');
-
+        Schema::create("tb_page", function (Blueprint $table) {
+            $table->id('id_page');
+            $table->string('nama_page');
+            $table->text('deskripsi')->nullable();
+            
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_skema');
+        Schema::dropIfExists('tb_page');
     }
 };
