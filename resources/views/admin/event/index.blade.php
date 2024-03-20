@@ -279,14 +279,30 @@
                                             <option value="3">Seminar</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="status" class="form-label mt-3">Skema</label>
-                                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                                            <option value="AL">Alabama</option>
-                                            <option value="WY">Wyoming</option>
-                                            <option value="AL">Alabama</option>
-                                            <option value="WY">Wyoming</option>
-                                          </select>
+                                    <div class="">
+                                        <label for="status" class="form-label">Skema</label>
+                                        <select class="form-select" id="multiple-select-field" multiple>
+                                            <option>Christmas Island</option>
+                                            <option>South Sudan</option>
+                                            <option>Jamaica</option>
+                                            <option>Kenya</option>
+                                            <option>French Guiana</option>
+                                            <option>Mayotta</option>
+                                            <option>Liechtenstein</option>
+                                            <option>Denmark</option>
+                                            <option>Eritrea</option>
+                                            <option>Gibraltar</option>
+                                            <option>Saint Helena, Ascension and Tristan da Cunha</option>
+                                            <option>Haiti</option>
+                                            <option>Namibia</option>
+                                            <option>South Georgia and the South Sandwich Islands</option>
+                                            <option>Vietnam</option>
+                                            <option>Yemen</option>
+                                            <option>Philippines</option>
+                                            <option>Benin</option>
+                                            <option>Czech Republic</option>
+                                            <option>Russia</option>
+                                        </select>
                                     </div>
 
                                 </div>
@@ -321,8 +337,11 @@
 
 @push('script')
 <script>
-$(document).ready(function() {
-    $('.js-example-basic-multiple').select2();
-});
+    $( '#multiple-select-field' ).select2( {
+    theme: "bootstrap-5",
+    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    placeholder: $( this ).data( 'placeholder' ),
+    closeOnSelect: false,
+} );
 </script>
 @endpush
