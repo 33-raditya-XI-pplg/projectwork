@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('tb_user', function (Blueprint $table) {
             $table->id('id_user');
             // Foreign Key
-            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
+            $table->foreignId('instansi_id')->nullable()->constrained('tb_instansi', 'id_instansi');
 
             $table->string('nama_lengkap');
             $table->string('email')->unique();
@@ -27,15 +27,15 @@ return new class extends Migration {
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
-            $table->integer('no_telp')->nullable()->unique();
+            $table->string('no_telp', 20)->nullable(); 
 
             $table->string('status')->nullable();
             $table->string('level')->nullable();
             $table->string('jabatan_penguji')->nullable();
             $table->string('type_penguji')->nullable();
 
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

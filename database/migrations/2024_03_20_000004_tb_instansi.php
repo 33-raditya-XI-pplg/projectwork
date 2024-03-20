@@ -26,7 +26,7 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('alamat_kota');
             $table->string('email')->unique();
-            $table->integer('no_telp');
+            $table->string('no_telp', 20)->nullable(); 
             
             $table->string('created_by');
             $table->string('updated_by');

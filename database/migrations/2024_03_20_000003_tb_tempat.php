@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create("tb_tempat", function (Blueprint $table) {
             $table->id('id_tempat');
             $table->string('nama_tempat');
-            $table->integer('no_telp');
+            $table->string('no_telp', 20)->nullable(); 
             $table->text('alamat');
             $table->string('alamat_kota');
             $table->string('link_maps');
