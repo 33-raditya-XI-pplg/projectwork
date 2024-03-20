@@ -45,4 +45,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function userInstansi() {  // FK one-to-one dengan tb_instansi
+        return $this->belongsTo(Instansi::class, 'instansi_id', 'id_instansi');
+    }
+
+    public function userLog() // PK one-to-many dengan tb_log
+    {
+        return $this->hasMany(Log::class, 'log_id', 'id_log');
+    }
+    public function userNilai_Peserta() {  // FK One-to-Many dengan tb_nilai_peserta
+        return $this->hasMany(Nilai_Peserta::class, 'nilai_peserta_id', 'id_nilai_peserta');
+    }
+    public function userSertifikat() {  // FK One-to-Many dengan tb_sertifikat
+        return $this->hasMany(Sertifikat::class, 'sertifikat_id', 'id_sertifikat');
+    }
+
+    public function userDaftar_Peserta() // PK many-to-many dengan tb_event_skema
+    {
+        return $this->belongsToMany(Event_Skema::class, 'tb_daftar_peserta','user_id', 'event_skema_id');
+    }
+    public function userMenguji() // PK many-to-many dengan tb_event_skema
+    {
+        return $this->belongsToMany(Event_Skema::class, 'tb_menguji','user_id', 'event_skema_id');
+    }
 }

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_gallery', function (Blueprint $table) {
-            $table->id('id_gallery');
+        Schema::create('tb_galeri', function (Blueprint $table) {
+            $table->id('id_galeri');
             // Foreign Key
             $table->foreignId('page_id')->constrained('tb_page', 'id_page');
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_gallery');
+        Schema::dropIfExists('tb_galeri');
     }
 };
