@@ -9,5 +9,7 @@ class Instansi extends Model
 {
     use HasFactory;
 
+    protected $table = 'tb_instansi';
+    protected $primaryKey = 'id_instansi';
     protected $guarded = ['id_instansi'];
 }

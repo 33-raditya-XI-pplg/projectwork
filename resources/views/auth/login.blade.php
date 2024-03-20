@@ -38,8 +38,9 @@
                                     placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
                                 <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
                                         id="toggle-pw" style="cursor: pointer;"></i></span>
-                                <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
+                                
                             </div>
+                            <x-input-error :messages="$errors->get('password')" class="mt-2 text-danger" />
                         </div>
                         <div class="d-grid">
                             <button type="submit"
