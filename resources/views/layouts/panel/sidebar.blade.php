@@ -6,31 +6,31 @@
     </div>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'dashboard'? 'active' : '' }}">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'dashboard'? 'active' : '' }}">
                 <a href="{{ url('admin/dashboard') }}" class="item-link">
                     <i class="fa fa-home link-icon"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'event' ? 'active' : '' }}">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
                 <a href="{{ route('event.index') }}" class="item-link">
                     <i class="fas fa-bullhorn link-icon"></i>
                     <span>Event</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
                 <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-tasks link-icon"></i>
                     <span>Penilaian</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }}">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }}">
                 <a href="{{route('sertifikat.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
                     <span>Sertifikat</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item {{ Request::segment(2) == 'master' ? 'active' : '' }}">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">
                     <i class="fas fa-database link-icon"></i>
                     <span>Master Data</span>
@@ -79,7 +79,7 @@
         </ul>
         <div id="segitiga">
             <span class="triangle d-block"></span>
-        <span class="triangles d-block"></span>
+            <span class="triangles d-block"></span>
         </div>
         <div id="footer" class="footer">
             <h6><i class="far fa-copyright"></i> 2024 Mascitra Konsultan IT</h6>
