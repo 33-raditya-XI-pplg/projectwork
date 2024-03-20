@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('nomor_sub');
             $table->text('deskripsi_sub');
 
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

@@ -9,24 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('tb_event', function (Blueprint $table) {
-            $table->id('id_event');
+        Schema::create('tb_ttd', function (Blueprint $table) {
+            $table->id('id_ttd');
             // Foreign Key
             $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
+            
+            $table->string('nama_ttd');
+            $table->string('jabatan');
+            $table->integer('nomor_induk'); 
 
-            $table->string('nama_event');
-            $table->date('tgl_mulai');
-            $table->date('tgl_berakhir');
-
-            $table->integer('biaya_regis');
-            $table->string('path_icon');
-            $table->string('path_banner');
-
-            $table->string('jenis_event');
+            $table->string('path_ttd');
             $table->string('status');
 
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
@@ -36,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_event');
+        Schema::dropIfExists('tb_ttd');
     }
 };

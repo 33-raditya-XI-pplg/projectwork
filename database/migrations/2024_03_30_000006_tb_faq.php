@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('tb_faq', function (Blueprint $table) {
             $table->id('id_faq');
-            $table->string('judul');
+            // Foreign Key
+            $table->foreignId('page_id')->constrained('tb_page', 'id_page');
+
             $table->string('pertanyaan');
             $table->string('jawaban');
             
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

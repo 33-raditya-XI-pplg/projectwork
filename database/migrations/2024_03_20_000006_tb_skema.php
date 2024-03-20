@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_rentang_nilai', function (Blueprint $table) {
-            $table->id('id_rentang_nilai');
-            $table->string('nama_konversi_nilai');
-            $table->integer('rentang_atas');
-            $table->integer('rentang_bawah');
+        Schema::create('tb_skema', function (Blueprint $table) {
+            $table->id('id_skema');
+            $table->string('nama_skema');
+            $table->boolean('has_sub_skema')->default(false);
+            $table->string('status');
 
-            $table->string('inisial_rentang_nilai');
-
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_rentang_nilai');
+        Schema::dropIfExists('tb_skema');
     }
 };

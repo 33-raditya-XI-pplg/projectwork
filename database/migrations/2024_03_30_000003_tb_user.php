@@ -34,6 +34,8 @@ return new class extends Migration {
             $table->string('jabatan_penguji')->nullable();
             $table->string('type_penguji')->nullable();
 
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
