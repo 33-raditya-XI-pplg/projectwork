@@ -41,7 +41,6 @@ class InstansiController extends Controller
 
    public function update(Request $request, $id)
    {
-      dd($request->all());
       if (!$request->has('status')) {
          $request->merge([
             'status' => 'Nonaktif'
