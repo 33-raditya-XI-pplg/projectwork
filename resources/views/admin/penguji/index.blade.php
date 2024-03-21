@@ -2,46 +2,48 @@
 @section('title', 'Penguji')
 @section('content')
 
-    <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-        <table id="example" class="table">
-            <thead class="fw-normal">
-                <th scope="col ">Nama Penguji</th>
-                <th scope="col">Instansi</th>
-                <th scope="col">NIK</th>
-                <th scope="col">Jabatan</th>
-                <th scope="col">Status</th>
-                <th scope="col">Aksi</th>
-            </thead>
-            <tbody class="" style="vertical-align: middle">
-                @for ($i = 0; $i < 5; $i++)
-                    <tr>
-                        <td>Bambang Suryadi {{ $i }}</td>
-                        <td>PT. Solusi Kreatif Digital</td>
-                        <td>35076801144007890</td>
-                        <td>Direktur Utama</td>
-                        <td><button type="button" class="btn btn-outline-success rounded-3" disabled>Aktif</button></td>
-                        <td>
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-bars"></i>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#edit{{ $i }}"><i
-                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                    <li><a href="{{ route('penguji.destroy', $i) }}" class="dropdown-item text-danger"
-                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                            Delete</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                @endfor
-            </tbody>
-        </table>
-    </div>
+
+        <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+            <table id="example" class="table">
+                <thead class="fw-normal">
+                    <th scope="col">Nama Penguji</th>
+                    <th scope="col">Instansi</th>
+                    <th scope="col">NIK</th>
+                    <th scope="col">Jabatan</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Aksi</th>
+                </thead>
+                <tbody class="" style="vertical-align: middle">
+                    @foreach ($penguji as $row)
+                        <tr>
+                            <td>{{ $row->nama_lengkap }}</td>
+                            <td>{{ $row->userInstansi->nama_instansi }}</td>
+                            <td>{{ $row->nomor_induk }}</td>
+                            <td>{{ $row->jabatan_penguji }}</td>
+                            <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-bars"></i>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                data-bs-target="#edit{{ $row->id_user }}"><i
+                                                    class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                        <li><a href="{{ route('penguji.destroy', $row->id_user) }}" class="dropdown-item text-danger"
+                                                data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                                Delete</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
 
 
@@ -50,7 +52,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Event</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Penguji</h5>
                     <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -61,25 +63,35 @@
                         <div class="row">
                             <div class="col">
                                 {{-- kanan --}}
-                                <form action="{{ route('penguji.store') }}" method="POST">
+                                <form action="{{ route('penguji.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+                                    <input type="hidden" name="password" value="Penguji">
+                                    <input type="hidden" name="level" value="Penguji">
                                     <div class="mb-3">
-                                        <label for="nama_penguji" class="form-label">Nama Penguji</label>
-                                        <input type="text" class="form-control" name="nama_penguji" id="nama_penguji"
+                                        <label for="nama_lengkap" class="form-label">Nama Penguji</label>
+                                        <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
                                             required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="instansi_penguji" class="form-label">Instansi</label>
-                                        <input type="text" class="form-control" name="instansi_penguji"
-                                            id="instansi_penguji" required>
+                                        <label for="instansi" class="form-label">Instansi</label>
+                                        <select name="instansi_id" id="instansi_id" class="form-select">
+                                            <option selected>Pilih...</option>
+                                            @foreach($instansi as $row)
+                                                <option value="{{ $row->id_instansi }}">{{ $row->nama_instansi }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <input type="text" class="form-control" name="alamat" id="alamat" required>
                                     </div>
+                                    <div class="mb-4">
+                                        <label for="no_telp" class="form-label">No. telp</label>
+                                        <input type="text" class="form-control" name="no_telp" id="no_telp" required>
+                                    </div>
                                     <div>
-                                        <label for="no" class="form-label">No. telp</label>
-                                        <input type="text" class="form-control" name="no" id="no" required>
+                                        <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
                                     </div>
 
                             </div>
@@ -87,20 +99,21 @@
                                 {{-- kiri --}}
                                 <div class="mb-3">
                                     <label for="nomor_induk" class="form-label">NIK</label>
-                                    <input type="text" class="form-control" name="nomor_indux" id="nomor_indux" required>
+                                    <input type="text" class="form-control" name="nomor_induk"
+                                        id="nomor_induk" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="jabatan_penguji" class="form-label">Jabatan</label>
-                                    <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji"
+                                    <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="alamat_kota" class="form-label">Kota</label>
+                                    <input type="text" class="form-control" name="alamat_kota" id="alamat_kota"
                                         required>
                                 </div>
                                 <div class="mb-5">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="text" class="form-control" name="email" id="email" required>
-                                </div>
-                                <div class="d-grid">
-                                    <button class="btn btn-primary rounded-3 text-start" type="button">Upload Foto <i
-                                            class="fa-solid fa-upload"></i></button>
                                 </div>
 
                             </div>
@@ -124,14 +137,14 @@
         </div>
     </div>
 
-    @for ($i = 0; $i < 10; $i++)
+    @foreach ($penguji as $row)
         <!-- edit -->
-        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="add"
+        <div class="modal modal-lg fade" id="edit{{ $row->id_user }}" tabindex="-1" aria-labelledby="add"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary-gradient text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Event</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Penguji</h5>
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -142,28 +155,36 @@
                             <div class="row">
                                 <div class="col">
                                     {{-- kanan --}}
-                                    <form action="{{ route('penguji.update', $i) }}" method="POST">
+                                    <form action="{{ route('penguji.update', $row->id_user) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
+                                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                                         <div class="mb-3">
-                                            <label for="nama_penguji" class="form-label">Nama Penguji</label>
-                                            <input type="text" class="form-control" name="nama_penguji"
-                                                id="nama_penguji" required>
+                                            <label for="nama_lengkap" class="form-label">Nama instansi</label>
+                                            <input type="text" class="form-control" name="nama_lengkap"
+                                                id="nama_lengkap" value="{{ $row->nama_lengkap }}" required>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="instansi_penguji" class="form-label">Instansi</label>
-                                            <input type="text" class="form-control" name="instansi_penguji"
-                                                id="instansi_penguji" required>
+                                        <div class="mb-4">
+                                            <label for="instansi" class="form-label">Instansi</label>
+                                            <select class="form-select" id="instansi_id" name="instansi_id">
+                                                <option selected disabled>Pilih...</option>
+                                                @foreach($instansi as $a)
+                                                    <option value="{{ $a->id_instansi }}" {{ $row->instansi_id == $a->id_instansi ? 'selected' : '' }}>
+                                                    {{ $a->nama_instansi }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label for="alamat" class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" id="alamat"
-                                                required>
+                                            <input type="text" class="form-control" name="alamat" id="alamat" value="{{ $row->alamat }}" required>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="no" class="form-label">No. telp</label>
+                                            <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
                                         <div>
-                                            <label for="no" class="form-label">No. telp</label>
-                                            <input type="text" class="form-control" name="no" id="no"
-                                                required>
+                                            <input class="form-control" name="logo" type="file" id="formFile" accept=".png">
                                         </div>
 
                                 </div>
@@ -171,22 +192,21 @@
                                     {{-- kiri --}}
                                     <div class="mb-3">
                                         <label for="nomor_induk" class="form-label">NIK</label>
-                                        <input type="text" class="form-control" name="nomor_indux" id="nomor_indux"
-                                            required>
+                                        <input type="text" class="form-control" name="nomor_induk"
+                                            id="nomor_induk" value="{{ $row->nomor_induk }}" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="jabatan_penguji" class="form-label">Jabatan</label>
                                         <input type="text" class="form-control" name="jabatan_penguji"
-                                            id="jabatan_penguji" required>
+                                            id="jabatan_penguji" value="{{ $row->jabatan_penguji }}" required>
                                     </div>
-                                    <div class="mb-5">
+                                    <div class="mb-3">
+                                        <label for="alamat_kota" class="form-label">Kota</label>
+                                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" required>
+                                    </div>
+                                    <div>
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email"
-                                            required>
-                                    </div>
-                                    <div class="d-grid">
-                                        <button class="btn btn-primary rounded-3 text-start" type="button">Upload Foto <i
-                                                class="fa-solid fa-upload"></i></button>
+                                        <input type="text" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
                                     </div>
 
                                 </div>
@@ -198,11 +218,10 @@
                     <div class="modal-footer justify-content-between mx-3">
                         <div>
                             <label for="status" class="me-3">Status</label>
-                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
+                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-danger rounded-3"
-                                data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                         </div>
                     </div>
@@ -210,8 +229,6 @@
                 </div>
             </div>
         </div>
-    @endfor
-
-
+        @endforeach
 
 @endsection

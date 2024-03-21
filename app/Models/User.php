@@ -19,12 +19,7 @@ class User extends Authenticatable
      */
     protected $table = 'tb_user';
     protected $primaryKey = 'id_user';
-
-    protected $fillable = [
-        'nama_lengkap',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id_user'];
 
     /**
      * The attributes that should be hidden for serialization.
