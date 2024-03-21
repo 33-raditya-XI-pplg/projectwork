@@ -21,7 +21,7 @@ class InstansiController extends Controller
    {
       if (!$request->has('status')) {
          $request->merge([
-            'status' => 'Tidak Aktif'
+            'status' => 'Nonaktif'
          ]);
       }
 
@@ -44,7 +44,7 @@ class InstansiController extends Controller
 
       if (!$request->has('status')) {
          $request->merge([
-            'status' => 'Tidak Aktif'
+            'status' => 'Nonaktif'
          ]);
       }
 

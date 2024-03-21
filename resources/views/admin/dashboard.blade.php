@@ -1,4 +1,13 @@
 @extends('layouts.panel.index')
+@section('title', 'Dashboard')
 @section('content')
-{{-- <h1>Content</h1> --}}
+
 @endsection
+
+@push('script')
+    <script>
+        var button = document.getElementById('add')
+
+        button.style.display = 'none';
+    </script>
+@endpush

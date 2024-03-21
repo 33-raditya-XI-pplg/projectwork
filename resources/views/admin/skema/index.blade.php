@@ -1,4 +1,5 @@
 @extends('layouts.panel.index')
+@section('title', 'Skema')
 @section('content')
 
 
@@ -38,4 +39,17 @@
         </div>
 
 
+
 @endsection
+
+@push('script')
+    <script>
+        var add = document.getElementById('add');
+
+        add.addEventListener('click', function(event) {
+
+            event.preventDefault();
+            window.location.href = "{{ route('skema.create') }}";
+        })
+    </script>
+@endpush

@@ -2,6 +2,14 @@
 @section('title', 'Jenis Event')
 @section('content')
 
+    @push('style')
+        <style>
+            .ck-editor__editable {
+                min-height: 200px;
+            }
+        </style>
+    @endpush
+
 
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <table id="example" class="table">
@@ -63,13 +71,16 @@
                                 <input type="text" class="form-control" name="jenis_event" id="jenis_event" required>
                         </div>
                         <div class="mb-3">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="10"></textarea>
+                            <label for="deskripsi" class="form-label h-100">Deskripsi</label>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi"></textarea>
                         </div>
                         <label for="status" class="form-label">Status</label>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                                name="status" checked>
+                        <div>
+
+                            <input class="form-check-input" type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif"
+                                data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs"
+                                data-width="75" value="Aktif">
+
                         </div>
 
                     </div>
@@ -110,12 +121,15 @@
                             </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="10"></textarea>
+                                <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="10"></textarea>
                             </div>
                             <label for="status" class="form-label">Status</label>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckChecked" name="status" checked>
+                            <div>
+
+                                <input class="form-check-input" type="checkbox" data-toggle="switchbutton"
+                                    data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary"
+                                    data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
+
                             </div>
 
                         </div>
@@ -135,3 +149,18 @@
 
 
 @endsection
+
+@push('script')
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#deskripsi'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#deskripsi-edit'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+@endpush

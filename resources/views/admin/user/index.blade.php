@@ -85,9 +85,9 @@
                               </select>
                         </div>
                         <label for="status" class="form-label">Status</label>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="status" checked>
-                        </div>
+                        <div>
+                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
+                    </div>
                     </div>
                     {{-- end form --}}
 
@@ -143,9 +143,9 @@
                               </select>
                         </div>
                         <label for="status" class="form-label">Status</label>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="status" checked>
-                          </div>
+                        <div>
+                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
+                    </div>
                     </div>
                     {{-- end form --}}
 

@@ -1,4 +1,5 @@
 @extends('layouts.panel.index')
+@section('title', 'Penilaian')
 @section('content')
     <div class="container mt-4">
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">

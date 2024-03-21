@@ -96,10 +96,9 @@
 
                 </div>
                 <div class="modal-footer justify-content-between mx-3">
-                    <div class="form-check form-switch">
-                        <label for="status" class="">Status</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            name="status" checked>
+                    <div>
+                        <label for="status" class="me-3">Status</label>
+                        <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3"
@@ -165,10 +164,9 @@
 
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
-                        <div class="form-check form-switch">
-                            <label for="status" class="">Status</label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                                name="status" checked>
+                        <div>
+                            <label for="status" class="me-3">Status</label>
+                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3"

@@ -1,6 +1,13 @@
 @extends('layouts.panel.index')
 @section('title', 'Kegiatan')
 @section('content')
+@push('style')
+        <style>
+            .ck-editor__editable {
+                min-height: 200px;
+            }
+        </style>
+    @endpush
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <nav>
@@ -192,10 +199,30 @@
                                         <option value="3">Seminar</option>
                                     </select>
                                 </div>
-                                <label for="status" class="form-label mt-3">Status</label>
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckChecked" name="status" checked>
+                                <div class="">
+                                    <label for="status" class="form-label">Skema</label>
+                                    <select class="form-select" id="multiple-select-field" multiple>
+                                        <option>Christmas Island</option>
+                                        <option>South Sudan</option>
+                                        <option>Jamaica</option>
+                                        <option>Kenya</option>
+                                        <option>French Guiana</option>
+                                        <option>Mayotta</option>
+                                        <option>Liechtenstein</option>
+                                        <option>Denmark</option>
+                                        <option>Eritrea</option>
+                                        <option>Gibraltar</option>
+                                        <option>Saint Helena, Ascension and Tristan da Cunha</option>
+                                        <option>Haiti</option>
+                                        <option>Namibia</option>
+                                        <option>South Georgia and the South Sandwich Islands</option>
+                                        <option>Vietnam</option>
+                                        <option>Yemen</option>
+                                        <option>Philippines</option>
+                                        <option>Benin</option>
+                                        <option>Czech Republic</option>
+                                        <option>Russia</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -208,10 +235,9 @@
 
                 </div>
                 <div class="modal-footer justify-content-between mx-3">
-                    <div class="form-check form-switch">
-                        <label for="status" class="">Status</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                            name="status" checked>
+                    <div>
+                        <label for="status" class="me-3">Status </label>
+                        <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" checked data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3"
@@ -279,9 +305,9 @@
                                             <option value="3">Seminar</option>
                                         </select>
                                     </div>
-                                    <div class="">
+                                    <div>
                                         <label for="status" class="form-label">Skema</label>
-                                        <select class="form-select" id="multiple-select-field" multiple>
+                                        <select class="form-select" id="multiple-select-field2" multiple>
                                             <option>Christmas Island</option>
                                             <option>South Sudan</option>
                                             <option>Jamaica</option>
@@ -308,7 +334,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="deskripsi" class="form-label">Deskripsi</label>
-                                    <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4"></textarea>
+                                    <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="4"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -316,10 +342,9 @@
 
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
-                        <div class="form-check form-switch">
-                            <label for="status" class="">Status</label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked"
-                                name="status" checked>
+                        <div>
+                            <label for="status" class="me-3">Status </label>
+                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" checked data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3"
@@ -343,5 +368,24 @@
     placeholder: $( this ).data( 'placeholder' ),
     closeOnSelect: false,
 } );
+$( '#multiple-select-field2' ).select2( {
+    theme: "bootstrap-5",
+    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+    placeholder: $( this ).data( 'placeholder' ),
+    closeOnSelect: false,
+} );
+</script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#deskripsi'))
+        .catch(error => {
+            console.error(error);
+        });
+    ClassicEditor
+        .create(document.querySelector('#deskripsi-edit'))
+        .catch(error => {
+            console.error(error);
+        });
 </script>
 @endpush
+
