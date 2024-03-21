@@ -29,6 +29,17 @@ return new class extends Migration {
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
             $table->string('no_telp', 20)->nullable(); 
 
+            $table->string('nama_sekolah')->nullable();
+            $table->string('jurusan')->nullable();
+            $table->string('jenjang')->nullable();
+            $table->date('tahun_lulus')->nullable();
+
+            $table->string('nama_perusahaan')->nullable();
+            $table->text('alamat_perusahaan')->nullable();
+            $table->string('alamat_kota_perusahaan')->nullable();
+            $table->string('jabatan_pekerjaan')->nullable();
+            $table->string('no_telp_perusahaan', 20)->nullable();
+
             $table->string('status')->nullable();
             $table->string('level')->nullable();
             $table->string('jabatan_penguji')->nullable();
