@@ -164,3 +164,15 @@
 
 
 @endsection
+
+@push('script')
+    <script>
+        var add = document.getElementById('add');
+
+        add.addEventListener('click', function(event) {
+
+            event.preventDefault();
+            window.location.href = "{{ route('user.create') }}";
+        })
+    </script>
+@endpush

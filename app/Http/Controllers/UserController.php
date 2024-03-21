@@ -19,6 +19,11 @@ class UserController extends Controller
         return redirect()->back();
     }
 
+    public function create() {
+
+        return view('admin.user.create');
+    }
+
     public function update($id) {
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
 
