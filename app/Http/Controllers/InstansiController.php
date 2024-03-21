@@ -11,18 +11,14 @@ class InstansiController extends Controller
 {
    public function index()
    {
-
       $instansi = Instansi::get();
 
       confirmDelete('Hapus Instansi', 'Apakah kamu yakin untuk mengapus instansi?');
-
       return view('admin.instansi.index', compact('instansi'));
    }
 
    public function store(Request $request)
    {
-
-
       if (!$request->has('status')) {
          $request->merge([
             'status' => 'Tidak Aktif'
@@ -31,10 +27,10 @@ class InstansiController extends Controller
 
       $logo = $request->file('logo');
       $filename = 'logo_' . $request->nomor_instansi . '.' . $logo->getClientOriginalExtension();
-      $stored = $logo->storeAs('public/img', $filename);
+      $stored = $logo->storeAs('public/logo_instansi', $filename);
 
       $request->merge([
-         'path_logo' => Storage::url($stored)
+         'path_logo' => Storage::url($stored),
       ]);
 
       Instansi::create($request->all());
@@ -55,7 +51,7 @@ class InstansiController extends Controller
       if ($request->has('logo')) {
          $logo = $request->file('logo');
          $filename = 'logo_' . $request->nomor_instansi . '.' . $logo->getClientOriginalExtension();
-         $logo->storeAs('public/img', $filename);
+         $logo->storeAs('public/logo_instansi', $filename);
       }
 
       $instansi = Instansi::find($id);
@@ -67,7 +63,6 @@ class InstansiController extends Controller
 
    public function destroy($id)
    {
-
       $logo = Instansi::find($id)->path_logo;
       unlink(public_path($logo));
       Instansi::destroy($id);
