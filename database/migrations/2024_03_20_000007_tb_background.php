@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('path_bg');
             $table->text('rincian_bg')->nullable();
 
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }

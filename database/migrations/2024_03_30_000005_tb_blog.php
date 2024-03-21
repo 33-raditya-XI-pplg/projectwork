@@ -21,8 +21,8 @@ return new class extends Migration
             $table->text('ringkasan');
             $table->text('body');
             
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }

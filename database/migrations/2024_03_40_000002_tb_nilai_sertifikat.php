@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignId('sertifikat_id')->constrained('tb_sertifikat', 'id_sertifikat');
             $table->foreignId('nilai_peserta_id')->constrained('tb_nilai_peserta', 'id_nilai_peserta');
 
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }

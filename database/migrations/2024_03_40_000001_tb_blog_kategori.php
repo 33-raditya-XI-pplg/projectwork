@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignId('blog_id')->constrained('tb_blog', 'id_blog');
             $table->foreignId('kategori_id')->constrained('tb_kategori', 'id_kategori');
 
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }

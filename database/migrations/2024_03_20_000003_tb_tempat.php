@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('nama_tempat');
             $table->string('no_telp', 20)->nullable(); 
             $table->text('alamat');
-            $table->string('alamat_kota');
-            $table->string('link_maps');
+            $table->string('alamat_kota')->nullable(); 
+            $table->string('link_maps')->nullable(); 
             
             $table->integer('created_by');
             $table->integer('updated_by');

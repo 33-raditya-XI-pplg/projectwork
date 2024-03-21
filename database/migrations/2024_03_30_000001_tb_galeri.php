@@ -21,8 +21,8 @@ return new class extends Migration
             $table->enum('kategori', ['partner', 'klien', 'gambar', 'video']);
             $table->string('deskripsi')->nullable();
             
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }

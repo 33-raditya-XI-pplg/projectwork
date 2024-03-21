@@ -19,8 +19,8 @@ return new class extends Migration
             $table->integer('rentang_atas');
             $table->integer('rentang_bawah');
 
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }

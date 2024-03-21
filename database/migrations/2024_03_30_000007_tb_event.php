@@ -28,8 +28,8 @@ return new class extends Migration
             $table->string('jenis_event');
             $table->string('status');
 
-            $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('created_by')->nullable(); 
+            $table->integer('updated_by')->nullable(); 
             $table->timestamps();
         });
     }
