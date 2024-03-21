@@ -17395,6 +17395,19 @@ body {
   background-color: #F6F8FD;
 }
 
+::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(27, 27, 27, 0.4);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .bg-primary-gradient {
   background: linear-gradient(88.18deg, #007DFF -2.91%, #007DFF 69.23%, #0063CB 100.92%);
 }
@@ -17467,9 +17480,6 @@ body {
 .input-password {
   position: relative;
 }
-.input-password .form-control {
-  padding-right: 2.5rem;
-}
 .input-password .input-password-eye-icon {
   position: absolute;
   top: 0;
@@ -17500,14 +17510,27 @@ body {
   outline: none;
   box-shadow: none;
   border: 1px solid #E5E7E9;
-  padding: 0.5rem 0.8rem;
+  margin-inline-end: 0.75rem;
+  line-height: 2.5;
+  padding-left: 0.5rem;
   border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
 }
 .form-control::placeholder {
   color: #aaa;
 }
 .form-control:focus {
   box-shadow: none;
+}
+.form-control::-webkit-file-upload-button {
+  color: #fff;
+  background-color: #007DFF;
+}
+.form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
+  background-color: rgba(0, 125, 255, 0.7);
 }
 
 .input-group .input-group-text {

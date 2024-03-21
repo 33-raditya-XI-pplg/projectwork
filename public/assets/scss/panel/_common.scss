@@ -6,6 +6,17 @@ body {
     background-color: $bg-body;
 }
 
+::-webkit-scrollbar {
+    width: .45rem;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(27, 27, 27, .4);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-track{
+    background: transparent;
+}
+
 .bg-primary-gradient{
     background: linear-gradient(88.18deg, #007DFF -2.91%, #007DFF 69.23%, #0063CB 100.92%);
 }
@@ -107,9 +118,9 @@ body {
 .input-password {
     position: relative;
 
-    .form-control {
-        padding-right: 2.5rem;
-    }
+    // .form-control {
+    //     padding-right: 2.5rem;
+    // }
 
     .input-password-eye-icon {
         position: absolute;
@@ -150,8 +161,14 @@ body {
     outline: none;
     box-shadow: none;
     border: 1px solid #E5E7E9;
-    padding: .5rem .8rem;
+    margin-inline-end: 0.75rem;
+    line-height: 2.5;
+    padding-left: .5rem;
     border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 
     &::placeholder {
         color: #aaa;
@@ -159,6 +176,13 @@ body {
 
     &:focus {
         box-shadow: none;
+    }
+    &::-webkit-file-upload-button{
+        color: $white;
+        background-color: $primary;
+    }
+    &:hover:not(:disabled):not([readonly])::-webkit-file-upload-button{
+        background-color: rgb($primary, .7);
     }
 }
 
