@@ -16,6 +16,7 @@ return new class extends Migration
             // Foreign Key
             $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
             $table->foreignId('tempat_id')->constrained('tb_tempat', 'id_tempat');
+            $table->foreignId('jenis_event_id')->constrained('tb_jenis_event', 'id_jenis_event');
 
             $table->string('nama_event');
             $table->date('tgl_mulai');
@@ -27,6 +28,7 @@ return new class extends Migration
 
             $table->string('jenis_event');
             $table->string('status');
+            $table->enum('visibilitas', ['privat', 'publik']);
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 

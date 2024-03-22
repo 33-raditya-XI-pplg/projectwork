@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tb_background', function (Blueprint $table) {
-            $table->id('id_background');
-            $table->string('nama_bg');
+        Schema::create('tb_jenis_event', function (Blueprint $table) {
+            $table->id('id_jenis_event');
+            $table->string('nama_jenis_event');
 
-            $table->enum('orientasi_bg', ['potrait', 'landscape']);
-            $table->string('path_bg');
-            $table->text('rincian_bg')->nullable();
+            $table->boolean('has_lampiran')->default(false);
+            $table->longText('deskripsi')->nullable();
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_background');
+        Schema::dropIfExists('tb_jenis_event');
     }
 };
