@@ -94,14 +94,16 @@
 
             reader.onloadend = function() {
                 preview.src = reader.result;
+                preview.removeAttribute("hidden");
             }
-
+            // console.log(file);
             if (file) {
                 reader.readAsDataURL(file);
             } else {
                 preview.src = "";
             }
         }
+
     </script>
     @stack('script')
     @include('sweetalert::alert')

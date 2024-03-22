@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Background;
+use Illuminate\Support\Facades\Storage;
 
 class BackgroundController extends Controller
 {
@@ -12,8 +14,10 @@ class BackgroundController extends Controller
      */
     public function index()
     {
+        $bg = Background::get();
+
         confirmDelete('Hapus Background', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.background.index');
+        return view('admin.background.index', compact('bg'));
     }
 
     /**
@@ -29,7 +33,18 @@ class BackgroundController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $bg = $request->file('bg');
+        $filename = 'bg_' .$request->nama_bg . '.' .$bg->getClientOriginalExtension();
+        $stored = $bg->storeAs('public/background', $filename);
+
+        $request->merge([
+            'path_bg' => Storage::url($stored)
+        ]);
+
+        Background::create($request->all());
+        Alert::success('Berhasil Tersimpan!', 'Background berhasil ditambahkan');
+
+        return redirect()->back();
     }
 
     /**
@@ -53,7 +68,24 @@ class BackgroundController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        if ($request->has('bg')) {
+            $bg = $request->file('bg');
+            $filename = 'bg_' .$request->nama_bg . '.' .$bg->getClientOriginalExtension();
+            unlink(public_path(Background::find($id)->path_bg));
+
+            $stored = $bg->storeAs('public/background', $filename);
+
+            $request->merge([
+                'path_bg' => Storage::url($stored)
+            ]);
+
+        }
+
+        Background::find($id)->update($request->all());
+        Alert::success('Berhasil Tersimpan!', 'Background berhasil diedit.');
+
+        return redirect()->back();
     }
 
     /**
@@ -61,6 +93,9 @@ class BackgroundController extends Controller
      */
     public function destroy(string $id)
     {
+        $bg = Background::find($id)->path_bg;
+        unlink(public_path($bg));
+        Background::destroy($id);
         toast('Background terhapus!','success');
         return redirect()->back();
     }
