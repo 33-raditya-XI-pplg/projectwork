@@ -28,12 +28,12 @@ use App\Http\Controllers\SertifikatController;
 */
 
 Route::get('/',function(){
-    return view('welcome');
+    return redirect('/login');
 });
 
-Route::get('/',function(){
-    return view('auth/login');
-});
+// Route::get('/',function(){
+//     return view('auth/login');
+// })->middleware('auth');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard', function() {
