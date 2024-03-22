@@ -14,18 +14,21 @@
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <table id="example" class="table">
             <thead class="fw-normal">
-                <th scope="col ">Nama Event</th>
+                <th scope="col ">Jenis Event</th>
                 <th scope="col" style="width: 60%;">Deskripsi</th>
                 <th scope="col">Status</th>
                 <th scope="col">Aksi</th>
             </thead>
             <tbody class="" style="vertical-align: middle">
-                @for ($i = 0; $i < 5; $i++)
+                @foreach ($jenis_event as $row)
                     <tr>
-                        <td>Seminar {{ $i }}</td>
-                        <td>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maiores odio accusamus incidunt iusto
-                            officiis mollitia quia ut voluptas reprehenderit laboriosam!</td>
-                        <td><button type="button" class="btn btn-outline-success rounded-3" disabled>Aktif</button></td>
+                        <td>{{ $row->nama_jenis_event }}</td>
+                        <td>@php 
+                            echo $row->deskripsi
+                            @endphp
+                        </td>
+                        <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -34,9 +37,9 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                     <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#edit{{ $i }}"><i
+                                            data-bs-target="#edit{{ $row->id_jenis_event }}"><i
                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                    <li><a href="{{ route('jenis-event.destroy', $i) }}" class="dropdown-item text-danger"
+                                    <li><a href="{{ route('jenis-event.destroy', $row->id_jenis_event) }}" class="dropdown-item text-danger"
                                             data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                             Delete</a>
                                     </li>
@@ -44,7 +47,7 @@
                             </div>
                         </td>
                     </tr>
-                @endfor
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -67,38 +70,42 @@
                         <div class="mb-3">
                             <form action="{{ route('jenis-event.store') }}" method="POST">
                                 @csrf
-                                <label for="jenis_event" class="form-label">Nama Event</label>
-                                <input type="text" class="form-control" name="jenis_event" id="jenis_event" required>
+                                <label for="nama_jenis_event" class="form-label">Nama Jenis Event</label>
+                                <input type="text" class="form-control" name="nama_jenis_event" id="nama_jenis_event" required>
                         </div>
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label h-100">Deskripsi</label>
                             <textarea class="form-control" id="deskripsi" name="deskripsi"></textarea>
                         </div>
-                        <label for="status" class="form-label">Status</label>
-                        <div>
-
-                            <input class="form-check-input" type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif"
-                                data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs"
-                                data-width="75" value="Aktif">
-
+                        <div class="form-check form-switch">
+                            <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="has_lampiran"
+                                name="has_lampiran" value="1">
                         </div>
-
                     </div>
                     {{-- end form --}}
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                <div class="modal-footer justify-content-between mx-3">
+                    <div class="form-check form-switch">
+                        <label for="status" class="me-3">Status </label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="status"
+                            name="status" value="Aktif" checked>
+                        {{-- <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" checked data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif"> --}}
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    </div>
                 </div>
                 </form>
             </div>
         </div>
     </div>
 
-    @for ($i = 0; $i < 9; $i++)
+    @foreach ($jenis_event as $row)
         <!-- edit -->
-        <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="add"
+        <div class="modal modal-lg fade" id="edit{{ $row->id_jenis_event }}" tabindex="-1" aria-labelledby="add"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -112,39 +119,43 @@
                         {{-- form --}}
                         <div class="container">
                             <div class="mb-3">
-                                <form action="{{ route('jenis-event.update', $i) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <label for="jenis_event" class="form-label">Nama Event</label>
-                                    <input type="text" class="form-control" name="jenis_event" id="jenis_event"
-                                        required>
+                                <form action="{{ route('jenis-event.update', $row->id_jenis_event) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <label for="nama_jenis_event" class="form-label">Nama Jenis Event</label>
+                                <input type="text" class="form-control" name="nama_jenis_event" id="nama_jenis_event"
+                                    required value="{{ $row->nama_jenis_event }}">
                             </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                                <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="10"></textarea>
+                                <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="10">{{ $row->deskripsi }}</textarea>
                             </div>
-                            <label for="status" class="form-label">Status</label>
-                            <div>
-
-                                <input class="form-check-input" type="checkbox" data-toggle="switchbutton"
-                                    data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary"
-                                    data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
-
+                            <div class="form-check form-switch">
+                                <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="has_lampiran" 
+                                    name="has_lampiran" value="1" @if($row->has_lampiran) checked @endif>
                             </div>
-
                         </div>
                         {{-- end form --}}
 
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    <div class="modal-footer justify-content-between mx-3">
+                        <div class="form-check form-switch">
+                            <label for="status" class="me-3">Status</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                name="status" value="1" {{ $row->status == '1' ? 'checked' : '' }}>
+                            {{-- <input class="form-check-input"  type="checkbox" role="switch" id="status" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" name="status" data-width="75" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}> --}}
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                        </div>
                     </div>
                     </form>
                 </div>
             </div>
         </div>
-    @endfor
+        @endforeach
 
 
 
