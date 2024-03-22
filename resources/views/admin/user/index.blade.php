@@ -6,7 +6,7 @@
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
                 <thead class="fw-normal">
-                    <th scope="col ">Username</th>
+                    <th scope="col">Nama Lengkap</th>
                     <th scope="col">Email</th>
                     <th scope="col">NIK</th>
                     <th scope="col">Jenis Kelamin</th>
@@ -14,24 +14,26 @@
                     <th scope="col">Aksi</th>
                 </thead>
                 <tbody class="" style="vertical-align: middle">
-                    @for ($i = 0; $i < 5; $i++)
+                    @foreach ($pengguna as $row)
                         <tr>
-                            <td>Mahmud Efendi</td>
-                            <td>Mahmud@gmail.com</td>
-                            <td>350918102909{{ $i }}</td>
-                            <td>Laki-laki</td>
-                            <td><button type="button" class="btn btn-outline-success rounded-3" disabled>Aktif</button></td>
-                            <td>
+                            <td>{{ $row->nama_lengkap }}</td>
+                            <td>{{ $row->email }}</td>
+                            <td>{{ $row->nomor_induk }}</td>
+                            <td>{{ $row->jenis_kelamin }}</td>
+                            <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>                            <td>
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#edit{{ $i }}"><i
-                                                    class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                        <li><a href="{{ route('user.destroy', $i) }}" class="dropdown-item text-danger"
+                                        <li><a class="dropdown-item text-info" href="{{ route('user.edit', $row->id_user) }}"
+                                            data-bs-target="#edit{{ $row->id_user }}"><i
+                                                class="fa-regular fa-pen-to-square"></i> Edit</a>
+                                        </li>
+                                        
+                                        
+                                        <li><a href="{{ route('user.destroy', $row->id_user) }}" class="dropdown-item text-danger"
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>
                                         </li>
@@ -39,129 +41,10 @@
                                 </div>
                             </td>
                         </tr>
-                    @endfor
+                        @endforeach
                 </tbody>
             </table>
         </div>
-
-
-
-    <!-- insert -->
-    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Event</h5>
-                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    {{-- form --}}
-                    <div class="container">
-                        <div class="mb-3">
-                            <form action="{{ route('user.store') }}" method="POST">
-                                @csrf
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" id="username"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" name="email" id="email"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="nik" class="form-label">NIK</label>
-                            <input type="text" class="form-control" name="nik" id="nik"
-                                required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="gender" class="form-label">Jenis Kelamin</label>
-                            <select class="form-select mb-3" aria-label="form-select example">
-                                <option selected>Laki-laki</option>
-                                <option value="1">Perempuan</option>
-                              </select>
-                        </div>
-                        <label for="status" class="form-label">Status</label>
-                        <div>
-                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
-                    </div>
-                    </div>
-                    {{-- end form --}}
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    @for ($i = 0; $i < 9; $i++ )
-
-    <!-- edit -->
-    <div class="modal modal-lg fade" id="edit{{ $i }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Pengguna</h5>
-                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    {{-- form --}}
-                    <div class="container">
-                        <div class="mb-3">
-                            <form action="{{ route('user.update', $i) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" name="username" id="username"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" class="form-control" name="email" id="email"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="nik" class="form-label">NIK</label>
-                            <input type="text" class="form-control" name="nik" id="nik"
-                                required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="gender" class="form-label">Jenis Kelamin</label>
-                            <select class="form-select mb-3" aria-label="form-select example">
-                                <option selected>Laki-laki</option>
-                                <option value="1">Perempuan</option>
-                              </select>
-                        </div>
-                        <label for="status" class="form-label">Status</label>
-                        <div>
-                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
-                    </div>
-                    </div>
-                    {{-- end form --}}
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    @endfor
-
-
 
 @endsection
 

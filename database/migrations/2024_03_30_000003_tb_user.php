@@ -32,7 +32,7 @@ return new class extends Migration {
             $table->string('nama_sekolah')->nullable();
             $table->string('jurusan')->nullable();
             $table->string('jenjang')->nullable();
-            $table->date('tahun_lulus')->nullable();
+            $table->year('tahun_lulus')->nullable();
 
             $table->string('nama_perusahaan')->nullable();
             $table->text('alamat_perusahaan')->nullable();

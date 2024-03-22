@@ -22,36 +22,42 @@ class DataSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        foreach (range(1, 20) as $index) {
-            Instansi::create([
-                'nama_instansi' => $faker->company,
-                'nomor_instansi' => $faker->randomNumber(8),
-                'nama_kepala_instansi' => $faker->name,
-                'jabatan_kepala' => $faker->jobTitle,
-                'path_logo' => $faker->imageUrl(),
-                'status' => $faker->randomElement(['Aktif', 'Nonaktif']),
-                'alamat' => $faker->address,
-                'alamat_kota' => $faker->city,
-                'email' => $faker->companyEmail,
-                'no_telp' => $faker->phoneNumber,
-                'created_by' => 1,
-                'updated_by' => 1,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
+        User::create([
+            'nama_lengkap' => 'Mas Admin',
+            'email'=> 'admin@gmail.com',
+            'password'=> Hash::make('admin123'),
+        ]);
 
-            Tempat::create([
-                'nama_tempat' => $faker->company,
-                'no_telp' => $faker->phoneNumber,
-                'alamat' => $faker->address,
-                'alamat_kota' => $faker->city,
-                'link_maps' => $faker->url,
-                'created_by' => 1,
-                'updated_by' => 1,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
-        }
+        // foreach (range(1, 20) as $index) {
+        //     Instansi::create([
+        //         'nama_instansi' => $faker->company,
+        //         'nomor_instansi' => $faker->randomNumber(8),
+        //         'nama_kepala_instansi' => $faker->name,
+        //         'jabatan_kepala' => $faker->jobTitle,
+        //         'path_logo' => $faker->imageUrl(),
+        //         'status' => $faker->randomElement(['Aktif', 'Nonaktif']),
+        //         'alamat' => $faker->address,
+        //         'alamat_kota' => $faker->city,
+        //         'email' => $faker->companyEmail,
+        //         'no_telp' => $faker->phoneNumber,
+        //         'created_by' => 1,
+        //         'updated_by' => 1,
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now(),
+        //     ]);
+
+        //     Tempat::create([
+        //         'nama_tempat' => $faker->company,
+        //         'no_telp' => $faker->phoneNumber,
+        //         'alamat' => $faker->address,
+        //         'alamat_kota' => $faker->city,
+        //         'link_maps' => $faker->url,
+        //         'created_by' => 1,
+        //         'updated_by' => 1,
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now(),
+        //     ]);
+        // }
 
     }
 }
