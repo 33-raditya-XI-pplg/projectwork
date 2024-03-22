@@ -17,6 +17,7 @@ return new class extends Migration
 
             $table->boolean('has_lampiran')->default(false);
             $table->longText('deskripsi')->nullable();
+            $table->string('status');
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 
