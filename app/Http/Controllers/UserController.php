@@ -52,17 +52,17 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id) {
+        if (!$request->has('status')) {
+            $request->merge([
+               'status' => 'Tidak Aktif'
+            ]);
+         }
+        
         if ($request->has('foto')) {
             $foto = $request->file('foto');
             $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
             $foto->storeAs('public/foto_pengguna', $filename);
         }
-
-        if ($request->has('logo')) {
-            $logo = $request->file('logo');
-            $filename = 'logo_' . $request->nomor_induk . '.' . $logo->getClientOriginalExtension();
-            $logo->storeAs('public/foto_pengguna', $filename);
-         }
 
         $user = User::find($id);
         $user->update($request->all());

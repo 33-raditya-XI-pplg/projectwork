@@ -9,10 +9,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
-                    <input type="hidden" name="password" value="Pengguna">
-                    <input type="hidden" name="level" value="Pengguna">
-
+                    <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                     <h5 class="text-center text-primary mb-4 rounded fw-bold">- Data Diri -</h5>
 
                     <div class="mb-3">
@@ -64,8 +61,13 @@
                         <input type="text" class="form-control" name="no_telp" id="no_telp"
                             required value="{{ $user->no_telp }}">
                     </div>
-                    <div>
+                    <div class="mb-3">
                         <input class="form-control" name="foto" type="file" id="formFile" accept=".png">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <label for="status" class="me-3">Status</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="status"
+                            name="status" value="Aktif" {{ $user->status == 'Aktif' ? 'checked' : '' }}>
                     </div>
                 </div>
 
@@ -133,9 +135,7 @@
 
 @push('script')
     <script>
-        var button = document.getElementById('add')
-
-        button.style.display = 'none';
+        document.querySelector('button[data-bs-toggle="modal"][data-bs-target="#add"]').style.display = 'none';
     </script>
 @endpush
 

@@ -62,8 +62,13 @@
                         <input type="text" class="form-control" name="no_telp" id="no_telp"
                             required>
                     </div>
-                    <div>
+                    <div class="mb-3">
                         <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <label for="status" class="me-3">Status</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="status"
+                            name="status" value="Aktif">
                     </div>
                 </div>
 
