@@ -47,16 +47,18 @@
                             <span class="h4 text-primary">{{ count(Request::segments()) > 2 ? '>' : '' }}</span>
                             <li class="breadcrumb-item text-capitalize h4 d-inline">
                                 {{ Str::replace('-', ' ', Request::segment(3)) }}</li>
+                                <span class="h5">{{ count(Request::segments()) > 3 ? '-' : '' }}</span>
+                            <li class="breadcrumb-item h5 d-inline">
+                                {{ Str::replace('-', ' ', Request::segment(4)) }}</li>
                         </ol>
                     </div>
                     <div>
                         @php
                             $menu = request()->segment(count(request()->segments()));
                         @endphp
-
-                        @if (in_array($menu, ['dashboard', 'skema', 'penilaian', 'create', 'user']))
+                        @if (in_array($menu, ['dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile']))
                             <button class="btn btn-primary rounded" id="add">+ Tambah</button>
-                        @elseif (in_array($menu, ['profile']))
+
                         @else
                             <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+
                                 Tambah</button>

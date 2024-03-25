@@ -43,9 +43,9 @@ class UserController extends Controller
     }
 
     public function edit($id) {
-        $user = User::findOrFail($id);
+        $pengguna = User::findOrFail($id);
 
-        return view('admin.user.edit', compact('user'));
+        return view('admin.user.create', compact('pengguna'));
     }
 
     public function update(Request $request, $id) {

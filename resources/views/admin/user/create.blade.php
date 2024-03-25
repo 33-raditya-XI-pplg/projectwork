@@ -3,8 +3,9 @@
 @section('content')
 
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-    <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf        
+    <form action="{{ isset($pengguna) ? route('user.update', $pengguna->id_user) : route('user.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        {!! isset($pengguna) ? method_field('PUT') : '' !!}     
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -16,18 +17,18 @@
 
                     <div class="mb-3">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
+                        <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap" value="{{ isset($pengguna) ? $pengguna->nama_lengkap : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
                         <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
-                        <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
+                        <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" value="{{ isset($pengguna) ? $pengguna->tempat_lahir : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
                         <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
                         <input type="date" class="form-control" name="tgl_lahir"
-                            id="tgl_lahir" placeholder="DD/MM/YYYY" required>
+                            id="tgl_lahir" placeholder="DD/MM/YYYY" value="{{ isset($pengguna) ? $pengguna->tgl_lahir : '' }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
@@ -39,93 +40,88 @@
                     </div>
                     <div class="mb-3">
                         <label for="nomor_induk" class="form-label">NIK</label>
-                        <input type="text" class="form-control" name="nomor_induk" id="nomor_induk"
+                        <input type="text" class="form-control" name="nomor_induk" id="nomor_induk" value="{{ isset($pengguna) ? $pengguna->nomor_induk : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="alamat" id="alamat"
+                        <input type="text" class="form-control" name="alamat" id="alamat" value="{{ isset($pengguna) ? $pengguna->alamat : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
                         <label for="alamat_kota" class="form-label">Kota</label>
-                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota"
+                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ isset($pengguna) ? $pengguna->alamat_kota : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" class="form-control" name="email" id="email"
+                        <input type="text" class="form-control" name="email" id="email" value="{{ isset($pengguna) ? $pengguna->email : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
                         <label for="no_telp" class="form-label">No. HP</label>
-                        <input type="text" class="form-control" name="no_telp" id="no_telp"
+                        <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ isset($pengguna) ? $pengguna->no_telp : '' }}"
                             required>
                     </div>
                     <div class="mb-3">
-                        <label for="foto_pengguna">Foto Pengguna</label>
+                        <label for="foto_pengguna" class="mb-2">Foto Pengguna</label>
                         <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
                     </div>
-                    <div class="form-check form-switch mb-3">
-                        <label for="status" class="me-3">Status</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="status"
-                            name="status" value="Aktif">
-                    </div>
+
                 </div>
 
                 <div class="col">
                     <h5 class="text-center text-primary mb-4 fw-bold rounded">- Data Pendidikan Terakhir -</h5>
                     
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="nama_sekolah" class="form-label">Nama Sekolah/Universitas</label>
                         <input type="text" class="form-control" name="nama_sekolah" id="nama_sekolah"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="jurusan" class="form-label">Jurusan</label>
                         <input type="text" class="form-control" name="jurusan" id="jurusan"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="jenjang" class="form-label">Jenjang</label>
                         <input type="text" class="form-control" name="jenjang" id="jenjang"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="tahun_lulus" class="form-label">Tahun Lulus</label>
                         <input type="text" class="form-control" name="tahun_lulus" id="tahun_lulus"
                             required>
                     </div>
+                    <h5 class="text-center text-primary mt-5 fw-bold rounded" style="margin-bottom: 28px;">- Data Pekerjaan Sekarang -</h5>
                     
-                    <h5 class="text-center text-primary mt-4 fw-bold rounded">- Data Pekerjaan Sekarang -</h5>
-                    
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="nama_perusahaan" class="form-label">Nama Perusahaan</label>
                         <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="alamat_perusahaan" class="form-label">Alamat</label>
                         <input type="text" class="form-control" name="alamat_perusahaan" id="alamat_perusahaan"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
                         <input type="text" class="form-control" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="jabatan_pekerjaan" class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="jabatan_pekerjaan" id="jabatan_pekerjaan"
                             required>
                     </div>
-                    <div class="mb-3">
+                    <div class="mt-3">
                         <label for="no_telp_perusahaan" class="form-label">Telepon</label>
                         <input type="text" class="form-control" name="no_telp_perusahaan" id="no_telp_perusahaan"
                             required>
                     </div>
                 </div>
-                <div class="d-grid">
+                <div class="d-grid mt-3 ">
                     <button type="submit" class="btn btn-primary rounded">Simpan</button>
                 </div>
             </div>
