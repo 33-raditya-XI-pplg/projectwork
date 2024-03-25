@@ -66,6 +66,10 @@
                             <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i>
                                 <span> Pengguna</span></a>
                         </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'tempat' ? 'active' : '' }}">
+                            <a href="{{ route('tempat.index') }}" class="sub-menu-link"><i class="fas fa-house-user"></i>
+                                <span> Tempat</span></a>
+                        </li>
                     </ul>
                 </div>
                 </div>
