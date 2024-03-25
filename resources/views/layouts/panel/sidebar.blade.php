@@ -75,7 +75,7 @@
                 </div>
             </li>
             <li class="sidebar-menu-item {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
-                <a href="" class="item-link">
+                <a href="{{ route('profile.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>
                     <span>Profile</span>
                 </a>

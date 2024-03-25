@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
         Route::resource('/tempat', TempatController::class);
     });
     Route::resource('sertifikat', SertifikatController::class);
+    Route::resource('profile', ProfileController::class);
 
 
 });

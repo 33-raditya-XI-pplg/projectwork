@@ -25,9 +25,9 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="{{ asset('vendor/simditor/styles/simditor.css') }}">
-    @stack('style')
     <link rel="stylesheet" href="{{ asset('assets/css/panel.css?v=1.1') }}">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css" rel="stylesheet">
+    @stack('style')
 
     {{-- @include('layouts.env') --}}
 </head>
@@ -56,6 +56,7 @@
 
                         @if (in_array($menu, ['dashboard', 'skema', 'penilaian', 'create', 'user']))
                             <button class="btn btn-primary rounded" id="add">+ Tambah</button>
+                        @elseif (in_array($menu, ['profile']))
                         @else
                             <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+
                                 Tambah</button>
