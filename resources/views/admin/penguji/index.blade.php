@@ -78,7 +78,7 @@
                                     <div class="mb-3">
                                         <label for="instansi" class="form-label">Instansi</label>
                                         <select name="instansi_id" id="instansi_id" class="form-select">
-                                            <option selected>Pilih...</option>
+                                            <option selected disabled>Pilih...</option>
                                             @foreach($instansi as $row)
                                                 <option value="{{ $row->id_instansi }}">{{ $row->nama_instansi }}</option>
                                             @endforeach
@@ -125,9 +125,10 @@
 
                 </div>
                 <div class="modal-footer justify-content-between mx-3">
-                    <div>
-                        <label for="status" class="me-3">Status </label>
-                        <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" checked data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif">
+                    <div class="form-check form-switch mb-3">
+                        <label for="status" class="me-3">Status</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="status"
+                            name="status" value="Aktif">
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -170,7 +171,7 @@
                                             <label for="instansi" class="form-label">Instansi</label>
                                             <select class="form-select" id="instansi_id" name="instansi_id">
                                                 <option selected disabled>Pilih...</option>
-                                                @foreach($instansi as $a)
+                                                    @foreach($instansi as $a)
                                                     <option value="{{ $a->id_instansi }}" {{ $row->instansi_id == $a->id_instansi ? 'selected' : '' }}>
                                                     {{ $a->nama_instansi }}
                                                     </option>
@@ -186,7 +187,7 @@
                                             <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
                                         <div>
-                                            <input class="form-control" name="logo" type="file" id="formFile" accept=".png">
+                                            <input class="form-control" name="foto" type="file" id="formFile" accept=".png">
                                         </div>
 
                                 </div>
@@ -218,9 +219,10 @@
 
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
-                        <div>
+                        <div class="form-check form-switch mb-3">
                             <label for="status" class="me-3">Status</label>
-                            <input class="form-check-input"  type="checkbox" data-toggle="switchbutton" data-onlabel="Aktif" data-offlabel="Nonaktif" data-onstyle="primary" data-offstyle="danger" data-size="xs" data-width="75" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                name="status" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>

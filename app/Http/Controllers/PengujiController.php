@@ -23,7 +23,7 @@ class PengujiController extends Controller
 
         if (!$request->has('status')) {
             $request->merge([
-            'status' => 'Tidak Aktif'
+            'status' => 'Nonaktif'
         ]);
         }
 

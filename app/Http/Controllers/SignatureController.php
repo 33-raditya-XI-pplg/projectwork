@@ -4,66 +4,70 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\Ttd;
+use App\Models\Instansi;
 
 class SignatureController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        confirmDelete('Hapus TTD', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.tandatangan.index');
+    public function index() {
+        $tanda_tangan = Ttd::with('ttdInstansi')->get();
+        $instansi = Instansi::all();
+
+        confirmDelete('Hapus Tanda Tangan', 'Apakah kamu yakin untuk menghapus?');
+        return view('admin.tandatangan.index', compact('tanda_tangan', 'instansi'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    public function store(Request $request) {
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
+        if (!$request->has('status')) {
+            $request->merge([
+            'status' => 'Nonaktif'
+        ]);
+        }
+
+        $foto = $request->file('foto_ttd');
+        $filename = 'ttd_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+        $stored = $foto->storeAs('public/ttd', $filename);
+
+        $request->merge([
+            'path_ttd' => Storage::url($stored)
+        ]);
+
+        Ttd::create($request->all());
+
         Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
         return redirect()->back();
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
-    }
+        if (!$request->has('status')) {
+            $request->merge([
+                'status' => 'Nonaktif'
+            ]);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if ($request->has('foto_ttd')) {
+            $foto = $request->file('foto_ttd');
+            $filename = 'ttd_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+            $foto->storeAs('public/ttd', $filename);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
+        $tanda_tangan = Ttd::find($id);
+        $tanda_tangan->update($request->all());
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
+
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        toast('Tanda Tangan Terhapus', 'success');
+        $foto = Ttd::find($id)->path_ttd;
+        unlink(public_path($foto));
+        Ttd::destroy($id);
+        toast('Tanda Tangan berhasil dihapus.', 'success');
+
         return redirect()->back();
     }
 }

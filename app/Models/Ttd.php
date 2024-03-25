@@ -10,7 +10,7 @@ class Ttd extends Model
     use HasFactory;
 
     protected $table = "tb_ttd";
-    protected $primaryKey = 'id_instansi';
+    protected $primaryKey = 'id_ttd';
     protected $guarded = ['id_ttd'];
 
     public function ttdInstansi() // FK Many-to-One dengan tb_instansi

@@ -32,7 +32,7 @@
                     <div class="mb-3">
                         <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                         <select name="jenis_kelamin" id="jenis_kelamin" class="form-select">
-                            <option selected>Pilih...</option>
+                            <option selected disabled>Pilih...</option>
                             <option value="laki-laki">Laki-Laki</option>
                             <option value="perempuan">Perempuan</option>
                         </select>
@@ -63,6 +63,7 @@
                             required>
                     </div>
                     <div class="mb-3">
+                        <label for="foto_pengguna">Foto Pengguna</label>
                         <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
                     </div>
                     <div class="form-check form-switch mb-3">

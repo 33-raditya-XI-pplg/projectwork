@@ -7,17 +7,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\User;
-use App\Models\Instansi;
 
 class UserController extends Controller
 {
     public function index() {
-        $pengguna = User::where('level', 'Pengguna')
-            ->with('userInstansi')->get();
-        $instansi = Instansi::all();
+        $pengguna = User::where('level', 'Pengguna')->get();
 
         confirmDelete('Hapus Pengguna', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.user.index', compact('pengguna','instansi'));
+        return view('admin.user.index', compact('pengguna'));
     }
 
     public function create() {
@@ -27,7 +24,7 @@ class UserController extends Controller
     public function store(Request $request) {
         if (!$request->has('status')) {
             $request->merge([
-            'status' => 'Tidak Aktif'
+            'status' => 'Nonaktif'
         ]);
         }
 
@@ -72,7 +69,11 @@ class UserController extends Controller
     }
 
     public function destroy($id) {
+        $foto = User::find($id)->path_logo;
+        unlink(public_path($foto));
+
         User::destroy($id);
+        
         toast('Pengguna terhapus!','success');
         return redirect()->back();
     }
