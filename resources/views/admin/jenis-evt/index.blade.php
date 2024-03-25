@@ -14,6 +14,7 @@
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <table id="example" class="table">
             <thead class="fw-normal">
+                <th>No</th>
                 <th scope="col ">Jenis Event</th>
                 <th scope="col" style="width: 60%;">Deskripsi</th>
                 <th scope="col">Status</th>
@@ -22,6 +23,7 @@
             <tbody class="" style="vertical-align: middle">
                 @foreach ($jenis_event as $row)
                     <tr>
+                        <th scope="row">{{ $loop->index + 1 }}</th>
                         <td>{{ $row->nama_jenis_event }}</td>
                         <td>@php 
                             echo $row->deskripsi

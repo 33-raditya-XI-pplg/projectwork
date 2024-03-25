@@ -6,6 +6,7 @@
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
                 <thead class="fw-normal">
+                    <th>No</th>
                     <th scope="col ">Nama Instansi</th>
                     <th scope="col">Nomor Instansi</th>
                     <th scope="col">Kepala Instansi</th>
@@ -17,6 +18,7 @@
                     @foreach ($instansi as $row)
                         
                         <tr>
+                            <th scope="row">{{ $loop->index + 1 }}</th>
                             <td>{{ $row->nama_instansi }}</td>
                             <td>{{ $row->nomor_instansi }}</td>
                             <td>{{ $row->nama_kepala_instansi }}</td>
