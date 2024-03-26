@@ -219,7 +219,7 @@
 
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
-                        <div class="form-check form-switch mb-3">
+                        <div class="form-check form-switch">
                             <label for="status" class="me-3">Status</label>
                             <input class="form-check-input" type="checkbox" role="switch" id="status"
                                 name="status" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>

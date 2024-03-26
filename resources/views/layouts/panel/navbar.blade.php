@@ -10,7 +10,7 @@
                 <div class="nav-dropdown-img">
                     <img src="{{ asset('assets/img/icon.png') }}" alt="0">
                 </div>
-                <div class="users-login ml-10">{{ Auth::user()->nama_lengkap }} <h6 id="roles">admin</h6></div>
+                <div class="users-login ml-10">{{ Auth::user()->nama_lengkap }} <h6 id="roles">admin <i class="fa-solid fa-caret-down ms-3"></i></h6></div>
                 {{-- <span class="nav-dropdown-title">{{ auth()->user()->name }}</span> --}}
             </button>
             <div class="nav-dropdown-content" style="border-radius: 7px">
