@@ -41,6 +41,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    // Check users level 
+    public function isLevel($level) {
+        return $this->level === $level;
+    }
+
     public function userInstansi() {  // FK one-to-one dengan tb_instansi
         return $this->belongsTo(Instansi::class, 'instansi_id', 'id_instansi');
     }
