@@ -11,8 +11,10 @@
 						<input type="text" class="form-control" id="nama_skema" name="nama_skema" required>
 					</div>
 					<div class="form-group sub-skema-wrapper mb-5">
-						<label class="form-label">Sub Skema</label>
+						<div class="d-flex justify-content-between">
+							<label class="form-label">Sub Skema</label>
 						<button type="button" class="btn btn-primary btn-sm rounded mb-2" id="addSubSkema">Tambah Sub-Skema</button>
+						</div>
 
 						<div class="input-group mb-3 sub-skema-input">
 							<input type="text" class="form-control" name="sub_skema[]" placeholder="Nama Sub-Skema" required>

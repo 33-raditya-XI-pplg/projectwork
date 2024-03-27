@@ -39,7 +39,7 @@ Route::get('/',function(){
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard', function() {
         return view('admin.dashboard');
-    });
+    })->name('dashboard');
 
     Route::resource('/event', EventController::class);
     Route::resource('penilaian',PenilaianController::class);
