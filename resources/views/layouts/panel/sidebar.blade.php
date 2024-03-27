@@ -2,7 +2,7 @@
     <div class="sidebar-brand justify-content-center">
         <img id="logo" src="{{ asset('assets/img/logo.png') }}" alt="0">
 
-        <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-primary" ></i></button>
+        <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-secondary " ></i></button>
     </div>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">

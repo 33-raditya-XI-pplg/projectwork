@@ -83,6 +83,7 @@
             min-width: 200px;
             background-color: #FFF;
             // border-radius: 0 0 10px 10px;
+            box-shadow: 4px 3px 10px rgba(0, 0, 0, 0.1);
             position: absolute;
             top: 100%;
             right: 10px;
@@ -104,17 +105,24 @@
                     .nav-dropdown-item-link {
                         display: flex;
                         align-items: center;
-                        gap: .5rem;
+                        gap: 1rem;
                         background-color: #fff;
                         border-radius: 5px;
-                        padding: .25rem .5rem;
+                        padding: .40rem .5rem;
                         font-weight: 500;
                         font-size: 16px;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, 0.053);
+                            color: $primary;}
                     }
+                    
 
                     &:last-child {
                         margin-bottom: 0;
                     }
+
+                    
                 }
 
             }

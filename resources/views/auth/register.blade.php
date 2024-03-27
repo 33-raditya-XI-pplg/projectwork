@@ -14,7 +14,7 @@
 
     <div class="container-fluid bg-white">
         <div class="row min-vh-100">
-            <div class="col-md-5 bg-primary d-flex flex-column justify-content-center position-relative" style="background: url({{ asset('assets/img/bg-login.png') }});background-size: cover;background-repeat: no-repeat;">
+            <div class="col-md-5 bg-primary d-flex flex-column justify-content-center position-relative" style="background: url({{ asset('assets/img/bg-register.png') }});background-size: cover;background-repeat: no-repeat;">
                 {{-- <a href="/"><img class="position-absolute mt-3 top-0 start-0 ms-4" src="{{ asset('assets/img/logo2.png') }}" height="35" alt="logo"></a> --}}
                 <div class="container mt-2 text-white text-center">
                     <h2 class="fw-bold">Selamat datang kembali!</h2>
