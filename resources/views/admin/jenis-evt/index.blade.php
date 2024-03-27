@@ -79,10 +79,9 @@
                             <label for="deskripsi" class="form-label h-100">Deskripsi</label>
                             <textarea class="form-control" id="deskripsi" name="deskripsi"></textarea>
                         </div>
-                        <div class="form-check form-switch">
+                        <div class="form-check">
                             <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="has_lampiran"
-                                name="has_lampiran" value="1">
+                            <input class="form-check-input" type="checkbox" value="1" id="has_lampiran" name="has_lampiran" checked>
                         </div>
                     </div>
                     {{-- end form --}}
@@ -131,7 +130,7 @@
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="10">{{ $row->deskripsi }}</textarea>
                             </div>
-                            <div class="form-check form-switch">
+                            <div class="form-check">
                                 <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
                                 <input class="form-check-input" type="checkbox" role="switch" id="has_lampiran" 
                                     name="has_lampiran" value="1" @if($row->has_lampiran) checked @endif>

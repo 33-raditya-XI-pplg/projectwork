@@ -81,19 +81,16 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat" class="form-label">Alamat</label>
-                                        <input type="text" class="form-control" name="alamat" id="alamat" required>
+                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="mb-3">
                                         <label for="no_telp" class="form-label">No. telp</label>
                                         <input type="text" class="form-control" name="no_telp" id="no_telp" required>
                                     </div>
                                     <div>
+                                        <label for="logo" class="form-label">Logo Instansi</label>
                                         <input class="form-control" name="logo" type="file" id="formFile" accept=".png" required>
                                       </div>
-                                    {{-- <div class="d-grid">
-                                        <button class="btn btn-primary rounded-3 text-start" type="button">Upload Logo <i
-                                                class="fa-solid fa-upload"></i></button>
-                                    </div> --}}
 
                             </div>
                             <div class="col">
@@ -110,7 +107,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="alamat_kota" class="form-label">Alamat Kota</label>
-                                    <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" required>
+                                    <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required></textarea>
                                 </div>
                                 <div class="mb-5">
                                     <label for="email" class="form-label">Email</label>
@@ -167,20 +164,21 @@
                                             <input type="text" class="form-control" name="nama_instansi"
                                                 id="nama_instansi" value="{{ $row->nama_instansi }}" required>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-3">
                                             <label for="nomor_instansi" class="form-label">Nomor Instansi</label>
                                             <input type="text" class="form-control" name="nomor_instansi"
                                                 id="nomor_instansi" value="{{ $row->nomor_instansi }}" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="alamat" class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" id="alamat" value="{{ $row->alamat }}" required>
+                                            <textarea class="form-control" id="alamat" name="alamat" rows="2" required>{{ $row->alamat }}</textarea>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-3">
                                             <label for="no" class="form-label">No. telp</label>
                                             <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
                                         <div>
+                                            <label for="logo" class="form-label">Logo Instansi</label>
                                             <input class="form-control" name="logo" type="file" id="formFile" accept=".png">
                                           </div>
 
@@ -199,7 +197,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat_kota" class="form-label">Alamat Kota</label>
-                                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" required>
+                                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ $row->alamat_kota }}</textarea>
                                     </div>
                                     <div>
                                         <label for="email" class="form-label">Email</label>

@@ -45,13 +45,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="alamat" id="alamat" value="{{ isset($pengguna) ? $pengguna->alamat : '' }}"
-                            required>
+                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required>{{ isset($pengguna) ? $pengguna->alamat : '' }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="alamat_kota" class="form-label">Kota</label>
-                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ isset($pengguna) ? $pengguna->alamat_kota : '' }}"
-                            required>
+                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ isset($pengguna) ? $pengguna->alamat_kota : '' }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -102,13 +100,11 @@
                     </div>
                     <div class="mt-3">
                         <label for="alamat_perusahaan" class="form-label">Alamat</label>
-                        <input type="text" class="form-control" name="alamat_perusahaan" id="alamat_perusahaan"
-                            required>
+                        <textarea class="form-control" id="alamat_perusahaan" name="alamat_perusahaan" rows="2" required></textarea>
                     </div>
                     <div class="mt-3">
                         <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
-                        <input type="text" class="form-control" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan"
-                            required>
+                        <textarea class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" rows="2" required></textarea>
                     </div>
                     <div class="mt-3">
                         <label for="jabatan_pekerjaan" class="form-label">Jabatan</label>

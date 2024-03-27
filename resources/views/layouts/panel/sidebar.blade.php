@@ -70,6 +70,10 @@
                             <a href="{{ route('tempat.index') }}" class="sub-menu-link"><i class="fas fa-house-user"></i>
                                 <span> Tempat</span></a>
                         </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'rentang-nilai' ? 'active' : '' }}">
+                            <a href="{{ route('rentang-nilai.index') }}" class="sub-menu-link"><i class="fa-solid fa-bezier-curve"></i>
+                                <span> Rentang Nilai</span></a>
+                        </li>
                     </ul>
                 </div>
                 </div>

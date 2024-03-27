@@ -15,7 +15,7 @@ use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\TempatController;
-
+use App\Http\Controllers\RentangNilaiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
         Route::resource('/instansi', InstansiController::class);
         Route::resource('/jenis-event', JenisEventController::class);
         Route::resource('/tempat', TempatController::class);
+        Route::resource('/rentang-nilai', RentangNilaiController::class);
     });
     Route::resource('sertifikat', SertifikatController::class);
     Route::resource('profile', ProfileController::class);

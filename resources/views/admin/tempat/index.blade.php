@@ -75,7 +75,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat" class="form-label">Alamat</label>
-                                        <input type="text" class="form-control" name="alamat" id="alamat" required>
+                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
                                     </div>
                             </div>
                             <div class="col">
@@ -86,13 +86,12 @@
                                     </div>
                                 <div class="mb-3">
                                     <label for="alamat_kota" class="form-label">Kota</label>
-                                    <input type="text" class="form-control" name="alamat_kota" id="alamat_kota"
-                                        required>
+                                    <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required></textarea>
                                 </div>
                             </div>
                             <div class="form-group mb-5">
                                 <label for="link_maps">Link Maps</label>
-                                <textarea class="form-control" id="link_maps" name="link_maps" rows="3"></textarea>
+                                <textarea class="form-control mt-2" id="link_maps" name="link_maps" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -144,8 +143,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="alamat" class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" id="alamat" required
-                                            value="{{ $row->alamat }}">
+                                            <textarea class="form-control" id="alamat" name="alamat" rows="2" required>{{ $row->alamat }}</textarea>
                                         </div>
                                 </div>
                                 <div class="col">
@@ -157,13 +155,12 @@
                                         </div>
                                     <div class="mb-3">
                                         <label for="alamat_kota" class="form-label">Kota</label>
-                                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota"
-                                            required value="{{ $row->alamat_kota }}">
+                                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ $row->alamat_kota }}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group mb-5">
                                     <label for="link_maps">Link Maps</label>
-                                    <textarea class="form-control" id="link_maps" name="link_maps" rows="3">{{ $row->link_maps }}</textarea>
+                                    <textarea class="form-control mt-2" id="link_maps" name="link_maps" rows="3">{{ $row->link_maps }}</textarea>
                                 </div>
                             </div>
                         </div>

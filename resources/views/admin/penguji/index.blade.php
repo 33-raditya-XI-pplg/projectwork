@@ -86,13 +86,14 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat" class="form-label">Alamat</label>
-                                        <input type="text" class="form-control" name="alamat" id="alamat" required>
+                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="mb-3">
                                         <label for="no_telp" class="form-label">No. telp</label>
                                         <input type="text" class="form-control" name="no_telp" id="no_telp" required>
                                     </div>
                                     <div>
+                                        <label for="foto" class="form-label">Foto Penguji</label>
                                         <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
                                     </div>
 
@@ -110,8 +111,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="alamat_kota" class="form-label">Kota</label>
-                                    <input type="text" class="form-control" name="alamat_kota" id="alamat_kota"
-                                        required>
+                                    <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required></textarea>
                                 </div>
                                 <div class="mb-5">
                                     <label for="email" class="form-label">Email</label>
@@ -180,13 +180,14 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="alamat" class="form-label">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" id="alamat" value="{{ $row->alamat }}" required>
+                                            <textarea class="form-control" id="alamat" name="alamat" rows="2" required>{{ $row->alamat }}</textarea>
                                         </div>
                                         <div class="mb-4">
                                             <label for="no" class="form-label">No. telp</label>
                                             <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
                                         <div>
+                                            <label for="foto" class="form-label">Foto Penguji</label>
                                             <input class="form-control" name="foto" type="file" id="formFile" accept=".png">
                                         </div>
 
@@ -205,7 +206,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat_kota" class="form-label">Kota</label>
-                                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" required>
+                                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ $row->alamat_kota }}</textarea>
                                     </div>
                                     <div>
                                         <label for="email" class="form-label">Email</label>

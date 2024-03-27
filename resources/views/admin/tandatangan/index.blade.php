@@ -93,7 +93,8 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <input class="form-control" name="foto_ttd" type="file" id="formFile" accept=".png" required>
+                                        <label for="tanda_tangan">Tanda Tangan</label>
+                                        <input class="form-control mt-2" name="foto_ttd" type="file" id="formFile" accept=".png" required>
                                     </div>
                             </div>
                         </div>
