@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\Instansi;
 use App\Models\Tempat;
 use App\Models\User;
+use App\Models\Rentang_Nilai as Rentang;
 
 class DataSeeder extends Seeder
 {
@@ -51,6 +52,15 @@ class DataSeeder extends Seeder
         //         'created_at' => Carbon::now(),
         //         'updated_at' => Carbon::now(),
         //     ]);
+        }
+
+        for($i=0; $i <10; $i++) {
+            Rentang::updateOrCreate([
+                'nama_konversi_nilai' => $faker->name,
+                'inisial_rentang_nilai' => $faker->suffix(),
+                'rentang_atas' => $faker->randomDigit(),
+                'rentang_bawah' => $faker->randomDigit(),
+            ]);
         }
 
         User::updateOrCreate([

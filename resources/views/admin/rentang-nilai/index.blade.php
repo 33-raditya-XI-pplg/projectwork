@@ -13,15 +13,14 @@
             <th scope="col">Aksi</th>
         </thead>
         <tbody class="" style="vertical-align: middle">
-            {{-- loop --}}
+            @foreach ($rentang as $row)
                 
                 <tr>
-                    {{-- <th scope="row">{{ $loop->index + 1 }}</th> --}}
-                    <th scope="row">1</th>
-                    <td>ABCD</td>
-                    <td>AB</td>
-                    <td>75</td>
-                    <td>90</td>
+                    <th scope="row">{{ $loop->index + 1 }}</th>
+                    <td>{{ $row->nama_konversi_nilai }}</td>
+                    <td>{{ $row->inisial_rentang_nilai }}</td>
+                    <td>{{ $row->rentang_atas }}</td>
+                    <td>{{ $row->rentang_bawah }}</td>
                     <td>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -30,7 +29,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#edit1"><i
+                                        data-bs-target="#edit{{ $row->id_rentang_nilai }}"><i
                                             class="fa-regular fa-pen-to-square"></i> Edit</a></li>
                                 <li><a href="{{ route('rentang-nilai.destroy', 1) }}" class="dropdown-item text-danger"
                                         data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
@@ -40,7 +39,7 @@
                         </div>
                     </td>
                 </tr>
-            {{-- endloop --}}
+            @endforeach
         </tbody>
     </table>
 </div>
@@ -96,7 +95,10 @@
 </div>
 
 {{-- edit --}}
-<div class="modal modal-lg fade" id="edit1" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+@foreach ( $rentang as $row)
+    
+
+<div class="modal modal-lg fade" id="edit{{ $row->id_rentang_nilai }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary-gradient text-white">
@@ -109,27 +111,27 @@
                 {{-- form --}}
                 <div class="container">
 
-                            <form action="{{ route('rentang-nilai.update', 1) }}" method="POST">
+                            <form action="{{ route('rentang-nilai.update', $row->id_rentang_nilai) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                                 <div class="mb-3">
                                     <label for="nama_konversi_nilai" class="form-label">Nama</label>
-                                    <input type="text" class="form-control" name="nama_konversi_nilai" id="nama_konversi_nilai" value="ABCD"
+                                    <input type="text" class="form-control" name="nama_konversi_nilai" id="nama_konversi_nilai" value="{{ $row-> nama_konversi_nilai}}"
                                         required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="inisial_rentang_nilai" class="form-label">Inisial</label>
-                                    <input type="text" class="form-control" name="inisial_rentang_nilai" id="inisial_rentang_nilai" value="AB"
+                                    <input type="text" class="form-control" name="inisial_rentang_nilai" id="inisial_rentang_nilai" value="{{ $row-> inisial_rentang_nilai}}"
                                         required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
-                                    <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" value="75" required>
+                                    <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Atas</label>
-                                    <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" value="90" required>
+                                    <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" value="{{ $row->rentang_bawah }}" required>
                                 </div>
                 </div>
                 {{-- end form --}}
@@ -145,5 +147,7 @@
         </div>
     </div>
 </div>
+
+@endforeach
 
 @endsection
