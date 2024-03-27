@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\SchemeController;
+use App\Http\Controllers\SkemaController;
 use App\Http\Controllers\PengujiController;
 
 use App\Http\Controllers\ProfileController;
@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);
-        Route::resource('skema', SchemeController::class);
+        Route::resource('skema', SkemaController::class);
         Route::resource('background', BackgroundController::class);
         Route::resource('/user', UserController::class);
         Route::resource('/penguji', PengujiController::class);

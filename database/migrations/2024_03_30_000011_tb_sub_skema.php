@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('tb_sub_skema', function (Blueprint $table) {
             $table->id('id_sub_skema');
             // Foreign Key
-            $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema');
-
+            $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema')
+                ->onDelete('cascade');
             $table->string('judul_sub');
-            $table->integer('nomor_sub');
-            $table->text('deskripsi_sub');
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 
