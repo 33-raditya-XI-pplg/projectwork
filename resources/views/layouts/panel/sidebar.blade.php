@@ -2,7 +2,7 @@
     <div class="sidebar-brand">
         <img class="logo" src="{{ asset('assets/img/logo.png') }}" alt="0">
 
-        <button class="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-secondary" ></i></button>
+        <button id="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars text-secondary " ></i></button>
     </div>
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
@@ -85,11 +85,11 @@
                 </a>
             </li>
         </ul>
-        <div class="segitiga">
+        <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>
             <span class="triangles d-block"></span>
         </div>
-        <div class="footer">
+        <div id="footer" class="footer">
             <h6><i class="far fa-copyright"></i> 2024 Mascitra Konsultan IT</h6>
         </div>
     </div>
@@ -100,7 +100,6 @@
 @push('script')
 <script>
         var sidebarState = false; // Menyimpan status sidebar terbuka atau tertutup
-
         $(document).on('click', '#btn-show-sidebar', function() {
             var sidebar = $('#panel-sidebar');
             // Jika sidebar sedang terbuka

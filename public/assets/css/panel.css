@@ -17877,7 +17877,7 @@ body {
     padding: 1rem;
   }
 }
-.sidebar .btn-show-sidebar {
+.sidebar #btn-show-sidebar {
   background-color: transparent;
   border: unset;
   font-size: 20px;
