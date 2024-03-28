@@ -8,7 +8,7 @@
         {!! isset($pengguna) ? method_field('PUT') : '' !!}     
         <div class="container">
             <div class="row">
-                <div class="col">
+                <div class="col mb-3">
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
                     <input type="hidden" name="password" value="Pengguna">
                     <input type="hidden" name="level" value="Pengguna">
@@ -34,8 +34,13 @@
                         <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                         <select name="jenis_kelamin" id="jenis_kelamin" class="form-select">
                             <option selected disabled>Pilih...</option>
-                            <option value="laki-laki">Laki-Laki</option>
-                            <option value="perempuan">Perempuan</option>
+                            @if (isset($pengguna))
+                                <option value="laki-laki" {{ $pengguna->jenis_kelamin == 'laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                <option value="perempuan" {{ $pengguna->jenis_kelamin == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                            @elseif (!isset($pengguna))
+                                <option value="laki-laki">Laki-Laki</option>
+                                <option value="perempuan">Perempuan</option>
+                            @endif
                         </select>
                     </div>
                     <div class="mb-3">
@@ -63,7 +68,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="foto_pengguna" class="mb-2">Foto Pengguna</label>
-                        <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
+                        <input class="form-control" name="foto" type="file" id="formFile" accept=".png" {{ isset($pengguna->path_foto) ? '' : 'required' }}>
                     </div>
 
                 </div>
@@ -116,10 +121,28 @@
                         <input type="text" class="form-control" name="no_telp_perusahaan" id="no_telp_perusahaan"
                             required value="{{ isset($pengguna) ? $pengguna->no_telp_perusahaan : '' }}">
                     </div>
+
+                    <div class="modal-footer justify-content-between mt-3">
+                        <div class="form-check form-switch mb-3">
+                            <label for="status" class="me-3">Status</label>
+                            @if (isset($pengguna))
+                                <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                    name="status" value="Aktif" {{ $pengguna->status == 'Aktif' ? 'checked' : '' }}>
+                            @elseif (!isset($pengguna))
+                                <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                    name="status" value="Aktif" {{ $user->status == 'Aktif' ? 'checked' : '' }}>
+                            @endif
+                        </div>
+                        <div class="d-flex justify-content-end mb-2">
+                            <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+                        </div>	
+                    </div>
                 </div>
-                <div class="d-grid mt-3 ">
+                
+                <!-- <div class="d-grid mt-3 ">
                     <button type="submit" class="btn btn-primary rounded">Simpan</button>
-                </div>
+                </div> -->
+                
             </div>
         </div>
     </form>

@@ -17,8 +17,8 @@ class UserController extends Controller
         return view('admin.user.index', compact('pengguna'));
     }
 
-    public function create() {
-        return view('admin.user.create');
+    public function create(User $user) {
+        return view('admin.user.create', compact('user'));
     }
 
     public function store(Request $request) {
@@ -69,10 +69,18 @@ class UserController extends Controller
     }
 
     public function destroy($id) {
-        $foto = User::find($id)->path_logo;
-        unlink(public_path($foto));
+        $user = User::findOrFail($id);
 
-        User::destroy($id);
+        // BUG : Somehow path_foto not exists
+        // quick fix : let-say path_foto can't be manually deleted on public_path
+        // if (!empty($user->path_foto) && Storage::exists($user->path_foto)) {
+        //     Storage::delete($user->path_foto);
+        // }
+        if (!empty($user->path_foto)) {
+            unlink(public_path($user->path_foto));
+            $user->delete();
+        }
+        $user->delete();
         
         toast('Pengguna terhapus!','success');
         return redirect()->back();
