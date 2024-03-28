@@ -13,7 +13,7 @@
                 </a>
             </li>
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
-                <a hrefx="{{ route('event.index') }}" class="item-link">
+                <a href="{{ route('event.index') }}" class="item-link">
                     <i class="fas fa-bullhorn link-icon"></i>
                     <span>Event</span>
                 </a>
