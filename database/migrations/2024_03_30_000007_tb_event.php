@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('tgl_berakhir');
 
             $table->integer('biaya_regis');
-            $table->string('path_icon');
             $table->string('path_banner');
 
             $table->string('jenis_event');

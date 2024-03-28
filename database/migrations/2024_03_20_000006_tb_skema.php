@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_skema');
             $table->string('nama_skema');
             $table->boolean('has_sub_skema')->default(false);
+            $table->string('path_icon');
             $table->string('status');
 
             $table->integer('created_by')->nullable(); 
