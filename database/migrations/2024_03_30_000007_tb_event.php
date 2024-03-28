@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->integer('biaya_regis');
             $table->string('path_banner');
+            $table->longText('deskripsi')->nullable();
 
             $table->string('status');
             $table->enum('visibilitas', ['privat', 'publik']);
