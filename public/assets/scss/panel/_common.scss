@@ -26,7 +26,7 @@ body {
     padding: 1rem .8rem;
     transition: all .2s linear;
 
-    @media screen and (min-width: $screen-lg){
+    @media screen and (min-width: $screen-sm){
         & {
             --sidebar-width: #{$sidebar-lg};
             width: calc(100% - var(--sidebar-width));
@@ -34,7 +34,8 @@ body {
         }
 
         &.expanded {
-            width: 100%;
+            --sidebar-width: #{$sidebar-coll};
+            width: calc(100% - var(--sidebar-width));
         }
     }
 }

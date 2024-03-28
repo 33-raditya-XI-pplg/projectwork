@@ -8,7 +8,7 @@
         {!! isset($pengguna) ? method_field('PUT') : '' !!}     
         <div class="container">
             <div class="row">
-                <div class="col">
+                <div class="col mb-3">
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
                     <input type="hidden" name="password" value="Pengguna">
                     <input type="hidden" name="level" value="Pengguna">
@@ -34,8 +34,13 @@
                         <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
                         <select name="jenis_kelamin" id="jenis_kelamin" class="form-select">
                             <option selected disabled>Pilih...</option>
-                            <option value="laki-laki">Laki-Laki</option>
-                            <option value="perempuan">Perempuan</option>
+                            @if (isset($pengguna))
+                                <option value="laki-laki" {{ $pengguna->jenis_kelamin == 'laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                <option value="perempuan" {{ $pengguna->jenis_kelamin == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                            @elseif (!isset($pengguna))
+                                <option value="laki-laki">Laki-Laki</option>
+                                <option value="perempuan">Perempuan</option>
+                            @endif
                         </select>
                     </div>
                     <div class="mb-3">
@@ -63,7 +68,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="foto_pengguna" class="mb-2">Foto Pengguna</label>
-                        <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
+                        <input class="form-control" name="foto" type="file" id="formFile" accept=".png" {{ isset($pengguna->path_foto) ? '' : 'required' }}>
                     </div>
 
                 </div>
@@ -74,52 +79,70 @@
                     <div class="mt-3">
                         <label for="nama_sekolah" class="form-label">Nama Sekolah/Universitas</label>
                         <input type="text" class="form-control" name="nama_sekolah" id="nama_sekolah"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->nama_sekolah : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="jurusan" class="form-label">Jurusan</label>
                         <input type="text" class="form-control" name="jurusan" id="jurusan"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->jurusan : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="jenjang" class="form-label">Jenjang</label>
                         <input type="text" class="form-control" name="jenjang" id="jenjang"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->jenjang : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="tahun_lulus" class="form-label">Tahun Lulus</label>
                         <input type="text" class="form-control" name="tahun_lulus" id="tahun_lulus"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->tahun_lulus : '' }}">
                     </div>
                     <h5 class="text-center text-primary mt-5 fw-bold rounded" style="margin-bottom: 28px;">- Data Pekerjaan Sekarang -</h5>
                     
                     <div class="mt-3">
                         <label for="nama_perusahaan" class="form-label">Nama Perusahaan</label>
                         <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->nama_perusahaan : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="alamat_perusahaan" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="alamat_perusahaan" name="alamat_perusahaan" rows="2" required></textarea>
+                        <textarea class="form-control" id="alamat_perusahaan" name="alamat_perusahaan" rows="2" required>{{ isset($pengguna) ? $pengguna->alamat_perusahaan : '' }}</textarea>
                     </div>
                     <div class="mt-3">
                         <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
-                        <textarea class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" rows="2" required></textarea>
+                        <textarea class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" rows="2" required>{{ isset($pengguna) ? $pengguna->alamat_kota_perusahaan : '' }}</textarea>
                     </div>
                     <div class="mt-3">
                         <label for="jabatan_pekerjaan" class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="jabatan_pekerjaan" id="jabatan_pekerjaan"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->jabatan_pekerjaan : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="no_telp_perusahaan" class="form-label">Telepon</label>
                         <input type="text" class="form-control" name="no_telp_perusahaan" id="no_telp_perusahaan"
-                            required>
+                            required value="{{ isset($pengguna) ? $pengguna->no_telp_perusahaan : '' }}">
+                    </div>
+
+                    <div class="modal-footer justify-content-between mt-3">
+                        <div class="form-check form-switch mb-3">
+                            <label for="status" class="me-3">Status</label>
+                            @if (isset($pengguna))
+                                <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                    name="status" value="Aktif" {{ $pengguna->status == 'Aktif' ? 'checked' : '' }}>
+                            @elseif (!isset($pengguna))
+                                <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                    name="status" value="Aktif" {{ $user->status == 'Aktif' ? 'checked' : '' }}>
+                            @endif
+                        </div>
+                        <div class="d-flex justify-content-end mb-2">
+                            <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+                        </div>	
                     </div>
                 </div>
-                <div class="d-grid mt-3 ">
+                
+                <!-- <div class="d-grid mt-3 ">
                     <button type="submit" class="btn btn-primary rounded">Simpan</button>
-                </div>
+                </div> -->
+                
             </div>
         </div>
     </form>

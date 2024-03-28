@@ -64,11 +64,20 @@ class PengujiController extends Controller
 
     public function destroy($id)
     {
-        $foto = User::find($id)->path_foto;
-        unlink(public_path($foto));
-        User::destroy($id);
-        toast('User berhasil dihapus.', 'success');
+        $user = User::findOrFail($id);
 
+        // BUG : Somehow path_foto not exists
+        // quick fix : let-say path_foto can't be manually deleted on public_path
+        // if (!empty($user->path_foto) && Storage::exists($user->path_foto)) {
+        //     Storage::delete($user->path_foto);
+        // }
+        if (!empty($user->path_foto)) {
+            unlink(public_path($user->path_foto));
+            $user->delete();
+        }
+        $user->delete();
+        
+        toast('User berhasil dihapus.', 'success');
         return redirect()->back();
     }
 }
