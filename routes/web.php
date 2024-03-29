@@ -58,7 +58,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::resource('sertifikat', SertifikatController::class);
     Route::resource('profile', ProfileController::class);
 
-
 });
 
 require __DIR__.'/auth.php';

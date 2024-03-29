@@ -99,14 +99,20 @@ class SkemaController extends Controller
             
             if (!empty($request->sub_skema)) {
                 foreach ($request->sub_skema as $subSkemaId => $subSkemaValue) {    
-                    if (!empty($subSkemaValue) && !Sub_Skema::where('id_sub_skema', $subSkemaId)->exists()) {
+                    // if (!empty($subSkemaValue) && Sub_Skema::where('id_sub_skema', !$subSkemaId)
+                    //     ->whereIn('skema_id', $skema->id_skema)) {
+                    if (!empty($subSkemaValue) && !Sub_Skema::where('id_sub_skema', $subSkemaId)
+                        ->whereIn('skema_id', [$skema->id_skema])->exists()) {
+                    
                         Sub_Skema::create([
                             'skema_id' => $skema->id_skema,
                             'judul_sub' => $subSkemaValue,
                             'created_by' => Auth::user()->id_user,
                         ]);
                     } 
-                    elseif (!empty($request->sub_skema)) {
+                    elseif (!empty($request->sub_skema) && Sub_Skema::where('id_sub_skema', $subSkemaId)
+                        ->whereIn('skema_id', [$skema->id_skema])) {
+
                         $subSkema = Sub_Skema::findOrFail($subSkemaId);
                         $subSkema->update([
                             'skema_id' => $skema->id_skema,
@@ -115,7 +121,7 @@ class SkemaController extends Controller
                         ]);
                     }
 
-                } 
+                } // End Foreach
             }
             elseif (empty($request->sub_skema)) {
                 Sub_Skema::where('skema_id', $skema->id_skema)->delete(); 

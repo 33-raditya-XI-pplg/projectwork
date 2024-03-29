@@ -3,7 +3,7 @@
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
-				<h5>Create Skema</h5>
+				<h5 class="mt-2">Create Skema</h5>
             </div>
 			<div class="card-body">
                 <div>
@@ -26,9 +26,9 @@
 								<button type="button" class="btn btn-primary btn-sm rounded mb-2" id="addSubSkema">Tambah Sub-Skema</button>
 							</div>
 
-							<!-- <div id="empty-input-message" class="alert alert-info" role="alert" style="display: hide;">
-								<p class="mb-1 mx-2">Sub-Skema Kosong</p>
-							</div> -->
+							<div id="empty-input-message" class="alert alert-info" role="alert" style="display: show;">
+								<h6 class="mx-3 mt-2">Tambahkan Sub-Skema</h6>
+							</div>
 
 							<div class="input-group mb-3 sub-skema-input">
 								<!-- Input Dinamis -->
@@ -56,41 +56,29 @@
 
 @push('script')
     <script>
-		$(document).ready(function() {
-            $('#addSubSkema').click(function() {
-                $('.sub-skema-wrapper').append('<div class="input-group mb-3 sub-skema-input">' +
-                    '<input type="text" class="form-control" name="sub_skema[]" placeholder="Nama Sub-Skema" required>' +
-                    '<button class="btn btn-outline-danger rounded removeSubSkema" type="button">Remove</button>' +
-                    '</div>');
-            });
+        $(document).ready(function() {
+			$('#addSubSkema').click(function() {
+				$('.sub-skema-wrapper').append('<div class="input-group mb-3 sub-skema-input">' +
+					'<input type="text" class="form-control" name="sub_skema[]" placeholder="Nama Sub-Skema" required>' +
+					'<button class="btn btn-outline-danger rounded removeSubSkema" type="button">Remove</button>' +
+					'</div>');
+				$('#empty-input-message').hide();
+			});
 
-            $(document).on('click', '.removeSubSkema', function() {
-                $(this).closest('.sub-skema-input').remove();
-            });
-        });
-        // $(document).ready(function() {
-		// 	$('#addSubSkema').click(function() {
-		// 		$('.sub-skema-wrapper').append('<div class="input-group mb-3 sub-skema-input">' +
-		// 			'<input type="text" class="form-control" name="sub_skema[]" placeholder="Nama Sub-Skema" required>' +
-		// 			'<button class="btn btn-outline-danger rounded removeSubSkema" type="button">Remove</button>' +
-		// 			'</div>');
-		// 		$('#empty-input-message').hide();
-		// 	});
+			$(document).on('click', '.removeSubSkema', function() {
+				$(this).closest('.sub-skema-input').remove();
+				checkEmptyInput(); 
+			});
 
-		// 	$(document).on('click', '.removeSubSkema', function() {
-		// 		$(this).closest('.sub-skema-input').remove();
-		// 		checkEmptyInput(); 
-		// 	});
-
-		// 	function checkEmptyInput() {
-		// 		var inputs = $('input[name="sub_skema[]"]');
-		// 		if (inputs.length == 0) {
-		// 			$('#empty-input-message').show(); 
-		// 		} else {
-		// 			$('#empty-input-message').hide(); 
-		// 		}
-		// 	}
-		// });
+			function checkEmptyInput() {
+				var inputs = $('input[name="sub_skema[]"]');
+				if (inputs.length == 0) {
+					$('#empty-input-message').show(); 
+				} else {
+					$('#empty-input-message').hide(); 
+				}
+			}
+		});
     </script>
 
 	<script>
