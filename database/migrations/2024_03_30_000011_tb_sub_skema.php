@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_sub_skema');
             // Foreign Key
             $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema')
-                ->onDelete('cascade');
+                ->onDelete('cascade')->onUpdate('cascade');
             $table->string('judul_sub');
 
             $table->integer('created_by')->nullable(); 
