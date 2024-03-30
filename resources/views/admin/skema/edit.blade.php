@@ -48,13 +48,16 @@
                             @endif
                         </div>
                         <hr>
-                        <div class="form-check form-switch mb-3">
-                            <label for="status" class="me-3">Status</label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="Aktif" {{ $skema->status == 'Aktif' ? 'checked' : '' }}>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success rounded text-white">Simpan Perubahan</button>
-                        </div>
+                        <div class="modal-footer justify-content-between">
+							<div class="form-check form-switch mb-3">
+								<label for="status" class="me-3">Status</label>
+								<input class="form-check-input" type="checkbox" role="switch" id="status"
+									name="status" value="Aktif">
+							</div>
+							<div class="d-flex justify-content-end mb-2">
+								<button type="submit" class="btn btn-success rounded text-white">Simpan Perubahan</button>
+							</div>	
+						</div>	
                     </form>
                 </div>
             </div>
