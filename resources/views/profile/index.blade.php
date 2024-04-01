@@ -1,4 +1,5 @@
 @extends('layouts.panel.index')
+@section('title', 'Profile')
 
 
 @section('title', 'Profile')
@@ -17,10 +18,10 @@
                         <div class="col-sm-4">
                             <div class="bg-primary position-relative p-2 shadow rounded-4 w-75 mx-auto" style="margin-top: -5em;">
                                 @if ($data->path_foto)
-                                    <img class="card-img-top rounded-4" src="{{ $data->path_foto }}" 
+                                    <img class="card-img-top rounded-4" src="{{ $data->path_foto }}"
                                         alt="foto_{{ explode(' ', $data->nama_lengkap)[0] }}">
                                 @else
-                                    <img class="card-img-top rounded-4" src="{{ asset('assets/img/icon.png') }}" 
+                                    <img class="card-img-top rounded-4" src="{{ asset('assets/img/icon.png') }}"
                                         alt="Default Photo">
                                 @endif
 
@@ -58,6 +59,7 @@
         <div class="card shadow-sm mb-4 p-4">
             <div class="card-body">
 
+                {{-- @dd(Auth::user()->isLevel('Pengguna')) --}}
                 <h2>Detail Akun - {{ $data->level }}</h2>
                     @if(Auth::user()->isLevel('Admin'))
                         <div class="row">
@@ -152,7 +154,7 @@
                         </div>
                         <hr>
                     @endif
-                
+
             </div>
         </div>
     </div>
