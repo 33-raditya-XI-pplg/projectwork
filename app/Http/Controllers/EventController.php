@@ -9,6 +9,7 @@ use App\Models\Tempat;
 use App\Models\Jenis_Event as JenisEvt;
 use App\Models\Event;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 
 class EventController extends Controller
 {
@@ -20,8 +21,10 @@ class EventController extends Controller
         $evt = Event::get();
         $evt_draft = Event::where('status', 'Draft')->get();
         $evt_pub = Event::where('status', 'Publish')->get();
+        $evt_live = Event::where('status', 'Berlangsung')->get();
+        $evt_end = Event::where('status', 'Selesai')->get();
         confirmDelete('Hapus Event', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub'));
+        return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end'));
     }
 
     public function store(Request $request) {

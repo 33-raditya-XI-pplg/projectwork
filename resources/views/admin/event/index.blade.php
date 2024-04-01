@@ -183,12 +183,100 @@
                 </div>
                 <div class="tab-pane fade" id="nav-live" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="mt-4 text-center">
-                        No data available!
+                        <table id="example" class="table">
+                            <thead class="fw-normal">
+                                <th scope="col ">Nama Event</th>
+                                <th scope="col">Jenis Event</th>
+                                <th scope="col">Tanggal Event</th>
+                                <th scope="col">Tanggal Berakhir</th>
+                                <th scope="col">Nama Instansi</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
+                            </thead>
+                            <tbody class="" style="vertical-align: middle">
+                                @foreach ($evt_live as $row )
+                                    <tr>
+                                        <td>{{ $row->nama_event }}</td>
+                                        <td>{{ \App\Models\Jenis_Event::find($row->jenis_event_id)->nama_jenis_event }}</td>
+                                        <td>{{ $row->tgl_mulai }}</td>
+                                        <td>{{ $row->tgl_berakhir }}</td>
+                                        <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
+                                            <td><button type="button" class="btn btn-outline-warning rounded-3"
+                                                disabled>Berlangsung</button></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="fa-solid fa-bars"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item text-info" href="#"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#edit{{ $row->event_id }}"><i
+                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                                    <li><a href="{{ route('event.destroy', 1) }}"
+                                                            class="dropdown-item text-danger"
+                                                            data-confirm-delete="true"><i
+                                                                class="fa-regular fa-trash-can pe-none"></i>
+                                                            Delete</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-end" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="mt-4 text-center">
-                        No data available!
+                        <table id="example" class="table">
+                            <thead class="fw-normal">
+                                <th scope="col ">Nama Event</th>
+                                <th scope="col">Jenis Event</th>
+                                <th scope="col">Tanggal Event</th>
+                                <th scope="col">Tanggal Berakhir</th>
+                                <th scope="col">Nama Instansi</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
+                            </thead>
+                            <tbody class="" style="vertical-align: middle">
+                                @foreach ($evt_end as $row )
+                                    <tr>
+                                        <td>{{ $row->nama_event }}</td>
+                                        <td>{{ \App\Models\Jenis_Event::find($row->jenis_event_id)->nama_jenis_event }}</td>
+                                        <td>{{ $row->tgl_mulai }}</td>
+                                        <td>{{ $row->tgl_berakhir }}</td>
+                                        <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
+                                            <td><button type="button" class="btn btn-outline-success rounded-3"
+                                                disabled>Selesai</button></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="fa-solid fa-bars"></i>
+                                                </a>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item text-info" href="#"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#edit{{ $row->event_id }}"><i
+                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                                    <li><a href="{{ route('event.destroy', 1) }}"
+                                                            class="dropdown-item text-danger"
+                                                            data-confirm-delete="true"><i
+                                                                class="fa-regular fa-trash-can pe-none"></i>
+                                                            Delete</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
