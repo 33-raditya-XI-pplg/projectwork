@@ -28,12 +28,12 @@ class EventTask extends Command
      */
     public function handle()
     {
-    $live = Event::where('status', 'Publish')
+    Event::where('status', 'Publish')
         ->where('tgl_mulai', '<=', Carbon::now()->toDateString())
         ->where('tgl_berakhir', '>=', Carbon::now()->toDateString())
         ->update(['status' => 'Berlangsung']);
 
-    $end = Event::where('status', 'Publish')
+    Event::where('status', 'Publish')
         ->where('tgl_berakhir', '<=', Carbon::now()->toDateString())
         ->update(['status' => 'Selesai']);
 

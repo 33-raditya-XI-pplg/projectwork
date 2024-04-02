@@ -19,5 +19,10 @@ composer require phpoffice/phpspreadsheet
 27/07/2023
 composer require stichoza/google-translate-php
 
-#cronjob 
+#cronjob
+
+#manual
 php artisan evt:update-status
+
+#auto
+php artisan schedule:work

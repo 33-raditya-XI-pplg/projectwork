@@ -48,6 +48,7 @@
 @push('script')
     <script>
         var add = document.getElementById('add');
+        add.style.display = '';
 
         add.addEventListener('click', function(event) {
 

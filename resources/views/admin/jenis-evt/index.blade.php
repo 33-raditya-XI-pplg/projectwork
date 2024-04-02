@@ -77,7 +77,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label h-100">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi" name="deskripsi"></textarea>
+                            <textarea class="form-control ck-editor" id="deskripsi" name="deskripsi"></textarea>
                         </div>
                         <div class="form-check">
                             <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
@@ -128,7 +128,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                                <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="10">{{ $row->deskripsi }}</textarea>
+                                <textarea class="form-control ck-editor" id="deskripsi-edit" name="deskripsi" rows="10">{{ $row->deskripsi }}</textarea>
                             </div>
                             <div class="form-check">
                                 <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
@@ -159,18 +159,3 @@
 
 
 @endsection
-
-@push('script')
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#deskripsi'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('#deskripsi-edit'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
-@endpush

@@ -49,6 +49,8 @@
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
                                         <td><button type="button" class="btn @if ($row->status == 'Publish') btn-outline-primary
                                         @elseif ($row->status == 'Draft') btn-outline-warning 
+                                        @elseif ($row->status == 'Berlangsung') btn-outline-warning
+                                        @elseif ($row->status == 'Selesai') btn-outline-success
                                         @endif 
                                         rounded-3" disabled>{{ $row->status }}</button></td>
                                         <td>
@@ -113,9 +115,9 @@
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                     <li><a class="dropdown-item text-info" href="#"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->event_id }}"><i
+                                                            data-bs-target="#edit{{ $row->id_event }}"><i
                                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', 1) }}"
+                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
                                                             class="dropdown-item text-danger"
                                                             data-confirm-delete="true"><i
                                                                 class="fa-regular fa-trash-can pe-none"></i>
@@ -133,7 +135,7 @@
                     {{--  --}}
                 </div>
                 <div class="tab-pane fade" id="nav-publish" role="tabpanel" aria-labelledby="nav-profile-tab">
-                    <div class="mt-4 text-center">
+                    <div class="mt-4">
                         <table id="example" class="table">
                             <thead class="fw-normal">
                                 <th scope="col ">Nama Event</th>
@@ -164,9 +166,9 @@
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                     <li><a class="dropdown-item text-info" href="#"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->event_id }}"><i
+                                                            data-bs-target="#edit{{ $row->id_event }}"><i
                                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', 1) }}"
+                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
                                                             class="dropdown-item text-danger"
                                                             data-confirm-delete="true"><i
                                                                 class="fa-regular fa-trash-can pe-none"></i>
@@ -182,7 +184,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-live" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <div class="mt-4 text-center">
+                    <div class="mt-4">
                         <table id="example" class="table">
                             <thead class="fw-normal">
                                 <th scope="col ">Nama Event</th>
@@ -213,9 +215,9 @@
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                     <li><a class="dropdown-item text-info" href="#"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->event_id }}"><i
+                                                            data-bs-target="#edit{{ $row->id_event }}"><i
                                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', 1) }}"
+                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
                                                             class="dropdown-item text-danger"
                                                             data-confirm-delete="true"><i
                                                                 class="fa-regular fa-trash-can pe-none"></i>
@@ -231,7 +233,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-end" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <div class="mt-4 text-center">
+                    <div class="mt-4">
                         <table id="example" class="table">
                             <thead class="fw-normal">
                                 <th scope="col ">Nama Event</th>
@@ -262,9 +264,9 @@
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                     <li><a class="dropdown-item text-info" href="#"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->event_id }}"><i
+                                                            data-bs-target="#edit{{ $row->id_event }}"><i
                                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', 1) }}"
+                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
                                                             class="dropdown-item text-danger"
                                                             data-confirm-delete="true"><i
                                                                 class="fa-regular fa-trash-can pe-none"></i>
@@ -372,7 +374,7 @@
                               </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                                <textarea class="form-control" id="deskripsi" name="deskripsi" rows="4"></textarea>
+                                <textarea class="form-control ck-editor" id="deskripsi" name="deskripsi" rows="4"></textarea>
                             </div>
                         </div>
                     </div>
@@ -483,7 +485,7 @@
                               </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                                <textarea class="form-control" id="deskripsi-edit" name="deskripsi" rows="4">@php
+                                <textarea class="form-control ck-editor" id="deskripsi-edit" name="deskripsi" rows="4">@php
                                     echo $row->deskripsi
                                 @endphp</textarea>
                             </div>
@@ -514,18 +516,4 @@
 
 @endsection
 
-@push('script')
-<script>
-    ClassicEditor
-        .create(document.querySelector('#deskripsi'))
-        .catch(error => {
-            console.error(error);
-        });
-    ClassicEditor
-        .create(document.querySelector('#deskripsi-edit'))
-        .catch(error => {
-            console.error(error);
-        });
-</script>
-@endpush
 
