@@ -36,8 +36,8 @@
 
     <div id="app">
         <div class="content-wrapper" id="panel-content">
-            @include('layouts.panel.navbar')
             @include('layouts.panel.sidebar')
+            @include('layouts.panel.navbar')
             <div class="container mt-4">
                 <div class="d-flex justify-content-between  align-items-center  mb-3 ">
                     <div id="breadcrumb " style="--bs-breadcrumb-divider: ''">
@@ -68,7 +68,6 @@
                 </div>
                 @yield('content')
             </div>
-
         </div>
     </div>
 
@@ -84,17 +83,16 @@
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/hotkeys.js"></script>
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/uploader.js"></script>
     <script src="{{ asset('') }}vendor/simditor/lib/simditor.js"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/main.js') }}"></script> --}}
     <script src="{{ asset('assets/js/panel.js') }}"></script>
     <script>
         var button = document.getElementById('add')
-
         button.style.display = 'none';
     </script>
     <script>
         function previewFile() {
-            const file = document.querySelector('#formFileSm').files[0];
-            const preview = document.querySelector('#preview');
+            const file = $("#formFileSm").files[0];
+            const preview = $("#preview");
 
             const reader = new FileReader();
 
@@ -111,11 +109,18 @@
         }
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             const ckeditorElements = document.querySelectorAll('.ck-editor');
             const tables = document.querySelectorAll('#example');
+
+            // Destroy the existing DataTable instance
+            $('#example').DataTable().destroy();
+            // create new DataTable instance
             tables.forEach(function(table) {
-                new DataTable(table);
+                new DataTable(table, {
+                    scrollX: true,
+                    deferRender: true
+                });
             });
             ckeditorElements.forEach(function(element) {
                 ClassicEditor

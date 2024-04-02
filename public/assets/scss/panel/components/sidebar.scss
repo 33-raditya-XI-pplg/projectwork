@@ -7,13 +7,14 @@
     overflow-x: hidden;
     top: 0;
     left: 0;
+    // left: -100%;
     background-color: #fff;
     z-index: 1024;
-    transition: left 1s linear;
-    -webkit-transition: left 1s linear;
-    -moz-transition: left 1s linear;
-    -ms-transition: left 1s linear;
-    -o-transition: left 1s linear;
+    transition: left .3s linear;
+    -webkit-transition: left .3s linear;
+    -moz-transition: left .3s linear;
+    -ms-transition: left .3s linear;
+    -o-transition: left .3s linear;
 
     @media screen and (min-width: $screen-sm) {
         & {
@@ -26,21 +27,24 @@
             box-shadow: 3px 0px 9px 1px rgb(220 220 220 / 50%);
         }
     }
+    &.mobile{
+        left: -100%;
+    }
 
     &.expanded {
         left: 0;
         max-width: $sidebar-lg;
 
-        #btn-show-sidebar {
-            margin-left: calc(($sidebar-lg - 150px) /4);
-        }
+        // #btn-show-sidebar {
+        //     margin-left: calc(($sidebar-lg - 150px) /4);
+        // }
     }
 
     &.coll{
         max-width: $sidebar-coll;
 
         button {
-            margin: auto;
+            padding: 0 1rem 0;
         }
 
         .segitiga, .footer, .logo, .sub-menu-link span, .item-link span{
@@ -62,6 +66,10 @@
         top: 0;
         z-index: 1;
         background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .8rem 1rem;
 
         img {
             width: 150px;
@@ -142,7 +150,7 @@
     .sidebar-menu-content {
         // overflow-y: auto;
         max-height: 99vh;
-        margin-top: 30px;
+        margin-top: 15px;
     }
 
     .sidebar-menu {
@@ -250,6 +258,7 @@
 
                         .sub-menu-link {
                             transition: all .2s linear;
+                            display: block;
                             color: #686868;
                             -webkit-transition: all .2s linear;
                             -moz-transition: all .2s linear;
@@ -280,6 +289,7 @@
             &.dropdown {
                 .item-link {
                     position: relative;
+                    padding: .5rem 1rem;
                     &::after {
                         content: '\f106';
                         font-weight: 900;

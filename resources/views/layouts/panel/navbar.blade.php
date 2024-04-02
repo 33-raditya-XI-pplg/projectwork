@@ -1,7 +1,6 @@
 <nav class="navbar" id="panel-navbar">
     <div class="navbar-left">
-        {{-- <button class="btn-show-sidebar" data-toggle="sidebar"><i class="fa fa-bars" ></i></button> --}}
-
+        <button id="btn-show-sidebar-nav" data-toggle="sidebar" class="d-none"><i class="fa fa-bars text-secondary " ></i></button>
     </div>
 
     <div class="navbar-right">

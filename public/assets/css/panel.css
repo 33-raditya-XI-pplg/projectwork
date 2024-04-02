@@ -17722,18 +17722,18 @@ body {
 
 .navbar {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
   background-color: #fff;
   position: fixed;
   top: 0;
   right: 0;
   transition: all 0.2s linear;
   z-index: 1020;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
 }
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 576px) {
   .navbar {
     --sidebar-width: 260px;
     width: calc(100% - var(--sidebar-width));
@@ -17741,6 +17741,14 @@ body {
   .navbar.expanded {
     width: 100%;
   }
+}
+.navbar .navbar-left {
+  margin-left: 1rem;
+}
+.navbar #btn-show-sidebar-nav {
+  background-color: transparent;
+  border: unset;
+  font-size: 20px;
 }
 .navbar .nav-dropdown {
   display: inline-block;
@@ -17824,11 +17832,11 @@ body {
   left: 0;
   background-color: #fff;
   z-index: 1024;
-  transition: left 1s linear;
-  -webkit-transition: left 1s linear;
-  -moz-transition: left 1s linear;
-  -ms-transition: left 1s linear;
-  -o-transition: left 1s linear;
+  transition: left 0.3s linear;
+  -webkit-transition: left 0.3s linear;
+  -moz-transition: left 0.3s linear;
+  -ms-transition: left 0.3s linear;
+  -o-transition: left 0.3s linear;
 }
 @media screen and (min-width: 576px) {
   .sidebar {
@@ -17840,18 +17848,18 @@ body {
     box-shadow: 3px 0px 9px 1px rgba(220, 220, 220, 0.5);
   }
 }
+.sidebar.mobile {
+  left: -100%;
+}
 .sidebar.expanded {
   left: 0;
   max-width: 260px;
-}
-.sidebar.expanded #btn-show-sidebar {
-  margin-left: 27.5px;
 }
 .sidebar.coll {
   max-width: 90px;
 }
 .sidebar.coll button {
-  margin: auto;
+  padding: 0 1rem 0;
 }
 .sidebar.coll .segitiga, .sidebar.coll .footer, .sidebar.coll .logo, .sidebar.coll .sub-menu-link span, .sidebar.coll .item-link span {
   display: none;
@@ -17867,6 +17875,10 @@ body {
   top: 0;
   z-index: 1;
   background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
 }
 .sidebar .sidebar-brand img {
   width: 150px;
@@ -17935,7 +17947,7 @@ body {
 }
 .sidebar .sidebar-menu-content {
   max-height: 99vh;
-  margin-top: 30px;
+  margin-top: 15px;
 }
 .sidebar .sidebar-menu {
   width: 100%;
@@ -18029,6 +18041,7 @@ body {
 }
 .sidebar .sidebar-menu .sidebar-menu-item .sub-menu .sub-menu-content .sub-menu-item .sub-menu-link {
   transition: all 0.2s linear;
+  display: block;
   color: #686868;
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
@@ -18051,6 +18064,7 @@ body {
 }
 .sidebar .sidebar-menu .sidebar-menu-item.dropdown .item-link {
   position: relative;
+  padding: 0.5rem 1rem;
 }
 .sidebar .sidebar-menu .sidebar-menu-item.dropdown .item-link::after {
   content: "\f106";

@@ -14,26 +14,29 @@ function setEventToggleSidebar(el){
 }
 
 var windowWidth = $(window).width();
-if(windowWidth > 992){
+if(windowWidth > 576){
     $('#panel-sidebar').addClass('expanded')
+    $('#panel-sidebar').removeClass('mobile')
     $('#panel-navbar').removeClass('expanded')
     $('#panel-content').removeClass('expanded')
 }else{
-    $('#panel-sidebar').removeClass('expanded')
-    $('#panel-navbar').addClass('expanded')
-    $('#panel-content').addClass('expanded')
+    $('#panel-sidebar').addClass('mobile')
+    $('#panel-sidebar').removeClass('coll')
+    $('#btn-show-sidebar-nav').removeClass('d-none')
 }
 
 $(window).resize(function(){
     var windowWidth = $(window).width();
-    if(windowWidth > 992){
+    if(windowWidth > 576){
         $('#panel-sidebar').addClass('expanded')
+        $('#panel-sidebar').removeClass('mobile')
         $('#panel-navbar').removeClass('expanded')
         $('#panel-content').removeClass('expanded')
+        $('#btn-show-sidebar-nav').addClass('d-none')
     }else{
-        $('#panel-sidebar').removeClass('expanded')
-        $('#panel-navbar').addClass('expanded')
-        $('#panel-content').addClass('expanded')
+        $('#panel-sidebar').addClass('mobile')
+        $('#panel-sidebar').removeClass('coll')
+        $('#btn-show-sidebar-nav').removeClass('d-none')
     }
 })
 

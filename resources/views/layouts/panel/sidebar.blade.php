@@ -101,14 +101,17 @@
 <script>
         var sidebarState = false; // Menyimpan status sidebar terbuka atau tertutup
         $(document).on('click', '#btn-show-sidebar', function() {
+            var windowWidth = $(window).width();
             var sidebar = $('#panel-sidebar');
-            // Jika sidebar sedang terbuka
-            if (sidebarState) {
-                sidebar.removeClass('coll');
-                sidebarState = false; // Menandakan sidebar kembali tertutup
-            } else { // Jika sidebar sedang tertutup
-                sidebar.addClass('coll');
-                sidebarState = true; // Menandakan sidebar sedang terbuka
+            if (windowWidth > 576) {
+                // Jika sidebar sedang terbuka
+                if (sidebarState) {
+                    sidebar.removeClass('coll');
+                    sidebarState = false; // Menandakan sidebar kembali tertutup
+                } else { // Jika sidebar sedang tertutup
+                    sidebar.addClass('coll');
+                    sidebarState = true; // Menandakan sidebar sedang terbuka
+                }
             }
         });
     </script>
