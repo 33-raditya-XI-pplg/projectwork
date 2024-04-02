@@ -118,8 +118,8 @@
             // create new DataTable instance
             tables.forEach(function(table) {
                 new DataTable(table, {
-                    scrollX: true,
-                    deferRender: true
+                    // scrollX: true,
+                    // deferRender: true
                 });
             });
             ckeditorElements.forEach(function(element) {

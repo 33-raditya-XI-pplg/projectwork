@@ -19,7 +19,7 @@
             <div class="mb-3 row">
                 <label for="password" class="col-sm-2 col-form-label">Password</label>
                 <div class="col-sm-10">
-                    <button type="button" class="btn btn-sm btn-primary rounded" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-sm btn-primary rounded" data-bs-toggle="modal" data-bs-target="#pw">
                     Ubah Password
                     </button>
                 </div>
@@ -208,6 +208,54 @@
     </div>
 </div>
 
+<div class="modal fade" id="pw" tabindex="-1" aria-labelledby="pw" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary-gradient text-white">
+                <h5 class="modal-title" id="exampleModalLabel">Ubah Password</h5>
+                <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <label for="exampleFormControlInput1" class="form-label">Kata Sandi Sekarang</label>
+                    <div class="input-group">
+                        <input id="password" type="password" name="password" class="form-control"
+                            placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+                        <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
+                                id="toggle-pw" style="cursor: pointer;"></i></span>
+                        
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="exampleFormControlInput1" class="form-label">Kata Sandi Baru</label>
+                    <div class="input-group">
+                        <input id="password2" type="password" name="password" class="form-control"
+                            placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+                        <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
+                                id="toggle-pw2" style="cursor: pointer;"></i></span>
+                        
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Konfirmasi Kata Sandi</label>
+                    <input type="password" class="form-control" id="password3">
+                  </div>
+
+            </div>
+            <div class="modal-footer justify-content-end mx-3">
+                <div>
+                    <button type="button" class="btn btn-danger rounded-3"
+                        data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 @push('script')
@@ -216,4 +264,35 @@
 
         button.style.display = 'none';
     </script>
+@endpush
+
+@push('script')
+<script>
+    let pw = document.getElementById("password");
+    let eye = document.getElementById("toggle-pw");
+    let pw2 = document.getElementById("password2");
+    let pw3 = document.getElementById("password3");
+    let eye2 = document.getElementById("toggle-pw2");
+
+    eye.onclick = function() {
+        if (pw.type == "password") {
+            pw.type = "text";
+            eye.className = "fa-regular fa-eye";
+        } else {
+            pw.type = "password";
+            eye.className = "fa-regular fa-eye-slash";
+        }
+    }
+    eye2.onclick = function() {
+        if (pw2.type == "password") {
+            pw2.type = "text";
+            pw3.type = "text";
+            eye2.className = "fa-regular fa-eye";
+        } else {
+            pw2.type = "password";
+            pw3.type = "password";
+            eye2.className = "fa-regular fa-eye-slash";
+        }
+    }
+</script>
 @endpush

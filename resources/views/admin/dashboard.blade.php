@@ -11,7 +11,7 @@
                 </div>
                 <div>
 
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
                         <input type="number" class="form-control"
                             aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis"
