@@ -69,7 +69,7 @@
                                 <span> Rentang Nilai</span></a>
                         </li>
                         <span class="text-muted">TUK</span>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }} mt-2">
+                        <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
                             <a href="{{ route('instansi.index') }}" class="sub-menu-link"><i
                                     class="far fa-building"></i><span> Instansi</span></a>
                         </li>
