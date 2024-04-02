@@ -7,9 +7,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use RealRashid\SweetAlert\Facades\Alert;
+
 use Illuminate\View\View;
 
 use App\Models\User;
+use App\Models\Instansi;
 
 class ProfileController extends Controller
 {
@@ -18,41 +21,94 @@ class ProfileController extends Controller
 
         return view('profile.index', compact('data'));
     }
-    public function edit(Request $request): View
-    {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+
+    public function edit($id) {
+        $instansi = Instansi::get();
+        $user = User::findOrFail($id);
+
+        return view('profile.edit', compact('user', 'instansi'));
     }
 
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    public function update(Request $request, $id) {   
+        if ($request->has('photo')) {
+            if (Auth::user()->isLevel('Admin')) {
+                $foto = $request->file('photo');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $foto->storeAs('public/foto_pengguna', $filename);
+            }
+            elseif (Auth::user()->isLevel('Penguji')) {
+                $foto = $request->file('photo');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $foto->storeAs('public/foto_penguji', $filename);
+            }
+            elseif (Auth::user()->isLevel('Pengguna')) {
+                $foto = $request->file('photo');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $foto->storeAs('public/foto_pengguna', $filename);
+            }
+                  
         }
 
-        $request->user()->save();
+        $user = User::find($id);
+        $user->update($request->all());
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
+        return redirect()->route('profile.index');
     }
 
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+    public function destroy($id) {
+        $user = User::findOrFail($id);
 
-        $user = $request->user();
-
-        Auth::logout();
-
+        // BUG : Somehow path_foto not exists
+        // quick fix : let-say path_foto can't be manually deleted on public_path
+        // if (!empty($user->path_foto) && Storage::exists($user->path_foto)) {
+        //     Storage::delete($user->path_foto);
+        // }
+        if (!empty($user->path_foto)) {
+            unlink(public_path($user->path_foto));
+            $user->delete();
+        }
         $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        
+        toast('Pengguna terhapus!','success');
+        return redirect()->back();
     }
+
+    // public function edit(Request $request): View
+    // {
+    //     return view('profile.edit', [
+    //         'user' => $request->user(),
+    //     ]);
+    // }
+
+    // public function update(ProfileUpdateRequest $request): RedirectResponse
+    // {
+    //     $request->user()->fill($request->validated());
+
+    //     if ($request->user()->isDirty('email')) {
+    //         $request->user()->email_verified_at = null;
+    //     }
+
+    //     $request->user()->save();
+
+    //     return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    // }
+
+    // public function destroy(Request $request): RedirectResponse
+    // {
+    //     $request->validateWithBag('userDeletion', [
+    //         'password' => ['required', 'current_password'],
+    //     ]);
+
+    //     $user = $request->user();
+
+    //     Auth::logout();
+
+    //     $user->delete();
+
+    //     $request->session()->invalidate();
+    //     $request->session()->regenerateToken();
+
+    //     return Redirect::to('/');
+    // }
 }
