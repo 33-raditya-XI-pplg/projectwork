@@ -78,7 +78,7 @@
             <div class="col-8 bg-white">
                 <div class="card shadow-md justify-content-center text-center rounded-3" style="height: 12rem;">
                         <div class="spinner-border text-primary text-center mx-auto" role="status">
-                            <span class="visually-hiddens">************</span>
+                            <span class="visually-hidden">************</span>
                         </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 <div class="card shadow-md rounded-3" style="height: 12rem;">
                     <div class="card shadow-md justify-content-center text-center rounded-3" style="height: 12rem;">
                         <div class="spinner-border text-primary text-center mx-auto" role="status">
-                            <span class="visually-hiddens">************</span>
+                            <span class="visually-hidden">************</span>
                         </div>
                 </div>
                 </div>

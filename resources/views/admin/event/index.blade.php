@@ -370,7 +370,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="logo" class="form-label">Upload Banner</label>
-                                <input class="form-control" name="logo" type="file" id="formFile" accept=".png, .jpg, .jpeg">
+                                <input class="form-control" name="logo" type="file" id="formFile" accept=".png, .jpg, .jpeg" required>
                               </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
