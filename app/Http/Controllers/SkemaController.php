@@ -156,4 +156,15 @@ class SkemaController extends Controller
 
         return redirect()->route('skema.index');
     }
+
+    // ==== API ====
+    public function indexApi() {
+        $data = Skema::get();
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Data skema berhasil diambil.',
+            'data' => $data
+        ]);
+    }
 }
