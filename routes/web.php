@@ -16,6 +16,7 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\RentangNilaiController;
+use App\Http\Controllers\User\NilaiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
 
     Route::resource('/event', EventController::class);
     Route::resource('penilaian',PenilaianController::class);
+    Route::resource('nilai',NilaiController::class);
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);

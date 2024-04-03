@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
 
-use App\Models\User;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\User\NilaiController;
 
 class UserController extends Controller
 {
@@ -54,7 +55,7 @@ class UserController extends Controller
                'status' => 'Tidak Aktif'
             ]);
          }
-        
+
         if ($request->has('foto')) {
             $foto = $request->file('foto');
             $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
@@ -81,7 +82,7 @@ class UserController extends Controller
             $user->delete();
         }
         $user->delete();
-        
+
         toast('Pengguna terhapus!','success');
         return redirect()->back();
     }
