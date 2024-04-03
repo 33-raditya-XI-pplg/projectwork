@@ -18,18 +18,21 @@
                     <span>Event</span>
                 </a>
             </li>
+            @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
                 <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-tasks link-icon"></i>
                     <span>Penilaian</span>
                 </a>
             </li>
+            @endif
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }} position-relative">
                 <a href="{{route('sertifikat.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
                     <span>Sertifikat</span>
                 </a>
             </li>
+            @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">
                     <i class="fas fa-database link-icon"></i>
@@ -82,6 +85,7 @@
                 </div>
                 </div>
             </li>
+            @endif
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
                 <a href="{{ route('profile.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>

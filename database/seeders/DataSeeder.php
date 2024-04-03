@@ -21,7 +21,7 @@ class DataSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create('id_ID');        
+        $faker = Faker::create('id_ID');
 
         foreach (range(1, 2) as $index) {
             Instansi::updateOrCreate([
@@ -62,7 +62,7 @@ class DataSeeder extends Seeder
                 'rentang_bawah' => $faker->randomDigit(),
             ]);
         }
-        
+
 
         User::updateOrCreate([
             'nama_lengkap' => 'Dedy Sutrisno',
@@ -72,47 +72,47 @@ class DataSeeder extends Seeder
             'password' => 'admin123'
         ]);
 
-        // User::updateOrCreate([
-        //     'nama_lengkap' => 'Agus Hariyanto',
-        //     'email' => 'penguji@gmail.com',
-        //     'level' => 'Penguji',
-        //     'status'=> 'Aktif',
-        //     'password' => 'penguji123',
+        User::updateOrCreate([
+            'nama_lengkap' => 'Agus Hariyanto',
+            'email' => 'penguji@gmail.com',
+            'level' => 'Penguji',
+            'status'=> 'Aktif',
+            'password' => 'penguji123',
 
-        //     'instansi_id'=> 1,
-        //     'alamat' => 'Jalan yang terjal',
-        //     'alamat_kota'=> 'Jember',
-        //     'no_telp'=> '082331072471',
+            'instansi_id'=> 1,
+            'alamat' => 'Jalan yang terjal',
+            'alamat_kota'=> 'Jember',
+            'no_telp'=> '082331072471',
 
-        //     'nomor_induk' => 2020101070,
-        //     'jabatan_penguji'=> 'Penguji Tingkat 1',
-        // ]);
+            'nomor_induk' => 2020101070,
+            'jabatan_penguji'=> 'Penguji Tingkat 1',
+        ]);
 
-        // User::updateOrCreate([
-        //     'nama_lengkap' => 'Septinus Yanes Samberbori',
-        //     'email' => 'pengguna@gmail.com',
-        //     'level' => 'Pengguna',
-        //     'status'=> 'Aktif',
-        //     'password' => 'pengguna123',
+        User::updateOrCreate([
+            'nama_lengkap' => 'Septinus Yanes Samberbori',
+            'email' => 'pengguna@gmail.com',
+            'level' => 'Pengguna',
+            'status'=> 'Aktif',
+            'password' => 'pengguna123',
 
-        //     'tempat_lahir'=> 'Wamena',
-        //     'tgl_lahir'=> '2024-03-06',
-        //     'jenis_kelamin'=> 'Laki-Laki',
-        //     'nomor_induk'=> 2020101090,
-        //     'alamat'=> 'Jalan yang benar',
-        //     'alamat_kota'=> 'Papua Barat',
+            'tempat_lahir'=> 'Wamena',
+            'tgl_lahir'=> '2024-03-06',
+            'jenis_kelamin'=> 'Laki-Laki',
+            'nomor_induk'=> 2020101090,
+            'alamat'=> 'Jalan yang benar',
+            'alamat_kota'=> 'Papua Barat',
 
-        //     'no_telp' => '082331867134',
-        //     'nama_sekolah' => 'Politeknik Negeri Jember',
-        //     'Jurusan'=> 'Teknik Komputer',
-        //     'Jenjang'=> 'Diploma 3',
-        //     'tahun_lulus'=> '2023',
+            'no_telp' => '082331867134',
+            'nama_sekolah' => 'Politeknik Negeri Jember',
+            'Jurusan'=> 'Teknik Komputer',
+            'Jenjang'=> 'Diploma 3',
+            'tahun_lulus'=> '2023',
 
-        //     'nama_perusahaan'=> 'Sumber Makmur',
-        //     'alamat_perusahaan'=> 'Jalan yang hancur',
-        //     'alamat_kota_perusahaan' => 'Jember',
-        //     'jabatan_pekerjaan' => 'Teknisi',
-        //     'no_telp_perusahaan' => '12300123'
-        // ]);
+            'nama_perusahaan'=> 'Sumber Makmur',
+            'alamat_perusahaan'=> 'Jalan yang hancur',
+            'alamat_kota_perusahaan' => 'Jember',
+            'jabatan_pekerjaan' => 'Teknisi',
+            'no_telp_perusahaan' => '12300123'
+        ]);
     }
 }

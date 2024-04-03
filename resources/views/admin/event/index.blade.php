@@ -48,10 +48,10 @@
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
                                         <td><button type="button" class="btn @if ($row->status == 'Publish') btn-outline-primary
-                                        @elseif ($row->status == 'Draft') btn-outline-warning 
+                                        @elseif ($row->status == 'Draft') btn-outline-warning
                                         @elseif ($row->status == 'Berlangsung') btn-outline-warning
                                         @elseif ($row->status == 'Selesai') btn-outline-success
-                                        @endif 
+                                        @endif
                                         rounded-3" disabled>{{ $row->status }}</button></td>
                                         <td>
                                             <div class="dropdown">
@@ -400,7 +400,7 @@
 
     {{-- edit --}}
     @foreach ($evt as $row)
-    
+
     <div class="modal modal-lg fade" id="edit{{ $row->id_event }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
