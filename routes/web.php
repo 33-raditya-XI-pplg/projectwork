@@ -16,6 +16,7 @@ use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\RentangNilaiController;
+use App\Http\Controllers\EventSkema;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     })->name('dashboard');
 
     Route::resource('/event', EventController::class);
+    Route::get('/event/skema/create', [EventSkema::class, 'create'])->name('event-skema.create');
+    Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
+    Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
+
     Route::resource('penilaian',PenilaianController::class);
 
     Route::group(['prefix' => 'master'], function () {

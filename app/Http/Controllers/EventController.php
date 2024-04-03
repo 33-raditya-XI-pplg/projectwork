@@ -27,6 +27,14 @@ class EventController extends Controller
         return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end'));
     }
 
+    public function show($id) {
+        $evt = Event::find($id);
+        confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
+
+        return view('admin.event.rincian-evt', compact('evt'));
+    }
+
+
     public function store(Request $request) {
 
         if (!$request->has('status')) {

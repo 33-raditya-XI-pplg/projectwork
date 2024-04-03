@@ -70,6 +70,10 @@
                                                                 class="fa-regular fa-trash-can pe-none"></i>
                                                             Delete</a>
                                                     </li>
+                                                    <li><a href="{{ route('event.rincian', $row->id_event) }}"
+                                                            class="dropdown-item text-warning"><i class="fa-solid fa-code pe-none"></i>
+                                                            Rincian</a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>
