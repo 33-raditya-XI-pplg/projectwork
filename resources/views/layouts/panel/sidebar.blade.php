@@ -93,6 +93,12 @@
                 </a>
             </li>
         </ul>
+        @if(Auth::user()->level == 'Pengguna')
+        <div class="level" style="margin-top:165px"></div>
+        @endif
+        @if(Auth::user()->level == 'Penguji')
+        <div class="level" style="margin-top:165px"></div>
+        @endif
         <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>
             <span class="triangles d-block"></span>
