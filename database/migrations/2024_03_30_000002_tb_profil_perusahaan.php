@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create("tb_profil", function (Blueprint $table) {
-            $table->id("id_profil");
+        Schema::create("tb_profil_perusahaan", function (Blueprint $table) {
+            $table->id("id_profil_perusahaan");
             // Foreign Key
             $table->foreignId('page_id')->constrained('tb_page', 'id_page');
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_profil');
+        Schema::dropIfExists('tb_profil_perusahaan');
     }
 };

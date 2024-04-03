@@ -41,13 +41,17 @@ class UserSeeder extends Seeder
 
             'instansi_id'=> 1,
 
+            'tempat_lahir'=> 'Bondowoso',
+            'tgl_lahir'=> '2024-02-16',
+            'jenis_kelamin'=> 'Laki-Laki',
+
             'alamat' => 'Jalan yang terjal',
             'alamat_kota'=> 'Jember',
             'no_telp'=> '082331072471',
 
             'nomor_induk' => 2020101070,
             'jabatan_penguji'=> 'Penguji Tingkat 1',
-            'jabatan_penguji'=> 'Asesor Utama',
+            'type_penguji'=> 'Asesor Utama',
         ]);
 
         User::updateOrCreate([
@@ -59,13 +63,17 @@ class UserSeeder extends Seeder
 
             'instansi_id'=> 1,
 
+            'tempat_lahir'=> 'Lumajang',
+            'tgl_lahir'=> '2024-01-17',
+            'jenis_kelamin'=> 'Laki-Laki',
+
             'alamat' => 'Jalan yang terportal',
             'alamat_kota'=> 'Jember',
             'no_telp'=> '08233107971',
 
             'nomor_induk' => 2020101071,
             'jabatan_penguji'=> 'Penguji Tingkat 1',
-            'jabatan_penguji'=> 'Asesor Utama',
+            'type_penguji'=> 'Asesor Utama',
         ]);
 
         // === Peserta / Pengguna ===

@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->integer('nomor_induk')->nullable();
             $table->date('tgl_lahir')->nullable();
             $table->string('tempat_lahir')->nullable();
-            $table->string('pekerjaan')->nullable();
             $table->string('path_foto')->nullable();
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
