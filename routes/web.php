@@ -1,22 +1,23 @@
 <?php
 
+use App\Http\Controllers\EventSkema;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SkemaController;
-use App\Http\Controllers\PengujiController;
 
+use App\Http\Controllers\TempatController;
+use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstansiController;
+
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\BackgroundController;
-
 use App\Http\Controllers\JenisEventController;
-use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SertifikatController;
-use App\Http\Controllers\TempatController;
-use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\NilaiController;
+use App\Http\Controllers\RentangNilaiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,15 +37,21 @@ Route::get('/',function(){
 // Route::get('/',function(){
 //     return view('auth/login');
 // })->middleware('auth');
+Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
+    Route::resource('nilai',NilaiController::class);
+    Route::resource('/event', EventController::class);
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard', function() {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::resource('/event', EventController::class);
+    Route::get('/event/skema/create', [EventSkema::class, 'create'])->name('event-skema.create');
+    Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
+    Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
+
     Route::resource('penilaian',PenilaianController::class);
-    Route::resource('nilai',NilaiController::class);
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);
