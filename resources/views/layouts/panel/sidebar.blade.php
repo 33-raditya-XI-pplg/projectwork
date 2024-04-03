@@ -41,7 +41,7 @@
                 <div class="card-header mt-3" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
                 <div class="sub-menu">
                     <ul class="sub-menu-content">
-                        <span class="text-muted">USER</span>
+                        <small class="text-muted">USER</small>
                         <li class="sub-menu-item {{ Request::segment(3) == 'penguji' ? 'active' : '' }}">
                             <a href="{{ route('penguji.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
                                 <span> Penguji</span></a>
@@ -49,7 +49,7 @@
                             <a href="{{ route('user.index') }}" class="sub-menu-link"><i class="fas fa-users"></i>
                                 <span> Pengguna</span></a>
                         </li>
-                        <span class="text-muted">SKEMA</span>
+                        <small class="text-muted">SKEMA</small>
                         <li class="sub-menu-item {{ Request::segment(3) == 'jenis-event' ? 'active' : '' }}">
                             <a href="{{ route('jenis-event.index') }}" class="sub-menu-link"><i
                                     class="fas fa-bullhorn"></i><span> Jenis Event</span></a>
@@ -58,7 +58,7 @@
                             <a href="{{ route('skema.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
                                 <span> Skema</span></a>
                         </li>
-                        <span class="text-muted">DATA</span>
+                        <small class="text-muted">DATA</small>
                         <li class="sub-menu-item {{ Request::segment(3) == 'tandatangan' ? 'active' : '' }}">
                             <a href="{{ route('tandatangan.index') }}" class="sub-menu-link"><i
                                     class="fas fa-pen-alt"></i><span> Tanda Tangan</span></a>
@@ -71,8 +71,8 @@
                             <a href="{{ route('rentang-nilai.index') }}" class="sub-menu-link"><i class="fa-solid fa-bezier-curve"></i>
                                 <span> Rentang Nilai</span></a>
                         </li>
-                        <span class="text-muted">TUK</span>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }} mt-2">
+                        <small class="text-muted">TUK</small>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
                             <a href="{{ route('instansi.index') }}" class="sub-menu-link"><i
                                     class="far fa-building"></i><span> Instansi</span></a>
                         </li>

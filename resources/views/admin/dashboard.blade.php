@@ -13,7 +13,7 @@
 
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="number" class="form-control"
+                        <input type="text" class="form-control"
                             aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis"
                             placeholder="Search">
                     </div>
@@ -75,24 +75,20 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-8 bg-white text-center">
-                <div class="card shadow-md rounded-3" style="height: 12rem;">
-                    <div class="card-body">
-                        {{-- This is some text within a card body. --}}
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+            <div class="col-8 bg-white">
+                <div class="card shadow-md justify-content-center text-center rounded-3" style="height: 12rem;">
+                        <div class="spinner-border text-primary text-center mx-auto" role="status">
+                            <span class="visually-hidden">************</span>
                         </div>
-                    </div>
                 </div>
             </div>
             <div class="col-4 bg-white text-center">
                 <div class="card shadow-md rounded-3" style="height: 12rem;">
-                    <div class="card-body">
-                        {{-- This is some text within a card body. --}}
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                    <div class="card shadow-md justify-content-center text-center rounded-3" style="height: 12rem;">
+                        <div class="spinner-border text-primary text-center mx-auto" role="status">
+                            <span class="visually-hidden">************</span>
                         </div>
-                    </div>
+                </div>
                 </div>
             </div>
         </div>

@@ -208,9 +208,14 @@
     </div>
 </div>
 
+<!-- Modal Update Password -->
 <div class="modal fade" id="pw" tabindex="-1" aria-labelledby="pw" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
+
+            <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
             <div class="modal-header bg-primary-gradient text-white">
                 <h5 class="modal-title" id="exampleModalLabel">Ubah Password</h5>
                 <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
@@ -218,28 +223,29 @@
             </div>
             <div class="modal-body">
                 <div class="mb-4">
-                    <label for="exampleFormControlInput1" class="form-label">Kata Sandi Sekarang</label>
+                    
+                    <label for="password_lama" class="form-label">Kata Sandi Sekarang</label>
                     <div class="input-group">
-                        <input id="password" type="password" name="password" class="form-control"
-                            placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+                        <input type="password" id="password_lama" name="password_lama" class="form-control"
+                            placeholder="Password sekarang">
                         <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
                                 id="toggle-pw" style="cursor: pointer;"></i></span>
                         
                     </div>
                 </div>
                 <div class="mb-4">
-                    <label for="exampleFormControlInput1" class="form-label">Kata Sandi Baru</label>
+                    <label for="password_baru" class="form-label">Kata Sandi Baru</label>
                     <div class="input-group">
-                        <input id="password2" type="password" name="password" class="form-control"
-                            placeholder="Password" aria-label="Password" aria-describedby="basic-addon2">
+                        <input type="password" id="password_baru" name="password_baru" class="form-control"
+                            placeholder="Password baru">
                         <span class="input-group-text bg-transparent"><i class="fa-regular fa-eye-slash"
                                 id="toggle-pw2" style="cursor: pointer;"></i></span>
                         
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Konfirmasi Kata Sandi</label>
-                    <input type="password" class="form-control" id="password3">
+                    <label for="konfirmasi_password_baru" class="form-label">Konfirmasi Kata Sandi Baru</label>
+                    <input type="password" class="form-control" id="konfirmasi_password_baru" name="konfirmasi_password_baru" placeholder="Password baru">
                   </div>
 
             </div>
@@ -251,10 +257,10 @@
                 </div>
             </div>
             </form>
+        
         </div>
     </div>
 </div>
-
 
 @endsection
 
@@ -268,10 +274,10 @@
 
 @push('script')
 <script>
-    let pw = document.getElementById("password");
+    let pw = document.getElementById("password_lama");
     let eye = document.getElementById("toggle-pw");
-    let pw2 = document.getElementById("password2");
-    let pw3 = document.getElementById("password3");
+    let pw2 = document.getElementById("password_baru");
+    let pw3 = document.getElementById("konfirmasi_password_baru");
     let eye2 = document.getElementById("toggle-pw2");
 
     eye.onclick = function() {

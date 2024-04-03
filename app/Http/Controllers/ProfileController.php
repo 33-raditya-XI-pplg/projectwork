@@ -6,10 +6,9 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
-
-use Illuminate\View\View;
 
 use App\Models\User;
 use App\Models\Instansi;
@@ -34,7 +33,7 @@ class ProfileController extends Controller
             if (Auth::user()->isLevel('Admin')) {
                 $foto = $request->file('photo');
                 $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                $foto->storeAs('public/foto_pengguna', $filename);
+                $foto->storeAs('public/foto_admin', $filename);
             }
             elseif (Auth::user()->isLevel('Penguji')) {
                 $foto = $request->file('photo');
@@ -50,6 +49,22 @@ class ProfileController extends Controller
         }
 
         $user = User::find($id);
+
+        if (!Hash::check($request->password_lama, $user->password)) {
+            Alert::error('Gagal Tersimpan!', 'Password lama salah');
+            return redirect()->back();
+        }
+        else {
+            if ($request->password_baru != $request->konfirmasi_password_baru) {
+                Alert::error('Gagal Tersimpan!', 'Password baru tidak sama');
+                return redirect()->back();
+            }
+            else {
+                $user->password = Hash::make($request->password_baru);
+                $user->save();
+            }
+        }
+
         $user->update($request->all());
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
