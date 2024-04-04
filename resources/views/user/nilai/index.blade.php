@@ -1,5 +1,5 @@
 @extends('layouts.panel.index')
-@section('title', 'Event')
+@section('title', 'Nilai')
 @section('content')
     @push('style')
         <style>

@@ -12,13 +12,13 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+            @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
                 <a href="{{ route('event.index') }}" class="item-link">
                     <i class="fas fa-bullhorn link-icon"></i>
                     <span>Event</span>
                 </a>
             </li>
-            @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
                 <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-tasks link-icon"></i>
@@ -32,12 +32,20 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }} position-relative">
-                <a href="{{route('penilaian.index')}}" class="item-link">
+            @if(Auth::user()->level == 'Pengguna')
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event-user' ? 'active' : '' }}">
+                <a href="{{ route('event-user.index') }}" class="item-link">
+                    <i class="fas fa-bullhorn link-icon"></i>
+                    <span>Event</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'nilai' ? 'active' : '' }} position-relative">
+                <a href="{{route('nilai.index')}}" class="item-link">
                     <i class="fas fa-marker link-icon"></i>
                     <span>Nilai</span>
                 </a>
             </li>
+            @endif
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">
@@ -99,10 +107,10 @@
             </li>
         </ul>
         @if(Auth::user()->level == 'Pengguna')
-        <div class="level" style="margin-top:165px"></div>
+        <div class="level" style="margin-top:105px"></div>
         @endif
         @if(Auth::user()->level == 'Penguji')
-        <div class="level" style="margin-top:165px"></div>
+        <div class="level" style="margin-top:215px"></div>
         @endif
         <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>

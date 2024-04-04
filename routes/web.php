@@ -18,6 +18,7 @@ use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\User\NilaiController;
 use App\Http\Controllers\RentangNilaiController;
+use App\Http\Controllers\User\EventUsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,8 @@ Route::get('/',function(){
 // })->middleware('auth');
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
     Route::resource('nilai',NilaiController::class);
-    Route::resource('/event', EventController::class);
+    Route::resource('event-user',EventUsersController::class);
+
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
@@ -47,6 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
         return view('admin.dashboard');
     })->name('dashboard');
 
+    Route::resource('/event', EventController::class);
     Route::get('/event/skema/create', [EventSkema::class, 'create'])->name('event-skema.create');
     Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
     Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
