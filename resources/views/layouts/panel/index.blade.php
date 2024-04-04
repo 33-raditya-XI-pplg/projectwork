@@ -25,6 +25,7 @@
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <link rel="stylesheet" href="{{ asset('vendor/simditor/styles/simditor.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/panel.css?v=1.1') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/chosen.css') }}">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css"
         rel="stylesheet">
     @stack('style')
@@ -84,6 +85,7 @@
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/uploader.js"></script>
     <script src="{{ asset('') }}vendor/simditor/lib/simditor.js"></script>
     {{-- <script src="{{ asset('assets/js/main.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/chosen.jquery.js') }}"></script>
     <script src="{{ asset('assets/js/panel.js') }}"></script>
     <script>
         var button = document.getElementById('add')

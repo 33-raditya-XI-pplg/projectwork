@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(TtdSeeder::class);
         $this->call(EventSeeder::class);
-
+        $this->call(EventSkemaSeeder::class);
 
         // \App\Models\User::factory(10)->create();
 

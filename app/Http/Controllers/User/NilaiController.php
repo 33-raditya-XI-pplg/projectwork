@@ -9,6 +9,6 @@ class NilaiController extends Controller
 {
     public function index()
     {
-        return view('admin.nilai.index');
+        return view('user.nilai.index');
     }
 }
