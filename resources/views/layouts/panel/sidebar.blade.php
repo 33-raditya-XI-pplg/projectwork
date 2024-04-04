@@ -32,8 +32,8 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'nilai' ? 'active' : '' }} position-relative">
-                <a href="{{route('nilai.index')}}" class="item-link">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }} position-relative">
+                <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-marker link-icon"></i>
                     <span>Nilai</span>
                 </a>
@@ -77,7 +77,6 @@
                             <a href="{{ route('rentang-nilai.index') }}" class="sub-menu-link"><i class="fa-solid fa-bezier-curve"></i>
                                 <span> Rentang Nilai</span></a>
                         </li>
-                        <small class="text-muted">TUK</small>
                         <li class="sub-menu-item {{ Request::segment(3) == 'instansi' ? 'active' : '' }}">
                             <a href="{{ route('instansi.index') }}" class="sub-menu-link"><i
                                     class="far fa-building"></i><span> Instansi</span></a>
