@@ -26,8 +26,8 @@
                                 <td>Senin Aktif</td>
                                 <td>Selasa Aktif</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-secondary rounded"><i class="fas fa-print"></i> cetak</a>
-                                    <a href="#" class="btn btn-sm btn-primary rounded">rincian event</a>
+                                    <a href="#" class="btn btn-sm btn-secondary rounded"><i class="fas fa-print"></i> btn kiri</a>
+                                    <a href="#" class="btn btn-sm btn-primary rounded">btn kanan</a>
                                 </td>
                             </tr>
                         @endfor

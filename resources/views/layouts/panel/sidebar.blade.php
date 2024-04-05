@@ -25,18 +25,24 @@
                     <span>Penilaian</span>
                 </a>
             </li>
-            @endif
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }} position-relative">
                 <a href="{{route('sertifikat.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
                     <span>Sertifikat</span>
                 </a>
             </li>
+            @endif
             @if(Auth::user()->level == 'Pengguna')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event-user' ? 'active' : '' }}">
                 <a href="{{ route('event-user.index') }}" class="item-link">
                     <i class="fas fa-bullhorn link-icon"></i>
                     <span>Event</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat-user' ? 'active' : '' }} position-relative">
+                <a href="{{route('sertifikat-user.index')}}" class="item-link">
+                    <i class="fas fa-award link-icon"></i>
+                    <span>Sertifikat</span>
                 </a>
             </li>
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'nilai' ? 'active' : '' }} position-relative">
