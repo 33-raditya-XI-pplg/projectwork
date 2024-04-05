@@ -8,34 +8,26 @@
         <div class="card-title mb-3 fw-semibold"style="font-size:18px">Pilih Event & Skema</div>
         <div class="d-flex flex-row mx-2">
         <div class="card-header me-2 w-100 mx-1">
-                <form action="">
-                    <select class="form-select w-100 btn btn-secondary py-2 w-100 rounded-3 text-white" aria-label="Default select example">
+                <form action="{{ route('penilaian.getData') }}" method="POST">
+                    @csrf
+                    <select id="event_select" name="event_select" class="form-select w-100 btn btn-secondary py-2 w-100 rounded-3 text-white">
                         <option disabled selected>Pilih Event</option>
-                        <option value="1">Event 1</option>
-                        <option value="2">Event 2</option>
-                        <option value="3">Event 3</option>
-                        <option value="4">Event 4</option>
-                        <option value="5">Event 5</option>
-                        <option value="6">Event 6</option>
-                        <option value="7">Event 7</option>
+                        @foreach ($event as $row)
+                            <option value="{{ $row->id_event }}">{{ $row->nama_event }}</option>
+                        @endforeach                        
                     </select>
-                </form>
             </div>
             <div class="card-header me-2 w-100 mx-1 ">
-                <form action="">
-                    <select class="form-select w-100 btn btn-secondary text-white py-2 w-100 rounded-3" aria-label="Default select example">
+                    <select id="skema_select" name="skema_select" class="form-select w-100 btn btn-secondary text-white py-2 w-100 rounded-3">
                         <option disabled selected>Pilih Skema</option>
-                        <option value="1">Skema 1</option>
-                        <option value="2">Skema 2</option>
-                        <option value="3">Skema 3</option>
-                        <option value="4">Skema 4</option>
-                        <option value="5">Skema 5</option>
-                        <option value="6">Skema 6</option>
-                        <option value="7">Skema 7</option>
+                        @foreach ($skema as $row)
+                            <option value="{{ $row->id_skema }}">{{ $row->nama_skema }}</option>
+                        @endforeach    
                     </select>
-                </form>
+                
             </div>
-            <button class="btn btn-secondary rounded-3 w-25 mx-1">Submit</button>
+            <button type="submit" id="search_button"class="btn btn-secondary rounded-3 w-25 mx-1">Submit</button>
+            </form>
         </div>
     </div>
 </div>
@@ -48,35 +40,64 @@
                         <div class="row">
                             <div class="col">
                                 {{-- kanan --}}
-                                <form action="#" method="POST">
-                                    @csrf
+                                @if (!empty($data_event_skema))
+                                    @foreach ($data_event_skema as $row)
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="mb-3">
                                                 <label for="nama_ttd" class="form-label">Nama Event</label>
-                                                <input type="text" class="form-control" name="nama_ttd" id="nama_ttd" required>
+                                                <input type="text" class="form-control" id="nama_event" placeholder="kosong" disabled value="{{ $row->nama_event }}">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="jabatan" class="form-label">Tanggal Selesai</label>
-                                                <input type="date" class="form-control" name="jabatan" id="jabatan" required>
+                                                <label for="jabatan" class="form-label">Tanggal Mulai</label>
+                                                <input type="date" class="form-control" id="tgl_mulai" disabled value="{{ $row->tgl_mulai }}">
                                             </div>
                                             <div class="form-check form-switch mb-3">
                                                 <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                                <input class="form-check-input" type="checkbox" id="status" disabled {{ $row->status ? 'checked' : '' }}>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="mb-3">
                                                 <label for="instansi" class="form-label">Jenis Event</label>
-                                                <input type="text" class="form-control" name="instansi" id="instansi" required>
+                                                <input type="text" class="form-control" id="jenis_event" placeholder="kosong" disabled value="{{ $row->nama_jenis_event }}">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="nik" class="form-label">Tanggal Event</label>
-                                                <input type="date" class="form-control" name="nik" id="nik" required>
+                                                <label for="nik" class="form-label">Tanggal Selesai</label>
+                                                <input type="date" class="form-control" id="tgl_selesai" disabled value="{{ $row->tgl_berakhir }}">
                                             </div>
                                         </div>
+                                    </div>   
+                                    @endforeach     
+                                @else
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="nama_ttd" class="form-label">Nama Event</label>
+                                            <input type="text" class="form-control" id="nama_event" placeholder="kosong" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="jabatan" class="form-label">Tanggal Mulai</label>
+                                            <input type="date" class="form-control" id="tgl_mulai" disabled>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
+                                            <input class="form-check-input" type="checkbox" id="status" disabled>
+                                        </div>
                                     </div>
-                                </form>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <label for="instansi" class="form-label">Jenis Event</label>
+                                            <input type="text" class="form-control" id="jenis_event" placeholder="kosong" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nik" class="form-label">Tanggal Selesai</label>
+                                            <input type="date" class="form-control" id="tgl_selesai" disabled>
+                                        </div>
+                                    </div>
+                                </div>   
+                                @endif                  
+                                    
                             </div>
                         </div>
                     </div>
@@ -91,16 +112,20 @@
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
                     <tbody class="" style="vertical-align: middle">
-                        @for ($i = 0; $i < 5; $i++)
-                            <tr>
-                                <td>Dedi {{ $i }}</td>
-                                <td>90</td>
-                                <td>14-02-2024</td>
-                                <td class="text-center">
-                                    <a href="{{route('penilaian.create')}}" class="btn btn-sm btn-secondary rounded">+  Input Nilai</a>
-                                </td>
-                            </tr>
-                        @endfor
+                        @if (!empty($data_daftar_peserta))
+                            @foreach ($data_daftar_peserta as $row)
+                                <tr>
+                                    <td>{{ $row->nama_lengkap }}</td>
+                                    <td>Nilai Peserta</td>
+                                    <td>Tanggal</td>
+                                    <td class="text-center">
+                                        <a href="{{route('penilaian.create')}}" class="btn btn-sm btn-secondary rounded">+ Input Nilai</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <!-- Kosong -->
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -109,3 +134,36 @@
 </div>
             
 @endsection
+
+<!-- @push('script')
+    <script>
+        $(document).ready(function(){
+            $('#search_button').change(function(){
+                var eventId = $('#event_select').val();
+                var skemaId = $('#skema_select').val();
+
+                // Kirim permintaan AJAX ke server
+                $.ajax({
+                    url: route('penilaian.getData'),
+                    type: 'POST',
+                    data: {
+                        eventId: eventId,
+                        skemaId: skemaId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response){
+                        console.log("Permintaan AJAX berhasil.");
+                        // Perbarui bagian data dengan hasil dari server
+                        $('#nama_event').val(response.data.nama_event);
+                        $('#jenis_event').val(response.data.nama_jenis_event);
+                        $('#tgl_mulai').val(response.data.tgl_mulai);
+                        $('#tgl_selesai').val(response.data.tgl_berakhir);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Terjadi kesalahan dalam permintaan AJAX: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+@endpush -->

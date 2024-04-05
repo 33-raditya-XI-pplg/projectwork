@@ -54,7 +54,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
     Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
 
+    
     Route::resource('penilaian',PenilaianController::class);
+    Route::post('penilaian/getData', [PenilaianController::class, 'getData'])->name('penilaian.getData');
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);

@@ -134,5 +134,63 @@ class UserSeeder extends Seeder
             'jabatan_pekerjaan' => 'Sysadmin',
             'no_telp_perusahaan' => '12300214'
         ]);
+
+        User::updateOrCreate([
+            'nama_lengkap' => 'Slamet Kopleng',
+            'email' => 'pengguna3@gmail.com',
+            'level' => 'Pengguna',
+            'status'=> 'Aktif',
+            'password' => 'pengguna123',
+
+            'instansi_id'=> 2,
+
+            'tempat_lahir'=> 'Jember',
+            'tgl_lahir'=> '2024-03-06',
+            'jenis_kelamin'=> 'Laki-Laki',
+            'nomor_induk'=> 2020101091,
+            'alamat'=> 'Jalan yang berat',
+            'alamat_kota'=> 'Papua Timur',
+            'no_telp' => '082331867631',
+
+            'nama_sekolah' => 'Politeknik Negeri Jember',
+            'Jurusan'=> 'Teknik Komputer',
+            'Jenjang'=> 'Diploma 3',
+            'tahun_lulus'=> '2023',
+
+            'nama_perusahaan'=> 'Sumber Kencono',
+            'alamat_perusahaan'=> 'Jalan yang belok',
+            'alamat_kota_perusahaan' => 'Jember',
+            'jabatan_pekerjaan' => 'Sysadmin',
+            'no_telp_perusahaan' => '12300214'
+        ]);
+
+        User::updateOrCreate([
+            'nama_lengkap' => 'Bodrex',
+            'email' => 'pengguna4@gmail.com',
+            'level' => 'Pengguna',
+            'status'=> 'Aktif',
+            'password' => 'pengguna123',
+
+            'instansi_id'=> 2,
+
+            'tempat_lahir'=> 'Kalolo',
+            'tgl_lahir'=> '2024-03-06',
+            'jenis_kelamin'=> 'Laki-Laki',
+            'nomor_induk'=> 2020101091,
+            'alamat'=> 'Jalan yang berat',
+            'alamat_kota'=> 'Papua Timur',
+            'no_telp' => '082331867631',
+
+            'nama_sekolah' => 'Politeknik Negeri Jember',
+            'Jurusan'=> 'Teknik Komputer',
+            'Jenjang'=> 'Diploma 3',
+            'tahun_lulus'=> '2023',
+
+            'nama_perusahaan'=> 'Sumber Kencono',
+            'alamat_perusahaan'=> 'Jalan yang belok',
+            'alamat_kota_perusahaan' => 'Jember',
+            'jabatan_pekerjaan' => 'Sysadmin',
+            'no_telp_perusahaan' => '12300214'
+        ]);
     }
 }
