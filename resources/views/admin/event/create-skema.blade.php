@@ -5,7 +5,7 @@
     <form>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Skema</label>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select chosen-select" aria-label="Default select example" multiple>
             <option selected>Open this select menu</option>
             @foreach ($skema as $list)
             <option value="{{ $list->id_skema }}">{{ $list->nama_skema }}</option>
@@ -14,7 +14,7 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Background</label>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select chosen-select" aria-label="Default select example">
             <option selected>Open this select menu</option>
             @foreach ($bg as $list)
             <option value="{{ $list->id_skema }}">{{ $list->nama_skema }}</option>
@@ -23,7 +23,7 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Tanda Tangan</label>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select chosen-select" aria-label="Default select example" multiple>
             <option selected>Open this select menu</option>
             @foreach ($ttd as $list)
             <option value="{{ $list->id_background }}">{{ $list->nama_bg }}</option>
@@ -32,7 +32,7 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Penguji</label>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select chosen-select" aria-label="Default select example" multiple>
             <option selected>Open this select menu</option>
             @foreach ($rn as $list)
             <option value="0">Pak Citra</option>
@@ -41,7 +41,7 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select chosen-select" aria-label="Default select example">
             <option selected>Open this select menu</option>
             @foreach ($rn as $list)
             <option value="{{ $list->id_rentang_nilai }}">{{ $list->nama_konversi_nilai }}</option>
@@ -53,3 +53,9 @@
       </form>
 </div>
 @endsection
+
+@push('script')
+  <script>
+    $(".chosen-select").chosen()
+  </script>
+@endpush

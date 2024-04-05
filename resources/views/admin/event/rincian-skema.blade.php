@@ -5,33 +5,28 @@
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Skema</label>
-                <select class="form-select" aria-label="Default select example" readonly>
-                    <option selected>Skema 1</option>
-                </select>
+                <input type="text" class="form-control" name="nama_event" id="nama_event"
+                value="Skema-01" readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Background</label>
-                <select class="form-select" aria-label="Default select example" readonly>
-                    <option selected>Background 1</option>
-                </select>
+                <input type="text" class="form-control" name="nama_event" id="nama_event"
+                value="BG-01" readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Tanda Tangan</label>
-                <select class="form-select" aria-label="Default select example" readonly>
-                    <option selected>Tanda Tangan 1</option>
-                </select>
+                <input type="text" class="form-control" name="nama_event" id="nama_event"
+                value="TTD Hendra" readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Penguji</label>
-                <select class="form-select" aria-label="Default select example" readonly>
-                    <option selected>Penguji 1</option>
-                </select>
+                <input type="text" class="form-control" name="nama_event" id="nama_event"
+                value="Andri Setiawan" readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
-                <select class="form-select" aria-label="Default select example" readonly>
-                    <option selected>Rentang Nilai 1</option>
-                </select>
+                <input type="text" class="form-control" name="nama_event" id="nama_event"
+                value="KNV-02" readonly>
             </div>
             
     </div>
