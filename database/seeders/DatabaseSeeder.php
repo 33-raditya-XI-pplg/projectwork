@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
             BackgroundSeeder::class,
             JenisEventSeeder::class,
 
-            UserSeeder::class
-            TtdSeeder::class
-            EventSeeder::class
-            EventSkemaSeeder::class
+            UserSeeder::class,
+            TtdSeeder::class,
+            EventSeeder::class,
+            EventSkemaSeeder::class,
             DaftarPesertaSeeder::class
         ]);
     }
