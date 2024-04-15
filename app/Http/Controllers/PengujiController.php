@@ -20,20 +20,23 @@ class PengujiController extends Controller
     }
 
     public function store(Request $request) {
-
+        // dd($request);
         if (!$request->has('status')) {
             $request->merge([
             'status' => 'Nonaktif'
         ]);
         }
 
-        $foto = $request->file('foto');
-        $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-        $stored = $foto->storeAs('public/foto_penguji', $filename);
-
-        $request->merge([
-            'path_foto' => Storage::url($stored)
-        ]);
+        if ($request->has('foto')) {
+            $foto = $request->file('foto');
+            $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+            $stored = $foto->storeAs('public/foto_penguji', $filename);
+    
+            $request->merge([
+                'path_foto' => Storage::url($stored)
+            ]);
+        }
+        
 
         User::create($request->all());
 
@@ -42,6 +45,8 @@ class PengujiController extends Controller
     }
     public function update(Request $request, $id)
     {
+        // dd($request);
+        $user = User::find($id);
 
         if (!$request->has('status')) {
             $request->merge([
@@ -50,12 +55,23 @@ class PengujiController extends Controller
         }
 
         if ($request->has('foto')) {
-            $foto = $request->file('foto');
-            $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-            $foto->storeAs('public/foto_penguji', $filename);
-        }
+            if (!empty($id->path_foto)) {
+                $foto = $request->file('foto');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $foto->storeAs('public/foto_penguji', $filename);
+            }
+            else {
+                $foto = $request->file('foto');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $stored = $foto->storeAs('public/foto_penguji', $filename);
 
-        $user = User::find($id);
+                $request->merge([
+                    'path_foto' => Storage::url($stored)
+                ]);
+            }
+
+        }
+       
         $user->update($request->all());
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
 

@@ -50,19 +50,32 @@ class UserController extends Controller
     }
 
     public function update(Request $request, $id) {
+        $user = User::find($id);
+
         if (!$request->has('status')) {
             $request->merge([
                'status' => 'Tidak Aktif'
             ]);
          }
 
-        if ($request->has('foto')) {
-            $foto = $request->file('foto');
-            $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-            $foto->storeAs('public/foto_pengguna', $filename);
+         if ($request->has('foto')) {
+            if (!empty($id->path_foto)) {
+                $foto = $request->file('foto');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $foto->storeAs('public/foto_pengguna', $filename);
+            }
+            else {
+                $foto = $request->file('foto');
+                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                $stored = $foto->storeAs('public/foto_pengguna', $filename);
+
+                $request->merge([
+                    'path_foto' => Storage::url($stored)
+                ]);
+            }
+
         }
 
-        $user = User::find($id);
         $user->update($request->all());
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
