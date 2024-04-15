@@ -115,7 +115,7 @@
             <div class="mb-3 row">
                 <label for="foto_pengguna" class="col-sm-2 col-form-label">Foto Pengguna</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="photo" type="file" id="formFile" accept=".png">
+                    <input class="form-control" name="foto_pengguna" type="file" id="formFile" accept=".png">
                 </div>
             </div>
             <hr>
@@ -209,6 +209,9 @@
 </div>
 
 <!-- Modal Update Password -->
+<!-- ADD Validasi Input 
+    (password lama dan password baru) 
+-->
 <div class="modal fade" id="pw" tabindex="-1" aria-labelledby="pw" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
