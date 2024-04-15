@@ -29,6 +29,8 @@ class UserSeeder extends Seeder
             'alamat'=> 'Jalan yang licin',
             'alamat_kota'=> 'Banyuwangi Timur',
             'no_telp' => '082331867741',
+
+            'created_by' => 0,
         ]);
 
         // === Penguji ===
@@ -52,6 +54,8 @@ class UserSeeder extends Seeder
             'nomor_induk' => 2020101070,
             'jabatan_penguji'=> 'Penguji Tingkat 1',
             'type_penguji'=> 'Asesor Utama',
+
+            'created_by' => 0,
         ]);
 
         User::updateOrCreate([
@@ -74,6 +78,8 @@ class UserSeeder extends Seeder
             'nomor_induk' => 2020101071,
             'jabatan_penguji'=> 'Penguji Tingkat 1',
             'type_penguji'=> 'Asesor Utama',
+
+            'created_by' => 0,
         ]);
 
         // === Peserta / Pengguna ===
@@ -103,7 +109,9 @@ class UserSeeder extends Seeder
             'alamat_perusahaan'=> 'Jalan yang hancur',
             'alamat_kota_perusahaan' => 'Jember',
             'jabatan_pekerjaan' => 'Teknisi',
-            'no_telp_perusahaan' => '12300123'
+            'no_telp_perusahaan' => '12300123',
+
+            'created_by' => 0,
         ]);
 
         User::updateOrCreate([
@@ -132,7 +140,9 @@ class UserSeeder extends Seeder
             'alamat_perusahaan'=> 'Jalan yang belok',
             'alamat_kota_perusahaan' => 'Jember',
             'jabatan_pekerjaan' => 'Sysadmin',
-            'no_telp_perusahaan' => '12300214'
+            'no_telp_perusahaan' => '12300214',
+
+            'created_by' => 0,
         ]);
 
         User::updateOrCreate([
@@ -161,7 +171,9 @@ class UserSeeder extends Seeder
             'alamat_perusahaan'=> 'Jalan yang belok',
             'alamat_kota_perusahaan' => 'Jember',
             'jabatan_pekerjaan' => 'Sysadmin',
-            'no_telp_perusahaan' => '12300214'
+            'no_telp_perusahaan' => '12300214',
+
+            'created_by' => 0,
         ]);
 
         User::updateOrCreate([
@@ -190,7 +202,9 @@ class UserSeeder extends Seeder
             'alamat_perusahaan'=> 'Jalan yang belok',
             'alamat_kota_perusahaan' => 'Jember',
             'jabatan_pekerjaan' => 'Sysadmin',
-            'no_telp_perusahaan' => '12300214'
+            'no_telp_perusahaan' => '12300214',
+
+            'created_by' => 0,
         ]);
     }
 }

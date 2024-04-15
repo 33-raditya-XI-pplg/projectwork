@@ -26,7 +26,9 @@ class EventSeeder extends Seeder
                 'path_banner' => 'assets\img\dummy\banner_event\banner_1.png',
                 'deskripsi' => 'Uji komputer diadakan oleh Badan LSP Polije',
                 'status' => 'Aktif',
-                'visibilitas' => 'publik'
+                'visibilitas' => 'publik',
+
+                'created_by' => 0,
             ],
             [
                 'instansi_id' => 1,
@@ -39,7 +41,9 @@ class EventSeeder extends Seeder
                 'path_banner' => 'assets\img\dummy\banner_event\banner_2.png',
                 'deskripsi' => 'Uji kompetensi profesi diadakan oleh Badan LSP Polije',
                 'status' => 'Aktif',
-                'visibilitas' => 'publik'
+                'visibilitas' => 'publik',
+
+                'created_by' => 0,
             ]
         ]);
     }

@@ -21,6 +21,8 @@ class TempatSeeder extends Seeder
                 'alamat' => 'Jalan yang keras',
                 'alamat_kota' => 'Jember',
                 'link_maps' => 'https://www.google.com/maps/place//@-8.1939106,113.679965,15z/data=!3m1!4b1?entry=ttu',
+
+                'created_by' => 0,
             ],
             [
                 'nama_tempat' => 'Gedung Serbaguna Lhoksumawe',
@@ -28,6 +30,8 @@ class TempatSeeder extends Seeder
                 'alamat' => 'Jalan yang berbatu',
                 'alamat_kota' => 'Lhoksumawe',
                 'link_maps' => 'https://www.google.com/maps/place//@-8.1946681,113.6802083,14.5z?entry=ttu',
+
+                'created_by' => 0,
             ]
         ]);
     }
