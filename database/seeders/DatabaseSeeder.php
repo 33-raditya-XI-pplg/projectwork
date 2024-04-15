@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // === CATATAN ===
+        // Data hasil Seder yang memiliki foto dari folder (/Dummy) -- TIDAK DAPAT DI EDIT
+
         $this->call([
             TempatSeeder::class,
             InstansiSeeder::class,

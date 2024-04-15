@@ -17,27 +17,37 @@ class DaftarPesertaSeeder extends Seeder
             [
                 'user_id' => 4,
                 'event_skema_id' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ],
             [
                 'user_id' => 5,
                 'event_skema_id' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ],
             [
                 'user_id' => 6,
                 'event_skema_id' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ],
             [
                 'user_id' => 4,
                 'event_skema_id' => 2,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ],
             [
                 'user_id' => 5,
                 'event_skema_id' => 2,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ]
         ]);
     }

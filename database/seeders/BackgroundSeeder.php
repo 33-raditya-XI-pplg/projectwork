@@ -19,25 +19,33 @@ class BackgroundSeeder extends Seeder
                 'nama_bg' => 'bg_sertifikasi',
                 'orientasi_bg' => 'landscape',
                 'path_bg' => 'assets\img\dummy\bg\template_sertifikasi.png',
-                'rincian_bg' => 'Background khusus Sertifikasi'
+                'rincian_bg' => 'Background khusus Sertifikasi',
+
+                'created_by' => 0,
             ],
             [
                 'nama_bg' => 'bg_seminar',
                 'orientasi_bg' => 'landscape',
                 'path_bg' => 'assets\img\dummy\bg\template_seminar.png',
-                'rincian_bg' => 'Background khusus Seminar'
+                'rincian_bg' => 'Background khusus Seminar',
+
+                'created_by' => 0,
             ],
             [
                 'nama_bg' => 'bg_piagam_1',
                 'orientasi_bg' => 'potrait',
                 'path_bg' => 'assets\img\dummy\bg\template_piagam_1.png',
-                'rincian_bg' => 'Background khusus Piagam-1'
+                'rincian_bg' => 'Background khusus Piagam-1',
+
+                'created_by' => 0,
             ],
             [
                 'nama_bg' => 'bg_piagam_2',
                 'orientasi_bg' => 'potrait',
                 'path_bg' => 'assets\img\dummy\bg\template_piagam_2.png',
-                'rincian_bg' => 'Background khusus Piagam-2'
+                'rincian_bg' => 'Background khusus Piagam-2',
+
+                'created_by' => 0,
             ]
         ]);
     }
