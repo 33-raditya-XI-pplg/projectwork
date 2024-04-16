@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 class SkemaSeeder extends Seeder
@@ -20,7 +18,7 @@ class SkemaSeeder extends Seeder
                 'nama_skema' => 'Junior Web Dev',
                 'path_icon' => 'assets\img\dummy\icon_skema\icon_skema_1.png',
                 'has_sub_skema' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -28,7 +26,7 @@ class SkemaSeeder extends Seeder
                 'nama_skema' => 'Junior Mobile Dev',
                 'path_icon' => 'assets\img\dummy\icon_skema\icon_skema_1.png',
                 'has_sub_skema' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -36,7 +34,7 @@ class SkemaSeeder extends Seeder
                 'nama_skema' => 'Microsoft Windows',
                 'path_icon' => 'assets\img\dummy\icon_skema\icon_skema_2.png',
                 'has_sub_skema' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -44,7 +42,7 @@ class SkemaSeeder extends Seeder
                 'nama_skema' => 'Microsoft Office',
                 'path_icon' => 'assets\img\dummy\icon_skema\icon_skema_2.png',
                 'has_sub_skema' => 1,
-                'status' => 'Aktif'
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ]
@@ -101,4 +99,4 @@ class SkemaSeeder extends Seeder
             ]
         ]);
     }
-}
+};

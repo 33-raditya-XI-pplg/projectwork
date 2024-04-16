@@ -66,6 +66,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Cukup Kompeten',
                 'rentang_atas' => 89,
                 'rentang_bawah' => 80,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_kompeten',
