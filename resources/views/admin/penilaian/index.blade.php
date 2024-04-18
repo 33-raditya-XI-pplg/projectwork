@@ -84,7 +84,7 @@
                         <th scope="col">Tanggal</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
-                    <tbody id="list_peserta" style="vertical-align: middle">
+                    <tbody style="vertical-align: middle">
                         <!-- AJAX Response Here -->
                     </tbody>
                 </table>
@@ -162,17 +162,10 @@
                             }
 
                             // Table daftar peserta
-                            $('tbody').empty();
+                            $('#example').DataTable().destroy();
+                            $('tbody').html("");
                             $.each(data_peserta, function(index, row) {
                                 var num = index + 1;
-                                // $('$#list_peserta').append(
-                                //     '<tr>' +
-                                //     '<td>' + num + '</td>' +
-                                //     '<td>' + row.nama_lengkap + '</td>' +
-                                //     '<td>' + row.id_event_skema + '</td>' +
-                                //     '<td>' + data_skema.tgl_mulai + '</td>' +
-                                //     '</tr>'
-                                // );
                                 $('tbody').append(
                                     '<tr>\
                                     <td>' + num + '</td>\
@@ -184,6 +177,7 @@
                                     </tr>'
                                 );
                             });
+                            $("#example").DataTable();
 
                         }
                     }
