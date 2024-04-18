@@ -35,17 +35,17 @@ Route::get('/',fn() => redirect('/login'));
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
     Route::resource('dashboard',DashboardController::class);
     Route::resource('nilai',NilaiController::class);
-    Route::resource('event-user',EventUsersController::class);
-    Route::resource('sertifikat-user',SertifikatUsersController::class);
-
+    // Route::resource('/event', EventController::class);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard',fn() => view('admin.dashboard'))->name('dashboard');
 
     Route::resource('/event', EventController::class);
-    Route::get('/event/skema/create', [EventSkema::class, 'create'])->name('event-skema.create');
+    Route::get('/event/{event}/skema/create/', [EventSkema::class, 'create'])->name('event-skema.create');
     Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
+    Route::post('/event/skema/', [EventSkema::class, 'store'])->name('event-skema.store');
+    Route::delete('/event/skema/{event}', [EventSkema::class, 'delete'])->name('event-skema.delete');
     Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
 
     Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');

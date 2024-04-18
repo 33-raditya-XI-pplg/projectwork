@@ -7,9 +7,10 @@
                 <div class="row">
                     <div class="col">
                         {{-- kanan --}}
-
+                        
                         <div class="mb-3">
                             <label for="nama_event" class="form-label">Nama Event</label>
+                            <input type="hidden" name="event_id" value="{{ request()->route('event') }}">
                             <input type="text" class="form-control" name="nama_event" id="nama_event"
                                 value="{{ $evt->nama_event }}" readonly>
                         </div>
@@ -76,7 +77,7 @@
     </div>
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <div class="d-flex mb-2 me-3 justify-content-end">
-            <a class="btn btn-primary rounded" href="{{ route('event-skema.create') }}">Tambah [+]</a>
+            <a class="btn btn-primary rounded" href="{{ route('event-skema.create', $evt->id_event)}}">Tambah [+]</a>
         </div>
         <table id="example" class="table">
             <thead>
@@ -85,10 +86,11 @@
                 <th scope="col">Aksi</th>
             </thead>
             <tbody>
-                @for ($i=0 ; $i < 10; $i++)
+                @foreach ($skema as $no)
+                    
                 <tr>
-                    <th scope="row">{{ $i }}</th>
-                    <td>Taser 9{{ $i }}</td>
+                    <th scope="row">{{ $loop->index + 1 }}</th>
+                    <td>{{ \App\Models\Skema::find($no)->nama_skema }}</td>
                     <td>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -97,14 +99,14 @@
                                 <i class="fa-solid fa-bars"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item text-info" href="{{ route('event-skema.create') }}"><i
+                                <li><a class="dropdown-item text-info" href="{{ route('event-skema.create', 1) }}"><i
                                             class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                <li><a href="#"
+                                <li><a href="{{ route('event-skema.delete', $no) }}"
                                         class="dropdown-item text-danger" data-confirm-delete="true"><i
                                             class="fa-regular fa-trash-can pe-none"></i>
                                         Delete</a>
                                 </li>
-                                <li><a href="{{ route('event-skema.show', 1) }}"
+                                <li><a href="{{ route('event-skema.show', $no) }}"
                                         class="dropdown-item text-warning"><i class="fa-solid fa-code pe-none"></i>
                                         Rincian</a>
                                 </li>
@@ -112,7 +114,7 @@
                         </div>
                     </td>
                 </tr>
-                @endfor
+                @endforeach
             </tbody>
         </table>
     </div>

@@ -14,7 +14,8 @@ class Event extends Model
 
     public function eventEvent_Skema() // PK One-to-Many dengan tb_event_skema
     {
-        return $this->hasMany(Event_Skema::class, 'event_skema_id', 'id_event_skema');
+        // return $this->hasMany(Event_Skema::class, 'event_skema_id', 'id_event_skema');
+        return $this->hasMany(Event_Skema::class, 'event_id');
     }
     public function eventInstansi() // FK Many-to-One dengan tb_instansi
     {
