@@ -32,6 +32,15 @@ class TempatSeeder extends Seeder
                 'link_maps' => 'https://www.google.com/maps/place//@-8.1946681,113.6802083,14.5z?entry=ttu',
 
                 'created_by' => 0,
+            ],
+            [
+                'nama_tempat' => 'Laboratorium Rekayasa Perangkat Lunak',
+                'no_telp' => '0334-18057',
+                'alamat' => 'Jalan yang halus',
+                'alamat_kota' => 'Lumajang',
+                'link_maps' => 'https://www.google.com/maps/place/SMK+Negeri+1+Lumajang/@-8.1254897,113.2180274,15z/data=!4m6!3m5!1s0x2dd667897656a9c1:0xa6cd2590433df9d4!8m2!3d-8.1254897!4d113.2180274!16s%2Fg%2F1thknt96?entry=ttu',
+
+                'created_by' => 0,
             ]
         ]);
     }

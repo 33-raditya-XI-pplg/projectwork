@@ -43,6 +43,20 @@ class InstansiSeeder extends Seeder
 
                 'created_by' => 0,
             ],
+            [
+                'nama_instansi' => 'SMKN 1 Satelite',
+                'nomor_instansi' => 432,
+                'nama_kepala_instansi' => 'Subroto',
+                'jabatan_kepala' => 'Kepala Sekolah',
+                'path_logo' => 'assets\img\icon.png',
+                'status' => 'Aktif',
+                'alamat' => 'Jalan yang mepet sawah',
+                'alamat_kota' => 'Mboreng',
+                'email' => 'satelite@gmail.com',
+                'no_telp' => '0334-18047',
+
+                'created_by' => 0,
+            ]
         ]);
     }
 }

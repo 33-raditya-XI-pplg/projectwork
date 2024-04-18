@@ -49,8 +49,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
 
     Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
-    Route::get('penilaian/getEventData/{id}', [PenilaianController::class, 'getEventData']);
-    Route::get('penilaian/getSkemaData/{id}', [PenilaianController::class, 'getSkemaData']);
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);
@@ -67,5 +65,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::resource('profile', ProfileController::class);
 
 });
+
+// AJAX Request
+Route::get('penilaian/getEventData/{id}', [PenilaianController::class, 'getEventData']);
+Route::get('penilaian/getSkemaData/{id}', [PenilaianController::class, 'getSkemaData']);
 
 require __DIR__.'/auth.php';

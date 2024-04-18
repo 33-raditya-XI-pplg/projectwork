@@ -22,7 +22,7 @@
                     
                 </select>
             </div>
-            <!-- <button type="submit" id="search_button"class="btn btn-secondary rounded-3 w-25 mx-1">Submit</button> -->
+            <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1">Submit</button>
 
         </div>
     </div>
@@ -35,64 +35,40 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                {{-- kanan --}}
-                                @if (!empty($data_event_skema))
-                                    @foreach ($data_event_skema as $row)
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="mb-3">
-                                                <label for="nama_ttd" class="form-label">Nama Event</label>
+                                                <label for="nama_event" class="form-label">Nama Event</label>
                                                 <input type="text" class="form-control" id="nama_event" placeholder="kosong" disabled>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="jabatan" class="form-label">Tanggal Mulai</label>
+                                                <label for="nama_skema" class="form-label">Nama Skema</label>
+                                                <input type="text" class="form-control" id="nama_skema" placeholder="kosong" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
                                                 <input type="date" class="form-control" id="tgl_mulai" disabled>
                                             </div>
                                             <div class="form-check form-switch mb-3">
-                                                <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                                <input class="form-check-input" type="checkbox" id="status" disabled {{ $row->status ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status">Status</label>
+                                                <input class="form-check-input" type="checkbox" id="status" disabled>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="mb-3">
-                                                <label for="instansi" class="form-label">Jenis Event</label>
+                                                <label for="jenis_event" class="form-label">Jenis Event</label>
                                                 <input type="text" class="form-control" id="jenis_event" placeholder="kosong" disabled>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="nik" class="form-label">Tanggal Selesai</label>
+                                                <label for="tempat_skema" class="form-label">Tempat</label>
+                                                <input type="text" class="form-control" id="tempat_skema" placeholder="kosong" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
                                                 <input type="date" class="form-control" id="tgl_selesai" disabled>
                                             </div>
                                         </div>
-                                    </div>   
-                                    @endforeach     
-                                @else
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="nama_ttd" class="form-label">Nama Event</label>
-                                            <input type="text" class="form-control" id="nama_event" placeholder="kosong" disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="jabatan" class="form-label">Tanggal Mulai</label>
-                                            <input type="date" class="form-control" id="tgl_mulai" disabled>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <label class="form-check-label" for="flexSwitchCheckDefault">Status</label>
-                                            <input class="form-check-input" type="checkbox" id="status" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="instansi" class="form-label">Jenis Event</label>
-                                            <input type="text" class="form-control" id="jenis_event" placeholder="kosong" disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="nik" class="form-label">Tanggal Selesai</label>
-                                            <input type="date" class="form-control" id="tgl_selesai" disabled>
-                                        </div>
-                                    </div>
-                                </div>   
-                                @endif                  
+                                    </div>              
                                     
                             </div>
                         </div>
@@ -102,26 +78,14 @@
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
                 <table id="example" class="table">
                     <thead class="fw-normal">
+                        <th>No</th>
                         <th scope="col">Nama Perserta</th>
                         <th scope="col">Nilai Peserta</th>
                         <th scope="col">Tanggal</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
-                    <tbody class="" style="vertical-align: middle">
-                        @if (!empty($data_daftar_peserta))
-                            @foreach ($data_daftar_peserta as $row)
-                                <tr>
-                                    <td>{{ $row->nama_lengkap }}</td>
-                                    <td>Nilai Peserta</td>
-                                    <td>Tanggal</td>
-                                    <td class="text-center">
-                                        <a href="{{route('penilaian.create')}}" class="btn btn-sm btn-secondary rounded">+ Input Nilai</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <!-- Kosong -->
-                        @endif
+                    <tbody style="vertical-align: middle">
+                        <!-- AJAX Response Here -->
                     </tbody>
                 </table>
             </div>
@@ -134,36 +98,114 @@
 @push('script')
 <script>
     $(document).ready(function() {
+        var eventID;
+
         $('#event_select').on('change', function() {
-            var eventID = $(this).val();
+            eventID = $(this).val();
 
             if(eventID) {
                 $.ajax({
-                    url: '/admin/penilaian/getEventData/'+eventID,
+                    url: '/penilaian/getEventData/'+eventID,
                     type: "GET",
                     data : {"_token":"{{ csrf_token() }}"},
                     dataType: "json",
 
-                    success:function(data) {
-                        
-                        if(data){
+                    success:function(response) {
+                        if(response){
+                            var data = response.data;
+
                             $('#skema_select').empty();
                             $('#skema_select').append('<option hidden>Pilih Skema</option>'); 
+
                             $.each(data, function(key, row){
                                 $('select[id="skema_select"]').append('<option value="'+ row.id_skema +'">' + row.nama_skema+ '</option>');
                             });
-                            
-                        }
-                        else{
-                            $('#skema_select').empty();
+                    
                         }
                     }
                 });
             }
-            else{
-                $('#skema_select').empty();
-            }
+
         });
+
+        $('#skema_select').on('change', function() {
+            var skemaID = $(this).val();
+
+            $('#search_btn').on('click', function() {
+                clearInputField();
+
+                $.ajax({
+                    url: '/penilaian/getSkemaData/'+skemaID,
+                    type: "GET",
+                    data : {"_token":"{{ csrf_token() }}"},
+                    dataType: "json",
+                    
+                    success:function(response) {
+                        if(response){
+                            var data_skema = response.data_skema[0];
+                            var data_peserta = response.data_peserta;
+                            
+                            // Input Disabled 
+                            $('#nama_event').val(data_skema.nama_event);
+                            $('#jenis_event').val(data_skema.nama_jenis_event);
+
+                            $('#nama_skema').val(data_skema.nama_skema);
+                            $('#tempat_skema').val(data_skema.nama_tempat);
+
+                            $('#tgl_mulai').val(data_skema.tgl_mulai);
+                            $('#tgl_selesai').val(data_skema.tgl_berakhir);
+
+                            if (data_skema.status === "Aktif") {
+                                $('#status').prop('checked', true);
+                            } else {
+                                $('#status').prop('checked', false);
+                            }
+
+                            // Table daftar peserta
+                            $('#example').DataTable().destroy();
+                            $('tbody').html("");
+                            $.each(data_peserta, function(index, row) {
+                                var num = index + 1;
+                                $('tbody').append(
+                                    '<tr>\
+                                    <td>' + num + '</td>\
+                                    <td>' + row.nama_lengkap + '</td>\
+                                    <td>' + row.id_event_skema + '</td>\
+                                    <td>' + data_skema.tgl_mulai + '</td>\
+                                    <td><button class="btn btn-primary btn-sm rounded">Edit</button>\
+                                    <button class="btn btn-danger btn-sm rounded">Delete</button></td>\
+                                    </tr>'
+                                );
+                            });
+                            $("#example").DataTable();
+
+                        }
+                    }
+                    
+                });
+            
+            });
+        });
+
+        // // Optional: Handler untuk tombol edit dan delete
+        // $('#list_peserta').on('click', '.edit-btn', function() {
+        //     var id = $(this).data('id');
+        //     console.log('Edit ID: ' + id);
+        //     // Tambahkan logika edit di sini
+        // });
+
+        // $('#list_peserta').on('click', '.delete-btn', function() {
+        //     var id = $(this).data('id');
+        //     console.log('Delete ID: ' + id);
+        //     // Tambahkan logika delete di sini
+        // });
+
+        function clearInputField() {
+            $('input[type="text"]').val('');
+            $('input[type="checkbox"]').prop('checked', false);
+        }
+
     });
+
 </script>
 @endpush

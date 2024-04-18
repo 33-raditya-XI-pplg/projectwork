@@ -30,6 +30,14 @@ class JenisEventSeeder extends Seeder
                 'status' => 'Aktif',
 
                 'created_by' => 0,
+            ],
+            [
+                'nama_jenis_event' => 'Ujian Akhir',
+                'has_lampiran' => 1,
+                'deskripsi' => 'Ujian kenaikan kelas untuk siswa/i SMK',
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ]
         ]);
     }
