@@ -84,7 +84,7 @@
                         <th scope="col">Tanggal</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
-                    <tbody id="list_peserta" class="" style="vertical-align: middle">
+                    <tbody id="list_peserta" style="vertical-align: middle">
                         <!-- AJAX Response Here -->
                     </tbody>
                 </table>
@@ -98,8 +98,10 @@
 @push('script')
 <script>
     $(document).ready(function() {
+        var eventID;
+
         $('#event_select').on('change', function() {
-            var eventID = $(this).val();
+            eventID = $(this).val();
 
             if(eventID) {
                 $.ajax({
@@ -125,13 +127,13 @@
             }
 
         });
-    });
 
-    $(document).ready(function() {
         $('#skema_select').on('change', function() {
             var skemaID = $(this).val();
-            
-            if(skemaID) {
+
+            $('#search_btn').on('click', function() {
+                clearInputField();
+
                 $.ajax({
                     url: '/penilaian/getSkemaData/'+skemaID,
                     type: "GET",
@@ -160,17 +162,26 @@
                             }
 
                             // Table daftar peserta
-                            $('#list_peserta').empty(); 
+                            $('tbody').empty();
                             $.each(data_peserta, function(index, row) {
                                 var num = index + 1;
-                                $('#list_peserta').append(
-                                    '<tr>' +
-                                    '<td>' + num + '</td>' +
-                                    '<td>' + row.nama_lengkap + '</td>' +
-                                    '<td>' + row.id_event_skema + '</td>' +
-                                    '<td>' + row.id_event_skema + '</td>' +
-                                    '<td>' + row.id_event_skema + '</td>' +
-                                    '</tr>'
+                                // $('$#list_peserta').append(
+                                //     '<tr>' +
+                                //     '<td>' + num + '</td>' +
+                                //     '<td>' + row.nama_lengkap + '</td>' +
+                                //     '<td>' + row.id_event_skema + '</td>' +
+                                //     '<td>' + data_skema.tgl_mulai + '</td>' +
+                                //     '</tr>'
+                                // );
+                                $('tbody').append(
+                                    '<tr>\
+                                    <td>' + num + '</td>\
+                                    <td>' + row.nama_lengkap + '</td>\
+                                    <td>' + row.id_event_skema + '</td>\
+                                    <td>' + data_skema.tgl_mulai + '</td>\
+                                    <td><button class="btn btn-primary btn-sm rounded">Edit</button>\
+                                    <button class="btn btn-danger btn-sm rounded">Delete</button></td>\
+                                    </tr>'
                                 );
                             });
 
@@ -178,8 +189,28 @@
                     }
                     
                 });
-            }
+            
+            });
         });
+
+        // // Optional: Handler untuk tombol edit dan delete
+        // $('#list_peserta').on('click', '.edit-btn', function() {
+        //     var id = $(this).data('id');
+        //     console.log('Edit ID: ' + id);
+        //     // Tambahkan logika edit di sini
+        // });
+
+        // $('#list_peserta').on('click', '.delete-btn', function() {
+        //     var id = $(this).data('id');
+        //     console.log('Delete ID: ' + id);
+        //     // Tambahkan logika delete di sini
+        // });
+
+        function clearInputField() {
+            $('input[type="text"]').val('');
+            $('input[type="checkbox"]').prop('checked', false);
+        }
+
     });
 
 </script>
