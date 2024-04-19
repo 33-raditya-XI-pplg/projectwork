@@ -54,6 +54,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::delete('/event/skema/{event}', [EventSkema::class, 'delete'])->name('event-skema.delete');
     Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
 
+    // Route::resource('/penilaian', PenilaianController::class);
     Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
 
     Route::group(['prefix' => 'master'], function () {

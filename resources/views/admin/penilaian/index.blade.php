@@ -107,7 +107,6 @@
                 $.ajax({
                     url: '/penilaian/getEventData/'+eventID,
                     type: "GET",
-                    data : {"_token":"{{ csrf_token() }}"},
                     dataType: "json",
 
                     success:function(response) {
@@ -128,80 +127,80 @@
 
         });
 
+        var skemaID
+
+        $('#search_btn').prop('disabled', true);
+
         $('#skema_select').on('change', function() {
-            var skemaID = $(this).val();
+            skemaID = $(this).val();
 
-            $('#search_btn').on('click', function() {
-                clearInputField();
+            if (skemaID) {
+                $('#search_btn').prop('disabled', false);
+            }
+        });
 
-                $.ajax({
-                    url: '/penilaian/getSkemaData/'+skemaID,
-                    type: "GET",
-                    data : {"_token":"{{ csrf_token() }}"},
-                    dataType: "json",
-                    
-                    success:function(response) {
-                        if(response){
-                            var data_skema = response.data_skema[0];
-                            var data_peserta = response.data_peserta;
-                            
-                            // Input Disabled 
-                            $('#nama_event').val(data_skema.nama_event);
-                            $('#jenis_event').val(data_skema.nama_jenis_event);
+        $('#search_btn').on('click', function() {
+            clearInputField();
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data berhasil dicari.'
+            });
 
-                            $('#nama_skema').val(data_skema.nama_skema);
-                            $('#tempat_skema').val(data_skema.nama_tempat);
+            $.ajax({
+                url: '/penilaian/getSkemaData/' + skemaID,
+                type: "GET",
+                dataType: "json",
+                
+                success: function(response) {
+                    if(response){
+                        var data_skema = response.data_skema[0];
+                        var data_peserta = response.data_peserta;
+                        
+                        // Input Disabled 
+                        $('#nama_event').val(data_skema.nama_event);
+                        $('#jenis_event').val(data_skema.nama_jenis_event);
 
-                            $('#tgl_mulai').val(data_skema.tgl_mulai);
-                            $('#tgl_selesai').val(data_skema.tgl_berakhir);
+                        $('#nama_skema').val(data_skema.nama_skema);
+                        $('#tempat_skema').val(data_skema.nama_tempat);
 
-                            if (data_skema.status === "Aktif") {
-                                $('#status').prop('checked', true);
-                            } else {
-                                $('#status').prop('checked', false);
-                            }
+                        $('#tgl_mulai').val(data_skema.tgl_mulai);
+                        $('#tgl_selesai').val(data_skema.tgl_berakhir);
 
-                            // Table daftar peserta
-                            $('#example').DataTable().destroy();
-                            $('tbody').html("");
-                            $.each(data_peserta, function(index, row) {
-                                var num = index + 1;
+                        if (data_skema.status === "Aktif") {
+                            $('#status').prop('checked', true);
+                        } else {
+                            $('#status').prop('checked', false);
+                        }
+
+                        // Table daftar peserta
+                        $('#example').DataTable().destroy();
+                        $('tbody').html("");
+
+                        $.each(data_peserta, function(index, row) {
+                            var num = index + 1;
                                 $('tbody').append(
                                     '<tr>\
                                     <td>' + num + '</td>\
                                     <td>' + row.nama_lengkap + '</td>\
                                     <td>' + row.id_event_skema + '</td>\
                                     <td>' + data_skema.tgl_mulai + '</td>\
-                                    <td><button class="btn btn-primary btn-sm rounded">Edit</button>\
-                                    <button class="btn btn-danger btn-sm rounded">Delete</button></td>\
+                                    <td><a href="" class="btn btn-danger rounded" data-confirm-delete="true">Delete</a></td>\
                                     </tr>'
                                 );
                             });
-                            $("#example").DataTable();
+                        $("#example").DataTable();
 
-                        }
                     }
-                    
-                });
-            
+                }
+                
             });
+        
         });
 
-        // // Optional: Handler untuk tombol edit dan delete
-        // $('#list_peserta').on('click', '.edit-btn', function() {
-        //     var id = $(this).data('id');
-        //     console.log('Edit ID: ' + id);
-        //     // Tambahkan logika edit di sini
-        // });
-
-        // $('#list_peserta').on('click', '.delete-btn', function() {
-        //     var id = $(this).data('id');
-        //     console.log('Delete ID: ' + id);
-        //     // Tambahkan logika delete di sini
-        // });
-
-        function clearInputField() {
+        function clearInputField() {            
             $('input[type="text"]').val('');
+            $('input[type="date"]').val('');
             $('input[type="checkbox"]').prop('checked', false);
         }
 
