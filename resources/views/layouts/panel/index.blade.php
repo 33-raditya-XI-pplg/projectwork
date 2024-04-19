@@ -11,7 +11,7 @@
     <meta name="author" content="@yield('meta.author', config('variable.AUTHOR'))">
     <meta name="keywords" content="@yield('meta.keywords', config('variable.KEYWORDS'))">
     <meta name="robots" content="index, follow">
-
+    
     <link rel="icon" href="{{ asset('assets/img/icon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/img/icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">

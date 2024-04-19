@@ -1,5 +1,5 @@
 @extends('layouts.panel.index')
-@section('title', 'Nilai')
+@section('title', 'Sertifikat')
 @section('content')
     @push('style')
         <style>
@@ -19,15 +19,15 @@
                         <th scope="col" width="30%">Skema</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
-                    <tbody class="" style="vertical-align: middle">
+                    <tbody class="table-responsive" style="vertical-align: middle">
                         @for ($i = 0; $i < 5; $i++)
                             <tr>
                                 <td>No {{ $i }}</td>
                                 <td>Senin Aktif</td>
                                 <td>Selasa Aktif</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-secondary rounded"><i class="fas fa-print"></i> btn kiri</a>
-                                    <a href="#" class="btn btn-sm btn-primary rounded">btn kanan</a>
+                                    <a href="#" class="btn btn-sm btn-primary rounded"><i class="fas fa-print"></i> Cetak</a>
+                                    <a href="{{route('rincian-sertifikat.index')}}" class="btn btn-sm btn-secondary rounded">Rincian</a>
                                 </td>
                             </tr>
                         @endfor
