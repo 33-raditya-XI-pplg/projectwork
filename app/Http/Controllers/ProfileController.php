@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -29,41 +30,82 @@ class ProfileController extends Controller
     }
 
     public function update(Request $request, $id) {   
-        if ($request->has('photo')) {
-            if (Auth::user()->isLevel('Admin')) {
-                $foto = $request->file('photo');
-                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                $foto->storeAs('public/foto_admin', $filename);
+        // dd($request);
+        
+        if ($request->has('foto_pengguna')) {
+
+            // Check if user has path_foto
+            if (!empty(Auth::user()->path_foto)) {
+                if (Auth::user()->isLevel('Admin')) {
+                    $foto = $request->file('foto_pengguna');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $foto->storeAs('public/foto_admin', $filename);
+                }
+                elseif (Auth::user()->isLevel('Penguji')) {
+                    $foto = $request->file('foto_pengguna');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $foto->storeAs('public/foto_penguji', $filename);
+                }
+                elseif (Auth::user()->isLevel('Pengguna')) {
+                    $foto = $request->file('foto_pengguna');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $foto->storeAs('public/foto_pengguna', $filename);
+                }
             }
-            elseif (Auth::user()->isLevel('Penguji')) {
-                $foto = $request->file('photo');
-                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                $foto->storeAs('public/foto_penguji', $filename);
+            else {
+                if (Auth::user()->isLevel('Admin')) {
+                    $foto = $request->file('foto_pengguna');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $stored = $foto->storeAs('public/foto_admin', $filename);
+            
+                    $request->merge([
+                        'path_foto' => Storage::url($stored)
+                    ]);
+                }
+                elseif (Auth::user()->isLevel('Penguji')) {
+                    $foto = $request->file('foto_pengguna');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $stored = $foto->storeAs('public/foto_penguji', $filename);
+
+                    $request->merge([
+                        'path_foto' => Storage::url($stored)
+                    ]);
+                }
+                elseif (Auth::user()->isLevel('Pengguna')) {
+                    $foto = $request->file('foto_pengguna');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $stored = $foto->storeAs('public/foto_pengguna', $filename);
+
+                    $request->merge([
+                        'path_foto' => Storage::url($stored)
+                    ]);
+                }
             }
-            elseif (Auth::user()->isLevel('Pengguna')) {
-                $foto = $request->file('photo');
-                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                $foto->storeAs('public/foto_pengguna', $filename);
-            }
-                  
+            // END Check path_foto
+
         }
 
         $user = User::find($id);
 
-        if (!Hash::check($request->password_lama, $user->password)) {
-            Alert::error('Gagal Tersimpan!', 'Password lama salah');
-            return redirect()->back();
-        }
-        else {
-            if ($request->password_baru != $request->konfirmasi_password_baru) {
-                Alert::error('Gagal Tersimpan!', 'Password baru tidak sama');
+        if ($request->has('password_lama') && $request->has('password_baru') && $request->has('konfirmasi_password_baru')) {
+            if (!Hash::check($request->password_lama, $user->password)) {
+                Alert::error('Gagal Tersimpan!', 'Password lama salah');
                 return redirect()->back();
             }
             else {
-                $user->password = Hash::make($request->password_baru);
-                $user->save();
+                if ($request->password_baru != $request->konfirmasi_password_baru) {
+                    Alert::error('Gagal Tersimpan!', 'Password baru tidak sama');
+                    return redirect()->back();
+                }
+                else {
+                    $user->password = Hash::make($request->password_baru);
+                    $user->save();
+    
+                    Alert::success('Berhasil Tersimpan!', 'Password berhasil diperbarui');
+                    return redirect()->back();
+                }
             }
-        }
+        }        
 
         $user->update($request->all());
 

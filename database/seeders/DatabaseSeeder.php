@@ -12,24 +12,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(TempatSeeder::class);
-        $this->call(InstansiSeeder::class);
-        $this->call(RentangNilaiSeeder::class);
-        $this->call(SkemaSeeder::class);
-        $this->call(BackgroundSeeder::class);
-        $this->call(JenisEventSeeder::class);
+        // === CATATAN ===
+        // Data hasil Seder yang memiliki foto dari folder (/Dummy) -- TIDAK DAPAT DI EDIT
 
-        $this->call(UserSeeder::class);
-        $this->call(TtdSeeder::class);
-        $this->call(EventSeeder::class);
-        $this->call(EventSkemaSeeder::class);
-        $this->call(DaftarPesertaSeeder::class);
+        $this->call([
+            TempatSeeder::class,
+            InstansiSeeder::class,
+            RentangNilaiSeeder::class,
+            SkemaSeeder::class,
+            BackgroundSeeder::class,
+            JenisEventSeeder::class,
 
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+            UserSeeder::class,
+            TtdSeeder::class,
+            EventSeeder::class,
+            EventSkemaSeeder::class,
+            DaftarPesertaSeeder::class
+        ]);
     }
 }

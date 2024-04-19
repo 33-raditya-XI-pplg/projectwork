@@ -37,6 +37,18 @@ class EventSkemaSeeder extends Seeder
                 'skema_id' => 4,
                 'background_id' => 2,
                 'status' => 'Aktif'
+            ],
+            [
+                'event_id' => 3,
+                'skema_id' => 5,
+                'background_id' => 2,
+                'status' => 'Aktif'
+            ],
+            [
+                'event_id' => 3,
+                'skema_id' => 6,
+                'background_id' => 2,
+                'status' => 'Aktif'
             ]
         ]);
     }

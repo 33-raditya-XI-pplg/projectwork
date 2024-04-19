@@ -21,6 +21,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Sangat Kompeten',
                 'rentang_atas' => 100,
                 'rentang_bawah' => 94,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_abcd',
@@ -28,6 +30,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Cukup Kompeten',
                 'rentang_atas' => 93,
                 'rentang_bawah' => 84,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_abcd',
@@ -35,6 +39,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Kurang Kompeten',
                 'rentang_atas' => 83,
                 'rentang_bawah' => 74,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_abcd',
@@ -42,6 +48,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Tidak Kompeten',
                 'rentang_atas' => 73,
                 'rentang_bawah' => 0,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_kompeten',
@@ -49,6 +57,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Sangat Kompeten',
                 'rentang_atas' => 100,
                 'rentang_bawah' => 90,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_kompeten',
@@ -56,6 +66,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Cukup Kompeten',
                 'rentang_atas' => 89,
                 'rentang_bawah' => 80,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_kompeten',
@@ -63,6 +75,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Kurang Kompeten',
                 'rentang_atas' => 79,
                 'rentang_bawah' => 60,
+
+                'created_by' => 0,
             ],
             [
                 'nama_konversi_nilai' => 'konversi_kompeten',
@@ -70,6 +84,8 @@ class RentangNilaiSeeder extends Seeder
                 'keterangan_rentang_nilai' => 'Tidak Kompeten',
                 'rentang_atas' => 59,
                 'rentang_bawah' => 0,
+
+                'created_by' => 0,
             ],
         ]);
     }

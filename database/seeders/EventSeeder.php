@@ -20,13 +20,15 @@ class EventSeeder extends Seeder
                 'tempat_id' => 1,
                 'jenis_event_id' => 1,
                 'nama_event' => 'Uji Komputer',
-                'tgl_mulai' => '2024-04-3',
-                'tgl_berakhir' => '2024-04-30',
+                'tgl_mulai' => '2024-07-14',
+                'tgl_berakhir' => '2024-07-19',
                 'biaya_regis' => 500000,
                 'path_banner' => 'assets\img\dummy\banner_event\banner_1.png',
                 'deskripsi' => 'Uji komputer diadakan oleh Badan LSP Polije',
                 'status' => 'Aktif',
-                'visibilitas' => 'publik'
+                'visibilitas' => 'publik',
+
+                'created_by' => 0,
             ],
             [
                 'instansi_id' => 1,
@@ -34,12 +36,29 @@ class EventSeeder extends Seeder
                 'jenis_event_id' => 1,
                 'nama_event' => 'Uji Kompetensi',
                 'tgl_mulai' => '2024-04-3',
-                'tgl_berakhir' => '2024-04-30',
+                'tgl_berakhir' => '2024-04-8',
                 'biaya_regis' => 300000,
                 'path_banner' => 'assets\img\dummy\banner_event\banner_2.png',
                 'deskripsi' => 'Uji kompetensi profesi diadakan oleh Badan LSP Polije',
                 'status' => 'Aktif',
-                'visibilitas' => 'publik'
+                'visibilitas' => 'publik',
+
+                'created_by' => 0,
+            ],
+            [
+                'instansi_id' => 3,
+                'tempat_id' => 3,
+                'jenis_event_id' => 3,
+                'nama_event' => 'Ujian Kenaikan Kelas',
+                'tgl_mulai' => '2024-05-24',
+                'tgl_berakhir' => '2024-05-26',
+                'biaya_regis' => 100000,
+                'path_banner' => 'assets\img\dummy\banner_event\banner_2.png',
+                'deskripsi' => 'UKK dilaksanakan oleh Mascitra Teknologi Informasi',
+                'status' => 'Aktif',
+                'visibilitas' => 'publik',
+
+                'created_by' => 0,
             ]
         ]);
     }

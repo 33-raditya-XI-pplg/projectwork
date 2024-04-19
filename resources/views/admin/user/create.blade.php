@@ -9,9 +9,13 @@
         <div class="container">
             <div class="row">
                 <div class="col mb-3">
-                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
-                    <input type="hidden" name="password" value="Pengguna">
-                    <input type="hidden" name="level" value="Pengguna">
+                    @if (method_field('PUT'))
+                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+                    @else
+                        <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+                        <input type="hidden" name="password" value="Pengguna">
+                        <input type="hidden" name="level" value="Pengguna">
+                    @endif
 
                     <h5 class="text-center text-primary mb-4 rounded fw-bold">- Data Diri -</h5>
 

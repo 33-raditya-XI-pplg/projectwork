@@ -8,6 +8,7 @@ use App\Models\Instansi;
 use App\Models\Tempat;
 use App\Models\Jenis_Event as JenisEvt;
 use App\Models\Event;
+use App\Models\Event_Skema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 
@@ -29,9 +30,14 @@ class EventController extends Controller
 
     public function show($id) {
         $evt = Event::find($id);
+
+        $skema = Event_Skema::where('event_id', $evt->id_event)->pluck('skema_id');
+
+
+        
         confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-evt', compact('evt'));
+        return view('admin.event.rincian-evt', compact('evt', 'skema'));
     }
 
 

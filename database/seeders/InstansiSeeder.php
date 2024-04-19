@@ -25,7 +25,9 @@ class InstansiSeeder extends Seeder
                 'alamat' => 'Jalan yang termasuk benar',
                 'alamat_kota' => 'Jember',
                 'email' => 'polije@gmail.com',
-                'no_telp' => '0334-18045'
+                'no_telp' => '0334-18045',
+
+                'created_by' => 0,
             ],
             [
                 'nama_instansi' => 'Politeknik Negeri Lhoksumawe',
@@ -37,8 +39,24 @@ class InstansiSeeder extends Seeder
                 'alamat' => 'Jalan yang termasuk salah',
                 'alamat_kota' => 'Lhoksumawe',
                 'email' => 'sumawe@gmail.com',
-                'no_telp' => '0334-18046'
+                'no_telp' => '0334-18046',
+
+                'created_by' => 0,
             ],
+            [
+                'nama_instansi' => 'SMKN 1 Satelite',
+                'nomor_instansi' => 432,
+                'nama_kepala_instansi' => 'Subroto',
+                'jabatan_kepala' => 'Kepala Sekolah',
+                'path_logo' => 'assets\img\icon.png',
+                'status' => 'Aktif',
+                'alamat' => 'Jalan yang mepet sawah',
+                'alamat_kota' => 'Mboreng',
+                'email' => 'satelite@gmail.com',
+                'no_telp' => '0334-18047',
+
+                'created_by' => 0,
+            ]
         ]);
     }
 }

@@ -20,6 +20,6 @@ class Ttd extends Model
 
     public function ttdPenandatangan() // PK Many-to-Many dengan tb_event_skema
     {
-        return $this->belongsToMany(Event_Skema::class, 'tb_nilai_sertifikat', 'ttd_id', 'event_skema_id');
+        return $this->belongsToMany(Event_Skema::class, 'tb_penandatangan', 'ttd_id', 'event_skema_id');
     }
 }

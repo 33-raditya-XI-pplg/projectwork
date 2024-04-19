@@ -19,13 +19,25 @@ class JenisEventSeeder extends Seeder
                 'nama_jenis_event' => 'Sertifikasi',
                 'has_lampiran' => 1,
                 'deskripsi' => 'Acara sertifikasi yang diadakan oleh lembaga sertifikasi',
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ],
             [
                 'nama_jenis_event' => 'Seminar',
                 'has_lampiran' => 0,
                 'deskripsi' => 'Acara multitema yang diadakan oleh suatu instansi',
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
+            ],
+            [
+                'nama_jenis_event' => 'Ujian Akhir',
+                'has_lampiran' => 1,
+                'deskripsi' => 'Ujian kenaikan kelas untuk siswa/i SMK',
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ]
         ]);
     }

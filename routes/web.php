@@ -1,23 +1,25 @@
 <?php
 
-use App\Http\Controllers\EventSkema;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\SkemaController;
 
 use App\Http\Controllers\TempatController;
-use App\Http\Controllers\PengujiController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstansiController;
-
-use App\Http\Controllers\PenilaianController;
-use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\RentangNilaiController;
+use App\Http\Controllers\SkemaController;
 use App\Http\Controllers\BackgroundController;
 use App\Http\Controllers\JenisEventController;
+
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\SertifikatController;
+use App\Http\Controllers\EventController;
+
+use App\Http\Controllers\PengujiController;
+use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\EventSkema;
+
 use App\Http\Controllers\User\NilaiController;
-use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\EventUsersController;
 use App\Http\Controllers\User\SertifikatUsersController;
 use App\Http\Controllers\User\DashboardController;
@@ -29,20 +31,10 @@ use App\Http\Controllers\User\RincianSertifikatController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
-Route::get('/',function(){
-    return redirect('/login');
-});
+Route::get('/',fn() => redirect('/login'));
 
-// Route::get('/',function(){
-//     return view('auth/login');
-// })->middleware('auth');
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
     Route::resource('dashboard',DashboardController::class);
     Route::resource('nilai',NilaiController::class);
@@ -53,18 +45,16 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
-    Route::get('/dashboard', function() {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard',fn() => view('admin.dashboard'))->name('dashboard');
 
     Route::resource('/event', EventController::class);
-    Route::get('/event/skema/create', [EventSkema::class, 'create'])->name('event-skema.create');
+    Route::get('/event/{event}/skema/create/', [EventSkema::class, 'create'])->name('event-skema.create');
     Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
+    Route::post('/event/skema/', [EventSkema::class, 'store'])->name('event-skema.store');
+    Route::delete('/event/skema/{event}', [EventSkema::class, 'delete'])->name('event-skema.delete');
     Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
 
-
-    Route::resource('penilaian',PenilaianController::class);
-    Route::post('penilaian/getData', [PenilaianController::class, 'getData'])->name('penilaian.getData');
+    Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);
@@ -81,5 +71,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::resource('profile', ProfileController::class);
 
 });
+
+// AJAX Request
+Route::get('penilaian/getEventData/{id}', [PenilaianController::class, 'getEventData']);
+Route::get('penilaian/getSkemaData/{id}', [PenilaianController::class, 'getSkemaData']);
 
 require __DIR__.'/auth.php';

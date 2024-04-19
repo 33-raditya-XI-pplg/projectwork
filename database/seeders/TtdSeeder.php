@@ -21,7 +21,9 @@ class TtdSeeder extends Seeder
                 'jabatan' => 'Penguji Tingkat 1',
                 'nomor_induk' => 2020101070,
                 'path_ttd' => 'assets\img\dummy\ttd\ttd_agus.png',
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ],
             [
                 'instansi_id' => 1,
@@ -29,7 +31,9 @@ class TtdSeeder extends Seeder
                 'jabatan' => 'Penguji Tingkat 1',
                 'nomor_induk' => 2020101071,
                 'path_ttd' => 'assets\img\dummy\ttd\ttd_denny.png',
-                'status' => 'Aktif'
+                'status' => 'Aktif',
+
+                'created_by' => 0,
             ]
         ]);
     }
