@@ -86,11 +86,11 @@
                 <th scope="col">Aksi</th>
             </thead>
             <tbody>
-                @foreach ($skema as $no)
+                @foreach ($skema as $list)
                     
                 <tr>
                     <th scope="row">{{ $loop->index + 1 }}</th>
-                    <td>{{ \App\Models\Skema::find($no)->nama_skema }}</td>
+                    <td>{{ \App\Models\Skema::find($list->skema_id)->nama_skema }}</td>
                     <td>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -99,14 +99,14 @@
                                 <i class="fa-solid fa-bars"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item text-info" href="{{ route('event-skema.create', 1) }}"><i
+                                <li><a class="dropdown-item text-info" href="{{ route('event-skema.edit', [$evt->id_event, $list->id_event_skema]) }}"><i
                                             class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                <li><a href="{{ route('event-skema.delete', $no) }}"
+                                <li><a href="{{ route('event-skema.delete', [$evt->id_event, $list->skema_id]) }}"
                                         class="dropdown-item text-danger" data-confirm-delete="true"><i
                                             class="fa-regular fa-trash-can pe-none"></i>
                                         Delete</a>
                                 </li>
-                                <li><a href="{{ route('event-skema.show', $no) }}"
+                                <li><a href="{{ route('event-skema.show', $list) }}"
                                         class="dropdown-item text-warning"><i class="fa-solid fa-code pe-none"></i>
                                         Rincian</a>
                                 </li>

@@ -17,7 +17,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SignatureController;
-use App\Http\Controllers\EventSkema;
+use App\Http\Controllers\EventSkemaController;
 
 use App\Http\Controllers\User\NilaiController;
 use App\Http\Controllers\User\EventUsersController;
@@ -48,11 +48,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/dashboard',fn() => view('admin.dashboard'))->name('dashboard');
 
     Route::resource('/event', EventController::class);
-    Route::get('/event/{event}/skema/create/', [EventSkema::class, 'create'])->name('event-skema.create');
-    Route::get('/event/skema/{event}', [EventSkema::class, 'show'])->name('event-skema.show');
-    Route::post('/event/skema/', [EventSkema::class, 'store'])->name('event-skema.store');
-    Route::delete('/event/skema/{event}', [EventSkema::class, 'delete'])->name('event-skema.delete');
-    Route::get('/event/rincian/{event}', [EventController::class, 'show'])->name('event.rincian');
+
+    Route::get('/event/{event}/skema/create/', [EventSkemaController::class, 'create'])->name('event-skema.create');
+    Route::get('/event/{event}/skema/{skema}/edit/', [EventSkemaController::class, 'edit'])->name('event-skema.edit');
+    Route::get('/event/skema/{event}', [EventSkemaController::class, 'show'])->name('event-skema.show');
+    Route::post('/event/skema/', [EventSkemaController::class, 'store'])->name('event-skema.store');
+    Route::delete('/event/{event}/skema/{skema}', [EventSkemaController::class, 'destroy'])->name('event-skema.delete');
+    Route::put('/event/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
+
+    Route::get('/event/{event}/rincian/', [EventController::class, 'show'])->name('event.rincian');
+
 
     // Route::resource('/penilaian', PenilaianController::class);
     Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');

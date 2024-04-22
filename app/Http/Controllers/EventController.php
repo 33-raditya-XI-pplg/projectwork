@@ -31,13 +31,11 @@ class EventController extends Controller
     public function show($id) {
         $evt = Event::find($id);
 
-        $skema = Event_Skema::where('event_id', $evt->id_event)->pluck('skema_id');
-
-
+        $skema = Event_Skema::where('event_id', $evt->id_event)->get();
         
         confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-evt', compact('evt', 'skema'));
+        return view('admin.event.rincian-evt', compact('evt', 'skema', 'id'));
     }
 
 
