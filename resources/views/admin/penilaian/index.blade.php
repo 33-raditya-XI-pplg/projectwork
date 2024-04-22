@@ -92,20 +92,95 @@
         </div>
     </div>
 </div>
+
+<!-- Create -- Nilai Modal -->
+<div class="modal fade" id="createNilaiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Modal Large -->
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Nilai Peserta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="create_nama_peserta" class="form-label">Nama Peserta</label>
+                    <input type="text" class="form-control" id="create_nama_peserta" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="create_nama_skema" class="form-label">Skema</label>
+                    <input type="text" class="form-control mb-4" id="create_nama_skema" disabled>
+                </div>
+                <label for="create_nama_skema" class="form-label">Sub-Skema</label>
+                <div class="form-group" id="nilai-sub-skema-wrapper">
+                    <div class="input-group mb-3 nilai-sub-skema">
+                        <!-- Input dinamis -- Ajax Request -->
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white">Tambah</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit -- Nilai Modal -->
+<div class="modal fade" id="editNilaiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Nilai Peserta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="nama_peserta" class="form-label">Nama Peserta</label>
+                    <input type="text" class="form-control" id="nama_peserta" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="nama_skema" class="form-label">Skema</label>
+                    <input type="text" class="form-control" id="nama_skema" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="nilai" class="form-label">Nilai</label>
+                    <input type="number" class="form-control" id="nilai">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
             
 @endsection
 
 @push('script')
 <script>
     $(document).ready(function() {
-        var eventID;
+        var skemaID
+        var data_skema;
+        var data_peserta;
+        var data_sub_skema;
+
+        $('#search_btn').prop('disabled', true);
 
         $('#event_select').on('change', function() {
-            eventID = $(this).val();
+            var eventID = $(this).val();
 
             if(eventID) {
                 $.ajax({
-                    url: '/penilaian/getEventData/'+eventID,
+                    url: '/penilaian/fetchEventData/'+eventID,
                     type: "GET",
                     dataType: "json",
 
@@ -127,10 +202,6 @@
 
         });
 
-        var skemaID
-
-        $('#search_btn').prop('disabled', true);
-
         $('#skema_select').on('change', function() {
             skemaID = $(this).val();
 
@@ -140,7 +211,10 @@
         });
 
         $('#search_btn').on('click', function() {
-            clearInputField();
+            $('input[type="text"]').val('');
+            $('input[type="date"]').val('');
+            $('input[type="checkbox"]').prop('checked', false);
+
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -148,14 +222,15 @@
             });
 
             $.ajax({
-                url: '/penilaian/getSkemaData/' + skemaID,
+                url: '/penilaian/fetchSkemaData/' + skemaID,
                 type: "GET",
                 dataType: "json",
                 
                 success: function(response) {
                     if(response){
-                        var data_skema = response.data_skema[0];
-                        var data_peserta = response.data_peserta;
+                        data_skema = response.data_skema[0];
+                        data_peserta = response.data_peserta;
+                        data_sub_skema = response.data_sub_skema;
                         
                         // Input Disabled 
                         $('#nama_event').val(data_skema.nama_event);
@@ -179,16 +254,23 @@
 
                         $.each(data_peserta, function(index, row) {
                             var num = index + 1;
-                                $('tbody').append(
-                                    '<tr>\
-                                    <td>' + num + '</td>\
-                                    <td>' + row.nama_lengkap + '</td>\
-                                    <td>' + row.id_event_skema + '</td>\
-                                    <td>' + data_skema.tgl_mulai + '</td>\
-                                    <td><a href="" class="btn btn-danger rounded" data-confirm-delete="true">Delete</a></td>\
-                                    </tr>'
-                                );
-                            });
+                            var buttonAction = row.has_nilai ?
+                                '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>' :
+                                '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
+
+                            $('tbody').append(
+                                '<tr>\
+                                <td>' + num + '</td>\
+                                <td>' + row.nama_lengkap + '</td>\
+                                <td>' + row.id_event_skema + '</td>\
+                                <td>' + data_skema.tgl_mulai + '</td>\
+                                <td>\
+                                    ' + buttonAction + ' \
+                                    <button value="'+row.id_user+'" id="delete_nilai" class="btn btn-danger rounded btn-sm">Delete</button>\
+                                </td>\
+                                </tr>'
+                            );
+                        });
                         $("#example").DataTable();
 
                     }
@@ -198,11 +280,62 @@
         
         });
 
-        function clearInputField() {            
-            $('input[type="text"]').val('');
-            $('input[type="date"]').val('');
-            $('input[type="checkbox"]').prop('checked', false);
-        }
+        // Create - Ajax Request 
+        $(document).on('click', '#create_nilai_btn', function (){
+            // e.preventDefault();
+            var pesertaID = $(this).val();
+            // console.log(pesertaID);
+            // console.log(data_peserta[0]);
+
+            $.ajax({
+                url: '/penilaian/fetchPesertaData/' + pesertaID,
+                type: "get",
+                dataType: "json",
+
+                success: function(response) {
+                    var data_peserta_wdos = response.data_peserta_dos;
+                    
+                    $('#createNilaiModal').modal('show');
+                    $('#create_nama_peserta').val(data_peserta_wdos[0].nama_lengkap);
+                    $('#create_nama_skema').val(data_skema.nama_skema);
+
+                    $('#nilai-sub-skema-wrapper').html("")
+                    $.each(data_sub_skema, function(index, row) {
+                        $('#nilai-sub-skema-wrapper').append(
+                            '<div class="px-1 mb-3 row">\
+                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                                <div class="col-sm-4 d-flex justify-content-end">\
+                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                        style="height: 35px;">Nilai</label>\
+                                    <input type="number" class="form-control rounded-0 rounded-end"\
+                                        style="width: 100px; height: 35px;" name="nilai_sub_skema[]">\
+                                </div>\
+                            </div>'
+                        );
+                    });
+                }
+                
+            });
+        });
+
+        // Edit - Ajax Request 
+        $(document).on('click', '#edit_nilai', function (e){
+            e.preventDefault();
+            var pesertaID = $(this).val();
+
+            $('#editNilaiModal').modal('show');
+            
+            // $.ajax({
+            //     url: '/penilaian/' + pesertaID,
+            //     type: "GET",
+            //     dataType: "json"
+
+            //     success: function(response) {
+            //         $('#edit_name').val(response.nama_lengkap);
+            //     }
+                
+            // });
+        });
 
     });
 

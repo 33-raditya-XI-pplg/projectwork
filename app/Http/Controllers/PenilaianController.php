@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\User;
 use App\Models\Event;
 
 class PenilaianController extends Controller
@@ -16,7 +17,7 @@ class PenilaianController extends Controller
         return view('admin.penilaian.index', compact('event'));
     }
 
-    public function getEventData($id) 
+    public function fetchEventData($id) 
     {
         $data = DB::table('tb_event_skema')
                     ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
@@ -29,11 +30,12 @@ class PenilaianController extends Controller
         ]);
     }
 
-    public function getSkemaData($id) 
+    public function fetchSkemaData($id) 
     {
         $data_skema = DB::table('tb_event_skema')
                     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                     ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+
                     ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
                     ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
                     ->select('tb_event_skema.id_event_skema', 'tb_event.id_event', 'tb_event.nama_event',
@@ -42,16 +44,66 @@ class PenilaianController extends Controller
                     ->where('tb_event_skema.skema_id', $id)
                     ->get();
 
+        $data_sub_skema = DB::table('tb_event_skema')
+                    // user, sub-skema -- nilai (event_skema),  
+                    ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                    ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+
+                    ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
+                    ->select('tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub')
+                    ->where('tb_event_skema.skema_id', $id)
+                    ->get();
+
         $data_peserta = DB::table('tb_daftar_peserta')
                     ->join('tb_user', 'tb_daftar_peserta.user_id', '=', 'tb_user.id_user')
                     ->join('tb_event_skema', 'tb_daftar_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                    ->select('tb_event_skema.id_event_skema', 'tb_user.nama_lengkap')
+                    ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_user.nama_lengkap')
                     ->where('tb_daftar_peserta.event_skema_id', $data_skema->value('id_event_skema'))
                     ->get();
 
+        $data_nilai = DB::table('tb_daftar_peserta')
+                        ->join('tb_user', 'tb_daftar_peserta.user_id', '=', 'tb_user.id_user')
+                        ->join('tb_event_skema', 'tb_daftar_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+
+                        ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
+                        ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_user.nama_lengkap',
+                            'tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub',
+                            // Subquery untuk mengecek keberadaan nilai
+                            DB::raw('(SELECT EXISTS(
+                                SELECT 1 FROM tb_nilai_peserta
+                                WHERE tb_nilai_peserta.user_id = tb_user.id_user
+                                AND tb_nilai_peserta.sub_skema_id = tb_sub_skema.id_sub_skema
+                            )) AS has_nilai')
+                        )
+                        ->where('tb_daftar_peserta.event_skema_id', $data_skema->value('id_event_skema'))
+                        ->orderBy('tb_user.id_user', 'asc')
+                        ->get();
+
+        // $data_nilai = DB::table('tb_nilai_peserta')
+        //             // user, sub-skema -- nilai (event_skema),  
+        //             ->select('tb_nilai_peserta.user_id', 'tb_nilai_peserta.event_skema_id', 'tb_nilai_peserta.sub_skema_id',
+        //                      'tb_nilai_peserta.nilai')
+        //             ->where('tb_nilai_peserta.event_skema_id', $data_skema->value('id_event_skema'))
+        //             ->get();
+
         return response()->json([
             'data_skema' => $data_skema, 
-            'data_peserta' => $data_peserta
+            'data_sub_skema' => $data_sub_skema, 
+            'data_peserta' => $data_peserta,
+            'data_nilai' => $data_nilai
+        ]);
+    }
+
+    public function fetchPesertaData($id) 
+    {
+        $data = DB::table('tb_user')
+                    ->select('tb_user.nama_lengkap')
+                    ->where('tb_user.id_user', $id)
+                    ->get();
+
+        return response()->json([
+            'data_peserta_dos' => $data
         ]);
     }
 
@@ -70,9 +122,13 @@ class PenilaianController extends Controller
         //
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $peserta = User::find($id);
+
+        return response()->json([
+            'data_peserta' => $peserta
+        ]);
     }
 
     public function update(Request $request, string $id)
