@@ -104,6 +104,7 @@
             </div>
 
             <div class="modal-body">
+                <input type="hidden" id="created_by" value="{{ Auth::user()->id_user }}">
                 <div class="mb-3">
                     <label for="create_nama_peserta" class="form-label">Nama Peserta</label>
                     <input type="text" class="form-control" id="create_nama_peserta" disabled>
@@ -112,7 +113,7 @@
                     <label for="create_nama_skema" class="form-label">Skema</label>
                     <input type="text" class="form-control mb-4" id="create_nama_skema" disabled>
                 </div>
-                <label for="create_nama_skema" class="form-label">Sub-Skema</label>
+                <label for="create_nama_sub_skema" class="form-label">Sub-Skema</label>
                 <div class="form-group" id="nilai-sub-skema-wrapper">
                     <div class="input-group mb-3 nilai-sub-skema">
                         <!-- Input dinamis -- Ajax Request -->
@@ -123,7 +124,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white">Tambah</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white" id="store_nilai_btn">Tambah</button>
             </div>
         </div>
     </div>
@@ -168,13 +169,18 @@
 @push('script')
 <script>
     $(document).ready(function() {
-        var skemaID
-        var data_skema;
+        var skemaID;
+        var event_skemaID
+
+        var pesertaID;
         var data_peserta;
+
+        var data_skema;
         var data_sub_skema;
 
         $('#search_btn').prop('disabled', true);
 
+        // Event Dropdown
         $('#event_select').on('change', function() {
             var eventID = $(this).val();
 
@@ -202,6 +208,7 @@
 
         });
 
+        // Skema Dropdown
         $('#skema_select').on('change', function() {
             skemaID = $(this).val();
 
@@ -210,6 +217,7 @@
             }
         });
 
+        // Search Button -- fetch Detail Data
         $('#search_btn').on('click', function() {
             $('input[type="text"]').val('');
             $('input[type="date"]').val('');
@@ -253,6 +261,7 @@
                         $('tbody').html("");
 
                         $.each(data_peserta, function(index, row) {
+                            event_skemaID = row.id_event_skema;
                             var num = index + 1;
                             var buttonAction = row.has_nilai ?
                                 '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>' :
@@ -280,10 +289,10 @@
         
         });
 
-        // Create - Ajax Request 
+        // Create Modal Trigger
         $(document).on('click', '#create_nilai_btn', function (){
             // e.preventDefault();
-            var pesertaID = $(this).val();
+            pesertaID = $(this).val();
             // console.log(pesertaID);
             // console.log(data_peserta[0]);
 
@@ -307,8 +316,9 @@
                                 <div class="col-sm-4 d-flex justify-content-end">\
                                     <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
                                         style="height: 35px;">Nilai</label>\
-                                    <input type="number" class="form-control rounded-0 rounded-end"\
-                                        style="width: 100px; height: 35px;" name="nilai_sub_skema[]">\
+                                    <input type="hidden" class="id_sub_skema" value="'+row.id_sub_skema+'">\
+                                    <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
+                                        style="width: 100px; height: 35px;"\
                                 </div>\
                             </div>'
                         );
@@ -318,7 +328,78 @@
             });
         });
 
-        // Edit - Ajax Request 
+        // Store function -- After Create Modal
+        $(document).on('click', '#store_nilai_btn', function (e) {
+            e.preventDefault();
+            var createdBy = $('#created_by').val();
+
+            var create_nilai_data = [];
+            var create_sub_skemaID = [];
+            
+            $('.id_sub_skema').each(function() {
+                var sub_skemaID = $(this).val();
+                create_sub_skemaID.push(sub_skemaID);
+            });
+
+            $('.nilai_sub_skema').each(function() {
+                var nilai = $(this).val();
+                create_nilai_data.push(nilai);
+            });
+
+            // console.log(create_nilai_data);
+            // console.log(create_sub_skemaID);
+
+            // // Membuat array asosiatif
+            // var nilaiSubSkemaArray = {};
+            // for (var i = 0; i < create_sub_skemaID.length; i++) {
+            //     var subSkemaID = create_sub_skemaID[i];
+            //     var nilai = create_nilai_data[i];
+            //     nilaiSubSkemaArray[subSkemaID] = nilai;
+            // }
+
+            // // Menampilkan array asosiatif dalam konsol
+            // console.log(pesertaID);
+            // console.log(nilaiSubSkemaArray);
+
+            var nilaiSubSkemaArray = {};
+            for (var i = 0; i < create_sub_skemaID.length; i++) {
+                nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
+            }
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/penilaian/storeNilaiData',
+                type: 'POST',
+                data: {
+                    pesertaID: pesertaID,
+                    event_skemaID: event_skemaID,
+                    nilaiSubSkema: nilaiSubSkemaArray,
+                    createdBy: createdBy
+                },
+                dataType: "json",
+
+                success: function(response) {
+                    $('#createNilaiModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Nilai berhasil ditambahkan.'
+                    });
+                }
+                    // alert('Data berhasil disimpan');
+                // },
+                // error: function(xhr, status, error) {
+                //     alert('Terjadi kesalahan saat menyimpan data');
+                // }
+            });
+        })
+        
+        // Edit Modal Trigger
         $(document).on('click', '#edit_nilai', function (e){
             e.preventDefault();
             var pesertaID = $(this).val();

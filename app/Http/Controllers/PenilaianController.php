@@ -112,9 +112,65 @@ class PenilaianController extends Controller
         return view('admin.penilaian.inputnilai');
     }
 
-    public function store(Request $request)
+    public function storeNilaiData(Request $request)
     {
-        //
+        // dd($request);
+
+        // $pesertaID = $request->pesertaID;
+        // $nilaiSubSkema = $request->nilaiSubSkema;
+
+        // // Logika untuk menyimpan data
+        // foreach ($nilaiSubSkema as $subSkemaID => $nilai) {
+        //     // Simpan setiap nilai dengan kode untuk menyimpan ke database
+            
+        // }
+
+        // return response()->json(['message' => 'Data berhasil disimpan']);
+
+        $pesertaID = $request->pesertaID;
+        $eventSkemaID = $request->event_skemaID;
+        $nilaiSubSkema = $request->nilaiSubSkema;
+        $created_by = $request->createdBy;
+
+        // Mulai transaksi database
+        DB::beginTransaction();
+
+        try {
+            foreach ($nilaiSubSkema as $subSkemaID => $nilai) {
+                // Periksa dulu apakah nilai sudah ada
+                $nilaiExist = DB::table('tb_nilai_peserta')
+                                ->where('user_id', $pesertaID)
+                                ->where('sub_skema_id', $subSkemaID)
+                                ->where('event_skema_id', $eventSkemaID)
+                                ->first();
+
+                if ($nilaiExist) {
+                    // Jika nilai sudah ada, update
+                    DB::table('tb_nilai_peserta')
+                        ->where('user_id', $pesertaID)
+                        ->where('sub_skema_id', $subSkemaID)
+                        ->where('event_skema_id', $eventSkemaID)
+                        ->update(['nilai' => $nilai]);
+                } else {
+                    // Jika tidak ada, insert baru
+                    DB::table('tb_nilai_peserta')->insert([
+                        'user_id' => $pesertaID,
+                        'sub_skema_id' => $subSkemaID,
+                        'event_skema_id' => $eventSkemaID,
+                        'nilai' => $nilai,
+                        'created_by' => $created_by
+                    ]);
+                }
+            }
+
+            // Jika semua operasi berhasil, commit transaksi
+            DB::commit();
+            return response()->json(['success' => true, 'message' => 'Nilai berhasil disimpan']);
+        } catch (\Exception $e) {
+            // Jika terjadi error, rollback transaksi
+            DB::rollback();
+            return response()->json(['success' => false, 'message' => 'Gagal menyimpan nilai', 'error' => $e->getMessage()]);
+        }
     }
 
     public function show($id)
