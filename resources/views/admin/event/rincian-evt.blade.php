@@ -106,7 +106,7 @@
                                             class="fa-regular fa-trash-can pe-none"></i>
                                         Delete</a>
                                 </li>
-                                <li><a href="{{ route('event-skema.show', $list) }}"
+                                <li><a href="{{ route('event-skema.show', [$evt->id_event, $list->id_event_skema]) }}"
                                         class="dropdown-item text-warning"><i class="fa-solid fa-code pe-none"></i>
                                         Rincian</a>
                                 </li>

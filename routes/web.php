@@ -49,15 +49,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
 
     Route::resource('/event', EventController::class);
     Route::resource('/penilaian', PenilaianController::class);
+    Route::get('/event/{event}/rincian/', [EventController::class, 'show'])->name('event.rincian');
 
     Route::get('/event/{event}/skema/create/', [EventSkemaController::class, 'create'])->name('event-skema.create');
     Route::get('/event/{event}/skema/{skema}/edit/', [EventSkemaController::class, 'edit'])->name('event-skema.edit');
-    Route::get('/event/skema/{event}', [EventSkemaController::class, 'show'])->name('event-skema.show');
+    Route::get('/event/{event}/skema/{skema}/rincian', [EventSkemaController::class, 'show'])->name('event-skema.show');
+    Route::get('/event/{event}/skema/{skema}/add-student', [EventSkemaController::class, 'addStudent'])->name('event-skema.add');
     Route::post('/event/skema/', [EventSkemaController::class, 'store'])->name('event-skema.store');
     Route::delete('/event/{event}/skema/{skema}', [EventSkemaController::class, 'destroy'])->name('event-skema.delete');
     Route::put('/event/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
 
-    Route::get('/event/{event}/rincian/', [EventController::class, 'show'])->name('event.rincian');
+    Route::get('/mencoba/{id}', [EventSkemaController::class, 'search'])->name('getPeserta');
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);

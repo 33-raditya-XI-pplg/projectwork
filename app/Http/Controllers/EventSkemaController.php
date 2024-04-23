@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\Event_Skema;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Instansi;
 
 class EventSkemaController extends Controller
 {
@@ -93,8 +94,23 @@ class EventSkemaController extends Controller
         return redirect()->back();
     }
 
-    public function show($idEvent) {
+    public function show($evt, $id2) {
+        $evtSkema = Event_Skema::find($id2);
+        $ttd = $evtSkema->event_skemaPenandatangan()->pluck('ttd_id')->toArray();
+        $penguji = $evtSkema->event_skemaMenguji()->pluck('user_id')->toArray();
+        confirmDelete('Hapus Peserta', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-skema');
+        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'penguji', 'evt'));
+    }
+
+    public function addStudent($evt, $skema) {
+        $instansi = Instansi::get();
+        return view('admin.event.add-student', compact('evt', 'skema', 'instansi'));
+    }
+
+    public function search($id) {
+        $peserta = User::select('id_user', 'nama_lengkap', 'email', 'jenis_kelamin')->where('instansi_id', $id)->where('level', 'pengguna')->get();
+
+        return response()->json($peserta);
     }
 }

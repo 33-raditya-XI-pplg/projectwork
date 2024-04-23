@@ -162,7 +162,7 @@
                                                 disabled>Publish</button></td>
                                         <td>
                                             <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                <a href="" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
                                                     id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                                     aria-expanded="false">
                                                     <i class="fa-solid fa-bars"></i>
