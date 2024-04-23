@@ -14,8 +14,8 @@ return new class extends Migration
      */
     public function up() 
     {
-        Schema::create('tb_daftar_peserta', function (Blueprint $table) {
-            $table->id('id_daftar_peserta');
+        Schema::create('tb_peserta', function (Blueprint $table) {
+            $table->id('id_peserta');
             // Foreign Key
             $table->foreignId('user_id')->constrained('tb_user', 'id_user');
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_daftar_peserta');
+        Schema::dropIfExists('tb_peserta');
     }
 };
