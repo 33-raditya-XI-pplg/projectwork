@@ -81,5 +81,6 @@ Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchS
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
 Route::get('penilaian/fetchNilaiData/{id}', [PenilaianController::class, 'fetchNilaiData']);
 Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
+Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'destroyNilaiData']);
 
 require __DIR__.'/auth.php';

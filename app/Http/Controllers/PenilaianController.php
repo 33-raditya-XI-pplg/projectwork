@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Nilai_Peserta;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -135,7 +136,8 @@ class PenilaianController extends Controller
                         ->where('event_skema_id', $eventSkemaID)
                         ->update([
                             'nilai' => $nilai,
-                            'updated_by' => $created_by
+                            'updated_by' => $created_by,
+                            'updated_at' => now()
                         ]);
                 } else {
                     // Jika tidak ada, insert baru
@@ -144,7 +146,8 @@ class PenilaianController extends Controller
                         'sub_skema_id' => $subSkemaID,
                         'event_skema_id' => $eventSkemaID,
                         'nilai' => $nilai,
-                        'created_by' => $created_by
+                        'created_by' => $created_by,
+                        'created_at' => now()
                     ]);
                 }
             }
@@ -184,9 +187,26 @@ class PenilaianController extends Controller
         //
     }
 
-    public function destroy()
+    public function destroyNilaiData(Request $request)
     {
-        
+        // Validasi request untuk memastikan parameter yang diperlukan tersedia
+        $request->validate([
+            'userId' => 'required|numeric' // Sesuaikan dengan kebutuhan Anda
+        ]);
+
+        // Ambil ID user dari request
+        $userId = $request->userId;
+
+        try {
+            // Cari dan hapus nilai peserta berdasarkan ID user
+            Nilai_Peserta::where('user_id', $userId)->delete();
+
+            // Berhasil menghapus, kirim respons JSON yang berhasil
+            return response()->json(['message' => 'Nilai peserta berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Jika terjadi kesalahan, kirim respons JSON dengan pesan kesalahan
+            return response()->json(['message' => 'Terjadi kesalahan saat menghapus nilai peserta'], 500);
+        }
     }
 
 }

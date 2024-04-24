@@ -242,21 +242,19 @@
                         $.each(data_peserta, function(index, row) {
                             event_skemaID = row.id_event_skema;
                             var num = index + 1;
+                            
+                            // Kondisi -> Button aksi -- tabel nilai
                             var buttonAction;
-                            if (row.jumlah_nilai != null) {
-                                buttonAction = '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>';
-                                // buttonAction = '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
-                            }
-                            else {
+                            row.jumlah_nilai != null ?
+                                buttonAction = '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>\
+                                    <button value="'+row.id_user+'" id="delete_nilai_btn" class="btn btn-danger rounded btn-sm">Delete</button>' :
                                 buttonAction = '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
-                            }
 
-                            if (row.total_nilai != null) {
-                                var nilaiData = row.total_nilai;
-                            } 
-                            else {
+                            // Kondisi -> Keterangan nilai kosong -- tabel nilai
+                            var nilaiData;
+                            row.total_nilai != null ? 
+                                nilaiData = row.total_nilai : 
                                 nilaiData = 'Nilai Kosong';
-                            }
 
                             $('tbody').append(
                                 '<tr>\
@@ -266,7 +264,6 @@
                                 <td>' + data_skema.tgl_mulai + '</td>\
                                 <td>\
                                     ' + buttonAction + ' \
-                                    <button value="'+row.id_user+'" id="delete_nilai" class="btn btn-danger rounded btn-sm">Delete</button>\
                                 </td>\
                                 </tr>'
                             );
@@ -359,6 +356,7 @@
                     $('#create_nama_skema').val(data_skema.nama_skema);
                     // console.log(data_sub_skema)
                     $('#nilai-sub-skema-wrapper').html("")
+                    $('.nilai_sub_skema').html("")
                     $.each(data_sub_skema, function(index, row) {
                         // $('#nilai-sub-skema-wrapper').append(
                         //     '<div class="px-1 mb-3 row">\
@@ -390,6 +388,7 @@
                                 </div>\
                             </div>'
                         );
+                        
                     });
                     
                     
@@ -398,9 +397,47 @@
             });
         });
 
-        // Store function -- After Create Modal
-        $(document).on('click', '#store_nilai_btn', function (e) {
-            e.preventDefault();
+        // Edit Modal Trigger
+        $(document).on('click', '#edit_nilai_btn', function (){
+            pesertaID = $(this).val();
+
+            $.ajax({
+                url: '/penilaian/fetchNilaiData/' + pesertaID,
+                type: "get",
+                dataType: "json",
+
+                success: function(response) {
+                    var data_peserta_edit = response.data_peserta_edit;
+                    
+                    $('#editNilaiModal').modal('show');
+                    $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
+                    $('#edit_nama_skema').val(data_skema.nama_skema);
+
+                    $('#edit-nilai-sub-skema-wrapper').html("")
+                    $('.nilai_sub_skema').html("")
+                    $.each(data_peserta_edit, function(index, row) {
+                        $('#edit-nilai-sub-skema-wrapper').append(
+                            '<div class="px-1 mb-3 row">\
+                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                                <div class="col-sm-4 d-flex justify-content-end">\
+                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                        style="height: 35px;">Nilai</label>\
+                                    <input type="hidden" class="id_sub_skema" value="' + row.sub_skema_id + '">\
+                                    <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
+                                        style="width: 100px; height: 35px;" value="' + row.nilai + '">\
+                                </div>\
+                            </div>'
+                        );
+
+                    });
+                    
+                }
+                
+            });
+        });
+
+        // Store function -- to store and update
+        $(document).on('click', '#store_nilai_btn', function () {
             var createdBy = $('#created_by').val();
 
             var create_nilai_data = [];
@@ -464,44 +501,115 @@
             });
         })
         
-        // Edit Modal Trigger
-        $(document).on('click', '#edit_nilai_btn', function (){
-            pesertaID = $(this).val();
+        // Delete function
+        // $(document).on('click', '#delete_nilai_btn', function () {
+        //     var create_nilai_data = [];
+        //     var create_sub_skemaID = [];
+            
+        //     $('.id_sub_skema').each(function() {
+        //         var sub_skemaID = $(this).val();
+        //         create_sub_skemaID.push(sub_skemaID);
+        //     });
 
-            $.ajax({
-                url: '/penilaian/fetchNilaiData/' + pesertaID,
-                type: "get",
-                dataType: "json",
+        //     $('.nilai_sub_skema').each(function() {
+        //         var nilai = $(this).val();
+        //         create_nilai_data.push(nilai);
+        //     });
 
-                success: function(response) {
-                    var data_peserta_edit = response.data_peserta_edit;
+        //     // Membersihkan array nilai yang kosong atau nol
+        //     // create_nilai_data = cleanArray(create_nilai_data);
+            
+        //     // Membuat array asosiatif
+        //     var nilaiSubSkemaArray = {};
+        //     for (var i = 0; i < create_sub_skemaID.length; i++) {
+        //         nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
+        //     }
+
+        //     Object.keys(nilaiSubSkemaArray).forEach(key => {
+        //         // Cek apakah nilai kosong, undefined, atau null, dan isi dengan 0
+        //         if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
+        //             nilaiSubSkemaArray[key] = 0;
+        //         }
+        //     });
+
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+
+        //     $.ajax({
+        //         url: '/penilaian/storeNilaiData',
+        //         type: 'POST',
+        //         data: {
+        //             pesertaID: pesertaID,
+        //             event_skemaID: event_skemaID,
+        //             nilaiSubSkema: nilaiSubSkemaArray,
+        //             createdBy: createdBy
+        //         },
+        //         dataType: "json",
+
+        //         success: function(response) {
+        //             $('#createNilaiModal').modal('hide');
+        //             $('#editNilaiModal').modal('hide');
+        //             Swal.fire({
+        //                 icon: 'success',
+        //                 title: 'Berhasil',
+        //                 text: 'Nilai berhasil ditambahkan.'
+        //             });
+
+        //             fetchDetailData(skemaID);
+        //         }
                     
-                    $('#editNilaiModal').modal('show');
-                    $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
-                    $('#edit_nama_skema').val(data_skema.nama_skema);
+        //     });
+        // })
 
-                    $('#edit-nilai-sub-skema-wrapper').html("")
-                    $.each(data_peserta_edit, function(index, row) {
-                        $('#edit-nilai-sub-skema-wrapper').append(
-                            '<div class="px-1 mb-3 row">\
-                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
-                                <div class="col-sm-4 d-flex justify-content-end">\
-                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
-                                        style="height: 35px;">Nilai</label>\
-                                    <input type="hidden" class="id_sub_skema" value="' + row.sub_skema_id + '">\
-                                    <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
-                                        style="width: 100px; height: 35px;" value="' + row.nilai + '">\
-                                </div>\
-                            </div>'
-                        );
+        // Event handler untuk tombol "Delete"
+        $(document).on('click', '#delete_nilai_btn', function() {
+            // Ambil ID user dari atribut value tombol
+            var userId = $(this).val();
 
+            // Tampilkan alert konfirmasi menggunakan SweetAlert 2
+            confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
+                // Jika pengguna mengkonfirmasi penghapusan
+                if (result.isConfirmed) {
+                    // Lakukan request AJAX untuk menghapus nilai peserta
+                    $.ajax({
+                        url: '/penilaian/destroyNilaiData/' + userId,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            userId: userId
+                        },
+                        success: function(response) {
+                            // Tambahkan logika untuk menangani respons dari server (jika diperlukan)
+                            // Misalnya, perbarui UI setelah penghapusan berhasil
+                            console.log('Nilai peserta berhasil dihapus');
+                            fetchDetailData(skemaID)
+                        },
+                        error: function(xhr, status, error) {
+                            // Tambahkan logika untuk menangani kesalahan (jika diperlukan)
+                            console.error('Terjadi kesalahan saat menghapus nilai peserta:', error);
+                        }
                     });
-                    
                 }
-                
             });
         });
 
+        // Fungsi untuk menampilkan alert konfirmasi menggunakan SweetAlert 2
+        function confirmDelete(title, text) {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            });
+        }
+        
     });
 
 </script>
