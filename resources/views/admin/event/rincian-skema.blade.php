@@ -54,7 +54,7 @@
                         <td>{{ $loop->index +1}}</td>
                         <td >{{ $list->nama_lengkap }}</td>
                         <td class="text-capitalize text-center">{{ $list->jenis_kelamin }}</td>
-                        <td><a href="#" data-confirm-delete="true"><i class="fa-solid fa-user-minus text-danger pe-none"></i></a></td>
+                        <td><a href="{{ route('event-skema.delete-student', [$evtSkema, $list->id_user]) }}" data-confirm-delete="true"><i class="fa-solid fa-user-minus text-danger pe-none"></i></a></td>
                     </tr>
                 @endforeach
             </tbody>

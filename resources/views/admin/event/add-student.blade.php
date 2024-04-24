@@ -58,7 +58,7 @@
 
                 $.each(data, function(index, peserta) {
                     table.row.add([
-                        '<input id="user_id" class="form-check-input peserta" type="checkbox" name="user_id[]" value="' +peserta.id_user+ '">',
+                        '<input class="form-check-input peserta" type="checkbox" name="user_id[]" value="' +peserta.id_user+ '">',
                         peserta.nama_lengkap,
                         peserta.email,
                         peserta.jenis_kelamin
@@ -66,13 +66,8 @@
                 });
             });
         });
-        })
 
-        // $('#user_id').on('change', function() {
-        //     if($('.peserta').prop('checked')) {
-        //         $('#save').prop('disabled', false);
-        //     } else{$('#save').prop('disabled', true)}
-        //     })
+        })
 
         // checkbox all
         $('#selectAll').on('change', function() {

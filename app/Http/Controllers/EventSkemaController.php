@@ -125,4 +125,10 @@ class EventSkemaController extends Controller
         $evtSkema->event_skemaDaftar_Peserta()->syncWithPivotValues($request->input('user_id'), ['created_by' => Auth::user()->id_user]);
         return redirect()->route('event-skema.show', [$event,$skema]);
     }
+
+    public function destroyStudents($skema, $id) {
+        $evtSkema = Event_Skema::find($skema);
+        $evtSkema->event_skemaDaftar_Peserta()->detach($id);
+        return back();
+    }
 }

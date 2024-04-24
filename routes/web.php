@@ -59,6 +59,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::delete('/event/{event}/skema/{skema}', [EventSkemaController::class, 'destroy'])->name('event-skema.delete');
     Route::put('/event/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
     Route::post('/event/{event}/skema/{skema}/students', [EventSkemaController::class, 'storeStudents'])->name('event-skema.store-student');
+    Route::delete('/event/skema/{skema}/students/{id}', [EventSkemaController::class, 'destroyStudents'])->name('event-skema.delete-student');
 
 
     Route::group(['prefix' => 'master'], function () {
