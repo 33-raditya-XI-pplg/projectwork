@@ -14,21 +14,24 @@
             </select>
             <a class="btn btn-primary rounded pe-none px-4" id="show-peserta" href="javascript:void(0)"><i class="fa-solid fa-magnifying-glass"></i><small class="fw-bold">Cari</small></a>
         </div>
-        
+        <form action="{{ route('event-skema.store-student', [$evt, $skema]) }}" method="POST">
+            @csrf
+        <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
         <table id="peserta" class="table rounded">
             <thead>
                 <th style="width: 5%;"><input id="selectAll" class="form-check-input" type="checkbox"></th>
                 <th class="">Nama Peserta</th>
                 <th class="">Email</th>
-                <th class="">Jenis Kelamin</th>
+                <th class="text-center">Jenis Kelamin</th>
             </thead>
             <tbody>
 
             </tbody>
         </table>
         <div class="d-grid mt-4 mx-2">
-            <a class="btn btn-primary rounded" href="#">Simpan Peserta</a>
+            <button id="save" type="submit" class="btn btn-primary rounded mx-3">Simpan Peserta</button>
         </div>
+    </form>
     </div>
 
 @endsection
@@ -55,7 +58,7 @@
 
                 $.each(data, function(index, peserta) {
                     table.row.add([
-                        '<input class="form-check-input peserta" type="checkbox" value="' +peserta.id_user+ '">',
+                        '<input id="user_id" class="form-check-input peserta" type="checkbox" name="user_id[]" value="' +peserta.id_user+ '">',
                         peserta.nama_lengkap,
                         peserta.email,
                         peserta.jenis_kelamin
@@ -64,6 +67,12 @@
             });
         });
         })
+
+        // $('#user_id').on('change', function() {
+        //     if($('.peserta').prop('checked')) {
+        //         $('#save').prop('disabled', false);
+        //     } else{$('#save').prop('disabled', true)}
+        //     })
 
         // checkbox all
         $('#selectAll').on('change', function() {

@@ -43,18 +43,20 @@
           </div>
         <table id="example" class="table table-borderless">
             <thead>
-                <th>No</th>
-                <th class="w-100 text-center">Nama</th>
-                <th>Aksi</th>
+                <th style="width: 5%">No</th>
+                <th class="w-50 text-center">Nama</th>
+                <th class="text-center">Jenis Kelamin</th>
+                <th style="width: 5%">Aksi</th>
             </thead>
             <tbody>
-                @for ($i = 0; $i < 6; $i++)
+                @foreach ($peserta as $list)
                     <tr>
-                        <td>{{ $i }}</td>
-                        <td class="text-center">Dedy Sutrisno</td>
+                        <td>{{ $loop->index +1}}</td>
+                        <td >{{ $list->nama_lengkap }}</td>
+                        <td class="text-capitalize text-center">{{ $list->jenis_kelamin }}</td>
                         <td><a href="#" data-confirm-delete="true"><i class="fa-solid fa-user-minus text-danger pe-none"></i></a></td>
                     </tr>
-                @endfor
+                @endforeach
             </tbody>
         </table>
     </div>

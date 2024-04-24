@@ -18,7 +18,8 @@ return new class extends Migration
             $table->id('id_peserta');
             // Foreign Key
             $table->foreignId('user_id')->constrained('tb_user', 'id_user');
-            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
+                  ->onDelete('cascade');
 
             $table->string('status');
 

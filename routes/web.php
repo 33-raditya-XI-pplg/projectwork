@@ -58,8 +58,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::post('/event/skema/', [EventSkemaController::class, 'store'])->name('event-skema.store');
     Route::delete('/event/{event}/skema/{skema}', [EventSkemaController::class, 'destroy'])->name('event-skema.delete');
     Route::put('/event/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
+    Route::post('/event/{event}/skema/{skema}/students', [EventSkemaController::class, 'storeStudents'])->name('event-skema.store-student');
 
-    Route::get('/mencoba/{id}', [EventSkemaController::class, 'search'])->name('getPeserta');
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan',SignatureController::class);
@@ -82,5 +82,7 @@ Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchE
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
 Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
+
+Route::get('/mencoba/{id}', [EventSkemaController::class, 'search'])->name('getPeserta');
 
 require __DIR__.'/auth.php';

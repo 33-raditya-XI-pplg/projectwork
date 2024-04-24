@@ -36,7 +36,7 @@ class Event_Skema extends Model
 
     public function event_skemaDaftar_Peserta() // PK Many-to-Many dengan tb_user
     {
-        return $this->belongsToMany(User::class, 'tb_daftar_peserta', 'event_skema_id', 'user_id');
+        return $this->belongsToMany(User::class, 'tb_peserta', 'event_skema_id', 'user_id');
     }
     public function event_skemaMenguji() // PK Many-to-Many dengan tb_user
     {

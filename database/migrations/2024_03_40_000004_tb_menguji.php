@@ -21,8 +21,6 @@ return new class extends Migration
                   ->onDelete('cascade');
             $table->foreignId('user_id')->constrained('tb_user', 'id_user');
 
-            $table->date('tgl_event');
-
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 
             $table->timestamps();

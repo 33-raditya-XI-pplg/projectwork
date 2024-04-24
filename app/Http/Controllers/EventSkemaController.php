@@ -12,6 +12,8 @@ use App\Models\Event;
 use App\Models\Event_Skema;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Instansi;
+use Illuminate\Support\Facades\Auth;
+
 
 class EventSkemaController extends Controller
 {
@@ -98,10 +100,13 @@ class EventSkemaController extends Controller
         $evtSkema = Event_Skema::find($id2);
         $ttd = $evtSkema->event_skemaPenandatangan()->pluck('ttd_id')->toArray();
         $penguji = $evtSkema->event_skemaMenguji()->pluck('user_id')->toArray();
+        $peserta = $evtSkema->event_skemaDaftar_Peserta()->get();
         confirmDelete('Hapus Peserta', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'penguji', 'evt'));
+        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'penguji', 'evt', 'peserta'));
     }
+
+    // Peserta
 
     public function addStudent($evt, $skema) {
         $instansi = Instansi::get();
@@ -112,5 +117,12 @@ class EventSkemaController extends Controller
         $peserta = User::select('id_user', 'nama_lengkap', 'email', 'jenis_kelamin')->where('instansi_id', $id)->where('level', 'pengguna')->get();
 
         return response()->json($peserta);
+    }
+
+    public function storeStudents($event, $skema, Request $request) {
+
+        $evtSkema = Event_Skema::find($skema);
+        $evtSkema->event_skemaDaftar_Peserta()->syncWithPivotValues($request->input('user_id'), ['created_by' => Auth::user()->id_user]);
+        return redirect()->route('event-skema.show', [$event,$skema]);
     }
 }
