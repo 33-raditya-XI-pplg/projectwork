@@ -79,6 +79,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
 Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchEventData']);
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
+Route::get('penilaian/fetchNilaiData/{id}', [PenilaianController::class, 'fetchNilaiData']);
 Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
 
 require __DIR__.'/auth.php';

@@ -132,7 +132,7 @@
 
 <!-- Edit -- Nilai Modal -->
 <div class="modal fade" id="editNilaiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -141,26 +141,29 @@
             </div>
 
             <div class="modal-body">
+                <input type="hidden" id="created_by" value="{{ Auth::user()->id_user }}">
                 <div class="mb-3">
-                    <label for="nama_peserta" class="form-label">Nama Peserta</label>
-                    <input type="text" class="form-control" id="nama_peserta" disabled>
+                    <label for="edit_nama_peserta" class="form-label">Nama Peserta</label>
+                    <input type="text" class="form-control" id="edit_nama_peserta" disabled>
                 </div>
                 <div class="mb-3">
-                    <label for="nama_skema" class="form-label">Skema</label>
-                    <input type="text" class="form-control" id="nama_skema" disabled>
+                    <label for="edit_nama_skema" class="form-label">Skema</label>
+                    <input type="text" class="form-control mb-4" id="edit_nama_skema" disabled>
                 </div>
-                <div class="mb-3">
-                    <label for="nilai" class="form-label">Nilai</label>
-                    <input type="number" class="form-control" id="nilai">
+                <label for="edit_nama_sub_skema" class="form-label">Sub-Skema</label>
+                <div class="form-group" id="edit-nilai-sub-skema-wrapper">
+                    <div class="input-group mb-3 nilai-sub-skema">
+                        <!-- Input dinamis -- Ajax Request -->
+                    </div>
                 </div>
-
+                
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white" id="store_nilai_btn">Simpan</button>
             </div>
-        </div>
+            </div>
     </div>
 </div>
             
@@ -179,6 +182,109 @@
         var data_sub_skema;
 
         $('#search_btn').prop('disabled', true);
+
+        // delete Null Array function
+        function cleanArray(arr) {
+            var cleanedArray = [];
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i]) { // Cek apakah nilai tidak kosong atau nol
+                    cleanedArray.push(arr[i]);
+                }
+            }
+            return cleanedArray;
+        }
+
+        // fetch Detail Data function
+        function fetchDetailData(skemaID) {
+            Swal.fire({
+                title: 'Memuat...',
+                text: 'Harap tunggu sebentar.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/penilaian/fetchSkemaData/' + skemaID,
+                type: "GET",
+                dataType: "json",
+                
+                success: function(response) {
+                    Swal.close();
+                    if(response){
+                        data_skema = response.data_skema[0];
+                        data_peserta = response.data_peserta;
+                        data_sub_skema = response.data_sub_skema;
+
+                        var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent[0];
+                        
+                        // Input Disabled 
+                        $('#nama_event').val(data_skema.nama_event);
+                        $('#jenis_event').val(data_skema.nama_jenis_event);
+
+                        $('#nama_skema').val(data_skema.nama_skema);
+                        $('#tempat_skema').val(data_skema.nama_tempat);
+
+                        $('#tgl_mulai').val(data_skema.tgl_mulai);
+                        $('#tgl_selesai').val(data_skema.tgl_berakhir);
+
+                        if (data_skema.status === "Aktif") {
+                            $('#status').prop('checked', true);
+                        } else {
+                            $('#status').prop('checked', false);
+                        }
+
+                        // Table daftar peserta
+                        $('#example').DataTable().destroy();
+                        $('tbody').html("");
+
+                        $.each(data_peserta, function(index, row) {
+                            event_skemaID = row.id_event_skema;
+                            var num = index + 1;
+                            var buttonAction;
+                            if (row.jumlah_nilai != null) {
+                                buttonAction = '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>';
+                                // buttonAction = '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
+                            }
+                            else {
+                                buttonAction = '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
+                            }
+
+                            if (row.total_nilai != null) {
+                                var nilaiData = row.total_nilai;
+                            } 
+                            else {
+                                nilaiData = 'Nilai Kosong';
+                            }
+
+                            $('tbody').append(
+                                '<tr>\
+                                <td>' + num + '</td>\
+                                <td>' + row.nama_lengkap + '</td>\
+                                <td>' + nilaiData + '</td>\
+                                <td>' + data_skema.tgl_mulai + '</td>\
+                                <td>\
+                                    ' + buttonAction + ' \
+                                    <button value="'+row.id_user+'" id="delete_nilai" class="btn btn-danger rounded btn-sm">Delete</button>\
+                                </td>\
+                                </tr>'
+                            );
+                        });
+                        $("#example").DataTable();
+
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal memuat data',
+                        text: 'Tidak dapat mengambil data dari server!'
+                    });
+                }
+                
+            });
+        }
 
         // Event Dropdown
         $('#event_select').on('change', function() {
@@ -228,64 +334,8 @@
                 title: 'Berhasil',
                 text: 'Data berhasil dicari.'
             });
-
-            $.ajax({
-                url: '/penilaian/fetchSkemaData/' + skemaID,
-                type: "GET",
-                dataType: "json",
-                
-                success: function(response) {
-                    if(response){
-                        data_skema = response.data_skema[0];
-                        data_peserta = response.data_peserta;
-                        data_sub_skema = response.data_sub_skema;
-                        
-                        // Input Disabled 
-                        $('#nama_event').val(data_skema.nama_event);
-                        $('#jenis_event').val(data_skema.nama_jenis_event);
-
-                        $('#nama_skema').val(data_skema.nama_skema);
-                        $('#tempat_skema').val(data_skema.nama_tempat);
-
-                        $('#tgl_mulai').val(data_skema.tgl_mulai);
-                        $('#tgl_selesai').val(data_skema.tgl_berakhir);
-
-                        if (data_skema.status === "Aktif") {
-                            $('#status').prop('checked', true);
-                        } else {
-                            $('#status').prop('checked', false);
-                        }
-
-                        // Table daftar peserta
-                        $('#example').DataTable().destroy();
-                        $('tbody').html("");
-
-                        $.each(data_peserta, function(index, row) {
-                            event_skemaID = row.id_event_skema;
-                            var num = index + 1;
-                            var buttonAction = row.has_nilai ?
-                                '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>' :
-                                '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
-
-                            $('tbody').append(
-                                '<tr>\
-                                <td>' + num + '</td>\
-                                <td>' + row.nama_lengkap + '</td>\
-                                <td>' + row.id_event_skema + '</td>\
-                                <td>' + data_skema.tgl_mulai + '</td>\
-                                <td>\
-                                    ' + buttonAction + ' \
-                                    <button value="'+row.id_user+'" id="delete_nilai" class="btn btn-danger rounded btn-sm">Delete</button>\
-                                </td>\
-                                </tr>'
-                            );
-                        });
-                        $("#example").DataTable();
-
-                    }
-                }
-                
-            });
+            
+            fetchDetailData(skemaID);
         
         });
 
@@ -307,22 +357,42 @@
                     $('#createNilaiModal').modal('show');
                     $('#create_nama_peserta').val(data_peserta_wdos[0].nama_lengkap);
                     $('#create_nama_skema').val(data_skema.nama_skema);
-
+                    // console.log(data_sub_skema)
                     $('#nilai-sub-skema-wrapper').html("")
                     $.each(data_sub_skema, function(index, row) {
+                        // $('#nilai-sub-skema-wrapper').append(
+                        //     '<div class="px-1 mb-3 row">\
+                        //         <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                        //         <div class="col-sm-4 d-flex justify-content-end">\
+                        //             <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                        //                 style="height: 35px;">Nilai</label>\
+                        //             <input type="hidden" class="id_sub_skema">\
+                        //             <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
+                        //                 style="width: 100px; height: 35px;">\
+                        //         </div>\
+                        //     </div>'
+                        // );
+
+                        // $('.nilai_sub_skema').last().change(function() {
+                        //     var parentDiv = $(this).closest('.row');
+                        //     var idSubSkemaInput = parentDiv.find('.id_sub_skema');
+                        //     idSubSkemaInput.val(row.id_sub_skema);
+                        // });
                         $('#nilai-sub-skema-wrapper').append(
                             '<div class="px-1 mb-3 row">\
                                 <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
                                 <div class="col-sm-4 d-flex justify-content-end">\
                                     <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
                                         style="height: 35px;">Nilai</label>\
-                                    <input type="hidden" class="id_sub_skema" value="'+row.id_sub_skema+'">\
+                                    <input type="hidden" class="id_sub_skema" value="' + row.id_sub_skema + '">\
                                     <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
-                                        style="width: 100px; height: 35px;"\
+                                        style="width: 100px; height: 35px;">\
                                 </div>\
                             </div>'
                         );
                     });
+                    
+                    
                 }
                 
             });
@@ -346,25 +416,21 @@
                 create_nilai_data.push(nilai);
             });
 
-            // console.log(create_nilai_data);
-            // console.log(create_sub_skemaID);
-
-            // // Membuat array asosiatif
-            // var nilaiSubSkemaArray = {};
-            // for (var i = 0; i < create_sub_skemaID.length; i++) {
-            //     var subSkemaID = create_sub_skemaID[i];
-            //     var nilai = create_nilai_data[i];
-            //     nilaiSubSkemaArray[subSkemaID] = nilai;
-            // }
-
-            // // Menampilkan array asosiatif dalam konsol
-            // console.log(pesertaID);
-            // console.log(nilaiSubSkemaArray);
-
+            // Membersihkan array nilai yang kosong atau nol
+            // create_nilai_data = cleanArray(create_nilai_data);
+            
+            // Membuat array asosiatif
             var nilaiSubSkemaArray = {};
             for (var i = 0; i < create_sub_skemaID.length; i++) {
                 nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
             }
+
+            Object.keys(nilaiSubSkemaArray).forEach(key => {
+                // Cek apakah nilai kosong, undefined, atau null, dan isi dengan 0
+                if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
+                    nilaiSubSkemaArray[key] = 0;
+                }
+            });
 
             $.ajaxSetup({
                 headers: {
@@ -385,37 +451,55 @@
 
                 success: function(response) {
                     $('#createNilaiModal').modal('hide');
+                    $('#editNilaiModal').modal('hide');
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil',
                         text: 'Nilai berhasil ditambahkan.'
                     });
+
+                    fetchDetailData(skemaID);
                 }
-                    // alert('Data berhasil disimpan');
-                // },
-                // error: function(xhr, status, error) {
-                //     alert('Terjadi kesalahan saat menyimpan data');
-                // }
+                    
             });
         })
         
         // Edit Modal Trigger
-        $(document).on('click', '#edit_nilai', function (e){
-            e.preventDefault();
-            var pesertaID = $(this).val();
+        $(document).on('click', '#edit_nilai_btn', function (){
+            pesertaID = $(this).val();
 
-            $('#editNilaiModal').modal('show');
-            
-            // $.ajax({
-            //     url: '/penilaian/' + pesertaID,
-            //     type: "GET",
-            //     dataType: "json"
+            $.ajax({
+                url: '/penilaian/fetchNilaiData/' + pesertaID,
+                type: "get",
+                dataType: "json",
 
-            //     success: function(response) {
-            //         $('#edit_name').val(response.nama_lengkap);
-            //     }
+                success: function(response) {
+                    var data_peserta_edit = response.data_peserta_edit;
+                    
+                    $('#editNilaiModal').modal('show');
+                    $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
+                    $('#edit_nama_skema').val(data_skema.nama_skema);
+
+                    $('#edit-nilai-sub-skema-wrapper').html("")
+                    $.each(data_peserta_edit, function(index, row) {
+                        $('#edit-nilai-sub-skema-wrapper').append(
+                            '<div class="px-1 mb-3 row">\
+                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                                <div class="col-sm-4 d-flex justify-content-end">\
+                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                        style="height: 35px;">Nilai</label>\
+                                    <input type="hidden" class="id_sub_skema" value="' + row.sub_skema_id + '">\
+                                    <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
+                                        style="width: 100px; height: 35px;" value="' + row.nilai + '">\
+                                </div>\
+                            </div>'
+                        );
+
+                    });
+                    
+                }
                 
-            // });
+            });
         });
 
     });
