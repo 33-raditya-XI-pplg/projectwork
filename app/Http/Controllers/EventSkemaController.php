@@ -21,13 +21,13 @@ class EventSkemaController extends Controller
         $skema = Skema::get();
         $bg = Background::get();
         $ttd = Ttd::get();
-        $rn = Rentang_Nilai::get();
+        $rn = Rentang_Nilai::distinct()->pluck('nama_konversi_nilai');
         $penguji = User::where('level', 'Penguji')->get();
         return view('admin.event.create-skema', compact('skema', 'id' ,'bg', 'ttd', 'rn', 'penguji'));
     }
 
     public function store(Request $request) {
-
+        
         $evt = Event::find($request->input('event_id'));
         $eventSkema = new Event_Skema($request->only([
             'skema_id',
@@ -37,24 +37,15 @@ class EventSkemaController extends Controller
 
         $evt->eventEvent_Skema()->save($eventSkema);
         $id = $eventSkema->id_event_skema;
-        // $tgl_event = Event::where('id_event', $request->event_id)->pluck('tgl_mulai')->first();
+        $evtSkema = Event_Skema::find($id);
+        $rn_id = Rentang_Nilai::where('nama_konversi_nilai', $request->input('nama_konversi_nilai'))
+                                ->pluck('id_rentang_nilai');
+        // // // $tgl_event = Event::where('id_event', $request->event_id)->pluck('tgl_mulai')->first();
 
-        $ttd = new Ttd();
-        foreach ($request->input('ttd_id') as $ttd_id) {
-            $ttd->ttdPenandatangan()->attach($id, [
-                'ttd_id' => $ttd_id,
-                'created_by' => $request->input('created_by')
-            ]);
-        }
-
-        $penguji = new User();
-        foreach ($request->input('user_id') as $userId) {
-            $penguji->userMenguji()->attach($id, [
-                'user_id' => $userId,
-                // 'tgl_event' => $tgl_event,
-                'created_by' => $request->input('created_by')
-            ]);
-        }
+        $evtSkema->event_skemaPenandatangan()->attach($request->input('ttd_id'));
+        $evtSkema->event_skemaMenguji()->attach($request->input('user_id'));
+        $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->attach($rn_id);
+        
         return back();
     }
 

@@ -42,10 +42,10 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
-          <select class="form-select chosen-select" aria-label="Default select example" disabled>
+          <select class="form-select chosen-select" name="nama_konversi_nilai">
             <option selected>Open this select menu</option>
             @foreach ($rn as $list)
-            <option value="{{ $list->id_rentang_nilai }}">{{ $list->nama_konversi_nilai }}</option>
+            <option >{{ $list }}</option>
             @endforeach
           </select>
         </div>
