@@ -124,7 +124,8 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white" id="store_nilai_btn">Tambah</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white" 
+                    id="store_nilai_btn" value="1">Tambah</button>
             </div>
         </div>
     </div>
@@ -161,7 +162,8 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white" id="store_nilai_btn">Simpan</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white" 
+                    id="store_nilai_btn" value="0">Simpan</button>
             </div>
             </div>
     </div>
@@ -382,8 +384,8 @@
                                 <div class="col-sm-4 d-flex justify-content-end">\
                                     <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
                                         style="height: 35px;">Nilai</label>\
-                                    <input type="hidden" class="id_sub_skema" value="' + row.id_sub_skema + '">\
-                                    <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
+                                    <input type="hidden" class="create_id_sub_skema" value="' + row.id_sub_skema + '">\
+                                    <input type="number" class="form-control rounded-0 rounded-end create_nilai_sub_skema"\
                                         style="width: 100px; height: 35px;">\
                                 </div>\
                             </div>'
@@ -422,8 +424,8 @@
                                 <div class="col-sm-4 d-flex justify-content-end">\
                                     <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
                                         style="height: 35px;">Nilai</label>\
-                                    <input type="hidden" class="id_sub_skema" value="' + row.sub_skema_id + '">\
-                                    <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
+                                    <input type="hidden" class="edit_id_sub_skema" value="' + row.sub_skema_id + '">\
+                                    <input type="number" class="form-control rounded-0 rounded-end edit_nilai_sub_skema"\
                                         style="width: 100px; height: 35px;" value="' + row.nilai + '">\
                                 </div>\
                             </div>'
@@ -439,20 +441,47 @@
         // Store function -- to store and update
         $(document).on('click', '#store_nilai_btn', function () {
             var createdBy = $('#created_by').val();
+            var btnIdentifier = $(this).val();
 
             var create_nilai_data = [];
             var create_sub_skemaID = [];
-            
-            $('.id_sub_skema').each(function() {
-                var sub_skemaID = $(this).val();
-                create_sub_skemaID.push(sub_skemaID);
-            });
+            console.log(create_nilai_data)
+            console.log(create_sub_skemaID)
 
-            $('.nilai_sub_skema').each(function() {
-                var nilai = $(this).val();
-                create_nilai_data.push(nilai);
-            });
+            if (btnIdentifier != 0) {
+                $('.create_id_sub_skema').each(function() {
+                    var sub_skemaID = $(this).val();
+                    create_sub_skemaID.push(sub_skemaID);
+                });
 
+                $('.create_nilai_sub_skema').each(function() {
+                    var nilai = $(this).val();
+                    create_nilai_data.push(nilai);
+                });
+            } else {
+                $('.edit_id_sub_skema').each(function() {
+                    var sub_skemaID = $(this).val();
+                    create_sub_skemaID.push(sub_skemaID);
+                });
+
+                $('.edit_nilai_sub_skema').each(function() {
+                    var nilai = $(this).val();
+                    create_nilai_data.push(nilai);
+                });
+            }
+
+            // $('.id_sub_skema').each(function() {
+            //     var sub_skemaID = $(this).val();
+            //     create_sub_skemaID.push(sub_skemaID);
+            // });
+
+            // $('.nilai_sub_skema').each(function() {
+            //     var nilai = $(this).val();
+            //     create_nilai_data.push(nilai);
+            // });
+
+            console.log(create_nilai_data)
+            console.log(create_sub_skemaID)
             // Membersihkan array nilai yang kosong atau nol
             // create_nilai_data = cleanArray(create_nilai_data);
             

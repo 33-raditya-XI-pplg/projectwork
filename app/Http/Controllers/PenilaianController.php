@@ -110,7 +110,7 @@ class PenilaianController extends Controller
         // ]);
         $data_peserta = DB::table('tb_peserta')
                     ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                    ->select('tb_user.nama_lengkap')
+                    ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap')
                     ->where('tb_peserta.id_peserta', $id)
                     ->get();
 
