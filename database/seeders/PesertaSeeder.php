@@ -6,14 +6,14 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DaftarPesertaSeeder extends Seeder
+class PesertaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('tb_daftar_peserta')->insert([
+        DB::table('tb_peserta')->insert([
             [
                 'user_id' => 4,
                 'event_skema_id' => 1,
