@@ -26,7 +26,7 @@
                                 <td>Senin Aktif</td>
                                 <td>Selasa Aktif</td>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-primary rounded"><i class="fas fa-print"></i> Cetak</a>
+                                    <a href="{{route('cetak-sertifikat.cetak')}}" class="btn btn-sm btn-primary rounded"><i class="fas fa-print"></i> Cetak</a>
                                     <a href="{{route('rincian-sertifikat.index')}}" class="btn btn-sm btn-secondary rounded">Rincian</a>
                                 </td>
                             </tr>

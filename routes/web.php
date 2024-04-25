@@ -40,6 +40,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
     Route::resource('nilai',NilaiController::class);
     Route::resource('event-user',EventUsersController::class);
     Route::resource('sertifikat-user',SertifikatUsersController::class);
+    Route::get('cetak-sertifikat',[SertifikatUsersController::class,'cetak'])->name('cetak-sertifikat.cetak');
     Route::resource('rincian-user',RincianController::class);
     Route::resource('rincian-sertifikat',RincianSertifikatController::class);
 });
