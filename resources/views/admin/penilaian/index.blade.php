@@ -176,7 +176,7 @@
         var event_skemaID
 
         var pesertaID;
-        var data_peserta;
+        var data_nilai_peserta;
 
         var data_skema;
         var data_sub_skema;
@@ -214,8 +214,8 @@
                     Swal.close();
                     if(response){
                         data_skema = response.data_skema[0];
-                        data_peserta = response.data_peserta;
                         data_sub_skema = response.data_sub_skema;
+                        data_nilai_peserta = response.data_nilai_peserta;
 
                         var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent[0];
                         
@@ -239,16 +239,16 @@
                         $('#example').DataTable().destroy();
                         $('tbody').html("");
 
-                        $.each(data_peserta, function(index, row) {
+                        $.each(data_nilai_peserta, function(index, row) {
                             event_skemaID = row.id_event_skema;
                             var num = index + 1;
                             
                             // Kondisi -> Button aksi -- tabel nilai
                             var buttonAction;
                             row.jumlah_nilai != null ?
-                                buttonAction = '<button value="' + row.id_user + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>\
-                                    <button value="'+row.id_user+'" id="delete_nilai_btn" class="btn btn-danger rounded btn-sm">Delete</button>' :
-                                buttonAction = '<button value="' + row.id_user + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
+                                buttonAction = '<button value="' + row.id_peserta + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>\
+                                    <button value="'+row.id_peserta+'" id="delete_nilai_btn" class="btn btn-danger rounded btn-sm">Delete</button>' :
+                                buttonAction = '<button value="' + row.id_peserta + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
 
                             // Kondisi -> Keterangan nilai kosong -- tabel nilai
                             var nilaiData;
@@ -349,14 +349,14 @@
                 dataType: "json",
 
                 success: function(response) {
-                    var data_peserta_wdos = response.data_peserta_dos;
+                    var data_peserta_create = response.data_peserta;
                     
                     $('#createNilaiModal').modal('show');
-                    $('#create_nama_peserta').val(data_peserta_wdos[0].nama_lengkap);
+                    $('#create_nama_peserta').val(data_peserta_create[0].nama_lengkap);
                     $('#create_nama_skema').val(data_skema.nama_skema);
                     // console.log(data_sub_skema)
                     $('#nilai-sub-skema-wrapper').html("")
-                    $('.nilai_sub_skema').html("")
+                    $('.nilai_sub_skema').val('')
                     $.each(data_sub_skema, function(index, row) {
                         // $('#nilai-sub-skema-wrapper').append(
                         //     '<div class="px-1 mb-3 row">\
@@ -391,13 +391,13 @@
                         
                     });
                     
-                    
                 }
                 
             });
         });
 
         // Edit Modal Trigger
+        // Bug di edit modal -> ambil pesertaID + skemaID
         $(document).on('click', '#edit_nilai_btn', function (){
             pesertaID = $(this).val();
 
@@ -407,14 +407,14 @@
                 dataType: "json",
 
                 success: function(response) {
-                    var data_peserta_edit = response.data_peserta_edit;
+                    var data_peserta_edit = response.data_nilai;
                     
                     $('#editNilaiModal').modal('show');
                     $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
                     $('#edit_nama_skema').val(data_skema.nama_skema);
 
                     $('#edit-nilai-sub-skema-wrapper').html("")
-                    $('.nilai_sub_skema').html("")
+                    $('.nilai_sub_skema').val('')
                     $.each(data_peserta_edit, function(index, row) {
                         $('#edit-nilai-sub-skema-wrapper').append(
                             '<div class="px-1 mb-3 row">\
@@ -567,7 +567,7 @@
         // Event handler untuk tombol "Delete"
         $(document).on('click', '#delete_nilai_btn', function() {
             // Ambil ID user dari atribut value tombol
-            var userId = $(this).val();
+            var pesertaId = $(this).val();
 
             // Tampilkan alert konfirmasi menggunakan SweetAlert 2
             confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
@@ -575,11 +575,11 @@
                 if (result.isConfirmed) {
                     // Lakukan request AJAX untuk menghapus nilai peserta
                     $.ajax({
-                        url: '/penilaian/destroyNilaiData/' + userId,
+                        url: '/penilaian/destroyNilaiData/' + pesertaId,
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}',
-                            userId: userId
+                            pesertaId: pesertaId
                         },
                         success: function(response) {
                             // Tambahkan logika untuk menangani respons dari server (jika diperlukan)
