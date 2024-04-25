@@ -11,4 +11,8 @@ class SertifikatUsersController extends Controller
     {
         return view('user.sertifikat.index');
     }
+    public function cetak()
+    {
+        return view('user.sertifikat.cetak_sertifikat');
+    }
 }
