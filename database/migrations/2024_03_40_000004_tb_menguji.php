@@ -17,10 +17,9 @@ return new class extends Migration
         Schema::create('tb_menguji', function (Blueprint $table) {
             $table->id('id_menguji');
             // Foreign Key
-            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
+                  ->onDelete('cascade');
             $table->foreignId('user_id')->constrained('tb_user', 'id_user');
-
-            $table->date('tgl_event');
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 

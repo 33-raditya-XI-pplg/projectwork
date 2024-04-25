@@ -17,7 +17,8 @@ return new class extends Migration
         Schema::create('tb_penandatangan', function (Blueprint $table) {
             $table->id('id_penandatangan');
             // Foreign Key
-            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
+                  ->onDelete('cascade');
             $table->foreignId('ttd_id')->constrained('tb_ttd', 'id_ttd');
 
             $table->integer('created_by')->nullable(); 

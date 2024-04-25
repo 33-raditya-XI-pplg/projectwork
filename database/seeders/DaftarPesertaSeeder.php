@@ -13,7 +13,7 @@ class DaftarPesertaSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('tb_daftar_peserta')->insert([
+        DB::table('tb_peserta')->insert([
             [
                 'user_id' => 4,
                 'event_skema_id' => 1,
