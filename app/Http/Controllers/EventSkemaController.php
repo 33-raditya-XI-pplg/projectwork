@@ -121,6 +121,11 @@ class EventSkemaController extends Controller
 
     public function storeStudents($event, $skema, Request $request) {
 
+        // validasi
+        $request->validate([
+            'user_id' => 'required'
+        ]);
+
         $evtSkema = Event_Skema::find($skema);
         $evtSkema->event_skemaDaftar_Peserta()->syncWithPivotValues($request->input('user_id'), ['created_by' => Auth::user()->id_user]);
         return redirect()->route('event-skema.show', [$event,$skema]);
