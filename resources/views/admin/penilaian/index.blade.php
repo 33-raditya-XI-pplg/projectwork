@@ -282,19 +282,16 @@
                                 buttonAction = '<button value="' + row.id_peserta + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
 
                             // Kondisi -> Keterangan nilai kosong -- tabel nilai
-                            var nilaiData;
-                            row.avg_nilai != null ? 
-                                nilaiData = formatNumber(row.avg_nilai) : 
-                                nilaiData = 'Nilai Kosong';
-                                
-                            // Kondisi -> Keterangan nilai kurang -- tabel nilai
-                            var banyakData;
+                            var banyakData, nilaiData;
                             if (row.banyak_nilai_nol == 0) {
                                 banyakData = 'Nilai Lengkap';
+                                nilaiData = formatNumber(row.avg_nilai)
                             } else if (row.banyak_nilai_nol == null) {
                                 banyakData = 'Nilai Kosong';
+                                nilaiData = 'Nilai Kosong'
                             } else {
                                 banyakData = 'Nilai kurang = <span style="color: red; font-weight: bold;"> ' + row.banyak_nilai_nol + '</span>';
+                                nilaiData = '<span style="color: red; font-weight: bold;"> ' + formatNumber(row.avg_nilai) + '</span>'
                             }
 
                             $('tbody').append(
