@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
                   ->onDelete('cascade');
 
-            $table->string('status');
+            // $table->string('status');
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 

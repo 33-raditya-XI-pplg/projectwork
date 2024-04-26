@@ -18,9 +18,10 @@ return new class extends Migration
             $table->id('id_event_skema_rentang_nilai');
             // Foreign Key
             $table->foreignId('rentang_nilai_id')->constrained('tb_rentang_nilai', 'id_rentang_nilai');
-            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
+                  ->onDelete('cascade');
 
-            $table->string('status');
+            // $table->string('status');
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 

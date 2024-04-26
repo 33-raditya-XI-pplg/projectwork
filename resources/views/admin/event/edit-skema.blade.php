@@ -2,7 +2,7 @@
 @section('title', 'Kegiatan')
 @section('content')
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-    <form action="{{ route('event-skema.update', $id) }}" method="POST">
+    <form action="{{ route('event-skema.update', [$evt, $id]) }}" method="POST">
       @csrf
       @method('PUT')
         <div class="mb-3">
@@ -42,10 +42,9 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
-          <select class="form-select chosen-select" aria-label="Default select example" disabled>
-            <option selected>Open this select menu</option>
+          <select class="form-select chosen-select" name="nama_konversi_nilai">
             @foreach ($rn as $list)
-            <option value="{{ $list->id_rentang_nilai }}">{{ $list->nama_konversi_nilai }}</option>
+            <option {{ $list == $rn_id ? 'selected' : '' }}>{{ $list }}</option>
             @endforeach
           </select>
         </div>

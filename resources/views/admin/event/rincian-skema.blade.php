@@ -16,17 +16,17 @@
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Tanda Tangan</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ \App\Models\Ttd::find($ttd)->pluck('nama_ttd')->implode(', ') }}" readonly>
+                value="{{ $ttd->implode(', ') }}" readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Penguji</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ \App\Models\User::find($penguji)->pluck('nama_lengkap')->implode(', ') }}" readonly>
+                value="{{ $penguji->implode(', ') }}" readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="N/A" readonly>
+                value="{{ $rn->implode(', ') }}" readonly>
             </div>
             
     </div>
