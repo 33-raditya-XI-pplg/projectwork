@@ -35,7 +35,8 @@ class EventSkemaController extends Controller
             'background_id' => 'required | not_in:0',
             'nama_konversi_nilai' => 'required | not_in:0'
         ]);
-        
+
+        $createdBy = $request->input('created_by');
         $evt = Event::find($request->input('event_id'));
         $eventSkema = new Event_Skema($request->only([
             'skema_id',
@@ -50,9 +51,9 @@ class EventSkemaController extends Controller
                                 ->pluck('id_rentang_nilai');
         // // // $tgl_event = Event::where('id_event', $request->event_id)->pluck('tgl_mulai')->first();
 
-        $evtSkema->event_skemaPenandatangan()->attach($request->input('ttd_id'));
-        $evtSkema->event_skemaMenguji()->attach($request->input('user_id'));
-        $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->attach($rn_id);
+        $evtSkema->event_skemaPenandatangan()->attach($request->input('ttd_id'), ['created_by' => $createdBy]);
+        $evtSkema->event_skemaMenguji()->attach($request->input('user_id'), ['created_by' => $createdBy]);
+        $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->attach($rn_id, ['created_by' => $createdBy]);
         
         return redirect()->route('event.rincian', $idEvt);
     }
