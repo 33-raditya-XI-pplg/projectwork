@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Event;
 use App\Models\Nilai_Peserta;
 
@@ -32,19 +31,17 @@ class PenilaianController extends Controller
     }
 
     public function fetchSkemaData($id) 
-    {
-        // $totalNilaiQuery = DB::table('tb_nilai_peserta')
-        //             ->select('user_id', 
-        //                 DB::raw('COUNT(nilai) as jumlah_nilai'),
-        //                 DB::raw('SUM(nilai) as total_nilai'))
-        //             ->groupBy('user_id');
-        
+    {        
         $totalNilaiQuery = DB::table('tb_nilai_peserta')
                     ->select('peserta_id', 
-                        DB::raw('COUNT(nilai) as jumlah_nilai'),
-                        DB::raw('SUM(nilai) as total_nilai'))
+                        DB::raw('COUNT(nilai) as banyak_nilai'),
+                        DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
+                        DB::raw('SUM(nilai) as total_nilai'),
+                        // DB::raw('ROUND(SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END), 1) as avg_nilai')
+                        DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
+                    )
                     ->groupBy('peserta_id');
-                       
+
         $data_skema = DB::table('tb_event_skema')
                     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                     ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
@@ -58,7 +55,6 @@ class PenilaianController extends Controller
                     ->get();
 
         $data_sub_skema = DB::table('tb_event_skema')
-                    // user, sub-skema -- nilai (event_skema),  
                     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                     ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
 
@@ -75,7 +71,8 @@ class PenilaianController extends Controller
                         $join->on('tb_peserta.id_peserta', '=', 'nilai_stats.peserta_id');
                     })
                     ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_peserta.id_peserta', 
-                        'tb_user.nama_lengkap', 'nilai_stats.jumlah_nilai', 'nilai_stats.total_nilai')
+                        'tb_user.nama_lengkap', 'nilai_stats.banyak_nilai', 'nilai_stats.banyak_nilai_nol', 
+                        'nilai_stats.total_nilai', 'nilai_stats.avg_nilai')
                     ->where('tb_peserta.event_skema_id', $data_skema->value('id_event_skema'))
                     ->orderBy('tb_user.id_user', 'asc')
                     ->get();
@@ -100,14 +97,6 @@ class PenilaianController extends Controller
 
     public function fetchPesertaData($id) 
     {
-        // $data = DB::table('tb_user')
-        //             ->select('tb_user.nama_lengkap')
-        //             ->where('tb_user.id_user', $id)
-        //             ->get();
-
-        // return response()->json([
-        //     'data_peserta_dos' => $data
-        // ]);
         $data_peserta = DB::table('tb_peserta')
                     ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
                     ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap')
@@ -119,7 +108,7 @@ class PenilaianController extends Controller
         ]);
     }
 
-    public function create()
+    public function create() // ==== EASTER EGG ====
     {
         return view('admin.penilaian.inputnilai');
     }
@@ -131,12 +120,10 @@ class PenilaianController extends Controller
         $nilaiSubSkema = $request->nilaiSubSkema;
         $created_by = $request->createdBy;
 
-        // Mulai transaksi database
         DB::beginTransaction();
 
         try {
             foreach ($nilaiSubSkema as $subSkemaID => $nilai) {
-                // Periksa dulu apakah nilai sudah ada
                 $nilaiExist = DB::table('tb_nilai_peserta')
                                 ->where('peserta_id', $pesertaID)
                                 ->where('sub_skema_id', $subSkemaID)
@@ -167,19 +154,12 @@ class PenilaianController extends Controller
                 }
             }
 
-            // Jika semua operasi berhasil, commit transaksi
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Nilai berhasil disimpan']);
         } catch (\Exception $e) {
-            // Jika terjadi error, rollback transaksi
             DB::rollback();
             return response()->json(['success' => false, 'message' => 'Gagal menyimpan nilai', 'error' => $e->getMessage()]);
         }
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function fetchNilaiData($id)
@@ -197,46 +177,16 @@ class PenilaianController extends Controller
             'data_nilai' => $data_nilai
         ]);
     }
-    // public function fetchNilaiData($event_skema_id, $peserta_id)
-    // {
-    //     $data_nilai = DB::table('tb_nilai_peserta')
-    //             ->join('tb_peserta', 'tb_nilai_peserta.peserta_id', '=', 'tb_peserta.id_peserta')
-    //             ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-    //             ->join('tb_sub_skema', 'tb_nilai_peserta.sub_skema_id', '=', 'tb_sub_skema.id_sub_skema')
-    //             ->select('tb_nilai_peserta.event_skema_id', 'tb_nilai_peserta.sub_skema_id', 'tb_sub_skema.judul_sub',
-    //                     'tb_nilai_peserta.peserta_id', 'tb_user.nama_lengkap', 'tb_nilai_peserta.nilai')
-    //             ->where('tb_nilai_peserta.peserta_id', $peserta_id)
-    //             ->where('tb_nilai_peserta.event_skema_id', $event_skema_id) // Memfilter berdasarkan event_skema_id
-    //             ->get();
-    
-    //     return response()->json([
-    //         'data_nilai' => $data_nilai
-    //     ]);
-    // }
-    
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
     public function destroyNilaiData(Request $request)
     {
-        // Validasi request untuk memastikan parameter yang diperlukan tersedia
-        $request->validate([
-            'pesertaId' => 'required|numeric' // Sesuaikan dengan kebutuhan Anda
-        ]);
-
-        // Ambil ID user dari request
         $pesertaId = $request->pesertaId;
 
         try {
-            // Cari dan hapus nilai peserta berdasarkan ID user
             Nilai_Peserta::where('peserta_id', $pesertaId)->delete();
 
-            // Berhasil menghapus, kirim respons JSON yang berhasil
             return response()->json(['message' => 'Nilai peserta berhasil dihapus'], 200);
         } catch (\Exception $e) {
-            // Jika terjadi kesalahan, kirim respons JSON dengan pesan kesalahan
             return response()->json(['message' => 'Terjadi kesalahan saat menghapus nilai peserta'], 500);
         }
     }

@@ -22,7 +22,7 @@
                     
                 </select>
             </div>
-            <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1">Submit</button>
+            <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1" disabled>Submit</button>
 
         </div>
     </div>
@@ -47,7 +47,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
-                                                <input type="date" class="form-control" id="tgl_mulai" disabled>
+                                                <input type="text" class="form-control" id="tgl_mulai" placeholder="dd-mm-yyyy" disabled>
                                             </div>
                                             <div class="form-check form-switch mb-3">
                                                 <label class="form-check-label" for="status">Status</label>
@@ -65,7 +65,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
-                                                <input type="date" class="form-control" id="tgl_selesai" disabled>
+                                                <input type="text" class="form-control" id="tgl_selesai" placeholder="dd-mm-yyyy" disabled>
                                             </div>
                                         </div>
                                     </div>              
@@ -78,9 +78,12 @@
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
                 <table id="example" class="table">
                     <thead class="fw-normal">
-                        <th>No</th>
+                        <th scope="col">No</th>
                         <th scope="col">Nama Perserta</th>
-                        <th scope="col">Nilai Peserta</th>
+                        <th scope="col">Status Nilai</th>
+                        <th scope="col">Nilai Peserta 
+                            <span style="color: grey; font-size: 15px;">avg</span>
+                        </th>
                         <th scope="col">Tanggal</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
@@ -183,24 +186,50 @@
         var data_skema;
         var data_sub_skema;
 
-        $('#search_btn').prop('disabled', true);
-
-        // delete Null Array function
-        function cleanArray(arr) {
-            var cleanedArray = [];
-            for (var i = 0; i < arr.length; i++) {
-                if (arr[i]) { // Cek apakah nilai tidak kosong atau nol
-                    cleanedArray.push(arr[i]);
-                }
+        function formatNumber(value) {
+            // Pastikan value adalah tipe number, konversi jika perlu
+            var num = parseFloat(value);
+            if (isNaN(num)) {
+                return 'Invalid input'; // atau Anda bisa menangani cara lain jika input tidak valid
             }
-            return cleanedArray;
+
+            // Menggunakan toFixed(1) untuk menghasilkan satu desimal
+            var fixedValue = num.toFixed(1);
+
+            // Menghilangkan desimal tidak perlu jika angka desimalnya adalah 0
+            return fixedValue.endsWith('.0') ? parseInt(fixedValue) : fixedValue;
+        }
+
+        // delete Sweet Alert function
+        function confirmDelete(title, text) {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            });
+        }
+
+        // format Date function
+        function formatDate(dateString) {
+            var dateParts = dateString.split("-");
+            var year = dateParts[0];
+            var month = dateParts[1];
+            var day = dateParts[2];
+
+            var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
         }
 
         // fetch Detail Data function
         function fetchDetailData(skemaID) {
             Swal.fire({
                 title: 'Memuat...',
-                text: 'Harap tunggu sebentar.',
+                text: 'Sabar wir.',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -228,8 +257,8 @@
                         $('#nama_skema').val(data_skema.nama_skema);
                         $('#tempat_skema').val(data_skema.nama_tempat);
 
-                        $('#tgl_mulai').val(data_skema.tgl_mulai);
-                        $('#tgl_selesai').val(data_skema.tgl_berakhir);
+                        $('#tgl_mulai').val(formatDate(data_skema.tgl_mulai));
+                        $('#tgl_selesai').val(formatDate(data_skema.tgl_berakhir));
 
                         if (data_skema.status === "Aktif") {
                             $('#status').prop('checked', true);
@@ -247,23 +276,34 @@
                             
                             // Kondisi -> Button aksi -- tabel nilai
                             var buttonAction;
-                            row.jumlah_nilai != null ?
+                            row.banyak_nilai != null ?
                                 buttonAction = '<button value="' + row.id_peserta + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>\
                                     <button value="'+row.id_peserta+'" id="delete_nilai_btn" class="btn btn-danger rounded btn-sm">Delete</button>' :
                                 buttonAction = '<button value="' + row.id_peserta + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
 
                             // Kondisi -> Keterangan nilai kosong -- tabel nilai
                             var nilaiData;
-                            row.total_nilai != null ? 
-                                nilaiData = row.total_nilai : 
+                            row.avg_nilai != null ? 
+                                nilaiData = formatNumber(row.avg_nilai) : 
                                 nilaiData = 'Nilai Kosong';
+                                
+                            // Kondisi -> Keterangan nilai kurang -- tabel nilai
+                            var banyakData;
+                            if (row.banyak_nilai_nol == 0) {
+                                banyakData = 'Nilai Lengkap';
+                            } else if (row.banyak_nilai_nol == null) {
+                                banyakData = 'Nilai Kosong';
+                            } else {
+                                banyakData = 'Nilai kurang = <span style="color: red; font-weight: bold;"> ' + row.banyak_nilai_nol + '</span>';
+                            }
 
                             $('tbody').append(
                                 '<tr>\
                                 <td>' + num + '</td>\
                                 <td>' + row.nama_lengkap + '</td>\
-                                <td>' + nilaiData + '</td>\
-                                <td>' + data_skema.tgl_mulai + '</td>\
+                                <td>' + banyakData +'</td>\
+                                <td>' + nilaiData +'</td>\
+                                <td>' + formatDate(data_skema.tgl_mulai) + '</td>\
                                 <td>\
                                     ' + buttonAction + ' \
                                 </td>\
@@ -288,6 +328,7 @@
         // Event Dropdown
         $('#event_select').on('change', function() {
             var eventID = $(this).val();
+            $('#search_btn').prop('disabled', true);
 
             if(eventID) {
                 $.ajax({
@@ -340,10 +381,7 @@
 
         // Create Modal Trigger
         $(document).on('click', '#create_nilai_btn', function (){
-            // e.preventDefault();
             pesertaID = $(this).val();
-            // console.log(pesertaID);
-            // console.log(data_peserta[0]);
 
             $.ajax({
                 url: '/penilaian/fetchPesertaData/' + pesertaID,
@@ -356,28 +394,10 @@
                     $('#createNilaiModal').modal('show');
                     $('#create_nama_peserta').val(data_peserta_create[0].nama_lengkap);
                     $('#create_nama_skema').val(data_skema.nama_skema);
-                    // console.log(data_sub_skema)
+
                     $('#nilai-sub-skema-wrapper').html("")
                     $('.nilai_sub_skema').val('')
                     $.each(data_sub_skema, function(index, row) {
-                        // $('#nilai-sub-skema-wrapper').append(
-                        //     '<div class="px-1 mb-3 row">\
-                        //         <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
-                        //         <div class="col-sm-4 d-flex justify-content-end">\
-                        //             <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
-                        //                 style="height: 35px;">Nilai</label>\
-                        //             <input type="hidden" class="id_sub_skema">\
-                        //             <input type="number" class="form-control rounded-0 rounded-end nilai_sub_skema"\
-                        //                 style="width: 100px; height: 35px;">\
-                        //         </div>\
-                        //     </div>'
-                        // );
-
-                        // $('.nilai_sub_skema').last().change(function() {
-                        //     var parentDiv = $(this).closest('.row');
-                        //     var idSubSkemaInput = parentDiv.find('.id_sub_skema');
-                        //     idSubSkemaInput.val(row.id_sub_skema);
-                        // });
                         $('#nilai-sub-skema-wrapper').append(
                             '<div class="px-1 mb-3 row">\
                                 <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
@@ -399,7 +419,6 @@
         });
 
         // Edit Modal Trigger
-        // Bug di edit modal -> ambil pesertaID + skemaID
         $(document).on('click', '#edit_nilai_btn', function (){
             pesertaID = $(this).val();
 
@@ -445,8 +464,9 @@
 
             var create_nilai_data = [];
             var create_sub_skemaID = [];
-            console.log(create_nilai_data)
-            console.log(create_sub_skemaID)
+
+            // console.log(create_nilai_data)
+            // console.log(create_sub_skemaID)
 
             if (btnIdentifier != 0) {
                 $('.create_id_sub_skema').each(function() {
@@ -470,29 +490,17 @@
                 });
             }
 
-            // $('.id_sub_skema').each(function() {
-            //     var sub_skemaID = $(this).val();
-            //     create_sub_skemaID.push(sub_skemaID);
-            // });
-
-            // $('.nilai_sub_skema').each(function() {
-            //     var nilai = $(this).val();
-            //     create_nilai_data.push(nilai);
-            // });
-
-            console.log(create_nilai_data)
-            console.log(create_sub_skemaID)
-            // Membersihkan array nilai yang kosong atau nol
-            // create_nilai_data = cleanArray(create_nilai_data);
+            // console.log(create_nilai_data)
+            // console.log(create_sub_skemaID)
             
-            // Membuat array asosiatif
+            // looping for Create Associative Array
             var nilaiSubSkemaArray = {};
             for (var i = 0; i < create_sub_skemaID.length; i++) {
                 nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
             }
 
+            // looping for Set null Data to 0
             Object.keys(nilaiSubSkemaArray).forEach(key => {
-                // Cek apakah nilai kosong, undefined, atau null, dan isi dengan 0
                 if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
                     nilaiSubSkemaArray[key] = 0;
                 }
@@ -531,78 +539,11 @@
         })
         
         // Delete function
-        // $(document).on('click', '#delete_nilai_btn', function () {
-        //     var create_nilai_data = [];
-        //     var create_sub_skemaID = [];
-            
-        //     $('.id_sub_skema').each(function() {
-        //         var sub_skemaID = $(this).val();
-        //         create_sub_skemaID.push(sub_skemaID);
-        //     });
-
-        //     $('.nilai_sub_skema').each(function() {
-        //         var nilai = $(this).val();
-        //         create_nilai_data.push(nilai);
-        //     });
-
-        //     // Membersihkan array nilai yang kosong atau nol
-        //     // create_nilai_data = cleanArray(create_nilai_data);
-            
-        //     // Membuat array asosiatif
-        //     var nilaiSubSkemaArray = {};
-        //     for (var i = 0; i < create_sub_skemaID.length; i++) {
-        //         nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
-        //     }
-
-        //     Object.keys(nilaiSubSkemaArray).forEach(key => {
-        //         // Cek apakah nilai kosong, undefined, atau null, dan isi dengan 0
-        //         if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
-        //             nilaiSubSkemaArray[key] = 0;
-        //         }
-        //     });
-
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     });
-
-        //     $.ajax({
-        //         url: '/penilaian/storeNilaiData',
-        //         type: 'POST',
-        //         data: {
-        //             pesertaID: pesertaID,
-        //             event_skemaID: event_skemaID,
-        //             nilaiSubSkema: nilaiSubSkemaArray,
-        //             createdBy: createdBy
-        //         },
-        //         dataType: "json",
-
-        //         success: function(response) {
-        //             $('#createNilaiModal').modal('hide');
-        //             $('#editNilaiModal').modal('hide');
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'Berhasil',
-        //                 text: 'Nilai berhasil ditambahkan.'
-        //             });
-
-        //             fetchDetailData(skemaID);
-        //         }
-                    
-        //     });
-        // })
-
-        // Event handler untuk tombol "Delete"
         $(document).on('click', '#delete_nilai_btn', function() {
-            // Ambil ID user dari atribut value tombol
             var pesertaId = $(this).val();
 
-            // Tampilkan alert konfirmasi menggunakan SweetAlert 2
             confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
-                // Jika pengguna mengkonfirmasi penghapusan
                 if (result.isConfirmed) {
-                    // Lakukan request AJAX untuk menghapus nilai peserta
                     $.ajax({
                         url: '/penilaian/destroyNilaiData/' + pesertaId,
                         type: 'DELETE',
@@ -611,33 +552,16 @@
                             pesertaId: pesertaId
                         },
                         success: function(response) {
-                            // Tambahkan logika untuk menangani respons dari server (jika diperlukan)
-                            // Misalnya, perbarui UI setelah penghapusan berhasil
                             console.log('Nilai peserta berhasil dihapus');
                             fetchDetailData(skemaID)
                         },
                         error: function(xhr, status, error) {
-                            // Tambahkan logika untuk menangani kesalahan (jika diperlukan)
                             console.error('Terjadi kesalahan saat menghapus nilai peserta:', error);
                         }
                     });
                 }
             });
         });
-
-        // Fungsi untuk menampilkan alert konfirmasi menggunakan SweetAlert 2
-        function confirmDelete(title, text) {
-            return Swal.fire({
-                title: title,
-                text: text,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus',
-                cancelButtonText: 'Batal'
-            });
-        }
         
     });
 

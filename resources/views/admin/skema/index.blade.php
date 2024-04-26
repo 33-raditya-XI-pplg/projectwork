@@ -7,7 +7,7 @@
             <table id="example" class="table">
                 <thead class="fw-normal">
                     <th>No</th>
-                    <th class="w-75" scope="col">Nama Skema</th>
+                    <th scope="col" class="w-75">Nama Skema</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                 </thead>
