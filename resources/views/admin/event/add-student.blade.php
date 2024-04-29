@@ -56,17 +56,19 @@
             })
 
             $('#show-peserta').on('click', function() {
-                var id = $('#instansi').val();
-                url = "{{ route('getPeserta', ':id') }}";
-                dataPeserta = url.replace(':id', id)
+                var instansi = $('#instansi').val();
+                var skema = {{ Js::from($skema) }};
+                url = "{{ route('getPeserta', [':instansi', ':skema']) }}"
+                      .replace(':instansi', instansi).replace(':skema', skema);
 
-                $.get(dataPeserta, function(data) {
+
+                $.get(url, function(data) {
                     table.clear().draw();
 
                     $.each(data, function(index, peserta) {
                         table.row.add([
                             '<input class="form-check-input peserta" type="checkbox" name="user_id[]" value="' +
-                            peserta.id_user + '">',
+                            peserta.id_user + '" '+ (peserta.exist ? 'checked' : '') +'>',
                             peserta.nama_lengkap,
                             peserta.email,
                             peserta.jenis_kelamin

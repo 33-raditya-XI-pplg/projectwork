@@ -77,6 +77,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::resource('sertifikat', SertifikatController::class);
     Route::resource('profile', ProfileController::class);
 
+    // jquery
+    Route::get('/peserta/instansi/{instansi}/event-skema/{skema}', [EventSkemaController::class, 'search'])->name('getPeserta');
+
 });
 
 // AJAX Request
@@ -85,6 +88,5 @@ Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchS
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
 Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
 
-Route::get('/mencoba/{id}', [EventSkemaController::class, 'search'])->name('getPeserta');
 
 require __DIR__.'/auth.php';

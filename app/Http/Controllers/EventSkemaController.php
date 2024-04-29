@@ -108,6 +108,7 @@ class EventSkemaController extends Controller
         $ttd = $evtSkema->event_skemaPenandatangan()->pluck('nama_ttd');
         $penguji = $evtSkema->event_skemaMenguji()->pluck('nama_lengkap');
         $peserta = $evtSkema->event_skemaDaftar_Peserta()->get();
+        // dd($peserta);
         $rn = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
                        ->pluck('nama_konversi_nilai');
         confirmDelete('Hapus Peserta', 'Apakah kamu yakin untuk menghapus?');
@@ -119,11 +120,22 @@ class EventSkemaController extends Controller
 
     public function addStudent($evt, $skema) {
         $instansi = Instansi::get();
+        $evtSkema = Event_Skema::find($skema);
+
         return view('admin.event.add-student', compact('evt', 'skema', 'instansi'));
     }
 
-    public function search($id) {
-        $peserta = User::select('id_user', 'nama_lengkap', 'email', 'jenis_kelamin')->where('instansi_id', $id)->where('level', 'pengguna')->get();
+    public function search($instansi, $skema) {
+        $evtSkema = Event_Skema::find($skema);
+        $id = $evtSkema->event_skemaDaftar_Peserta->pluck('id_user')->toArray();
+
+        $peserta = User::select('id_user', 'nama_lengkap', 'email', 'jenis_kelamin')
+                        ->where('instansi_id', $instansi)
+                        ->where('level', 'pengguna')->get();
+                        
+        $peserta->each(function ($item) use ($id) {
+            $item['exist'] = in_array($item->id_user, $id);
+        });
 
         return response()->json($peserta);
     }

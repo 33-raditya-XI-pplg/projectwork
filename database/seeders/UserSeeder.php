@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Faker\Factory as Faker;
+
 
 class UserSeeder extends Seeder
 {
@@ -206,5 +208,41 @@ class UserSeeder extends Seeder
 
             'created_by' => 0,
         ]);
+
+        for ($i=0;$i<5;$i++) {
+            $faker = Faker::create('id_ID');
+
+            User::updateOrCreate([
+                'nama_lengkap' => $faker->name(),
+                'email' => $faker->email(),
+                'level' => 'Pengguna',
+                'status'=> 'Aktif',
+                'password' => 'pengguna123',
+
+                'instansi_id'=> 3,
+
+                'tempat_lahir'=> $faker->state(),
+                'tgl_lahir'=> '2024-03-06',
+                'jenis_kelamin'=> 'Laki-Laki',
+                'nomor_induk'=> $faker->randomNumber(6),
+                'alamat'=> $faker->streetAddress(),
+                'alamat_kota'=> $faker->city(),
+                'no_telp' => $faker->phoneNumber(),
+
+                'nama_sekolah' => 'SMKN 1 Satelite',
+                'Jurusan'=> 'TKJ',
+                'Jenjang'=> 'Diploma 3',
+                'tahun_lulus'=> '2019',
+
+                'nama_perusahaan'=> 'Sumber Barokah',
+                'alamat_perusahaan'=> 'Jalan yang belok',
+                'alamat_kota_perusahaan' => 'Lumajang',
+                'jabatan_pekerjaan' => 'tura-turu',
+                'no_telp_perusahaan' => '123005555',
+
+                'created_by' => 0,
+
+            ]);
+        }
     }
 }
