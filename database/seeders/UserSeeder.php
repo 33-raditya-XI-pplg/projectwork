@@ -82,6 +82,30 @@ class UserSeeder extends Seeder
             'created_by' => 0,
         ]);
 
+        User::updateOrCreate([
+            'nama_lengkap' => 'Yogiswara',
+            'email' => 'penguji3@gmail.com',
+            'level' => 'Penguji',
+            'status'=> 'Aktif',
+            'password' => 'penguji123',
+
+            'instansi_id'=> 1,
+
+            'tempat_lahir'=> 'Malang',
+            'tgl_lahir'=> '2024-03-24',
+            'jenis_kelamin'=> 'Laki-Laki',
+
+            'alamat' => 'Jalan yang longsor',
+            'alamat_kota'=> 'Ambulu',
+            'no_telp'=> '08233107972',
+
+            'nomor_induk' => 2020101072,
+            'jabatan_penguji'=> 'Penguji Tingkat 16',
+            'type_penguji'=> 'Asesor Cadangan',
+
+            'created_by' => 0,
+        ]);
+
         // === Peserta / Pengguna ===
         User::updateOrCreate([
             'nama_lengkap' => 'Septinus Yanes Samberbori',

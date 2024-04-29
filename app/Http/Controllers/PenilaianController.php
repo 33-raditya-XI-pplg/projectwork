@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Event_Skema;
 use App\Models\Nilai_Peserta;
 
 use Illuminate\Http\Request;
@@ -54,6 +55,15 @@ class PenilaianController extends Controller
                     ->where('tb_event_skema.skema_id', $id)
                     ->get();
 
+        $data_penguji = Event_Skema::where('id_event_skema', $data_skema->value('id_event_skema'))
+            ->select('id_event_skema')
+            ->with(
+                ['event_skemaMenguji' => function($query) {
+                    $query->select('id_user', 'nama_lengkap'); 
+                }]
+            )
+            ->first();
+
         $data_sub_skema = DB::table('tb_event_skema')
                     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                     ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
@@ -89,6 +99,7 @@ class PenilaianController extends Controller
 
         return response()->json([
             'data_skema' => $data_skema, 
+            'data_penguji' => $data_penguji, 
             'data_sub_skema' => $data_sub_skema, 
             'data_nilai_peserta' => $data_nilai_peserta,
             'jumlahSubSkemaPerEvent' => $jumlahSubSkemaPerEvent

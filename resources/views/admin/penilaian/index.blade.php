@@ -8,20 +8,6 @@
         <div class="card-title mb-3 fw-semibold" style="font-size:18px">Pilih Event & Skema</div>
 
         <div class="d-flex flex-row mx-2">
-            <!-- <div class="card-header me-2 w-100 mx-1">
-                <select id="event_select" name="event_select" class="form-select w-100 btn btn-secondary py-2 w-100 rounded-3 text-white">
-                    <option disabled selected>Pilih Event</option>
-                    @foreach ($event as $row)
-                        <option value="{{ $row->id_event }}">{{ $row->nama_event }}</option>
-                    @endforeach                        
-                </select>
-            </div>
-            <div class="card-header me-2 w-100 mx-1 ">
-                <select id="skema_select" name="skema_select" class="form-select w-100 btn btn-secondary text-white py-2 w-100 rounded-3">
-                    <option hidden>Pilih Event Dahulu</option>
-                </select>
-            </div> -->
-            
             <div class="card-header me-2 w-100 mx-1">
                 <select id="event_select" name="event_select" class="chosen-select form-control">
                     <option hidden disabled selected>Pilih Event</option>
@@ -62,7 +48,7 @@
                                                 <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
                                                 <input type="text" class="form-control" id="tgl_mulai" placeholder="dd-mm-yyyy" disabled>
                                             </div>
-                                            <div class="form-check form-switch mb-3">
+                                            <div class="form-check form-switch mt-3">
                                                 <label class="form-check-label" for="status">Status</label>
                                                 <input class="form-check-input" type="checkbox" id="status" disabled>
                                             </div>
@@ -79,6 +65,21 @@
                                             <div class="mb-3">
                                                 <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
                                                 <input type="text" class="form-control" id="tgl_selesai" placeholder="dd-mm-yyyy" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="list_penguji" class="form-label">Daftar Penguji</label>
+                                                <ol id="list_penguji" class="list-group list-group-numbered">
+                                                    <!-- List Penguji Here -->
+                                                </ol>
+
+                                                <!-- <div id="buttonGroup">
+                                                    <button id="btnSelengkapnya" class="btn btn-primary mt-2">Selengkapnya</button>
+                                                    <button id="btnSedikit" class="btn btn-primary mt-2" style="display: none;">Tampilkan Sedikit</button>
+                                                </div> -->
+                                                <div id="buttonGroup">
+                                                    <a href="#" id="btnSelengkapnya" class="text-primary mt-2" style="display: none;">Tampilkan Banyak</a>
+                                                    <a href="#" id="btnSedikit" class="text-primary mt-2" style="display: none;">Tampilkan Sedikit</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>              
@@ -260,6 +261,7 @@
                     Swal.close();
                     if(response){
                         data_skema = response.data_skema[0];
+                        data_penguji = response.data_penguji;
                         data_sub_skema = response.data_sub_skema;
                         data_nilai_peserta = response.data_nilai_peserta;
 
@@ -275,6 +277,56 @@
                         $('#tgl_mulai').val(formatDate(data_skema.tgl_mulai));
                         $('#tgl_selesai').val(formatDate(data_skema.tgl_berakhir));
 
+                        var listPenguji = document.getElementById('list_penguji');
+                        var btnSelengkapnya = document.getElementById('btnSelengkapnya');
+                        var btnSedikit = document.getElementById('btnSedikit');
+
+                        function renderPenguji(names) {
+                            listPenguji.innerHTML = ''; // Bersihkan isi list
+
+                            names.forEach(function(name) {
+                                var listItem = document.createElement('li');
+                                listItem.textContent = name;
+                                listItem.classList.add('list-group-item');
+                                listPenguji.appendChild(listItem);
+                            });
+                        }
+
+                        // Tampilkan hanya 2 penguji awal
+                        var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(function(penguji) {
+                            return penguji.nama_lengkap;
+                        });
+                        renderPenguji(initialPenguji);
+
+                        // Tentukan apakah tombol "Selengkapnya" perlu ditampilkan
+                        if (data_penguji.event_skema_menguji.length <= 2) {
+                            btnSelengkapnya.style.display = 'none';
+                        } else {
+                            btnSelengkapnya.style.display = '';
+                        }
+
+                        // Tambahkan event listener untuk tombol Selengkapnya
+                        btnSelengkapnya.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var allPenguji = data_penguji.event_skema_menguji.map(function(penguji) {
+                                return penguji.nama_lengkap;
+                            });
+                            renderPenguji(allPenguji);
+                            btnSelengkapnya.style.display = 'none'; // Sembunyikan tombol "Selengkapnya"
+                            btnSedikit.style.display = 'inline'; // Tampilkan tombol "Tampilkan Sedikit"
+                        });
+
+                        // Tambahkan event listener untuk tombol Sedikit
+                        btnSedikit.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(function(penguji) {
+                                return penguji.nama_lengkap;
+                            });
+                            renderPenguji(initialPenguji);
+                            btnSedikit.style.display = 'none'; // Sembunyikan tombol "Tampilkan Sedikit"
+                            btnSelengkapnya.style.display = 'inline'; // Tampilkan tombol "Selengkapnya"
+                        });
+                        
                         if (data_skema.status === "Aktif") {
                             $('#status').prop('checked', true);
                         } else {
@@ -354,7 +406,7 @@
 
                             $('#skema_select').empty();
                             $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>'); 
-                            console.log(eventID)
+                            
                             $.each(data, function(key, row){
                                 $('select[id="skema_select"]').append('<option value="'+ row.id_skema +'">' + row.nama_skema+ '</option>');
                             });
