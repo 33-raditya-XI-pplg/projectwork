@@ -72,10 +72,6 @@
                                                     <!-- List Penguji Here -->
                                                 </ol>
 
-                                                <!-- <div id="buttonGroup">
-                                                    <button id="btnSelengkapnya" class="btn btn-primary mt-2">Selengkapnya</button>
-                                                    <button id="btnSedikit" class="btn btn-primary mt-2" style="display: none;">Tampilkan Sedikit</button>
-                                                </div> -->
                                                 <div id="buttonGroup">
                                                     <a href="#" id="btnSelengkapnya" class="text-primary mt-2" style="display: none;">Tampilkan Banyak</a>
                                                     <a href="#" id="btnSedikit" class="text-primary mt-2" style="display: none;">Tampilkan Sedikit</a>
@@ -202,17 +198,14 @@
         var data_skema;
         var data_sub_skema;
 
+        // round Nilai function
         function formatNumber(value) {
-            // Pastikan value adalah tipe number, konversi jika perlu
             var num = parseFloat(value);
             if (isNaN(num)) {
-                return 'Invalid input'; // atau Anda bisa menangani cara lain jika input tidak valid
+                return '0'; 
             }
-
-            // Menggunakan toFixed(1) untuk menghasilkan satu desimal
             var fixedValue = num.toFixed(1);
 
-            // Menghilangkan desimal tidak perlu jika angka desimalnya adalah 0
             return fixedValue.endsWith('.0') ? parseInt(fixedValue) : fixedValue;
         }
 

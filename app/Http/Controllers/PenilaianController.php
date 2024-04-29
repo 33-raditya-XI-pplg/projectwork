@@ -140,6 +140,13 @@ class PenilaianController extends Controller
                                 ->where('sub_skema_id', $subSkemaID)
                                 ->where('event_skema_id', $eventSkemaID)
                                 ->first();
+                
+                if ($nilai > 100) {
+                    $nilai = 100;
+                }
+                elseif ($nilai < 0) {
+                    $nilai = 0;
+                }
 
                 if ($nilaiExist) {
                     // Jika nilai sudah ada, update
