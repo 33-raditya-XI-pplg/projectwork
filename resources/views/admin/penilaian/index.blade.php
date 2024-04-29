@@ -8,7 +8,7 @@
         <div class="card-title mb-3 fw-semibold" style="font-size:18px">Pilih Event & Skema</div>
 
         <div class="d-flex flex-row mx-2">
-        <div class="card-header me-2 w-100 mx-1">
+            <!-- <div class="card-header me-2 w-100 mx-1">
                 <select id="event_select" name="event_select" class="form-select w-100 btn btn-secondary py-2 w-100 rounded-3 text-white">
                     <option disabled selected>Pilih Event</option>
                     @foreach ($event as $row)
@@ -19,7 +19,20 @@
             <div class="card-header me-2 w-100 mx-1 ">
                 <select id="skema_select" name="skema_select" class="form-select w-100 btn btn-secondary text-white py-2 w-100 rounded-3">
                     <option hidden>Pilih Event Dahulu</option>
-                    
+                </select>
+            </div> -->
+            
+            <div class="card-header me-2 w-100 mx-1">
+                <select id="event_select" name="event_select" class="chosen-select form-control">
+                    <option hidden disabled selected>Pilih Event</option>
+                    @foreach ($event as $row)
+                        <option value="{{ $row->id_event }}">{{ $row->nama_event }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="card-header me-2 w-100 mx-1">
+                <select id="skema_select" name="skema_select" class="chosen-select form-control">
+                    <option hidden disabled selected>Pilih Event Dahulu</option>
                 </select>
             </div>
             <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1" disabled>Submit</button>
@@ -60,7 +73,7 @@
                                                 <input type="text" class="form-control" id="jenis_event" placeholder="kosong" disabled>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="tempat_skema" class="form-label">Tempat</label>
+                                                <label for="tempat_skema" class="form-label">TUK</label>
                                                 <input type="text" class="form-control" id="tempat_skema" placeholder="kosong" disabled>
                                             </div>
                                             <div class="mb-3">
@@ -176,6 +189,8 @@
 
 @push('script')
 <script>
+    $(".chosen-select").chosen()
+
     $(document).ready(function() {
         var skemaID;
         var event_skemaID
@@ -338,12 +353,13 @@
                             var data = response.data;
 
                             $('#skema_select').empty();
-                            $('#skema_select').append('<option hidden>Pilih Skema</option>'); 
-
+                            $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>'); 
+                            console.log(eventID)
                             $.each(data, function(key, row){
                                 $('select[id="skema_select"]').append('<option value="'+ row.id_skema +'">' + row.nama_skema+ '</option>');
                             });
-                    
+
+                            $('#skema_select').trigger("chosen:updated");
                         }
                     }
                 });
