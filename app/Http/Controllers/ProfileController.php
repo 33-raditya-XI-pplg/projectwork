@@ -22,7 +22,8 @@ class ProfileController extends Controller
         return view('profile.index', compact('data'));
     }
 
-    public function edit($id) {
+    public function edit() {
+        $id = Auth::user()->id_user;
         $instansi = Instansi::get();
         $user = User::findOrFail($id);
 

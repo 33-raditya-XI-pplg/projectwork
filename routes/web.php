@@ -75,7 +75,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
         Route::resource('/rentang-nilai', RentangNilaiController::class);
     });
     Route::resource('sertifikat', SertifikatController::class);
-    Route::resource('profile', ProfileController::class);
+    Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
     // jquery
     Route::get('/peserta/instansi/{instansi}/event-skema/{skema}', [EventSkemaController::class, 'search'])->name('getPeserta');
