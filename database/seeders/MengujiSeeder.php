@@ -31,6 +31,18 @@ class MengujiSeeder extends Seeder
                 'event_skema_id' => 1,
 
                 'created_by' => 0,
+            ],
+            [
+                'user_id' => 2,
+                'event_skema_id' => 2,
+
+                'created_by' => 0,
+            ],
+            [
+                'user_id' => 3,
+                'event_skema_id' => 2,
+
+                'created_by' => 0,
             ]
         ]);
     }

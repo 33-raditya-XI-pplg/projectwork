@@ -178,7 +178,7 @@
                 <button type="submit" class="btn btn-success rounded-3 text-white" 
                     id="store_nilai_btn" value="0">Simpan</button>
             </div>
-            </div>
+        </div>
     </div>
 </div>
             
@@ -191,10 +191,9 @@
     $(document).ready(function() {
         var skemaID;
         var event_skemaID
-
         var pesertaID;
-        var data_nilai_peserta;
 
+        var data_nilai_peserta;
         var data_skema;
         var data_sub_skema;
 
@@ -253,12 +252,12 @@
                 success: function(response) {
                     Swal.close();
                     if(response){
-                        data_skema = response.data_skema[0];
+                        data_skema = response.data_skema;
                         data_penguji = response.data_penguji;
                         data_sub_skema = response.data_sub_skema;
                         data_nilai_peserta = response.data_nilai_peserta;
 
-                        var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent[0];
+                        var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent;
                         
                         // Input Disabled 
                         $('#nama_event').val(data_skema.nama_event);
@@ -275,7 +274,7 @@
                         var btnSedikit = document.getElementById('btnSedikit');
 
                         function renderPenguji(names) {
-                            listPenguji.innerHTML = ''; // Bersihkan isi list
+                            listPenguji.innerHTML = ''; 
 
                             names.forEach(function(name) {
                                 var listItem = document.createElement('li');
@@ -305,8 +304,8 @@
                                 return penguji.nama_lengkap;
                             });
                             renderPenguji(allPenguji);
-                            btnSelengkapnya.style.display = 'none'; // Sembunyikan tombol "Selengkapnya"
-                            btnSedikit.style.display = 'inline'; // Tampilkan tombol "Tampilkan Sedikit"
+                            btnSelengkapnya.style.display = 'none'; 
+                            btnSedikit.style.display = 'inline'; 
                         });
 
                         // Tambahkan event listener untuk tombol Sedikit
@@ -316,8 +315,8 @@
                                 return penguji.nama_lengkap;
                             });
                             renderPenguji(initialPenguji);
-                            btnSedikit.style.display = 'none'; // Sembunyikan tombol "Tampilkan Sedikit"
-                            btnSelengkapnya.style.display = 'inline'; // Tampilkan tombol "Selengkapnya"
+                            btnSedikit.style.display = 'none'; 
+                            btnSelengkapnya.style.display = 'inline'; 
                         });
                         
                         if (data_skema.status === "Aktif") {
@@ -329,6 +328,7 @@
                         // Table daftar peserta
                         $('#example').DataTable().destroy();
                         $('tbody').html("");
+                        $('#dropdown-menu').html("");
 
                         $.each(data_nilai_peserta, function(index, row) {
                             event_skemaID = row.id_event_skema;
@@ -336,11 +336,27 @@
                             
                             // Kondisi -> Button aksi -- tabel nilai
                             var buttonAction;
-                            row.banyak_nilai != null ?
-                                buttonAction = '<button value="' + row.id_peserta + '" id="edit_nilai_btn" class="btn btn-warning rounded btn-sm">Edit</button>\
-                                    <button value="'+row.id_peserta+'" id="delete_nilai_btn" class="btn btn-danger rounded btn-sm">Delete</button>' :
-                                buttonAction = '<button value="' + row.id_peserta + '" id="create_nilai_btn" class="btn btn-success rounded btn-sm">Tambah</button>';
-
+                            if (row.banyak_nilai != null) {
+                                buttonAction = 
+                                '<li>\
+                                    <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
+                                        <i class="fa-regular fa-pen-to-square"></i>\
+                                     Edit</a>\
+                                </li>\
+                                <li>\
+                                    <a href="#" class="dropdown-item text-danger delete_nilai_btn" data-id="' + row.id_peserta + '">\
+                                        <i class="fa-regular fa-trash-can pe-none"></i>\
+                                     Delete</a>\
+                                </li>'
+                            } else {
+                                buttonAction = 
+                                '<li>\
+                                    <a href="#" class="dropdown-item text-primary create_nilai_btn" data-id="' + row.id_peserta + '">\
+                                        <i class="fa-regular fa-pen-to-square"></i>\
+                                     Tambah</a>\
+                                </li>'
+                            }
+                            
                             // Kondisi -> Keterangan nilai kosong -- tabel nilai
                             var banyakData, nilaiData;
                             if (row.banyak_nilai_nol == 0) {
@@ -362,7 +378,15 @@
                                 <td>' + nilaiData +'</td>\
                                 <td>' + formatDate(data_skema.tgl_mulai) + '</td>\
                                 <td>\
-                                    ' + buttonAction + ' \
+                                    <div class="dropdown">\
+                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
+                                            <i class="fa-solid fa-bars"></i>\
+                                        </a>\
+                                        <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                                            '+ buttonAction +'\
+                                        </ul>\
+                                    </div>\
                                 </td>\
                                 </tr>'
                             );
@@ -438,8 +462,9 @@
         });
 
         // Create Modal Trigger
-        $(document).on('click', '#create_nilai_btn', function (){
-            pesertaID = $(this).val();
+        $(document).on('click', '.create_nilai_btn', function (e){
+            e.preventDefault()
+            pesertaID = $(this).data('id')
 
             $.ajax({
                 url: '/penilaian/fetchPesertaData/' + pesertaID,
@@ -450,11 +475,12 @@
                     var data_peserta_create = response.data_peserta;
                     
                     $('#createNilaiModal').modal('show');
-                    $('#create_nama_peserta').val(data_peserta_create[0].nama_lengkap);
+                    $('#create_nama_peserta').val(data_peserta_create.nama_lengkap);
                     $('#create_nama_skema').val(data_skema.nama_skema);
 
                     $('#nilai-sub-skema-wrapper').html("")
                     $('.nilai_sub_skema').val('')
+
                     $.each(data_sub_skema, function(index, row) {
                         $('#nilai-sub-skema-wrapper').append(
                             '<div class="px-1 mb-3 row">\
@@ -477,8 +503,9 @@
         });
 
         // Edit Modal Trigger
-        $(document).on('click', '#edit_nilai_btn', function (){
-            pesertaID = $(this).val();
+        $(document).on('click', '.edit_nilai_btn', function (e){
+            e.preventDefault()
+            pesertaID = $(this).data('id')
 
             $.ajax({
                 url: '/penilaian/fetchNilaiData/' + pesertaID,
@@ -517,14 +544,11 @@
 
         // Store function -- to store and update
         $(document).on('click', '#store_nilai_btn', function () {
-            var createdBy = $('#created_by').val();
             var btnIdentifier = $(this).val();
+            var createdBy = $('#created_by').val();
 
             var create_nilai_data = [];
             var create_sub_skemaID = [];
-
-            // console.log(create_nilai_data)
-            // console.log(create_sub_skemaID)
 
             if (btnIdentifier != 0) {
                 $('.create_id_sub_skema').each(function() {
@@ -547,9 +571,6 @@
                     create_nilai_data.push(nilai);
                 });
             }
-
-            // console.log(create_nilai_data)
-            // console.log(create_sub_skemaID)
             
             // looping for Create Associative Array
             var nilaiSubSkemaArray = {};
@@ -597,17 +618,18 @@
         })
         
         // Delete function
-        $(document).on('click', '#delete_nilai_btn', function() {
-            var pesertaId = $(this).val();
+        $(document).on('click', '.delete_nilai_btn', function(e) {
+            e.preventDefault()
+            pesertaID = $(this).data('id')
 
             confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/penilaian/destroyNilaiData/' + pesertaId,
+                        url: '/penilaian/destroyNilaiData/' + pesertaID,
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}',
-                            pesertaId: pesertaId
+                            pesertaID: pesertaID
                         },
                         success: function(response) {
                             console.log('Nilai peserta berhasil dihapus');

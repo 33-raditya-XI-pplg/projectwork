@@ -62,10 +62,10 @@ class PenilaianController extends Controller
                              'tb_event.tgl_mulai', 'tb_event.tgl_berakhir', 'tb_event.status', 
                              'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema', 'tb_tempat.nama_tempat')
                     ->where('tb_event_skema.skema_id', $id)
-                    ->get();
+                    ->first();
 
 
-        $data_penguji = Event_Skema::where('id_event_skema', $data_skema->value('id_event_skema'))
+        $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
             ->select('id_event_skema')
             ->with(
                 ['event_skemaMenguji' => function($query) {
@@ -79,7 +79,7 @@ class PenilaianController extends Controller
                     ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
 
                     ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
-                    ->select('tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub')
+                    ->select('tb_event_skema.id_event_skema', 'tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub')
                     ->where('tb_event_skema.skema_id', $id)
                     ->get();
 
@@ -115,7 +115,7 @@ class PenilaianController extends Controller
                     ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_peserta.id_peserta', 
                              'tb_user.nama_lengkap', 'nilai_stats.banyak_nilai', 'nilai_stats.banyak_nilai_nol', 
                              'nilai_stats.total_nilai', 'nilai_stats.avg_nilai')
-                    ->where('tb_peserta.event_skema_id', $data_skema->value('id_event_skema'))
+                    ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
                     ->orderBy('tb_user.id_user', 'asc')
                     ->get();
 
@@ -127,7 +127,7 @@ class PenilaianController extends Controller
                     )
                     ->groupBy('es.id_event_skema', 's.nama_skema')
                     ->where('es.skema_id', $id)
-                    ->get();
+                    ->first();
 
         return response()->json([
             'data_skema' => $data_skema, 
@@ -144,7 +144,7 @@ class PenilaianController extends Controller
                     ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
                     ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap')
                     ->where('tb_peserta.id_peserta', $id)
-                    ->get();
+                    ->first();
 
         return response()->json([
             'data_peserta' => $data_peserta
@@ -230,10 +230,10 @@ class PenilaianController extends Controller
 
     public function destroyNilaiData(Request $request)
     {
-        $pesertaId = $request->pesertaId;
+        $pesertaID = $request->pesertaID;
 
         try {
-            Nilai_Peserta::where('peserta_id', $pesertaId)->delete();
+            Nilai_Peserta::where('peserta_id', $pesertaID)->delete();
 
             return response()->json(['message' => 'Nilai peserta berhasil dihapus'], 200);
         } catch (\Exception $e) {
