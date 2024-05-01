@@ -234,6 +234,22 @@
             return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
         }
 
+        // format Timestamps function
+        function formatTimestamps(dateString) {
+            let dateOnly = new Date(dateString).toISOString().slice(0, 10);
+
+            var dateParts = dateOnly.split("-");
+            var year = dateParts[0];
+            var month = dateParts[1];
+            var day = dateParts[2];
+
+            var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
+        }
+
+
         // fetch Detail Data function
         function fetchDetailData(skemaID) {
             Swal.fire({
@@ -363,15 +379,30 @@
                             if (row.banyak_nilai_nol == 0) {
                                 banyakData = 'Nilai Lengkap';
                                 nilaiData = formatNumber(row.avg_nilai)
-                                inisialNilaiData = row.keterangan
-                            } else if (row.banyak_nilai_nol == null) {
+
+                                row.keterangan != "Kompeten" ?
+                                    inisialNilaiData = '<span style="color: red; font-weight: bold;">' + row.keterangan + '</span>' :
+                                    inisialNilaiData = '<span style="color: green; font-weight: bold;">' + row.keterangan + '</span>'; 
+
+                                row.updated_at != null ? 
+                                    timestampsNilaiData = formatTimestamps(row.updated_at) :
+                                    timestampsNilaiData = formatTimestamps(row.created_at);
+                            } 
+                            else if (row.banyak_nilai_nol == null) {
                                 banyakData = '-';
                                 nilaiData = '-'
                                 inisialNilaiData = '-'
-                            } else {
+                                timestampsNilaiData = formatTimestamps(row.created_at)
+                            } 
+                            else {
                                 banyakData = '<span style="color: red; font-weight: bold;">Nilai kurang =  ' + row.banyak_nilai_nol + '</span>';
                                 nilaiData = '<span style="color: red; font-weight: bold;"> ' + formatNumber(row.avg_nilai) + '</span>'
                                 inisialNilaiData = '<span style="color: red; font-weight: bold;">Nilai Kurang wir</span>'
+                                
+                                row.updated_at != null ? 
+                                    timestampsNilaiData = '<span style="color: red; font-weight: bold;">'+ formatTimestamps(row.updated_at) +'</span>' :
+                                    timestampsNilaiData = '<span style="color: red; font-weight: bold;">'+ formatTimestamps(row.created_at) +'</span>';
+                                    timestampsNilaiData = formatTimestamps(row.created_at);
                             }
 
                             $('tbody').append(
@@ -381,9 +412,9 @@
                                 <td>' + banyakData +'</td>\
                                 <td>' + nilaiData +'</td>\
                                 <td>' + inisialNilaiData +'</td>\
-                                <td>' + formatDate(data_skema.tgl_mulai) + '</td>\
-                                <td class="text-center">\
-                                    <div class="dropdown">\
+                                <td>' + timestampsNilaiData + '</td>\
+                                <td>\
+                                    <div class="dropdown px-3">\
                                         <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
                                             id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
                                             <i class="fa-solid fa-bars"></i>\

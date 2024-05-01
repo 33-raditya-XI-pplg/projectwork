@@ -64,42 +64,51 @@ class PenilaianController extends Controller
 
         $eventSkemaId = $data_skema->id_event_skema;
         $data_nilai_peserta = DB::table('tb_peserta')
-                        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                        ->leftJoinSub(function ($query) {
-                            $query->from('tb_nilai_peserta')
-                                ->select('peserta_id')
-                                ->selectRaw('COUNT(nilai) as banyak_nilai')
-                                ->selectRaw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol')
-                                ->selectRaw('SUM(nilai) as total_nilai')
-                                ->selectRaw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
-                                ->groupBy('peserta_id');
-                        }, 'nilai_stats', function ($join) {
-                            $join->on('tb_peserta.id_peserta', '=', 'nilai_stats.peserta_id');
-                        })
-                        ->leftJoinSub(function ($query) use ($eventSkemaId) {
-                            $query->from('tb_rentang_nilai')
-                                ->join('tb_event_skema_rentang_nilai as tb_es_rn', 'tb_rentang_nilai.id_rentang_nilai', '=', 'tb_es_rn.rentang_nilai_id')
-                                ->select('tb_es_rn.event_skema_id', 'tb_es_rn.rentang_nilai_id', 
-                                         'tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai', 'tb_rentang_nilai.keterangan',
-                                         'tb_rentang_nilai.rentang_atas', 'tb_rentang_nilai.rentang_bawah'
-                                )
-                                ->where('tb_es_rn.event_skema_id', $eventSkemaId);
-                        }, 'inisial_nilai', function ($join) {
-                            $join->on('nilai_stats.avg_nilai', '>=', 'inisial_nilai.rentang_bawah')
-                                 ->on('nilai_stats.avg_nilai', '<=', 'inisial_nilai.rentang_atas');
-                        })
-                        ->select('tb_event_skema.id_event_skema', 
-                                 'tb_user.id_user', 'tb_peserta.id_peserta', 'tb_user.nama_lengkap', 
-                                 'nilai_stats.banyak_nilai', 'nilai_stats.banyak_nilai_nol', 
-                                 'nilai_stats.total_nilai', 'nilai_stats.avg_nilai',
-                                 'inisial_nilai.inisial_rentang_nilai', 'inisial_nilai.keterangan', 
-                                 'inisial_nilai.nama_konversi_nilai'
-                                )
-                        ->where('tb_peserta.event_skema_id', $eventSkemaId)
-                        ->orderBy('tb_user.id_user', 'asc')
-                        ->get();
+                            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+                            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                            ->leftJoinSub(function ($query) {
+                                $query->from('tb_nilai_peserta')
+                                    ->select('peserta_id',
+                                        DB::raw('COUNT(nilai) as banyak_nilai'),
+                                        DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
+                                        DB::raw('SUM(nilai) as total_nilai'),
+                                        DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
+                                    )
+                                    ->groupBy('peserta_id');
+                            }, 'nilai_stats', function ($join) {
+                                $join->on('tb_peserta.id_peserta', '=', 'nilai_stats.peserta_id');
+                            })
+                            ->leftJoinSub(function ($query) {
+                                $query->from('tb_nilai_peserta')
+                                    ->select('peserta_id', 
+                                        DB::raw('MAX(created_at) as created_at'), 
+                                        DB::raw('MAX(updated_at) as updated_at')
+                                    )
+                                    ->groupBy('peserta_id');
+                            }, 'nilai_timestamp', function ($join) {
+                                $join->on('nilai_stats.peserta_id', '=', 'nilai_timestamp.peserta_id');
+                            })
+                            ->leftJoinSub(function ($query) use ($eventSkemaId) {
+                                $query->from('tb_rentang_nilai')
+                                    ->join('tb_event_skema_rentang_nilai', 'tb_rentang_nilai.id_rentang_nilai', '=', 'tb_event_skema_rentang_nilai.rentang_nilai_id')
+                                    ->select('tb_event_skema_rentang_nilai.event_skema_id', 'tb_event_skema_rentang_nilai.rentang_nilai_id', 
+                                            'tb_rentang_nilai.keterangan', 'tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai',
+                                            'tb_rentang_nilai.rentang_atas', 'tb_rentang_nilai.rentang_bawah',
+                                    )
+                                    ->where('tb_event_skema_rentang_nilai.event_skema_id', $eventSkemaId);
+                            }, 'inisial_nilai', function ($join) {
+                                $join->on('nilai_stats.avg_nilai', '>=', 'inisial_nilai.rentang_bawah')
+                                    ->on('nilai_stats.avg_nilai', '<=', 'inisial_nilai.rentang_atas');
+                            })
+                            ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_peserta.id_peserta', 
+                                    'tb_user.nama_lengkap', 'nilai_stats.banyak_nilai', 'nilai_stats.banyak_nilai_nol', 
+                                    'nilai_stats.total_nilai', 'nilai_stats.avg_nilai',
+                                    'inisial_nilai.keterangan', 'inisial_nilai.inisial_rentang_nilai', 'inisial_nilai.nama_konversi_nilai',
+                                    'nilai_timestamp.created_at', 'nilai_timestamp.updated_at')
+                            ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
+                            ->orderBy('tb_user.id_user', 'asc')
+                            ->get();
 
         $jumlahSubSkemaPerEvent = DB::table('tb_event_skema as es')
                         ->join('tb_skema as s', 'es.skema_id', '=', 's.id_skema')
