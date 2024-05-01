@@ -94,6 +94,7 @@
                         <th scope="col">Nilai Peserta 
                             <span style="color: grey; font-size: 15px;">avg</span>
                         </th>
+                        <th scope="col">Keterangan</th>
                         <th scope="col">Tanggal</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
@@ -362,12 +363,15 @@
                             if (row.banyak_nilai_nol == 0) {
                                 banyakData = 'Nilai Lengkap';
                                 nilaiData = formatNumber(row.avg_nilai)
+                                inisialNilaiData = row.keterangan
                             } else if (row.banyak_nilai_nol == null) {
-                                banyakData = 'Nilai Kosong';
-                                nilaiData = 'Nilai Kosong'
+                                banyakData = '-';
+                                nilaiData = '-'
+                                inisialNilaiData = '-'
                             } else {
-                                banyakData = 'Nilai kurang = <span style="color: red; font-weight: bold;"> ' + row.banyak_nilai_nol + '</span>';
+                                banyakData = '<span style="color: red; font-weight: bold;">Nilai kurang =  ' + row.banyak_nilai_nol + '</span>';
                                 nilaiData = '<span style="color: red; font-weight: bold;"> ' + formatNumber(row.avg_nilai) + '</span>'
+                                inisialNilaiData = '<span style="color: red; font-weight: bold;">Nilai Kurang wir</span>'
                             }
 
                             $('tbody').append(
@@ -376,8 +380,9 @@
                                 <td>' + row.nama_lengkap + '</td>\
                                 <td>' + banyakData +'</td>\
                                 <td>' + nilaiData +'</td>\
+                                <td>' + inisialNilaiData +'</td>\
                                 <td>' + formatDate(data_skema.tgl_mulai) + '</td>\
-                                <td>\
+                                <td class="text-center">\
                                     <div class="dropdown">\
                                         <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
                                             id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\

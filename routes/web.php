@@ -80,6 +80,8 @@ Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchE
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
 Route::get('penilaian/fetchNilaiData/{id}', [PenilaianController::class, 'fetchNilaiData']);
+Route::get('penilaian/fetchInisialData', [PenilaianController::class, 'fetchInisialData']);
+
 Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
 Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'destroyNilaiData']);
 

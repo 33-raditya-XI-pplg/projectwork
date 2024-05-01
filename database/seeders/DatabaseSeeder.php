@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             EventSeeder::class,
             EventSkemaSeeder::class,
             PesertaSeeder::class,
-            MengujiSeeder::class
+            MengujiSeeder::class,
+            EventSkemaRentangNilaiSeeder::class
         ]);
     }
 }
