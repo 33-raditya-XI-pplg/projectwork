@@ -15,12 +15,6 @@ class PesertaSeeder extends Seeder
     {
         DB::table('tb_peserta')->insert([
             [
-                'user_id' => 5,
-                'event_skema_id' => 1,
-
-                'created_by' => 0,
-            ],
-            [
                 'user_id' => 6,
                 'event_skema_id' => 1,
 
@@ -39,13 +33,19 @@ class PesertaSeeder extends Seeder
                 'created_by' => 0,
             ],
             [
-                'user_id' => 5,
-                'event_skema_id' => 2,
+                'user_id' => 9,
+                'event_skema_id' => 1,
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 6,
+                'event_skema_id' => 2,
+
+                'created_by' => 0,
+            ],
+            [
+                'user_id' => 7,
                 'event_skema_id' => 2,
 
                 'created_by' => 0,

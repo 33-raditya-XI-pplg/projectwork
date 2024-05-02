@@ -33,13 +33,13 @@ class MengujiSeeder extends Seeder
                 'created_by' => 0,
             ],
             [
-                'user_id' => 2,
+                'user_id' => 4,
                 'event_skema_id' => 2,
 
                 'created_by' => 0,
             ],
             [
-                'user_id' => 3,
+                'user_id' => 5,
                 'event_skema_id' => 2,
 
                 'created_by' => 0,

@@ -102,7 +102,31 @@ class UserSeeder extends Seeder
             'no_telp'=> '08233107972',
 
             'nomor_induk' => 2020101072,
-            'jabatan_penguji'=> 'Penguji Tingkat 16',
+            'jabatan_penguji'=> 'Penguji Tingkat 2',
+            'type_penguji'=> 'Asesor Cadangan',
+
+            'created_by' => 0,
+        ]);
+
+        User::updateOrCreate([
+            'nama_lengkap' => 'Danu Nugraha',
+            'email' => 'penguji4@gmail.com',
+            'level' => 'Penguji',
+            'status'=> 'Aktif',
+            'password' => 'penguji123',
+
+            'instansi_id'=> 1,
+
+            'tempat_lahir'=> 'Patrang',
+            'tgl_lahir'=> '2024-07-09',
+            'jenis_kelamin'=> 'Laki-Laki',
+
+            'alamat' => 'Jalan tanpa nama',
+            'alamat_kota'=> 'Tegal Gede',
+            'no_telp'=> '08233107973',
+
+            'nomor_induk' => 2020101073,
+            'jabatan_penguji'=> 'Penguji Tingkat 2',
             'type_penguji'=> 'Asesor Cadangan',
 
             'created_by' => 0,
