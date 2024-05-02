@@ -17,42 +17,36 @@ class PesertaSeeder extends Seeder
             [
                 'user_id' => 5,
                 'event_skema_id' => 1,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 6,
                 'event_skema_id' => 1,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 7,
                 'event_skema_id' => 1,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 8,
                 'event_skema_id' => 1,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 5,
                 'event_skema_id' => 2,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 6,
                 'event_skema_id' => 2,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ]
