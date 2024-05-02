@@ -33,7 +33,8 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                         <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                 data-bs-target="#edit{{ $row->id_user }}"><i
-                                                    class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                                    class="fa-regular fa-pen-to-square"></i> Edit</a>
+                                        </li>
                                         <li><a href="{{ route('penguji.destroy', $row->id_user) }}" class="dropdown-item text-danger"
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>

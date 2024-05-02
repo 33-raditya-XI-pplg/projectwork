@@ -7,7 +7,7 @@
             <table id="example" class="table">
                 <thead class="fw-normal">
                     <th>No</th>
-                    <th class="w-75" scope="col">Nama Skema</th>
+                    <th scope="col" class="w-75">Nama Skema</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
                 </thead>
@@ -25,12 +25,11 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-info" href="{{ route('skema.edit', $row->id_skema) }}">
+                                        <li><a href="{{ route('skema.edit', $row->id_skema) }}" class="dropdown-item text-info" >
                                             <i class="fa-regular fa-pen-to-square"></i> Edit</a>
                                         </li>
-                                        <li><a href="{{ route('skema.destroy', $row->id_skema) }}" class="dropdown-item text-danger"
-                                                data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                                Delete</a>
+                                        <li><a href="{{ route('skema.destroy', $row->id_skema) }}" class="dropdown-item text-danger" data-confirm-delete="true">
+                                            <i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
                                         </li>
                                     </ul>
                                 </div>

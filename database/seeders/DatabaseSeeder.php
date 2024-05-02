@@ -27,7 +27,9 @@ class DatabaseSeeder extends Seeder
             TtdSeeder::class,
             EventSeeder::class,
             EventSkemaSeeder::class,
-            DaftarPesertaSeeder::class
+            PesertaSeeder::class,
+            MengujiSeeder::class,
+            EventSkemaRentangNilaiSeeder::class
         ]);
     }
 }

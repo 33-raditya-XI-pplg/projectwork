@@ -10,14 +10,14 @@ return new class extends Migration
      * Run the migrations.
      * 
      * ====PIVOT TABLE====
-     * tb_event_skema to tb_rentang_nilai
+     * tb_user to tb_event_skema
      */
     public function up() 
     {
-        Schema::create('tb_event_skema_rentang_nilai', function (Blueprint $table) {
-            $table->id('id_event_skema_rentang_nilai');
+        Schema::create('tb_peserta', function (Blueprint $table) {
+            $table->id('id_peserta');
             // Foreign Key
-            $table->foreignId('rentang_nilai_id')->constrained('tb_rentang_nilai', 'id_rentang_nilai');
+            $table->foreignId('user_id')->constrained('tb_user', 'id_user');
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
                   ->onDelete('cascade');
 
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tb_event_skema_rentang_nilai');
+        Schema::dropIfExists('tb_peserta');
     }
 };

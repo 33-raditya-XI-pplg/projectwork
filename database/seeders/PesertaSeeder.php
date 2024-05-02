@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DaftarPesertaSeeder extends Seeder
+class PesertaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,37 +15,44 @@ class DaftarPesertaSeeder extends Seeder
     {
         DB::table('tb_peserta')->insert([
             [
-                'user_id' => 4,
-                'event_skema_id' => 1,
-                // 'status' => 'Aktif',
-
-                'created_by' => 0,
-            ],
-            [
                 'user_id' => 5,
                 'event_skema_id' => 1,
-                // 'status' => 'Aktif',
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 6,
                 'event_skema_id' => 1,
-                // 'status' => 'Aktif',
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
-                'user_id' => 4,
-                'event_skema_id' => 2,
-                // 'status' => 'Aktif',
+                'user_id' => 7,
+                'event_skema_id' => 1,
+                'status' => 'Aktif',
+
+                'created_by' => 0,
+            ],
+            [
+                'user_id' => 8,
+                'event_skema_id' => 1,
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'user_id' => 5,
                 'event_skema_id' => 2,
-                // 'status' => 'Aktif',
+                'status' => 'Aktif',
+
+                'created_by' => 0,
+            ],
+            [
+                'user_id' => 6,
+                'event_skema_id' => 2,
+                'status' => 'Aktif',
 
                 'created_by' => 0,
             ]

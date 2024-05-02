@@ -63,7 +63,7 @@
                         @php
                             $menu = request()->segment(count(request()->segments()));
                         @endphp
-                        @if (in_array($menu, ['dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat', !ctype_alpha($menu)]))
+                        @if (in_array($menu, ['dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat']))
                             <button class="btn btn-primary rounded" id="add">+ Tambah</button>
                         @else
                             <button class="btn btn-primary rounded" data-bs-toggle="modal" data-bs-target="#add">+
