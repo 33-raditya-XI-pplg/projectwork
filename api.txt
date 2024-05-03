@@ -1,0 +1,2 @@
+https://sertifikasi.mascitra.cloud/api/skema
+https://sertifikasi.mascitra.cloud/api/event

@@ -18,6 +18,6 @@ class Skema extends Model
     }
     public function skemaSub_Skema() // PK One-to-Many dengan tb_sub_skema
     {
-        return $this->hasMany(Sub_Skema::class, 'sub_skema_id', 'id_sub_skema');
+        return $this->hasMany(Sub_Skema::class, 'skema_id');
     }
 }
