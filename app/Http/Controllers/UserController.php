@@ -23,6 +23,7 @@ class UserController extends Controller
     }
 
     public function store(Request $request) {
+        dd($request);
         if (!$request->has('status')) {
             $request->merge([
             'status' => 'Nonaktif'

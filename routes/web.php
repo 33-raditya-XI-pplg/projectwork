@@ -83,7 +83,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
 
 });
 
-// AJAX Request
+// AJAX Request -- Menu Penilaian
 Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchEventData']);
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
@@ -93,5 +93,9 @@ Route::get('penilaian/fetchInisialData', [PenilaianController::class, 'fetchInis
 Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
 Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'destroyNilaiData']);
 
+// AJAX Request -- Menu Sertifikat
+Route::get('sertifikat/fetchPesertaData/{id}', [SertifikatController::class, 'fetchPesertaData']);
+
+Route::post('sertifikat/storeSertifikatData', [SertifikatController::class, 'storeSertifikatData']);
 
 require __DIR__.'/auth.php';
