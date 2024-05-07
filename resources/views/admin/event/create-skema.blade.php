@@ -2,14 +2,19 @@
 @section('title', 'Kegiatan')
 @section('content')
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-    <form action="{{ route('event-skema.store') }}" method="POST">
+  @if ($errors->any())
+            <div class="alert alert-danger justify-content-center align-items-center py-2">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>Kolom tidak boleh kosong
+            </div>
+        @endif
+    <form action="{{ route('event-skema.store', $id) }}" method="POST">
       @csrf
         <div class="mb-3">
           <input type="hidden" name="event_id" value="{{ request()->route('event') }}">
           <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
           <label for="exampleInputEmail1" class="form-label">Skema</label>
-          <select class="form-select chosen-select" name="skema_id"">
-            <option selected>Open this select menu</option>
+          <select class="form-select chosen-select" name="skema_id" required>
+            <option value="0" selected>Open this select menu</option>
             @foreach ($skema as $list)
             <option value="{{ $list->id_skema }}">{{ $list->nama_skema }}</option>
             @endforeach
@@ -17,8 +22,8 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Background</label>
-          <select class="form-select chosen-select" name="background_id">
-            <option selected>Open this select menu</option>
+          <select class="form-select chosen-select" name="background_id" required>
+            <option value="0" selected>Open this select menu</option>
             @foreach ($bg as $list)
             <option value="{{ $list->id_background }}">{{ $list->nama_bg }}</option>
             @endforeach
@@ -42,10 +47,10 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
-          <select class="form-select chosen-select" aria-label="Default select example" disabled>
-            <option selected>Open this select menu</option>
+          <select class="form-select chosen-select" name="nama_konversi_nilai">
+            <option value="0" selected>Open this select menu</option>
             @foreach ($rn as $list)
-            <option value="{{ $list->id_rentang_nilai }}">{{ $list->nama_konversi_nilai }}</option>
+            <option >{{ $list }}</option>
             @endforeach
           </select>
         </div>

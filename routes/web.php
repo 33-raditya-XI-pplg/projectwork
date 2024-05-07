@@ -58,9 +58,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::get('/event/{event}/skema/{skema}/edit/', [EventSkemaController::class, 'edit'])->name('event-skema.edit');
     Route::get('/event/{event}/skema/{skema}/rincian', [EventSkemaController::class, 'show'])->name('event-skema.show');
     Route::get('/event/{event}/skema/{skema}/add-student', [EventSkemaController::class, 'addStudent'])->name('event-skema.add');
-    Route::post('/event/skema/', [EventSkemaController::class, 'store'])->name('event-skema.store');
+    Route::post('/event/{event}/skema/', [EventSkemaController::class, 'store'])->name('event-skema.store');
     Route::delete('/event/{event}/skema/{skema}', [EventSkemaController::class, 'destroy'])->name('event-skema.delete');
-    Route::put('/event/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
+    Route::put('/event/{event}/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
     Route::post('/event/{event}/skema/{skema}/students', [EventSkemaController::class, 'storeStudents'])->name('event-skema.store-student');
     Route::delete('/event/skema/{skema}/students/{id}', [EventSkemaController::class, 'destroyStudents'])->name('event-skema.delete-student');
 
@@ -77,7 +77,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
         Route::resource('/rentang-nilai', RentangNilaiController::class);
     });
     Route::resource('sertifikat', SertifikatController::class);
-    Route::resource('profile', ProfileController::class);
+    Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    // jquery
+    Route::get('/peserta/instansi/{instansi}/event-skema/{skema}', [EventSkemaController::class, 'search'])->name('getPeserta');
 
 });
 
@@ -85,8 +89,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
 Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchEventData']);
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
-Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
+Route::get('penilaian/fetchNilaiData/{id}', [PenilaianController::class, 'fetchNilaiData']);
+Route::get('penilaian/fetchInisialData', [PenilaianController::class, 'fetchInisialData']);
 
-Route::get('/mencoba/{id}', [EventSkemaController::class, 'search'])->name('getPeserta');
+Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilaiData']);
+Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'destroyNilaiData']);
+
 
 require __DIR__.'/auth.php';

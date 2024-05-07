@@ -17,20 +17,20 @@ class TtdSeeder extends Seeder
         DB::table('tb_ttd')->insert([
             [
                 'instansi_id' => 1,
-                'nama_ttd' => 'Agus Hariyanto',
-                'jabatan' => 'Penguji Tingkat 1',
+                'nama_ttd' => 'Saiful Anwar',
+                'jabatan' => 'Direktur PN',
                 'nomor_induk' => 2020101070,
-                'path_ttd' => 'assets\img\dummy\ttd\ttd_agus.png',
+                'path_ttd' => 'assets\img\dummy\ttd\ttd_saiful.png',
                 'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
             [
                 'instansi_id' => 1,
-                'nama_ttd' => 'Denny Wijanarko',
-                'jabatan' => 'Penguji Tingkat 1',
+                'nama_ttd' => 'Surateno',
+                'jabatan' => 'Wadir Bidang Wejangan',
                 'nomor_induk' => 2020101071,
-                'path_ttd' => 'assets\img\dummy\ttd\ttd_denny.png',
+                'path_ttd' => 'assets\img\dummy\ttd\ttd_surateno.png',
                 'status' => 'Aktif',
 
                 'created_by' => 0,

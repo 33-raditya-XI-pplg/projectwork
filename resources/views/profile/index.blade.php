@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-2">
                                 <div class="card-tittle text-end">
-                                    <a href="{{ route('profile.edit', $data->id_user) }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a href="{{ route('profile.edit') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
                                 </div>
                                 <div id="segitiga">
                                     <span class="triangle d-block"></span>

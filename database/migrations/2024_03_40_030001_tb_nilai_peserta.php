@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
             $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema');
             $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta');
-            // $table->foreignId('user_id')->constrained('tb_user', 'id_user');
 
             $table->integer('nilai');
 

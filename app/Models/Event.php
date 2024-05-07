@@ -23,7 +23,7 @@ class Event extends Model
     }
     public function eventTempat() // FK Many-to-One dengan tb_tempat
     {
-        return $this->belongsTo(Tempat::class, 'tempat_id', 'id_tempat');
+        return $this->belongsTo(Tempat::class, 'tempat_id');
     }
     public function eventJenis_Event() // FK Many-to-One dengan tb_jenis_event
     {

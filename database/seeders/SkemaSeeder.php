@@ -78,6 +78,12 @@ class SkemaSeeder extends Seeder
                 'created_by' => 0,
             ],
             [
+                'skema_id' => 1,
+                'judul_sub' => 'Mampu membuat API menggunakan laravel',
+
+                'created_by' => 0,
+            ],
+            [
                 'skema_id' => 2,
                 'judul_sub' => 'Memahami framework flutter',
 
