@@ -15,8 +15,10 @@
                 <table id="example" class="table">
                     <thead class="fw-normal">
                         <th scope="col" width="10%">No</th>
-                        <th scope="col" width="30%">Event</th>
-                        <th scope="col" width="30%">Skema</th>
+                        <th scope="col" width="20%">Event</th>
+                        <th scope="col" width="20%">Skema</th>
+                        <th scope="col" width="20%">Status</th>
+                        <th scope="col" width="10%">Nilai</th>
                         <th scope="col" class="text-center">Aksi</th>
                     </thead>
                     <tbody class="table-responsive" style="vertical-align: middle">
@@ -25,12 +27,15 @@
                                 <td>No {{ $i }}</td>
                                 <td>Senin Aktif</td>
                                 <td>Selasa Aktif</td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td class="text-center">
-                                    <a href="{{route('cetak-sertifikat.cetak')}}" class="btn btn-sm btn-primary rounded"><i class="fas fa-print"></i> Cetak</a>
-                                    <a href="{{route('rincian-sertifikat.index')}}" class="btn btn-sm btn-secondary rounded">Rincian</a>
+                                    <a href="{{route('cetak-sertifikasi.cetak')}}" class="btn btn-sm btn-primary rounded"><i class="fas fa-print"></i> Cetak</a>
+                                    <a href="{{route('rincian-sertifikasi.index')}}" class="btn btn-sm btn-secondary rounded">Rincian</a>
                                 </td>
                             </tr>
                         @endfor
+
                     </tbody>
                 </table>
             </div>

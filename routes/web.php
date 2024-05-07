@@ -25,7 +25,9 @@ use App\Http\Controllers\User\SertifikatUsersController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\RincianController;
 use App\Http\Controllers\User\RincianNilaiController;
+use App\Http\Controllers\User\RincianSertifikasiController;
 use App\Http\Controllers\User\RincianSertifikatController;
+use App\Http\Controllers\User\SertifikasiUsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +41,10 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
     Route::resource('dashboard',DashboardController::class);
     Route::resource('nilai',NilaiController::class);
     Route::resource('event-user',EventUsersController::class);
-    Route::resource('sertifikat-user',SertifikatUsersController::class);
-    Route::get('cetak-sertifikat',[SertifikatUsersController::class,'cetak'])->name('cetak-sertifikat.cetak');
+    Route::resource('sertifikasi-user',SertifikasiUsersController::class);
+    Route::get('cetak-sertifikasi',[SertifikasiUsersController::class,'cetak'])->name('cetak-sertifikasi.cetak');
     Route::resource('rincian-user',RincianController::class);
-    Route::resource('rincian-sertifikat',RincianSertifikatController::class);
+    Route::resource('rincian-sertifikasi',RincianSertifikasiController::class);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){

@@ -39,16 +39,10 @@
                     <span>Event</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat-user' ? 'active' : '' }} position-relative">
-                <a href="{{route('sertifikat-user.index')}}" class="item-link">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikasi-user' ? 'active' : '' }} position-relative">
+                <a href="{{route('sertifikasi-user.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
-                    <span>Sertifikat</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'nilai' ? 'active' : '' }} position-relative">
-                <a href="{{route('nilai.index')}}" class="item-link">
-                    <i class="fas fa-marker link-icon"></i>
-                    <span>Nilai</span>
+                    <span>Sertifikasi</span>
                 </a>
             </li>
             @endif
@@ -113,7 +107,7 @@
             </li>
         </ul>
         @if(Auth::user()->level == 'Pengguna')
-        <div class="level" style="margin-top:105px"></div>
+        <div class="level" style="margin-top:160px"></div>
         @endif
         @if(Auth::user()->level == 'Penguji')
         <div class="level" style="margin-top:215px"></div>
