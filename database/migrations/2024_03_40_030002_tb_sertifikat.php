@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('keterangan')->nullable(); 
             // $table->string('status');
 
-            $table->integer('total_nilai')->nullable(); 
-            $table->integer('inisial_nilai')->nullable(); 
+            $table->integer('nilai')->nullable(); 
+            $table->string('inisial_nilai')->nullable(); 
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 
