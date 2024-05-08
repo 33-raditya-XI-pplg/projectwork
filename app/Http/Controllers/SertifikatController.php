@@ -282,11 +282,11 @@ class SertifikatController extends Controller
 
         $pdf = "";
         if ($data_sertifikat_peserta[0]->orientasi_bg != 'landscape') {
-            $pdf = PDF::loadView('sertifikat_potrait', 
+            $pdf = PDF::loadView('template_sertifikat.sertifikat_potrait', 
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'potrait');
         } else {
-            $pdf = PDF::loadView('sertifikat_landscape', 
+            $pdf = PDF::loadView('template_sertifikat.sertifikat_landscape', 
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'landscape');
         }
