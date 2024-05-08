@@ -302,7 +302,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -311,7 +311,7 @@
 
     </div>
 
-    <div class="filter-training mb-4" id="shadow">
+    {{-- <div class="filter-training mb-4" id="shadow">
         <div class="card border-0">
             <div class="card-header bg-primary text-white">
                 <label for=""><b> Filter</b></label>
@@ -335,13 +335,13 @@
                         <input type="date" class="form-control" id="date">
                     </div>
                     <div class="col-md-4 mb-3">
-                        {{-- <label for="">Jenis Event</label>
+                        <label for="">Jenis Event</label>
                         <select name="type" id="type" class="form-control">
                             <option value="">Semua</option>
                             <option value="online">Online</option>
                             <option value="offline">Offline</option>
                             <option value="hybrid">Hybrid</option>
-                        </select> --}}
+                        </select>
 
                             <label for="">Pilih</label>
                             <select data-placeholder="Choose a Country..." class="chosen-select form-control"
@@ -615,7 +615,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     <div class="row row-cols-1 row-cols-md-3 g-4">

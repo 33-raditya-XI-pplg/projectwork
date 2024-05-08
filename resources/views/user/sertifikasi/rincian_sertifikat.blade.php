@@ -35,7 +35,7 @@
                             <p class="mb-0">+08100001</p>
                         </div>
                         <div class="mb-4 col-6">
-                            <h6 class="text-uppercase fs-5 ls-2">Date of Birth </h6>
+                            <h6 class="text-uppercase fs-5 ls-2">Date</h6>
                             <p class="mb-0">01.10.2000</p>
                         </div>
                         <div class="col-6">
