@@ -18,8 +18,8 @@
             page-break-after: avoid;
         }
         .signature img {
-            max-width: 50px; /* Ukuran maksimum untuk tanda tangan */
-            max-height: 50px; /* Tinggi maksimum untuk tanda tangan */
+            max-width: 100px; /* Ukuran maksimum untuk tanda tangan */
+            max-height: 100px; /* Tinggi maksimum untuk tanda tangan */
         }
         /* Add your certificate styling here */
     </style>
@@ -32,21 +32,17 @@
                 <p>Nomor Sertifikat: {{ $row->nomor_sertifikat }}</p>
 
                 <p>Nama Peserta: {{ $row->nama_lengkap }}</p>
-                <p>Nama Peserta: {{ $row->nama_event }}</p>
-                <p>Nama Peserta: {{ $row->nama_jenis_event }}</p>
+                <p>Event: {{ $row->nama_event }}</p>
+                <p>Jenis Event: {{ $row->nama_jenis_event }}</p>
 
-                <p>Nama Peserta: {{ $row->nama_skema }}</p>
+                <p>Skema: {{ $row->nama_skema }}</p>
 
-                <p>Nama Peserta: {{ $row->nama_bg }}</p>
-                <p>Nama Peserta: {{ $row->orientasi_bg }}</p>
-                <p>Nama Peserta: {{ $row->path_bg }}</p>
+                <p>Nilai: {{ $row->nilai }}</p>
+                <p>Keterangan: {{ $row->keterangan }}</p>
 
-                <p>Nama Peserta: {{ $row->nilai }}</p>
-                <p>Nama Peserta: {{ $row->keterangan }}</p>
-
-                <p>Tanggal: {{ \Carbon\Carbon::parse($row->tgl_terbit)->format('d-F-Y') }}</p>
-                <p>Tanggal: {{ \Carbon\Carbon::parse($row->tgl_berakhir)->format('d-F-Y') }}</p>
-                <p>Nama Peserta: {{ $row->masa_berlaku }}</p>
+                <p>Terbit: {{ \Carbon\Carbon::parse($row->tgl_terbit)->format('d-F-Y') }}</p>
+                <p>Berakhir: {{ \Carbon\Carbon::parse($row->tgl_berakhir)->format('d-F-Y') }}</p>
+                <p>Masa Berlaku: {{ $row->masa_berlaku }}</p>
                 
                 <table style="width: 100%;">
                     <tr>

@@ -146,7 +146,15 @@
     // submit Form Trigger function
     function submitForm() {
         var form = document.getElementById('export-form');
-        form.target = '_blank';
+
+        Swal.fire({
+            title: 'Memproses...',
+            text: 'Sabar wir.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
         form.submit(); 
     }
 
@@ -186,6 +194,21 @@
         });
     });
 
+    // format Timestamps function
+    function formatTimestamps(dateString) {
+        let dateOnly = new Date(dateString).toISOString().slice(0, 10);
+
+        var dateParts = dateOnly.split("-");
+        var year = dateParts[0];
+        var month = dateParts[1];
+        var day = dateParts[2];
+
+        var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+        return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
+    }
+    
     // ajax Request Here
     $(document).ready(function() {
         var skemaID;
@@ -203,6 +226,21 @@
                 cancelButtonText: 'Batal'
             });
         }
+
+        // close Loading if Download Complete
+        window.addEventListener('focus', function() {
+            $('input[type="text"]').val('');
+            $('input[type="date"]').val('');
+            $('#cetak_sertifikat_btn').prop('disabled', true);
+
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+            // fetchDetailData(skemaID);
+            Swal.close();
+        });
 
         // fetch Detail Data function
         function fetchDetailData(skemaID) {
@@ -232,7 +270,7 @@
                         var peserta_tanpa_nilai = response.data_peserta_tanpa_nilai.length;
                         var peserta_tanpa_sertifikat = response.data_peserta_tanpa_sertifikat.length;
 
-                        event_skemaID = data_skema.id_event_skema;
+                        event_skemaID = data_skema.id_event_skema; // update Variable 
 
                         // Input Disabled 
                         $('#nama_skema').val(data_skema.nama_skema);
@@ -241,10 +279,22 @@
                         // Condition for select_peserta Dropdown
                         if (total_peserta != 0) {
                             if (peserta_tanpa_nilai != 0) {
-                                console.log('Nilai peserta tidak lengkap, tersisa' + peserta_tanpa_nilai)
+                                // console.log('Nilai peserta tidak lengkap, tersisa' + peserta_tanpa_nilai)
+
+                                Swal.fire({
+                                    title: ' Nilai Peserta <span style="color: red;">Kurang '+peserta_tanpa_nilai+'</span>',
+                                    html:
+                                        'pada Skema <b>'+data_skema.nama_skema+'</b>',
+                                    icon: 'info',
+                                    footer: '<a href="{{ route('penilaian.index') }}">Tekan untuk Tambah Nilai...</a>'
+                                });
+
+                                $('#peserta_select').append('<option hidden disabled selected>\
+                                    <span style="color: red; font-weight: bold;">Nilai peserta kurang</span>\
+                                </option>'); 
                             } else {
                                 if (peserta_tanpa_sertifikat != 0) {
-                                    console.log('Peserta Kurang' + peserta_tanpa_sertifikat)
+                                    // console.log('Peserta Kurang' + peserta_tanpa_sertifikat)
                                     
                                     $('#create_tgl_terbit').prop('disabled', false);
                                     $('#create_tgl_berakhir').prop('disabled', false);
@@ -260,7 +310,7 @@
                                         $('select[id="peserta_select"]').append('<option value="'+ row.id_peserta +'">' + row.nama_lengkap+ '</option>');
                                     });
                                 } else {
-                                    console.log('Semua Peserta Memiliki Nilai')
+                                    // console.log('Semua Peserta Memiliki Nilai')
 
                                     $('#peserta_select').prop('disabled', true);
                                     $('#create_tgl_terbit').prop('disabled', true);
@@ -273,14 +323,19 @@
                                 }
                             }
                         } else {
-                            console.log('Tidak ada peserta')
+                            // console.log('Tidak ada peserta')
+                            Swal.fire({
+                                title: 'Tidak ada peserta',
+                                text: 'Tambah Peserta dulu wir',
+                                icon: 'warning',
+                            });
 
                             $('#peserta_select').prop('disabled', true);
                             $('#create_tgl_terbit').prop('disabled', true);
                             $('#create_tgl_berakhir').prop('disabled', true);
                             $('#store_sertifikat_btn').prop('disabled', true);
 
-                            $('select[id="peserta_select"]').append('<option disabled selected>Tidak Ada Peserta wir</option>');
+                            $('select[id="peserta_select"]').append('<option disabled selected>Tidak Ada Peserta</option>');
                         }
 
                         $('#peserta_select').trigger("chosen:updated");
@@ -316,7 +371,7 @@
                                 <td>' + num + '</td>\
                                 <td>' + row.nama_lengkap + '</td>\
                                 <td>' + row.nomor_sertifikat +'</td>\
-                                <td>' + row.tgl_terbit +'</td>\
+                                <td>' + formatTimestamps(row.tgl_terbit) +'</td>\
                                 <td>' + row.masa_berlaku +'</td>\
                                 <td>\
                                     <div class="dropdown px-3">\

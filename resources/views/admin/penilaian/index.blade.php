@@ -392,7 +392,7 @@
                                 banyakData = '-';
                                 nilaiData = '-'
                                 inisialNilaiData = '-'
-                                timestampsNilaiData = formatTimestamps(row.created_at)
+                                timestampsNilaiData = '-'
                             } 
                             else {
                                 banyakData = '<span style="color: red; font-weight: bold;">Nilai kurang =  ' + row.banyak_nilai_nol + '</span>';

@@ -28,7 +28,7 @@ class PenandatanganSeeder extends Seeder
             ],
             [
                 'event_skema_id' => 2,
-                'ttd_id' => 2,
+                'ttd_id' => 1,
 
                 'created_by' => 0,
             ],
