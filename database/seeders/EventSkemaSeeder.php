@@ -17,7 +17,7 @@ class EventSkemaSeeder extends Seeder
             [
                 'event_id' => 1,
                 'skema_id' => 1,
-                'background_id' => 1,
+                'background_id' => 3,
                 'status' => 'Aktif',
 
                 'created_by' => 0,
