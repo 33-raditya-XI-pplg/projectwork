@@ -327,7 +327,7 @@
                             Swal.fire({
                                 title: 'Tidak ada peserta',
                                 text: 'Tambah Peserta dulu wir',
-                                icon: 'warning',
+                                icon: 'info',
                             });
 
                             $('#peserta_select').prop('disabled', true);

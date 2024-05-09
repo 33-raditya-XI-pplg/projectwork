@@ -83,7 +83,47 @@ class NilaiPesertaSeeder extends Seeder
                 'event_skema_id' => 1,
                 'sub_skema_id' => 3,
                 'peserta_id' => 3,
-                'nilai' => 89,
+                'nilai' => 81,
+
+                'created_by' => 0,
+            ],
+            [
+                'event_skema_id' => 1,
+                'sub_skema_id' => 1,
+                'peserta_id' => 4,
+                'nilai' => 82,
+
+                'created_by' => 0,
+            ],
+            [
+                'event_skema_id' => 1,
+                'sub_skema_id' => 2,
+                'peserta_id' => 4,
+                'nilai' => 87,
+
+                'created_by' => 0,
+            ],
+            [
+                'event_skema_id' => 1,
+                'sub_skema_id' => 3,
+                'peserta_id' => 4,
+                'nilai' => 85,
+
+                'created_by' => 0,
+            ],
+            [
+                'event_skema_id' => 2,
+                'sub_skema_id' => 4,
+                'peserta_id' => 5,
+                'nilai' => 72,
+
+                'created_by' => 0,
+            ],
+            [
+                'event_skema_id' => 2,
+                'sub_skema_id' => 4,
+                'peserta_id' => 5,
+                'nilai' => 74,
 
                 'created_by' => 0,
             ]
