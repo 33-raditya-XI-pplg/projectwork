@@ -69,7 +69,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
         Route::resource('tandatangan',SignatureController::class);
         Route::resource('skema', SkemaController::class);
         Route::resource('background', BackgroundController::class);
-        Route::resource('/user', UserController::class);
+        Route::resource('/user', UserController::class)->except('show');
+        Route::post('user/import', [UserController::class, 'import'])->name('user.import');
         Route::resource('/penguji', PengujiController::class);
         Route::resource('/instansi', InstansiController::class);
         Route::resource('/jenis-event', JenisEventController::class);

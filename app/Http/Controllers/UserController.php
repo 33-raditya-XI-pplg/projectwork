@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\User\NilaiController;
+use App\Imports\FirstSheetImport;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -99,5 +102,12 @@ class UserController extends Controller
 
         toast('Pengguna terhapus!','success');
         return redirect()->back();
+    }
+
+    public function import(Request $request) 
+    {
+        Excel::import(new UsersImport, $request->file('data-peserta'));
+        
+        return redirect()->route('user.index')->with('success', 'All good!');
     }
 }
