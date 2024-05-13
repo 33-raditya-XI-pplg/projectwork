@@ -18,10 +18,9 @@
             page-break-after: avoid;
         }
         .signature img {
-            max-width: 100px; /* Ukuran maksimum untuk tanda tangan */
-            max-height: 100px; /* Tinggi maksimum untuk tanda tangan */
+            max-width: 100px;
+            max-height: 100px;
         }
-        /* Add your certificate styling here */
     </style>
 </head>
 <body>
@@ -46,19 +45,28 @@
                 
                 <table style="width: 100%;">
                     <tr>
-                        @foreach ($data_penadatangan as $row)
+                        @foreach ($data_penadatangan as $row2)
                             <td style="width: 50%;  text-align: center;">
                                 <div>
-                                    <p style="font-size: 1em; font-weight: bold;">{{ $row->nama_ttd }}</p>
+                                    <p style="font-size: 1em; font-weight: bold;">{{ $row2->nama_ttd }}</p>
                                     <div class="signature">
-                                        <img src="{{ $row->path_ttd }}" alt="Signature">
+                                        <img src="{{ $row2->path_ttd }}" alt="Signature">
                                     </div>
-                                    <p style="font-size: 1em; text-decoration: underline;">{{ $row->jabatan }}</p>
+                                    <p style="font-size: 1em; text-decoration: underline;">{{ $row2->jabatan }}</p>
                                 </div>
                             </td>
                         @endforeach
                     </tr>
                 </table>
+
+                <?php
+                    $qrCodeData = $row->nomor_sertifikat; 
+                    $qrCode = QrCode::format('svg') // biarin errornya wir -- mlaku kok iki
+                            ->size(80)
+                            ->errorCorrection('H')
+                            ->generate($qrCodeData);
+                ?>
+                <img src="data:image/svg+xml;base64,{{ base64_encode($qrCode) }}" alt="QR Code">
             </div>
         @endforeach
 

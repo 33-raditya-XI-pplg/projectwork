@@ -230,9 +230,7 @@
 
         // close Loading if Download Complete
         window.addEventListener('focus', function() {
-            // $('input[type="text"]').val('');
-            // $('input[type="date"]').val('');
-            // $('#cetak_sertifikat_btn').prop('disabled', true);
+            $('#cetak_sertifikat_btn').prop('disabled', true);
 
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(function(checkbox) {
@@ -341,6 +339,8 @@
 
                             $('select[id="peserta_select"]').append('<option disabled selected>Tidak Ada Peserta</option>');
                         }
+
+                        total_peserta !=
 
                         $('#peserta_select').trigger("chosen:updated");
 
