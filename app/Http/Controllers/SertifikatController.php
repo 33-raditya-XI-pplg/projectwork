@@ -102,6 +102,100 @@ class SertifikatController extends Controller
 
     public function storeSertifikatData(Request $request)
     {
+        $option = $request->option;
+        $tgl_terbit = $request->tgl_terbit;
+        $tgl_berakhir = $request->tgl_berakhir;
+        $event_skemaID = $request->event_skemaID;
+        $created_by = $request->created_by;
+
+        // dd($request);
+        try {
+            DB::beginTransaction();
+
+            if (!empty($request->option)) {
+                if ($option == 'all') {
+                    $pesertas = db::table('tb_peserta')
+                            ->where('event_skema_id', $event_skemaID)
+                            ->select('id_peserta')
+                            ->get();
+                    // dd($pesertas);
+
+                    foreach ($pesertas as $row) {
+                        $pesertaID = $row->id_peserta;
+
+                        $exist = Sertifikat::where('peserta_id', $pesertaID)->exists();
+                        if (!$exist) { // Buat sertifikat baru
+                            // Generate nomor sertifikat
+                            $dateTimeNow = Carbon::now()->format('YmdHis');
+                            $nomorSertifikat = "SRT-{$event_skemaID}-{$pesertaID}-{$dateTimeNow}";
+            
+                            $nilai_peserta = DB::table('tb_nilai_peserta')
+                                            ->select(
+                                                DB::raw('COUNT(nilai) as banyak_nilai'),
+                                                DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
+                                                DB::raw('SUM(nilai) as total_nilai'),
+                                                DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
+                                            )
+                                            ->where('peserta_id', $pesertaID)
+                                            ->where('event_skema_id', $event_skemaID)
+                                            ->first();
+            
+                            $keterangan_nilai_peserta = DB::table('tb_event_skema_rentang_nilai as tb_es_rn')
+                                            ->join('tb_rentang_nilai', 'tb_es_rn.rentang_nilai_id', '=', 'tb_rentang_nilai.id_rentang_nilai')
+                                            ->join('tb_event_skema', 'tb_es_rn.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                                            ->select('tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai', 'tb_rentang_nilai.keterangan')
+                                            ->where('tb_es_rn.event_skema_id', $event_skemaID)
+                                            ->where('rentang_bawah', '<=', $nilai_peserta->avg_nilai)
+                                            ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
+                                            ->first();
+            
+                            $a = Carbon::parse($tgl_terbit);
+                            $b = Carbon::parse($tgl_berakhir);
+            
+                            // Hitung masa berlaku dalam tahun
+                            $masa_berlaku_diff = $a->diffInYears($b);
+                            if ($masa_berlaku_diff == 0) {
+                                $masa_berlaku_diff = $a->diffInMonths($b);
+                                if($masa_berlaku_diff == 0) {
+                                    $masa_berlaku_diff = $a->diffInDays($b);
+                                    $masa_berlaku = $masa_berlaku_diff . ' Hari';
+                                } else {
+                                    $masa_berlaku = $masa_berlaku_diff . ' Bulan';
+                                }
+                            } else {
+                                $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                            }
+            
+                            Sertifikat::create([
+                                'peserta_id' => $pesertaID,
+                                'event_skema_id' => $event_skemaID,
+                                'nomor_sertifikat' => $nomorSertifikat,
+                                'nilai' => $nilai_peserta->avg_nilai,
+                                'keterangan' => $keterangan_nilai_peserta->keterangan,
+                                'inisial_nilai' => $keterangan_nilai_peserta->inisial_rentang_nilai,
+                                'tgl_terbit' => $tgl_terbit,
+                                'tgl_berakhir' => $tgl_berakhir,
+                                'masa_berlaku' => $masa_berlaku,
+                                'created_by' => $created_by,
+                                'created_at' => now(),
+                            ]);
+                        }
+                    } 
+
+                }
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'Sertifikat saved successfully'], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => 'asu', $e->getMessage()], 500);
+        }
+    }
+
+
+    public function updateSertifikatData(Request $request) // Bakal e jadi edit function
+    {
         $pesertaID = $request->pesertaID;
         $tgl_terbit = $request->tgl_terbit;
         $tgl_berakhir = $request->tgl_berakhir;

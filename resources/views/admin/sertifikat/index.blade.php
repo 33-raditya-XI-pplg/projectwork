@@ -41,6 +41,7 @@
                                     <label for="nama_ttd" class="form-label">Nama Peserta</label>
                                     <select class="chosen-select form-control" id="peserta_select" disabled>
                                         <option hidden disabled selected>Pilih Skema Dulu wir</option>
+                                        <!-- Ajax Response Here -->
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -229,9 +230,9 @@
 
         // close Loading if Download Complete
         window.addEventListener('focus', function() {
-            $('input[type="text"]').val('');
-            $('input[type="date"]').val('');
-            $('#cetak_sertifikat_btn').prop('disabled', true);
+            // $('input[type="text"]').val('');
+            // $('input[type="date"]').val('');
+            // $('#cetak_sertifikat_btn').prop('disabled', true);
 
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(function(checkbox) {
@@ -289,6 +290,11 @@
                                     footer: '<a href="{{ route('penilaian.index') }}">Tekan untuk Tambah Nilai...</a>'
                                 });
 
+                                $('#peserta_select').prop('disabled', true);
+                                $('#create_tgl_terbit').prop('disabled', true);
+                                $('#create_tgl_berakhir').prop('disabled', true);
+                                $('#store_sertifikat_btn').prop('disabled', true);
+
                                 $('#peserta_select').append('<option hidden disabled selected>\
                                     <span style="color: red; font-weight: bold;">Nilai peserta kurang</span>\
                                 </option>'); 
@@ -304,11 +310,9 @@
                                     $('#store_sertifikat_btn').prop('disabled', true);
 
                                     $('#peserta_select').append('<option hidden disabled selected>\
-                                        <span style="color: green; font-weight: bold;">Ada '+ peserta_tanpa_sertifikat +' Peserta</span>\
+                                        <span style="color: green; font-weight: bold;">Sertifikat siap dibuat</span>\
                                     </option>'); 
-                                    $.each(data_peserta, function(key, row){
-                                        $('select[id="peserta_select"]').append('<option value="'+ row.id_peserta +'">' + row.nama_lengkap+ '</option>');
-                                    });
+                                    $('#peserta_select').append('<option value="all">Semua Peserta</option>')
                                 } else {
                                     // console.log('Semua Peserta Memiliki Nilai')
 
@@ -325,7 +329,7 @@
                         } else {
                             // console.log('Tidak ada peserta')
                             Swal.fire({
-                                title: 'Tidak ada peserta',
+                                title: 'Tidak ada peserta pada <span style="color: red;">'+data_skema.nama_skema+'</span>',
                                 text: 'Tambah Peserta dulu wir',
                                 icon: 'info',
                             });
@@ -478,74 +482,99 @@
             var tgl_terbit;
             var tgl_berakhir;
 
-            if (btnIdentifier != 0) {
+            if (btnIdentifier != 0) {   // to Create Sertifikat Data
                 tgl_terbit = $('#create_tgl_terbit').val();
                 tgl_berakhir = $('#create_tgl_berakhir').val();
-            } 
-            else {
-                tgl_terbit = $('#edit_tgl_terbit').val();
-                tgl_berakhir = $('#edit_tgl_berakhir').val();
-            }
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-            $.ajax({
-                url: '/sertifikat/storeSertifikatData',
-                type: 'POST',
-                data: {
-                    pesertaID: pesertaID,
-                    event_skemaID: event_skemaID,
-                    tgl_terbit: tgl_terbit,
-                    tgl_berakhir: tgl_berakhir,
-                    createdBy: createdBy
-                },
-                dataType: "json",
+                $.ajax({
+                    url: '/sertifikat/storeSertifikatData',
+                    type: 'POST',
+                    data: {
+                        option: pesertaID,
+                        event_skemaID: event_skemaID,
+                        tgl_terbit: tgl_terbit,
+                        tgl_berakhir: tgl_berakhir,
+                        createdBy: createdBy
+                    },
+                    dataType: "json",
 
-                success: function(response) {
-                    $('#editSertifikatModal').modal('hide');
-                    $('input[type="date"]').val('');
+                    success: function(response) {
+                        $('#editSertifikatModal').modal('hide');
+                        $('input[type="date"]').val('');
 
-                    if (btnIdentifier != 0) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: 'Sertifikat berhasil ditambahkan.'
                         });
-                    } 
-                    else {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Sertifikat berhasil diperbarui.'
-                        });
-                    }
 
-                    fetchDetailData(skemaID);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Terjadi kesalahan saat menambahkan sertifikat peserta:', error);
-                    if (btnIdentifier != 0) {
+                        fetchDetailData(skemaID);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Terjadi kesalahan saat menambahkan sertifikat peserta:', error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal',
                             text: 'Sertifikat gagal ditambahkan.'
                         });
-                    } 
-                    else {
+
+                    }
+                        
+                });
+            } 
+            else {                      // to Update Sertifikat Data
+                tgl_terbit = $('#edit_tgl_terbit').val();
+                tgl_berakhir = $('#edit_tgl_berakhir').val();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: '/sertifikat/updateSertifikatData',
+                    type: 'POST',
+                    data: {
+                        pesertaID: pesertaID,
+                        event_skemaID: event_skemaID,
+                        tgl_terbit: tgl_terbit,
+                        tgl_berakhir: tgl_berakhir,
+                        createdBy: createdBy
+                    },
+                    dataType: "json",
+
+                    success: function(response) {
+                        $('#editSertifikatModal').modal('hide');
+                        $('input[type="date"]').val('');
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Sertifikat berhasil diperbarui.'
+                        });
+
+                        fetchDetailData(skemaID);
+                    },
+                    error: function(xhr, status, error) {
+                        // console.error('Terjadi kesalahan saat menambahkan sertifikat peserta:', error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal',
                             text: 'Sertifikat gagal diperbarui.'
                         });
-                    }
 
-                }
-                    
-            });
+                    }
+                        
+                });
+            }
+
         })
 
         // Edit Modal Trigger
@@ -590,6 +619,12 @@
                         },
                         success: function(response) {
                             console.log('Sertifikat peserta berhasil dihapus');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Sertifikat peserta berhasil dihapus'
+                            });
+
                             fetchDetailData(skemaID)
                         },
                         error: function(xhr, status, error) {
