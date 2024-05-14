@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SertifikatController extends Controller
 {
@@ -377,11 +378,11 @@ class SertifikatController extends Controller
 
         $pdf = "";
         if ($data_sertifikat_peserta[0]->orientasi_bg != 'landscape') {
-            $pdf = PDF::loadView('template_sertifikat.sertifikat_potrait', 
+            $pdf = PDF::loadView('template_sertifikat.cetak.cetak_sertifikat_potrait', 
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'potrait');
         } else {
-            $pdf = PDF::loadView('template_sertifikat.sertifikat_landscape', 
+            $pdf = PDF::loadView('template_sertifikat.cetak.cetak_sertifikat_landscape', 
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'landscape');
         }
@@ -394,23 +395,23 @@ class SertifikatController extends Controller
 
         if ($exist) {
             $data_sertifikat_peserta = DB::table('tb_sertifikat')
-            ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-            ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
-            ->select('tb_user.nama_lengkap',
-                     'tb_event_skema.id_event_skema',
-                     'tb_event.nama_event', 'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema',
-                     'tb_background.nama_bg', 'tb_background.orientasi_bg', 'tb_background.path_bg',
-                     'tb_sertifikat.nomor_sertifikat', 
-                     'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
-                     'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
-            )
-            ->where('tb_sertifikat.nomor_sertifikat', $nomor_sertifikat)
-            ->first();
+                        ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+                        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                        ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
+                        ->select('tb_user.nama_lengkap',
+                                'tb_event_skema.id_event_skema',
+                                'tb_event.nama_event', 'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema',
+                                'tb_background.nama_bg', 'tb_background.orientasi_bg', 'tb_background.path_bg',
+                                'tb_sertifikat.nomor_sertifikat', 
+                                'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
+                                'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
+                        )
+                        ->where('tb_sertifikat.nomor_sertifikat', $nomor_sertifikat)
+                        ->first();
 
             $data_penadatangan = DB::table('tb_event_skema')
                         ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
@@ -419,15 +420,28 @@ class SertifikatController extends Controller
                         ->where('tb_penandatangan.event_skema_id', $data_sertifikat_peserta->id_event_skema)
                         ->get();
 
-            $templateBg = public_path($data_sertifikat_peserta->path_bg);
+            // Change back-slash to slash -- css can't read back-slash
+            $templateBg = str_replace('\\', '/', $data_sertifikat_peserta->path_bg);
 
-            return view('check_sertifikat_potrait', 
-                compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
+            $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat; 
+            $qrCode = QrCode::format('svg')->size(80)->errorCorrection('H')
+                    ->generate($qrCodeData);
+
+            if ($data_sertifikat_peserta->orientasi_bg === 'landscape') {
+                return view('template_sertifikat.check.check_sertifikat_landscape', 
+                    compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg', 'qrCode')
                 );
-            
-            } else {
-                return view('check_sertifikat_error');
             }
+            else {
+                return view('template_sertifikat.check.check_sertifikat_potrait', 
+                    compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg', 'qrCode')
+                );
+            }
+
+        }
+        else {
+            return view('template_sertifikat.check.check_sertifikat_error');
+        }
         
     }
 }

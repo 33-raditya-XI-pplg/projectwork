@@ -3,12 +3,20 @@
 <head>
     <style>
         body {
-            margin: -50px;
-            padding: -50px;
-            background-image: url('{{ $templateBg }}');
-            background-size: cover;
+            margin: 50px;
+            padding: 50px;
             font-family: Arial, sans-serif;
             text-align: center;
+
+            background-image: url('{{ asset($templateBg) }}');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            padding: 20px;
         }
         .signature img {
             max-width: 100px; 
@@ -42,7 +50,7 @@
                         <div>
                             <p style="font-size: 1em; font-weight: bold;">{{ $row2->nama_ttd }}</p>
                             <div class="signature">
-                                <img src="{{ public_path($row2->path_ttd) }}" alt="Signature">
+                                <img src="{{ asset($row2->path_ttd) }}" alt="Signature">
                             </div>
                             <p style="font-size: 1em; text-decoration: underline;">{{ $row2->jabatan }}</p>
                         </div>
@@ -51,13 +59,6 @@
             </tr>
         </table>
 
-        <?php
-            $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/'. $data_sertifikat_peserta->nomor_sertifikat; 
-            $qrCode = QrCode::format('svg') // biarin errornya wir -- mlaku kok iki
-                    ->size(80)
-                    ->errorCorrection('H')
-                    ->generate($qrCodeData);
-        ?>
         <img src="data:image/svg+xml;base64,{{ base64_encode($qrCode) }}" alt="QR Code">
     </div>
 </body>
