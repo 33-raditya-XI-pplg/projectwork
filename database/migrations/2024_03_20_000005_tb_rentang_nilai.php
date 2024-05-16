@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('nama_konversi_nilai');
             $table->string('inisial_rentang_nilai');
             $table->string('keterangan_rentang_nilai');
-            $table->string('keterangan');
             
-            $table->float('rentang_atas', 8, 1);
-            $table->float('rentang_bawah', 8, 1);
+            $table->integer('rentang_atas');
+            $table->integer('rentang_bawah');
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 

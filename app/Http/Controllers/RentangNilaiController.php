@@ -35,7 +35,7 @@ class RentangNilaiController extends Controller
 
         Rentang::destroy($id);
 
-        Alert::success('Berhasil', 22/7);
+        Alert::success('Berhasil', 'Data berhasil dihapus.');
         return redirect()->back();
     }
 }

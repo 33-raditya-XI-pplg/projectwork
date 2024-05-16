@@ -94,7 +94,7 @@ class PenilaianController extends Controller
                                 $query->from('tb_rentang_nilai')
                                     ->join('tb_event_skema_rentang_nilai', 'tb_rentang_nilai.id_rentang_nilai', '=', 'tb_event_skema_rentang_nilai.rentang_nilai_id')
                                     ->select('tb_event_skema_rentang_nilai.event_skema_id', 'tb_event_skema_rentang_nilai.rentang_nilai_id', 
-                                            'tb_rentang_nilai.keterangan', 'tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai',
+                                            'tb_rentang_nilai.keterangan_rentang_nilai', 'tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai',
                                             'tb_rentang_nilai.rentang_atas', 'tb_rentang_nilai.rentang_bawah',
                                     )
                                     ->where('tb_event_skema_rentang_nilai.event_skema_id', $eventSkemaId);
@@ -105,7 +105,7 @@ class PenilaianController extends Controller
                             ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_peserta.id_peserta', 
                                     'tb_user.nama_lengkap', 'nilai_stats.banyak_nilai', 'nilai_stats.banyak_nilai_nol', 
                                     'nilai_stats.total_nilai', 'nilai_stats.avg_nilai',
-                                    'inisial_nilai.keterangan', 'inisial_nilai.inisial_rentang_nilai', 'inisial_nilai.nama_konversi_nilai',
+                                    'inisial_nilai.keterangan_rentang_nilai', 'inisial_nilai.inisial_rentang_nilai', 'inisial_nilai.nama_konversi_nilai',
                                     'nilai_timestamp.created_at', 'nilai_timestamp.updated_at')
                             ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
                             ->orderBy('tb_user.id_user', 'asc')
