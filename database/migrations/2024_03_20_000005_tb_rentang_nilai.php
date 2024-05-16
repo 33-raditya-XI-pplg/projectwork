@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('keterangan_rentang_nilai');
             $table->string('keterangan');
             
-            $table->integer('rentang_atas');
-            $table->integer('rentang_bawah');
+            $table->float('rentang_atas', 8, 1);
+            $table->float('rentang_bawah', 8, 1);
 
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 

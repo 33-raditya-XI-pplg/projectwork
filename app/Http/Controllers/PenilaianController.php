@@ -73,7 +73,8 @@ class PenilaianController extends Controller
                                         DB::raw('COUNT(nilai) as banyak_nilai'),
                                         DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
                                         DB::raw('SUM(nilai) as total_nilai'),
-                                        DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
+                                        DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai'),
+                                        // DB::raw('ROUND(AVG(nilai)) as avg_nilai') // Pake ini wir
                                     )
                                     ->groupBy('peserta_id');
                             }, 'nilai_stats', function ($join) {
@@ -153,7 +154,7 @@ class PenilaianController extends Controller
         $eventSkemaID = $request->event_skemaID;
         $nilaiSubSkema = $request->nilaiSubSkema;
         $created_by = $request->createdBy;
-
+// dd($request);
         DB::beginTransaction();
 
         try {
@@ -164,11 +165,11 @@ class PenilaianController extends Controller
                                 ->where('event_skema_id', $eventSkemaID)
                                 ->first();
                 
-                if ($nilai > 100) {
-                    $nilai = 100;
+                if ($nilai == null) {
+                    return response()->json(['message' => 'Nilai tidak boleh kosong'], 400);
                 }
-                elseif ($nilai < 0) {
-                    $nilai = 0;
+                elseif ($nilai > 100 || $nilai < 0) {
+                    return response()->json(['message' => 'Nilai harus dalam rentang 0 - 100'], 400);
                 }
 
                 if ($nilaiExist) {

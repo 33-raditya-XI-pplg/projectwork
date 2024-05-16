@@ -26,11 +26,21 @@
         </div>
     </div>
 </div>
+
 <div class="container mt-2"> 
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
                     <div class="card-title mb-4 fw-semibold" style="font-size:18px">Detail Event</div>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="container">
                         <div class="row">
                             <div class="col">
@@ -392,7 +402,7 @@
                                 banyakData = '-';
                                 nilaiData = '-'
                                 inisialNilaiData = '-'
-                                timestampsNilaiData = formatTimestamps(row.created_at)
+                                timestampsNilaiData = '-'
                             } 
                             else {
                                 banyakData = '<span style="color: red; font-weight: bold;">Nilai kurang =  ' + row.banyak_nilai_nol + '</span>';
@@ -617,7 +627,7 @@
             // looping for Set null Data to 0
             Object.keys(nilaiSubSkemaArray).forEach(key => {
                 if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
-                    nilaiSubSkemaArray[key] = 0;
+                    nilaiSubSkemaArray[key] = null;
                 }
             });
 
@@ -648,6 +658,15 @@
                     });
 
                     fetchDetailData(skemaID);
+                },
+                error: function(xhr) {
+                    var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi Error';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: errorMessage
+                    });
+
                 }
                     
             });
