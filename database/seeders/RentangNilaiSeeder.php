@@ -30,7 +30,7 @@ class RentangNilaiSeeder extends Seeder
                 'inisial_rentang_nilai' => 'B',
                 'keterangan_rentang_nilai' => 'Cukup Kompeten',
                 'keterangan' => 'Kompeten',
-                'rentang_atas' => 93,
+                'rentang_atas' => 93.9,
                 'rentang_bawah' => 84,
 
                 'created_by' => 0,
@@ -40,7 +40,7 @@ class RentangNilaiSeeder extends Seeder
                 'inisial_rentang_nilai' => 'C',
                 'keterangan_rentang_nilai' => 'Kurang Kompeten',
                 'keterangan' => 'Tidak Kompeten',
-                'rentang_atas' => 83,
+                'rentang_atas' => 83.9,
                 'rentang_bawah' => 74,
 
                 'created_by' => 0,
@@ -50,7 +50,7 @@ class RentangNilaiSeeder extends Seeder
                 'inisial_rentang_nilai' => 'D',
                 'keterangan_rentang_nilai' => 'Tidak Kompeten',
                 'keterangan' => 'Tidak Kompeten',
-                'rentang_atas' => 73,
+                'rentang_atas' => 73.9,
                 'rentang_bawah' => 0,
 
                 'created_by' => 0,
@@ -70,7 +70,7 @@ class RentangNilaiSeeder extends Seeder
                 'inisial_rentang_nilai' => 'Cukup Kompeten',
                 'keterangan_rentang_nilai' => 'Cukup Kompeten',
                 'keterangan' => 'Kompeten',
-                'rentang_atas' => 89,
+                'rentang_atas' => 89.9,
                 'rentang_bawah' => 80,
 
                 'created_by' => 0,
@@ -80,7 +80,7 @@ class RentangNilaiSeeder extends Seeder
                 'inisial_rentang_nilai' => 'Kurang Kompeten',
                 'keterangan_rentang_nilai' => 'Kurang Kompeten',
                 'keterangan' => 'Tidak Kompeten',
-                'rentang_atas' => 79,
+                'rentang_atas' => 79.9,
                 'rentang_bawah' => 60,
 
                 'created_by' => 0,
@@ -90,7 +90,7 @@ class RentangNilaiSeeder extends Seeder
                 'inisial_rentang_nilai' => 'Tidak Kompeten',
                 'keterangan_rentang_nilai' => 'Tidak Kompeten',
                 'keterangan' => 'Tidak Kompeten',
-                'rentang_atas' => 59,
+                'rentang_atas' => 59.9,
                 'rentang_bawah' => 0,
 
                 'created_by' => 0,

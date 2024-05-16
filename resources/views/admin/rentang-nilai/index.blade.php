@@ -1,8 +1,10 @@
 @extends('layouts.panel.index')
 @section('title', 'Rentang Nilai')
 @section('content')
-
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+    <!-- Button trigger modal -->
+    <a href="#" class="btn btn-primary rounded mb-3" data-bs-toggle="modal" data-bs-target="#panduanPengisianModal">Panduan</a>
+
     <table id="example" class="table">
         <thead class="fw-normal">
             <th>No</th>
@@ -44,6 +46,73 @@
     </table>
 </div>
 
+
+<!-- Panduan Pengisian Modal -->
+<div class="modal fade" id="panduanPengisianModal" tabindex="-1" aria-labelledby="panduanPengisianModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h5 class="modal-title" id="rentangNilaiModalLabel">Panduan Pengisian Rentang Nilai</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Harap perhatikan panduan berikut untuk mengisi rentang nilai:</p>
+            <ul>
+                <li>Setiap rentang nilai harus memiliki batas atas dan batas bawah.</li>
+                <li>Batas atas dari nilai harus diakhiri dengan angka ',9' (misalnya, 79.9, 89.9, dst).</li>
+                <li>Batas atas dan batas bawah setiap rentang nilai tidak boleh sama.</li>
+            </ul><br>
+
+            <p>Berikut contohnya</p>
+            <table class="table table-hover">
+                <thead class="table-primary">
+                    <th>No</th>
+                    <th scope="col">Nama konversi</th>
+                    <th scope="col">Inisial</th>
+                    <th scope="col">Rentang Atas</th>
+                    <th scope="col">Rentang Bawah</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>konversi_abcd</td>
+                        <td>A</td>
+                        <td>100</td>
+                        <td>94</td>
+                    </tr>        
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>konversi_abcd</td>
+                        <td>B</td>
+                        <td>93.9</td>
+                        <td>84</td>
+                    </tr>   
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>konversi_abcd</td>
+                        <td>C</td>
+                        <td>83.9</td>
+                        <td>74</td>
+                    </tr>   
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>konversi_abcd</td>
+                        <td>D</td>
+                        <td>73.9</td>
+                        <td>0</td>
+                    </tr>   
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Tutup</button>
+        </div>
+
+    </div>
+  </div>
+</div>
+
 {{-- insert --}}
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -73,11 +142,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
-                                    <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" required>
+                                    <input type="number" step="0.01" class="form-control" name="rentang_atas" id="rentang_atas" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Atas</label>
-                                    <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required>
+                                    <input type="number" step="0.01" class="form-control" name="rentang_bawah" id="rentang_bawah" required>
                                 </div>
                 </div>
                 {{-- end form --}}
@@ -127,16 +196,17 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
-                                    <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas }}" required>
+                                    <input type="number" class="form-control" step="0.01" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Atas</label>
-                                    <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" value="{{ $row->rentang_bawah }}" required>
+                                    <input type="number" class="form-control" step="0.01" name="rentang_bawah" id="rentang_bawah" value="{{ $row->rentang_bawah }}" required>
                                 </div>
                 </div>
                 {{-- end form --}}
 
             </div>
+
             <div class="modal-footer justify-end mx-3">
                 <div>
                     <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -147,7 +217,14 @@
         </div>
     </div>
 </div>
-
 @endforeach
 
 @endsection
+
+@push('script')
+<script>
+    $(document).ready(function(){
+        $('#panduanPengisianModal').modal('show');
+    });
+</script>
+@endpush
