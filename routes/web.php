@@ -99,9 +99,11 @@ Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'd
 // AJAX Request -- Menu Sertifikat
 Route::get('sertifikat/fetchPesertaData/{id}', [SertifikatController::class, 'fetchPesertaData']);
 Route::get('sertifikat/fetchSertifikatData/{id}', [SertifikatController::class, 'fetchSertifikatData']);
+Route::get('sertifikat/checkSertifikat/{nomor_sertifikat}', [SertifikatController::class, 'checkSertifikat']);
 
 Route::post('/exportToPDF', [SertifikatController::class, 'exportToPDF'])->name('exportToPDF');
 Route::post('sertifikat/storeSertifikatData', [SertifikatController::class, 'storeSertifikatData']);
+Route::post('sertifikat/updateSertifikatData', [SertifikatController::class, 'updateSertifikatData']);
 Route::delete('sertifikat/destroySertifikatData/{id}', [SertifikatController::class, 'destroySertifikatData']);
 
 require __DIR__.'/auth.php';

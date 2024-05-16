@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nama_konversi_nilai');
             $table->string('inisial_rentang_nilai');
             $table->string('keterangan_rentang_nilai');
-            $table->string('keterangan');
             
             $table->integer('rentang_atas');
             $table->integer('rentang_bawah');
