@@ -10,6 +10,7 @@
             <th>No</th>
             <th scope="col ">Nama</th>
             <th scope="col">Inisial</th>
+            <th scope="col">Keterangan</th>
             <th scope="col">Rentang Atas</th>
             <th scope="col">Rentang Bawah</th>
             <th scope="col">Aksi</th>
@@ -21,6 +22,7 @@
                     <th scope="row">{{ $loop->index + 1 }}</th>
                     <td>{{ $row->nama_konversi_nilai }}</td>
                     <td>{{ $row->inisial_rentang_nilai }}</td>
+                    <td>{{ $row->keterangan_rentang_nilai }}</td>
                     <td>{{ $row->rentang_atas }}</td>
                     <td>{{ $row->rentang_bawah }}</td>
                     <td>

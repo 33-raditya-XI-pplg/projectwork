@@ -390,9 +390,10 @@
                                 banyakData = 'Nilai Lengkap';
                                 nilaiData = formatNumber(row.avg_nilai)
 
-                                row.keterangan != "Kompeten" ?
-                                    inisialNilaiData = '<span style="color: red; font-weight: bold;">' + row.keterangan + '</span>' :
-                                    inisialNilaiData = '<span style="color: green; font-weight: bold;">' + row.keterangan + '</span>'; 
+                                let keterangan_nilai = row.keterangan_rentang_nilai
+                                keterangan_nilai === "Sangat Kompeten" || keterangan_nilai === "Cukup Kompeten" ?
+                                    inisialNilaiData = '<span style="color: green; font-weight: bold;">' + keterangan_nilai + '</span>' :
+                                    inisialNilaiData = '<span style="color: red; font-weight: bold;">' + keterangan_nilai + '</span>' ;
 
                                 row.updated_at != null ? 
                                     timestampsNilaiData = formatTimestamps(row.updated_at) :
