@@ -102,6 +102,44 @@ class SertifikatController extends Controller
         ]);
     }    
 
+    public function generateNomorSertifikat($tglTerbitInput)
+    {
+        $tglTerbit = Carbon::parse($tglTerbitInput);
+        $bulan = $tglTerbit->format('n');
+        $tahun = $tglTerbit->format('Y');
+
+        $count = Sertifikat::whereYear('tgl_terbit', $tahun)
+                            ->whereMonth('tgl_terbit', $bulan)
+                            ->count();
+
+        $autoIncrement = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+        $bulanRomawi = $this->convertToRoman($bulan);
+
+        $nomorSertifikat = "{$autoIncrement}/MASCITRA/SKOM/{$bulanRomawi}/{$tahun}";
+
+        return $nomorSertifikat;
+    }
+
+    private function convertToRoman($month)
+    {
+        $map = [
+            1 => 'I',
+            2 => 'II',
+            3 => 'III',
+            4 => 'IV',
+            5 => 'V',
+            6 => 'VI',
+            7 => 'VII',
+            8 => 'VIII',
+            9 => 'IX',
+            10 => 'X',
+            11 => 'XI',
+            12 => 'XII'
+        ];
+
+        return $map[$month];
+    }
+
     public function storeSertifikatData(Request $request)
     {
         $option = $request->option;
@@ -110,6 +148,9 @@ class SertifikatController extends Controller
         $event_skemaID = $request->event_skemaID;
         $created_by = $request->created_by;
 
+
+        // dd($request);
+        
         // dd($request);
         try {
             DB::beginTransaction();
@@ -120,16 +161,15 @@ class SertifikatController extends Controller
                             ->where('event_skema_id', $event_skemaID)
                             ->select('id_peserta')
                             ->get();
-                    // dd($pesertas);
 
                     foreach ($pesertas as $row) {
                         $pesertaID = $row->id_peserta;
-
                         $exist = Sertifikat::where('peserta_id', $pesertaID)->exists();
-                        if (!$exist) { // Buat sertifikat baru
+
+                        // Buat sertifikat baru
+                        if (!$exist) { 
                             // Generate nomor sertifikat
-                            $dateTimeNow = Carbon::now()->format('YmdHis');
-                            $nomorSertifikat = "SRT-{$event_skemaID}-{$pesertaID}-{$dateTimeNow}";
+                            $nomorSertifikat = $this->generateNomorSertifikat($tgl_terbit);                            
             
                             $nilai_peserta = DB::table('tb_nilai_peserta')
                                             ->select(
@@ -205,8 +245,7 @@ class SertifikatController extends Controller
         $created_by = $request->created_by;
 
         // Generate nomor sertifikat
-        $dateTimeNow = Carbon::now()->format('YmdHis');
-        $nomorSertifikat = "SRT-{$event_skemaID}-{$pesertaID}-{$dateTimeNow}";
+        $nomorSertifikat = $this->generateNomorSertifikat($tgl_terbit);
 
         try {
             DB::beginTransaction();
@@ -390,7 +429,9 @@ class SertifikatController extends Controller
         return $pdf->download($fileName);
     }
 
-    public function checkSertifikat($nomor_sertifikat) {
+    public function checkSertifikat($part1, $part2, $part3, $part4, $part5)
+    {
+        $nomor_sertifikat = "$part1/$part2/$part3/$part4/$part5";
         $exist = Sertifikat::where('nomor_sertifikat', $nomor_sertifikat)->exists();
 
         if ($exist) {
@@ -413,28 +454,18 @@ class SertifikatController extends Controller
                         ->where('tb_sertifikat.nomor_sertifikat', $nomor_sertifikat)
                         ->first();
 
-            $data_penadatangan = DB::table('tb_event_skema')
-                        ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
-                        ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
-                        ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
-                        ->where('tb_penandatangan.event_skema_id', $data_sertifikat_peserta->id_event_skema)
-                        ->get();
-
-            // Change back-slash to slash -- css can't read back-slash
-            $templateBg = str_replace('\\', '/', $data_sertifikat_peserta->path_bg);
-
             $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat; 
             $qrCode = QrCode::format('svg')->size(80)->errorCorrection('H')
                     ->generate($qrCodeData);
 
             if ($data_sertifikat_peserta->orientasi_bg === 'landscape') {
                 return view('template_sertifikat.check.check_sertifikat_landscape', 
-                    compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg', 'qrCode')
+                    compact('data_sertifikat_peserta', 'qrCode')
                 );
             }
             else {
                 return view('template_sertifikat.check.check_sertifikat_potrait', 
-                    compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg', 'qrCode')
+                    compact('data_sertifikat_peserta', 'qrCode')
                 );
             }
 

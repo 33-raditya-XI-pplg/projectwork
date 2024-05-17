@@ -2,7 +2,6 @@
 @section('title', 'Rentang Nilai')
 @section('content')
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-    <!-- Button trigger modal -->
     <a href="#" class="btn btn-primary rounded mb-3" data-bs-toggle="modal" data-bs-target="#panduanPengisianModal">Panduan</a>
 
     <table id="example" class="table">
@@ -16,11 +15,22 @@
         </thead>
         <tbody class="" style="vertical-align: middle">
             @foreach ($rentang as $row)
+                <?php 
+                    if ($row->keterangan_rentang_nilai === "Sangat Kompeten" || $row->keterangan_rentang_nilai === "Cukup Kompeten") {
+                        $color = 'color: green; font-weight: bold;';
+                    } 
+                    elseif ($row->keterangan_rentang_nilai === "Kurang Kompeten" || $row->keterangan_rentang_nilai === "Tidak Kompeten") {
+                        $color = 'color: red; font-weight: normal;';
+                    } else {
+                        $color = 'color: black; font-weight: normal;';
+                    }
+                ?>
                 
                 <tr>
                     <th scope="row">{{ $loop->index + 1 }}</th>
                     <td>{{ $row->nama_konversi_nilai }}</td>
                     <td>{{ $row->inisial_rentang_nilai }}</td>
+                    <td style="{{ $color }}">{{ $row->keterangan_rentang_nilai }}</td>
                     <td>{{ $row->rentang_atas }}</td>
                     <td>{{ $row->rentang_bawah }}</td>
                     <td>
@@ -43,7 +53,9 @@
                 </tr>
             @endforeach
         </tbody>
+
     </table>
+
 </div>
 
 
@@ -59,6 +71,7 @@
         <div class="modal-body">
             <p>Harap perhatikan panduan berikut untuk mengisi rentang nilai:</p>
             <ul>
+                <li>Nama konversi harus sama untuk setiap rentang nilai yang dibuat.</li>
                 <li>Setiap rentang nilai harus memiliki batas atas dan batas bawah.</li>
                 <li>Batas atas dan batas bawah setiap rentang nilai tidak boleh sama.</li>
             </ul><br>
@@ -78,7 +91,7 @@
                         <th scope="row">1</th>
                         <td>konversi_abcd</td>
                         <td>A</td>
-                        <td>Kompeten</td>
+                        <td><span style="color: green; font-weight: bold;">Sangat Kompeten</span></td>
                         <td>100</td>
                         <td>94</td>
                     </tr>        
@@ -86,7 +99,7 @@
                         <th scope="row">2</th>
                         <td>konversi_abcd</td>
                         <td>B</td>
-                        <td>Kompeten</td>
+                        <td><span style="color: green; font-weight: bold;">Cukup Kompeten</span></td>
                         <td>93</td>
                         <td>84</td>
                     </tr>   
@@ -94,7 +107,7 @@
                         <th scope="row">3</th>
                         <td>konversi_abcd</td>
                         <td>C</td>
-                        <td>Tidak Kompeten</td>
+                        <td><span style="color: red; font-weight: bold;">Kurang Kompeten</span></td>
                         <td>83</td>
                         <td>74</td>
                     </tr>   
@@ -102,13 +115,20 @@
                         <th scope="row">4</th>
                         <td>konversi_abcd</td>
                         <td>D</td>
-                        <td>Tidak Kompeten</td>
+                        <td><span style="color: red; font-weight: bold;">Tidak Kompeten</span></td>
                         <td>73</td>
                         <td>0</td>
                     </tr>   
                 </tbody>
             </table>
+
+            <p><span style="color: red; font-weight: bold;">note</span></p>
+            <ul>
+                <li>Hanya keterangan nilai yang sama persis pada contoh yang dapat berubah warna.</li>
+                <li><p>apabila keterangan tidak sama seperti contoh, maka akan berwarna hitam</p></li>
+            </ul>
         </div>
+
         <div class="modal-footer">
             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Tutup</button>
         </div>
