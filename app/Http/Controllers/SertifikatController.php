@@ -475,4 +475,52 @@ class SertifikatController extends Controller
         }
         
     }
+
+    public function showSertifikat($request_id)
+    {
+        $id = intval($request_id);
+
+        $data_sertifikat_peserta = DB::table('tb_sertifikat')
+                        ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+                        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                        ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
+                        ->select('tb_user.nama_lengkap',
+                                 'tb_event.nama_event', 'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema',
+                                 'tb_event_skema.id_event_skema',
+                                 'tb_background.nama_bg', 'tb_background.orientasi_bg', 'tb_background.path_bg',
+                                 'tb_sertifikat.nomor_sertifikat', 
+                                 'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
+                                 'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
+                        )
+                        ->where('tb_sertifikat.peserta_id', $id)
+                        ->first();
+
+        $data_penadatangan = DB::table('tb_event_skema')
+                        ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
+                        ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
+                        ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
+                        ->where('tb_penandatangan.event_skema_id', $data_sertifikat_peserta->id_event_skema)
+                        ->get();
+
+        $templateBg = public_path($data_sertifikat_peserta->path_bg);
+        $fileName = 'Sertif-' . $data_sertifikat_peserta->nomor_sertifikat . '.pdf';
+
+        $pdf = "";
+        if ($data_sertifikat_peserta->orientasi_bg != 'landscape') {
+            $pdf = PDF::loadView('template_sertifikat.show.show_sertifikat_potrait', 
+                compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
+            )->setPaper('a4', 'potrait');
+        } else {
+            $pdf = PDF::loadView('template_sertifikat.show.show_sertifikat_landscape', 
+                compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
+            )->setPaper('a4', 'landscape');
+        }
+
+        return $pdf->stream($fileName);
+    }
+
 }
