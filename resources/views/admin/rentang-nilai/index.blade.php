@@ -9,6 +9,7 @@
             <th>No</th>
             <th scope="col ">Nama</th>
             <th scope="col">Inisial</th>
+            <th scope="col">Keterangan</th>
             <th scope="col">Rentang Atas</th>
             <th scope="col">Rentang Bawah</th>
             <th scope="col">Aksi</th>
@@ -169,7 +170,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
-                                    <input type="number" step="0.01" class="form-control" name="rentang_atas" id="rentang_atas" required>
+                                    <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" required>
                                 </div>
                             </div>
 
@@ -181,7 +182,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Bawah</label>
-                                    <input type="number" step="0.01" class="form-control" name="rentang_bawah" id="rentang_bawah" required>
+                                    <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required>
                                 </div>
                             </div>
                             
@@ -238,7 +239,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
-                                    <input type="number" step="0.01" class="form-control" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas}}" required>
+                                    <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas}}" required>
                                 </div>
                             </div>
 
@@ -250,7 +251,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Bawah</label>
-                                    <input type="number" step="0.01" class="form-control" name="rentang_bawah" id="rentang_bawah" required value="{{ $row->rentang_bawah}}">
+                                    <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required value="{{ $row->rentang_bawah}}">
                                 </div>
                             </div>
                             
