@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>{{ $data_sertifikat_peserta->nomor_sertifikat }}</title>
     <style>
         body {
             margin: -50px;

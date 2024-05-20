@@ -20,39 +20,46 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Rincian</h4>
-                    {{-- <img src="{{ asset('assets/img/wa.jpg') }}" width="100%" height="300" alt="kosong"> --}}
-                    <img id="img-rincian" src="{{ asset('assets/img/wa.jpg') }}" class="img-fluid mx-auto d-block" alt="kosong">
+                    <img id="img-rincian" src="{{ $banner }}" class="img-fluid mx-auto d-block" alt="Banner Event">
                     <hr>
                     <br>
-                    <p class="mt-2 mb-4">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore enim esse, et repellendus suscipit eligendi itaque? Provident voluptatem, cum, rerum numquam fugit laborum quibusdam quas iure repudiandae nam eius ipsum iusto aperiam delectus velit perspiciatis nihil a temporibus. Itaque, dolore!</p>
+                    <p class="mt-2 mb-4">{{ $data_skema->deskripsi }}</p>
                     <div class="row">
                         <div class="mb-4 col-12">
-                            <h6 class="text-uppercase fs-5 ls-2">Position</h6>
-                            <p class="mb-0">Theme designer at Bootstrap.</p>
+                            <h6 class="fs-5 ls-2">Skema</h6>
+                            <p class="mb-0">{{ $data_skema->nama_skema }}</p>
                         </div>
                         <div class="mb-4 col-6">
-                            <h6 class="text-uppercase fs-5 ls-2">Phone </h6>
-                            <p class="mb-0">+08100001</p>
+                            <h6 class="fs-5 ls-2">Event</h6>
+                            <p class="mb-0">{{ $data_skema->nama_event }}</p>
                         </div>
                         <div class="mb-4 col-6">
-                            <h6 class="text-uppercase fs-5 ls-2">Date of Birth </h6>
-                            <p class="mb-0">01.10.2000</p>
+                            <h6 class="fs-5 ls-2">TUK</h6>
+                            <p class="mb-0">{{ $data_skema->nama_tempat }}</p>
                         </div>
                         <div class="col-6">
-                            <h6 class="text-uppercase fs-5 ls-2">Email </h6>
-                            <p class="mb-0">Mascitra.com</p>
+                            <h6 class="fs-5 ls-2">Tanggal Mulai</h6>
+                            <p class="mb-0">{{ $data_skema->tgl_mulai }}</p>
                         </div>
                         <div class="col-6">
-                            <h6 class="text-uppercase fs-5 ls-2">Location</h6>
-                            <p class="mb-0">Jember</p>
+                            <h6 class="fs-5 ls-2">Tanggal Berakhir</h6>
+                            <p class="mb-0">{{ $data_skema->tgl_berakhir }}</p>
                         </div>
                     </div>
                     <div class="back mt-4 mb-3">
-                        <a href="{{ URL::previous() }}" class="btn btn-primary rounded">Kembali</a>
-                        <a href="#" class="btn btn-outline-secondary rounded">Register</a>
+                        <a href="{{ route('sertifikat-user.index') }}" class="btn btn-primary rounded">Kembali</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var button = document.getElementById('tambahBtn');
+            button.style.display = 'none';
+        });
+    </script>
+@endpush

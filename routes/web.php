@@ -24,7 +24,6 @@ use App\Http\Controllers\User\EventUsersController;
 use App\Http\Controllers\User\SertifikatUsersController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\RincianController;
-use App\Http\Controllers\User\RincianNilaiController;
 use App\Http\Controllers\User\RincianSertifikatController;
 
 /*
@@ -40,9 +39,12 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
     Route::resource('nilai',NilaiController::class);
     Route::resource('event-user',EventUsersController::class);
     Route::resource('sertifikat-user',SertifikatUsersController::class);
-    Route::get('cetak-sertifikat',[SertifikatUsersController::class,'cetak'])->name('cetak-sertifikat.cetak');
+
     Route::resource('rincian-user',RincianController::class);
     Route::resource('rincian-sertifikat',RincianSertifikatController::class);
+
+    Route::get('cetak-sertifikat/{event_skemaID}',[SertifikatUsersController::class,'cetak'])->name('cetak-sertifikat.cetak');
+    Route::get('cetak-sertifikat',[SertifikatUsersController::class,'cetak1']);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
