@@ -7,6 +7,8 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UsersImport implements ToModel, WithStartRow, WithMultipleSheets
 {
@@ -29,6 +31,32 @@ class UsersImport implements ToModel, WithStartRow, WithMultipleSheets
      */
     public function model(array $row)
     {
+        // validasi
+        $messages = [
+            '0.integer' => 'Nomer harus berupa angka.',
+            '4.integer' => 'NIK :input tidak valid.',
+            '6.integer' => 'Tanggal lahir :input tidak valid.',
+            '9.email' => 'Email :input tidak valid.',
+            '9.unique' => 'Email :input sudah pernah digunakan.',
+        ];
+
+        $validator = Validator::make($row, [
+            0 => 'integer',
+            1 => 'string',
+            2 => 'string',
+            3 => 'string',
+            4 => 'integer',
+            5 => 'string',
+            6 => 'integer',
+            7 => 'string',
+            8 => 'string',
+            9 => 'email|unique:tb_user,email'
+        ], $messages);
+
+        if ($validator->fails()) {
+            Alert::error('Error', $validator->errors()->all());
+            return null;
+        }
 
         $data = [
             'instansi_id' => intval($row[0]),
@@ -47,7 +75,6 @@ class UsersImport implements ToModel, WithStartRow, WithMultipleSheets
 
         ];
 
-        // dd($data);
         return new User($data);
     }
 }
