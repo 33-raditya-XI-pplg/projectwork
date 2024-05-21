@@ -15,9 +15,11 @@
                 <table id="example" class="table">
                     <thead class="fw-normal">
                         <th scope="col" width="5%">No</th>
-                        <th scope="col" width="30%">Event</th>
-                        <th scope="col" width="30%">Skema</th>
-                        <th scope="col" class="text-center">Aksi</th>
+                        <th scope="col" width="20%">Event</th>
+                        <th scope="col" width="8%">Status</th>
+                        <th scope="col" width="15%">Tanggal Mulai</th>
+                        <th scope="col" width="15%">Tanggal Berakhir</th>
+                        <th scope="col" width="8%" class="text-center">Aksi</th>
                     </thead>
 
                     <tbody class="table-responsive" style="vertical-align: middle">
@@ -26,22 +28,13 @@
                             <tr>
                                 <td>{{ $num++ }}</td>
                                 <td>{{ $row->nama_event }}</td>
-                                <td>{{ $row->nama_skema }}</td>
+                                <td>{{ $row->status }}</td>
+                                <td>{{ $row->tgl_mulai }}</td>
+                                <td>{{ $row->tgl_berakhir }}</td>
                                 <td class="text-center">
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li><a href="{{ route('cetak-sertifikat.cetak', $row->id_event_skema) }}" class="dropdown-item text-primary">
-                                                <i class="fa fa-print"></i> Cetak</a>
-                                            </li>
-                                            <li><a href="{{ route('rincian-sertifikat.show', $row->id_event_skema) }}" class="dropdown-item text-secondary">
-                                                <i class="fa fa-info"></i> Rincian</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <a href="{{ route('rincian-sertifikat.show', $row->id_event) }}" class="btn btn-secondary btn-sm rounded">
+                                        <i class="fa fa-info"></i> Rincian
+                                    </a>
                                 </td>
                                 
                             </tr>
@@ -51,6 +44,7 @@
 
             </div>
         </div>
+        
     </div>
 
 @endsection

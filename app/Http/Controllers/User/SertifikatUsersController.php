@@ -13,21 +13,18 @@ class SertifikatUsersController extends Controller
 {
     public function index()
     {
-        $data_sertifikat_peserta = DB::table('tb_sertifikat')
-                    ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                    ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                    ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                    ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                    ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                    ->select('tb_user.nama_lengkap',
-                             'tb_event_skema.id_event_skema',
-                             'tb_event.nama_event',
-                             'tb_skema.nama_skema',
-                             'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir'
-                    )
-                    ->where('tb_peserta.user_id', Auth::user()->id_user)
-                    ->get();
-
+        $data_sertifikat_peserta= DB::table('tb_peserta')
+                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                        ->select('tb_event.id_event', 'tb_event.nama_event', 'tb_event.status',
+                                 'tb_event.tgl_mulai', 'tb_event.tgl_berakhir',
+                        )
+                        ->where('tb_peserta.user_id', Auth::user()->id_user)
+                        ->groupBy('tb_event.id_event', 'tb_event.nama_event', 'tb_event.status')
+                        ->get();
+                        // dd($data_sertifikat_peserta);
+        
         return view('user.sertifikat.index', compact('data_sertifikat_peserta'));
     }
     public function cetak1() // ==== Easter Egg ====
@@ -52,7 +49,8 @@ class SertifikatUsersController extends Controller
                                  'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
                                  'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
                         )
-                        ->where('tb_peserta.user_id', Auth::user()->id_user)
+                        // ->where('tb_peserta.user_id', Auth::user()->id_user)
+                        ->where('tb_peserta.id_peserta', 6)
                         ->where('tb_event_skema.id_event_skema', $event_skemaID)
                         ->get();
 
@@ -62,7 +60,7 @@ class SertifikatUsersController extends Controller
                         ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
                         ->where('tb_penandatangan.event_skema_id', $event_skemaID)
                         ->get();
-
+        
         $templateBg = public_path($data_sertifikat_peserta[0]->path_bg);
         $fileName = 'Sertif-' . $data_sertifikat_peserta[0]->nomor_sertifikat . '.pdf';
 
