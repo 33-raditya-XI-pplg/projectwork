@@ -19,11 +19,11 @@ class SertifikatUsersController extends Controller
                         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
                         ->select('tb_event.id_event', 'tb_event.nama_event', 'tb_event.status',
                                  'tb_event.tgl_mulai', 'tb_event.tgl_berakhir',
-                        )
-                        ->where('tb_peserta.user_id', Auth::user()->id_user)
-                        ->groupBy('tb_event.id_event', 'tb_event.nama_event', 'tb_event.status')
-                        ->get();
-                        // dd($data_sertifikat_peserta);
+                                 )
+                                 ->where('tb_peserta.user_id', Auth::user()->id_user)
+                                 ->groupBy('tb_event.id_event', 'tb_event.nama_event', 'tb_event.status')
+                                 ->get();
+                                //  dd($data_sertifikat_peserta);
 
         return view('user.sertifikat.index', compact('data_sertifikat_peserta'));
     }

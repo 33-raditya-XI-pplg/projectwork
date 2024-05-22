@@ -107,10 +107,13 @@
             </li>
         </ul>
         @if(Auth::user()->level == 'Pengguna')
-        <div class="level" style="margin-top:105px"></div>
+        <div class="level" style="margin-top:325px"></div>
         @endif
         @if(Auth::user()->level == 'Penguji')
         <div class="level" style="margin-top:215px"></div>
+        @endif
+        @if(Auth::user()->level == 'Admin')
+        <div class="level" style="margin-top:197px"></div>
         @endif
         <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>

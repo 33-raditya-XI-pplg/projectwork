@@ -18,6 +18,7 @@ use App\Http\Controllers\EventSkemaController;
 use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\SertifikatController;
 
+
 use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\RincianController;
 use App\Http\Controllers\User\DashboardController;
