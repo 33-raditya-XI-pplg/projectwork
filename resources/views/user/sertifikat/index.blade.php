@@ -32,7 +32,7 @@
                                 <td>{{ $row->tgl_mulai }}</td>
                                 <td>{{ $row->tgl_berakhir }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('rincian-sertifikat.show', $row->id_event) }}" class="btn btn-secondary btn-sm rounded">
+                                    <a href="{{ route('sertifikat-user.show', $row->id_event) }}" class="btn btn-secondary btn-sm rounded">
                                         <i class="fa fa-info"></i> Rincian
                                     </a>
                                 </td>

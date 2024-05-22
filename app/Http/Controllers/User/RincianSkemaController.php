@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class RincianSkemaController extends Controller
 {
-    public function show($event_skemaID)
+    public function rincian_skema($event_skemaID)
     {
+        $previousUrl = url()->previous();
         $data_sub_skema = DB::table('tb_event_skema')
                         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
                         ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
@@ -39,6 +40,6 @@ class RincianSkemaController extends Controller
                         ->where('tb_event_skema.id_event_skema', $event_skemaID)
                         ->get();
 
-        return view('user.skema.rincian_skema', compact('data_sub_skema', 'data_skema', 'data_penguji'));
+        return view('user.skema.rincian_skema', compact('data_sub_skema', 'data_skema', 'data_penguji', 'previousUrl'));
     }
 }

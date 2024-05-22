@@ -65,7 +65,10 @@
                         </div>
 
                         <div class="back mt-4 mb-3">
-                            <a href="{{ route('rincian-sertifikat.show', $data_skema->id_event) }}" class="btn btn-primary rounded">Kembali</a>
+                            <a class="btn btn-primary rounded" href="{{ strpos($previousUrl, 'sertifikat-user') !== false ? 
+                                    route('sertifikat-user.show', $data_skema->id_event) : 
+                                    route('event-user.show', $data_skema->id_event) }}" >
+                            Kembali</a>
                         </div>
 
                     </div>

@@ -91,7 +91,7 @@
                                                     <li><a href="{{ route('cetak-sertifikat.cetak', $row->id_event_skema) }}" class="dropdown-item text-primary">
                                                         <i class="fa fa-print"></i> Cetak</a>
                                                     </li>
-                                                    <li><a href="{{ route('rincian-skema.show', $row->id_event_skema) }}" class="dropdown-item text-secondary">
+                                                    <li><a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="dropdown-item text-secondary">
                                                         <i class="fa fa-info"></i> Rincian</a>
                                                     </li>
                                                 </ul>
@@ -103,7 +103,7 @@
                                         <td>-</td>
                                         <td>-</td>
                                         <td class="text-center">
-                                            <a href="{{ route('rincian-skema.show', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded">
+                                            <a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded">
                                                 <i class="fa fa-info"></i> Rincian</a>
                                         </td>
                                     @endif
