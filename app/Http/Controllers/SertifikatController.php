@@ -506,7 +506,7 @@ class SertifikatController extends Controller
                         ->where('tb_penandatangan.event_skema_id', $data_sertifikat_peserta->id_event_skema)
                         ->get();
 
-        $templateBg = public_path($data_sertifikat_peserta->path_bg);
+        $templateBg = (php_uname('s') === 'Linux') ? public_path(str_replace('\\', '/', $data_sertifikat_peserta->path_bg)) : public_path($data_sertifikat_peserta->path_bg);
         $fileName = 'Sertif-' . $data_sertifikat_peserta->nomor_sertifikat . '.pdf';
 
         $pdf = "";
