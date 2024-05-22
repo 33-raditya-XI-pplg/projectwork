@@ -45,12 +45,6 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'nilai' ? 'active' : '' }} position-relative">
-                <a href="{{route('nilai.index')}}" class="item-link">
-                    <i class="fas fa-marker link-icon"></i>
-                    <span>Nilai</span>
-                </a>
-            </li>
             @endif
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
