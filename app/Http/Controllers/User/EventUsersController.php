@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EventUsersController extends Controller
 {
@@ -17,25 +18,24 @@ class EventUsersController extends Controller
     {
         $data_jenis_event = Jenis_Event::get();
         $data_instansi = Instansi::get();
-        $data_event = Event::paginate(9);
-        
+        $data_event = Event::where('tb_event.visibilitas', 'publik')->paginate(9);
+
         return view('user.event.index', compact('data_jenis_event', 'data_instansi', 'data_event'));
     }
 
     public function show($eventID)
     {
+        confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?'); // Include SweetAlert to View
         $userID = Auth::user()->id_user;
-        $data_event = DB::table('tb_peserta')
-                    ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+
+        $data_event = DB::table('tb_event_skema')
                     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                     ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
                     ->select('tb_event.nama_event', 'tb_event.deskripsi', 'tb_event.path_banner',
                              'tb_event.tgl_mulai', 'tb_event.tgl_berakhir',
                              'tb_tempat.nama_tempat'
                     )
-                    ->where('tb_peserta.user_id', Auth::user()->id_user)
                     ->where('tb_event_skema.event_id', $eventID)
-                    ->groupBy('tb_event.id_event')
                     ->first();
 
         $data_skema = DB::table('tb_event')
@@ -59,6 +59,31 @@ class EventUsersController extends Controller
         $banner = asset($data_event->path_banner);
         
         return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner'));
+    }
+
+    public function mendaftar(Request $request)
+    {
+        $userID = Auth::user()->id_user;
+
+        $isRegistered = DB::table('tb_peserta')
+            ->where('user_id', $userID)
+            ->where('event_skema_id', $request->event_skema_id)
+            ->exists();
+
+        if ($isRegistered) {
+            Alert::error('Gagal Mendaftar!');
+            return redirect()->back();
+        }
+
+        DB::table('tb_peserta')->insert([
+            'user_id' => $userID,
+            'event_skema_id' => $request->event_skema_id,
+            'created_by' => $userID,
+            'created_at' => now()
+        ]);
+
+        Alert::success('Berhasil Mendaftar!', 'Data berhasil ditambahkan.');
+        return redirect()->back();
     }
 
 }

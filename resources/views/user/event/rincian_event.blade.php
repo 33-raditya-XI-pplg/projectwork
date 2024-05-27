@@ -63,17 +63,38 @@
                                 <tr>
                                     <td>{{ $num++ }}</td>
                                     <td>{{ $row->nama_skema }}</td>
-
-                                    @if ($row->telah_terdaftar == 0)
-                                        <td>bisa mendaftar</td>                                        
-                                    @else
-                                        <td>sudah terdaftar</td>    
-                                    @endif
-
-                                    <td class="text-center">
-                                        <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded">
-                                                <i class="fa fa-info"></i> Rincian</a>
+                                    <td><button type="button" class="btn rounded-3 {{ $row->telah_terdaftar == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>
+                                        {{ $row->telah_terdaftar == 1 ? 'Sudah Terdaftar' : 'Dapat Mendaftar' }}</button>
                                     </td>
+
+                                    @if ($row->telah_terdaftar == 1)
+                                        <td class="text-center">
+                                            <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded">
+                                                    <i class="fa fa-info"></i> Rincian</a>
+                                        </td>
+                                    @else
+                                        <td class="text-center"> 
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa-solid fa-bars"></i>
+                                                </a>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a href="#" class="dropdown-item text-success" id="registerButton">
+                                                            <i class="fa-regular fa-pen-to-square"></i> Daftar</a>
+                                                            <form id="mendaftarForm" action="{{ route('mendaftar.event') }}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="event_skema_id" required value="{{ $row->id_event_skema }}">
+                                                            </form>
+                                                    </li>
+                                                    <li><a href="{{ route('event.rincian-skema', $row->id_event_skema) }}" class="dropdown-item text-danger">
+                                                            <i class="fa fa-info"></i> Rincian</a>
+                                                    </li>
+                                                </ul>
+                                            </div>                                               
+                                        </td>
+                                    @endif
                                     
                                 </tr>
                             @endforeach
@@ -93,5 +114,22 @@
             var button = document.getElementById('tambahBtn');
             button.style.display = 'none';
         });
+        
+        document.getElementById('registerButton').addEventListener('click', function () {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan mendaftar untuk event ini!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Daftar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('mendaftarForm').submit();
+                }
+            })
+        });
+
     </script>
 @endpush

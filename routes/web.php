@@ -42,6 +42,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
 
     Route::get('cetak-sertifikat/{event_skemaID}',[SertifikatUsersController::class,'cetak'])->name('cetak-sertifikat.cetak');
     Route::get('cetak-sertifikat',[SertifikatUsersController::class,'cetak1']);
+
+    Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
