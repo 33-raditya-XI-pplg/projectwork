@@ -33,6 +33,7 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
+
         </style>
     @endpush
 
@@ -100,11 +101,11 @@
                             <h5>{{ $row->nama_event }}</h5>
                             <p class="deskripsi">{{ $row->deskripsi }}</p>
                         </div>
-                        <div class="d-flex justify-content-end align-items-center mt-3 mb-3">
+                        <div class="d-flex mt-3 mb-3">
                             <div>
-                                <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
+                                <span style="margin-right:90px">{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
                                 <a href="{{ route('event-user.show', $row->id_event) }}"
-                                    class="btn btn-sm btn-warning float-end rounded"><i class="fas fa-tasks"></i> Rincian</a>
+                                    class="btn btn-sm btn-warning float-right rounded"><i class="fas fa-tasks"></i> Rincian</a>
                             </div>
                         </div>
                     </div>
