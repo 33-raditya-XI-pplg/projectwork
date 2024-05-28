@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\TempatController;
+use App\Models\Tempat;
+use Carbon\Carbon;
 use App\Models\Event;
 use App\Models\Instansi;
-use App\Models\Jenis_Event;
 
+use App\Models\Jenis_Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -14,13 +17,43 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class EventUsersController extends Controller
 {
-    public function index()
+    public function index1()
     {
         $data_jenis_event = Jenis_Event::get();
         $data_instansi = Instansi::get();
         $data_event = Event::where('tb_event.visibilitas', 'publik')->paginate(9);
 
         return view('user.event.index', compact('data_jenis_event', 'data_instansi', 'data_event'));
+    }
+
+    public function index(Request $request)
+    {
+        $data_jenis_event = Jenis_Event::get();
+        $data_tempat = Tempat::get();
+        $query = Event::query();
+
+        if ($request->has('tgl_mulai') && $request->tgl_mulai) {
+            $query->where('tb_event.tgl_mulai', '>=', Carbon::parse($request->tgl_mulai));
+        }
+
+        if ($request->has('tgl_berakhir') && $request->tgl_berakhir) {
+            $query->where('tb_event.tgl_berakhir', '<=', Carbon::parse($request->tgl_berakhir));
+        }
+
+        if ($request->has('nama_jenis_event') && $request->nama_jenis_event) {
+            $query->where('tb_jenis_event.id_jenis_event', 'like', '%' . $request->nama_jenis_event . '%');
+        }
+
+        if ($request->has('nama_tuk') && $request->nama_tuk) {
+            $query->where('tb_tempat.id_tempat', 'like', '%' . $request->nama_tuk . '%');
+        }
+
+        $data_event = $query->where('tb_event.visibilitas', 'publik')
+                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+                        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+                        ->paginate(9);
+
+        return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat'));
     }
 
     public function show($eventID)
