@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/skema', [Api\SkemaController::class, 'show']);
+Route::get('/event', [Api\EventController::class, 'show']);
 
 Route::get('/shoow/{id}', [Api\SkemaController::class, 'shoow'])->name('shoow');
-Route::get('/event', [Api\EventController::class, 'show']);
+Route::get('/evshow/{id}', [Api\EventController::class, 'shoow'])->name('evshow');
