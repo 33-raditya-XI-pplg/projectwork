@@ -28,7 +28,7 @@
 
             .deskripsi {
                 display: -webkit-box;
-                -webkit-line-clamp: 2;
+                -webkit-line-clamp: 1;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -45,7 +45,7 @@
             <div class="card-body">
 
                 <form action="{{ route('event-user.index') }}" method="GET">
-                    <div class="row">                    
+                    <div class="row">
                         <div class="col-md-2 mb-3">
                             <label for="tgl_mulai">Tanggal Mulai</label>
                             <input type="date" name="tgl_mulai" class="form-control" value="{{ request('tgl_mulai') }}">
@@ -63,7 +63,7 @@
                                         {{ $row->nama_tempat }}
                                     </option>
                                 @endforeach
-                            </select>                    
+                            </select>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="nama_jenis_event">Jenis Event</label>
@@ -74,7 +74,7 @@
                                         {{ $row->nama_jenis_event }}
                                     </option>
                                 @endforeach
-                            </select>                    
+                            </select>
                         </div>
                         <div class="col-md-1 mb-3 mt-4">
                             <button type="submit" class="btn btn-primary rounded">Filter</button>
@@ -101,12 +101,9 @@
                             <h5>{{ $row->nama_event }}</h5>
                             <p class="deskripsi">{{ $row->deskripsi }}</p>
                         </div>
-                        <div class="d-flex mt-3 mb-3">
-                            <div>
-                                <span style="margin-right:90px">{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
-                                <a href="{{ route('event-user.show', $row->id_event) }}"
-                                    class="btn btn-sm btn-warning float-right rounded"><i class="fas fa-tasks"></i> Rincian</a>
-                            </div>
+                        <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
+                            <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
+                            <a href="{{ route('event-user.show', $row->id_event) }}" class="btn btn-sm btn-warning rounded"><i class="fas fa-tasks"></i> Rincian</a>
                         </div>
                     </div>
                 </div>
@@ -117,7 +114,7 @@
         @else
             <p>Tidak ada event yang ditemukan.</p>
         @endif
-        
+
     </div>
 @endsection
 
