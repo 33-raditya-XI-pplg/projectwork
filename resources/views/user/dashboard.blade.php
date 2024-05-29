@@ -67,24 +67,34 @@
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-8 bg-white">
-                <div class="card shadow-md justify-content-center text-center rounded-3" style="height: 12rem;">
-                        <div class="spinner-border text-primary text-center mx-auto" role="status">
-                            <span class="visually-hidden">************</span>
-                        </div>
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <label><b> Event yang Sedang Berlangsung</b></label>
                 </div>
-            </div>
-            <div class="col-4 bg-white text-center">
-                <div class="card shadow-md rounded-3" style="height: 12rem;">
-                    <div class="card shadow-md justify-content-center text-center rounded-3" style="height: 12rem;">
-                        <div class="spinner-border text-primary text-center mx-auto" role="status">
-                            <span class="visually-hidden">************</span>
-                        </div>
+
+                <div class="card-body">
+                    <div class="accordion" id="accordionExample">
+                        @php $num=1; @endphp
+                        @foreach ($data_event as $row)
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ $row->id_event }}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $row->id_event }}" aria-expanded="true" aria-controls="collapse{{ $row->id_event }}">
+                                        <strong>{{ $num++ }}. {{ $row->nama_event }}</strong>
+                                        <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }} - {{ \Carbon\Carbon::parse($row->tgl_berakhir)->format('d, F Y') }}</span>
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ $row->id_event }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $row->id_event }}" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <p>{{ $row->deskripsi }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                    </div>
                 </div>
-                </div>
+
             </div>
         </div>
-
-    </div>
 @endsection

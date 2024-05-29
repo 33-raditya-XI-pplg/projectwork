@@ -21,7 +21,9 @@ class EventUsersController extends Controller
     {
         $data_jenis_event = Jenis_Event::get();
         $data_instansi = Instansi::get();
-        $data_event = Event::where('tb_event.visibilitas', 'publik')->paginate(9);
+        $data_event = Event::where('visibilitas', 'publik')
+                        ->where('status', 'aktif')
+                        ->paginate(9);
 
         return view('user.event.index', compact('data_jenis_event', 'data_instansi', 'data_event'));
     }
