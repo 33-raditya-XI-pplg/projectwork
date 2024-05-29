@@ -17,17 +17,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class EventUsersController extends Controller
 {
-    public function index1()
-    {
-        $data_jenis_event = Jenis_Event::get();
-        $data_instansi = Instansi::get();
-        $data_event = Event::where('visibilitas', 'publik')
-                        ->where('status', 'aktif')
-                        ->paginate(9);
-
-        return view('user.event.index', compact('data_jenis_event', 'data_instansi', 'data_event'));
-    }
-
     public function index(Request $request)
     {
         $data_jenis_event = Jenis_Event::get();
