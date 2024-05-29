@@ -41,6 +41,7 @@
         <div class="card border-0">
             <div class="card-header bg-primary text-white">
                 <label for=""><b> Filter</b></label>
+                <a href="{{ route('event-user.index') }}" class="btn btn-light rounded btn-sm">Clear Filter</a>
             </div>
             <div class="card-body">
 
@@ -103,7 +104,8 @@
                         </div>
                         <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
                             <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
-                            <a href="{{ route('event-user.show', $row->id_event) }}" class="btn btn-sm btn-warning rounded"><i class="fas fa-tasks"></i> Rincian</a>
+                            <a href="{{ route('event-user.show', $row->id_event) }}" class="btn btn-sm btn-warning rounded">
+                                <i class="fas fa-tasks"></i> Rincian</a>
                         </div>
                     </div>
                 </div>

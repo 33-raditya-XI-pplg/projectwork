@@ -10,12 +10,6 @@
                 </div>
                 <div>
 
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" class="form-control"
-                            aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis"
-                            placeholder="Search">
-                    </div>
                 </div>
             </div>
         </div>
@@ -30,8 +24,8 @@
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
                         </div>
-                        <h1 class="card-title fw-bold">{{ rand(1, 100) }}</h1>
-                        <p class="card-text fw-bold">Total Pengguna</p>
+                        <h1 class="card-title fw-bold">{{ $banyak_pengguna }}</h1>
+                        <p class="card-text fw-bold">Banyak Pengguna</p>
                     </div>
                 </div>
             </div>
@@ -42,8 +36,8 @@
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
                         </div>
-                        <h1 class="card-title fw-bold">{{ rand(1, 100) }}</h1>
-                        <p class="card-text fw-bold">Total Pengguna</p>
+                        <h1 class="card-title fw-bold">{{ $banyak_penguji }}</h1>
+                        <p class="card-text fw-bold">Banyak Penguji</p>
                     </div>
                 </div>
             </div>
@@ -54,8 +48,8 @@
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
                         </div>
-                        <h1 class="card-title fw-bold">{{ rand(1, 100) }}</h1>
-                        <p class="card-text fw-bold">Total Pengguna</p>
+                        <h1 class="card-title fw-bold">{{ $banyak_event }}</h1>
+                        <p class="card-text fw-bold">Banyak Event</p>
                     </div>
                 </div>
             </div>
@@ -66,8 +60,8 @@
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
                         </div>
-                        <h1 class="card-title fw-bold">{{ rand(1, 100) }}</h1>
-                        <p class="card-text fw-bold">Total Pengguna</p>
+                        <h1 class="card-title fw-bold">{{ $banyak_skema }}</h1>
+                        <p class="card-text fw-bold">Banyak Skema<p>
                     </div>
                 </div>
             </div>

@@ -7,10 +7,17 @@
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
-                <a href="{{ url('admin/dashboard') }}" class="item-link">
-                    <i class="fa fa-home link-icon"></i>
-                    <span>Dashboard</span>
-                </a>
+                @if(Auth::user()->level == 'Pengguna')
+                    <a href="{{ url('user/dashboard') }}" class="item-link">
+                        <i class="fa fa-home link-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @else
+                    <a href="{{ url('admin/dashboard') }}" class="item-link">
+                        <i class="fa fa-home link-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @endif
             </li>
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
