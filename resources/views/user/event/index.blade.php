@@ -41,7 +41,7 @@
         <div class="card border-0">
             <div class="card-header bg-primary text-white">
                 <label for=""><b> Filter</b></label>
-                <a href="{{ route('event-user.index') }}" class="btn btn-light rounded btn-sm">Clear Filter</a>
+                <a href="{{ route('event-user.index') }}" class="btn btn-light rounded btn-sm float-end">Clear Filter</a>
             </div>
             <div class="card-body">
 

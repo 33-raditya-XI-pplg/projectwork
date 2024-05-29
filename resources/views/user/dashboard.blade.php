@@ -1,5 +1,20 @@
 @extends('layouts.panel.index')
 @section('title', 'Dashboard')
+@push('styles')
+    <style>
+        .accordion-button {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .accordion-button strong {
+            margin-right: auto;
+        }
+        .accordion-button span {
+            text-align: right;
+        }
+    </style>
+@endpush
 @section('content')
     <div class="container">
         <div class="card bg-primary-gradient text-white rounded-3 shadow-lg" style="height: 7rem;">
@@ -13,10 +28,10 @@
                 </div>
             </div>
         </div>
+      
         <div class="row">
             <div class="col-md-3">
-                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm"
-                    style="width: 15rem; height: 8rem">
+                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm">
                     <div class="card-body">
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
@@ -30,8 +45,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm"
-                    style="width: 15rem; height: 8rem">
+                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm">
                     <div class="card-body">
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
@@ -42,8 +56,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm"
-                    style="width: 15rem; height: 8rem">
+                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm">
                     <div class="card-body">
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
@@ -54,14 +67,13 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm"
-                    style="width: 15rem; height: 8rem">
+                <div class="card mt-4 bg-primary-gradient text-white rounded-3 shadow-sm">
                     <div class="card-body">
                         <div class="position-absolute top-0 end-0 mt-2 me-2">
                             <i class="fa-solid fa-users fs-1"></i>
                         </div>
                         <h1 class="card-title fw-bold">{{ $banyak_skema }}</h1>
-                        <p class="card-text fw-bold">Banyak Skema<p>
+                        <p class="card-text fw-bold">Banyak Skema</p>
                     </div>
                 </div>
             </div>
@@ -80,10 +92,17 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ $row->id_event }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $row->id_event }}" aria-expanded="true" aria-controls="collapse{{ $row->id_event }}">
-                                        <strong>{{ $num++ }}. {{ $row->nama_event }}</strong>
-                                        <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }} - {{ \Carbon\Carbon::parse($row->tgl_berakhir)->format('d, F Y') }}</span>
+                                        <div class="row w-100">
+                                            <div class="col-md-6">
+                                                <strong>{{ $num++ }}. {{ $row->nama_event }}</strong>
+                                            </div>
+                                            <div class="col-md-6 text-end">
+                                                <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }} - {{ \Carbon\Carbon::parse($row->tgl_berakhir)->format('d, F Y') }}</span>
+                                            </div>
+                                        </div>
                                     </button>
                                 </h2>
+
                                 <div id="collapse{{ $row->id_event }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $row->id_event }}" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         <p>{{ $row->deskripsi }}</p>
