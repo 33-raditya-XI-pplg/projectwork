@@ -7,10 +7,17 @@
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
-                <a href="{{ url('admin/dashboard') }}" class="item-link">
-                    <i class="fa fa-home link-icon"></i>
-                    <span>Dashboard</span>
-                </a>
+                @if(Auth::user()->level == 'Pengguna')
+                    <a href="{{ url('user/dashboard') }}" class="item-link">
+                        <i class="fa fa-home link-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @else
+                    <a href="{{ url('admin/dashboard') }}" class="item-link">
+                        <i class="fa fa-home link-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
+                @endif
             </li>
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
@@ -39,10 +46,10 @@
                     <span>Event</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikasi-user' ? 'active' : '' }} position-relative">
-                <a href="{{route('sertifikasi-user.index')}}" class="item-link">
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat-user' ? 'active' : '' }} position-relative">
+                <a href="{{route('sertifikat-user.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
-                    <span>Sertifikasi</span>
+                    <span>Sertifikat</span>
                 </a>
             </li>
             @endif
@@ -107,10 +114,13 @@
             </li>
         </ul>
         @if(Auth::user()->level == 'Pengguna')
-        <div class="level" style="margin-top:160px"></div>
+        <div class="level" style="margin-top:325px"></div>
         @endif
         @if(Auth::user()->level == 'Penguji')
         <div class="level" style="margin-top:215px"></div>
+        @endif
+        @if(Auth::user()->level == 'Admin')
+        <div class="level" style="margin-top:197px"></div>
         @endif
         <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>

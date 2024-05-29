@@ -67,19 +67,21 @@ class PenilaianController extends Controller
                             ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
                             ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
                             ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+
                             ->leftJoinSub(function ($query) {
                                 $query->from('tb_nilai_peserta')
                                     ->select('peserta_id',
                                         DB::raw('COUNT(nilai) as banyak_nilai'),
                                         DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
                                         DB::raw('SUM(nilai) as total_nilai'),
-                                        DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai'),
-                                        // DB::raw('ROUND(AVG(nilai)) as avg_nilai') // Pake ini wir
+                                        // DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai'),
+                                        DB::raw('ROUND(AVG(nilai)) as avg_nilai') // Pake ini wir
                                     )
                                     ->groupBy('peserta_id');
                             }, 'nilai_stats', function ($join) {
                                 $join->on('tb_peserta.id_peserta', '=', 'nilai_stats.peserta_id');
                             })
+
                             ->leftJoinSub(function ($query) {
                                 $query->from('tb_nilai_peserta')
                                     ->select('peserta_id', 
@@ -90,6 +92,7 @@ class PenilaianController extends Controller
                             }, 'nilai_timestamp', function ($join) {
                                 $join->on('nilai_stats.peserta_id', '=', 'nilai_timestamp.peserta_id');
                             })
+
                             ->leftJoinSub(function ($query) use ($eventSkemaId) {
                                 $query->from('tb_rentang_nilai')
                                     ->join('tb_event_skema_rentang_nilai', 'tb_rentang_nilai.id_rentang_nilai', '=', 'tb_event_skema_rentang_nilai.rentang_nilai_id')
@@ -102,6 +105,7 @@ class PenilaianController extends Controller
                                 $join->on('nilai_stats.avg_nilai', '>=', 'inisial_nilai.rentang_bawah')
                                     ->on('nilai_stats.avg_nilai', '<=', 'inisial_nilai.rentang_atas');
                             })
+                            
                             ->select('tb_event_skema.id_event_skema', 'tb_user.id_user', 'tb_peserta.id_peserta', 
                                     'tb_user.nama_lengkap', 'nilai_stats.banyak_nilai', 'nilai_stats.banyak_nilai_nol', 
                                     'nilai_stats.total_nilai', 'nilai_stats.avg_nilai',
@@ -111,14 +115,14 @@ class PenilaianController extends Controller
                             ->orderBy('tb_user.id_user', 'asc')
                             ->get();
 
-        $jumlahSubSkemaPerEvent = DB::table('tb_event_skema as es')
-                        ->join('tb_skema as s', 'es.skema_id', '=', 's.id_skema')
-                        ->join('tb_sub_skema as ss', 's.id_skema', '=', 'ss.skema_id')
-                        ->select('es.id_event_skema', 's.nama_skema', 
-                            DB::raw('COUNT(ss.id_sub_skema) as jumlah_sub_skema')
+        $jumlahSubSkemaPerEvent = DB::table('tb_event_skema')
+                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                        ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
+                        ->select('tb_event_skema.id_event_skema', 'tb_skema.nama_skema', 
+                                 DB::raw('COUNT(tb_sub_skema.id_sub_skema) as jumlah_sub_skema')
                         )
-                        ->groupBy('es.id_event_skema', 's.nama_skema')
-                        ->where('es.skema_id', $id)
+                        ->groupBy('tb_event_skema.id_event_skema', 'tb_skema.nama_skema')
+                        ->where('tb_event_skema.skema_id', $id)
                         ->first();
 
         return response()->json([

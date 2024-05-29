@@ -49,6 +49,12 @@ class PesertaSeeder extends Seeder
                 'event_skema_id' => 2,
 
                 'created_by' => 0,
+            ],
+            [
+                'user_id' => 6,
+                'event_skema_id' => 3,
+
+                'created_by' => 0,
             ]
         ]);
     }

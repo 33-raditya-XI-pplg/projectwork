@@ -7,10 +7,6 @@
             padding: 50px;
             font-family: Arial, sans-serif;
             text-align: center;
-
-            background-image: url('{{ asset($templateBg) }}');
-            background-position: center;
-            background-repeat: no-repeat;
         }
         .content {
             position: relative;
@@ -42,22 +38,6 @@
         <p>Terbit: {{ \Carbon\Carbon::parse($data_sertifikat_peserta->tgl_terbit)->format('d-F-Y') }}</p>
         <p>Berakhir: {{ \Carbon\Carbon::parse($data_sertifikat_peserta->tgl_berakhir)->format('d-F-Y') }}</p>
         <p>Masa Berlaku: {{ $data_sertifikat_peserta->masa_berlaku }}</p>
-        
-        <table style="width: 100%;">
-            <tr>
-                @foreach ($data_penadatangan as $row2)
-                    <td style="width: 50%;  text-align: center;">
-                        <div>
-                            <p style="font-size: 1em; font-weight: bold;">{{ $row2->nama_ttd }}</p>
-                            <div class="signature">
-                                <img src="{{ asset($row2->path_ttd) }}" alt="Signature">
-                            </div>
-                            <p style="font-size: 1em; text-decoration: underline;">{{ $row2->jabatan }}</p>
-                        </div>
-                    </td>
-                @endforeach
-            </tr>
-        </table>
 
         <img src="data:image/svg+xml;base64,{{ base64_encode($qrCode) }}" alt="QR Code">
     </div>

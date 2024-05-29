@@ -75,7 +75,7 @@
                 <form id="export-form" action="{{ route('exportToPDF') }}" method="POST">
                     @csrf
                     
-                    <input type="hidden" name="event_skema_id" id="event_skema_id">
+                    <input type="hidden" name="event_skema_id" id="event_skema_id">                    
                     <button type="button" class="btn btn-secondary rounded-3 mb-3" id="cetak_sertifikat_btn"
                         onclick="submitForm()" disabled>Cetak 
                     </button>
@@ -94,7 +94,8 @@
                             <!-- AJAX Response Here -->
                         </tbody>
                     </table>
-                </form>
+
+                <iframe id="printFrame" name="printFrame" style="visibility: hidden; height: 0; width: 0;"></iframe>
             </div>
         </div>
     </div>
@@ -274,6 +275,7 @@
                         // Input Disabled 
                         $('#nama_skema').val(data_skema.nama_skema);
                         $('#peserta_select').empty();
+                        $('#event_skema_id').val(event_skemaID);
 
                         // Condition for select_peserta Dropdown
                         if (total_peserta != 0) {
@@ -303,8 +305,6 @@
                                     $('#create_tgl_terbit').prop('disabled', false);
                                     $('#create_tgl_berakhir').prop('disabled', false);
                                     $('#peserta_select').prop('disabled', false);
-
-                                    $('#event_skema_id').val(event_skemaID);
                                     $('#store_sertifikat_btn').prop('disabled', true);
 
                                     $('#peserta_select').append('<option hidden disabled selected>\
@@ -358,6 +358,11 @@
 
                             var buttonAction = 
                             '<li>\
+                                <a href="#" class="dropdown-item text-success print_sertifikat_btn" onclick="printCertificate(' + row.id_peserta + ')"">\
+                                    <i class="fa-solid fa-book-open"></i>\
+                                    Lihat</a>\
+                            </li>\
+                            <li>\
                                 <a href="#" class="dropdown-item text-info edit_sertifikat_btn" data-id="' + row.id_peserta + '">\
                                     <i class="fa-regular fa-pen-to-square"></i>\
                                     Edit</a>\
@@ -636,6 +641,25 @@
         });
 
     })
+
+    function printCertificate(id) {
+        var printFrame = document.getElementById('printFrame');
+        printFrame.src = '/sertifikat/showSertifikat/' +id+ '/pdf';
+
+        printFrame.onload = function() {
+            // window.frames['printFrame'].focus();
+            window.frames['printFrame'].print();
+        };
+
+        Swal.fire({
+            title: 'Memuat...',
+            text: 'Sabar wir.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+    }
 
 </script>
 @endpush

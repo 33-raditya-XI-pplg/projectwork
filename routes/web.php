@@ -2,32 +2,28 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\TempatController;
-use App\Http\Controllers\InstansiController;
-use App\Http\Controllers\RentangNilaiController;
-use App\Http\Controllers\SkemaController;
-use App\Http\Controllers\BackgroundController;
-use App\Http\Controllers\JenisEventController;
-
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SertifikatController;
 use App\Http\Controllers\EventController;
-
+use App\Http\Controllers\SkemaController;
+use App\Http\Controllers\TempatController;
 use App\Http\Controllers\PengujiController;
+use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SignatureController;
-use App\Http\Controllers\EventSkemaController;
+use App\Http\Controllers\BackgroundController;
 
-use App\Http\Controllers\User\NilaiController;
-use App\Http\Controllers\User\EventUsersController;
-use App\Http\Controllers\User\SertifikatUsersController;
+use App\Http\Controllers\EventSkemaController;
+use App\Http\Controllers\JenisEventController;
+use App\Http\Controllers\SertifikatController;
+
+
+use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\DashboardController;
-use App\Http\Controllers\User\RincianController;
-use App\Http\Controllers\User\RincianNilaiController;
-use App\Http\Controllers\User\RincianSertifikasiController;
-use App\Http\Controllers\User\RincianSertifikatController;
-use App\Http\Controllers\User\SertifikasiUsersController;
+use App\Http\Controllers\User\EventUsersController;
+use App\Http\Controllers\User\RincianSkemaController;
+use App\Http\Controllers\User\SertifikatUsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,17 +34,19 @@ use App\Http\Controllers\User\SertifikasiUsersController;
 Route::get('/',fn() => redirect('/login'));
 
 Route::group(['prefix' => 'user', 'middleware' => 'auth'], function(){
-    Route::resource('dashboard',DashboardController::class);
-    Route::resource('nilai',NilaiController::class);
+    Route::get('dashboard', [DashboardController::class, 'user_index']);
     Route::resource('event-user',EventUsersController::class);
-    Route::resource('sertifikasi-user',SertifikasiUsersController::class);
-    Route::get('cetak-sertifikasi',[SertifikasiUsersController::class,'cetak'])->name('cetak-sertifikasi.cetak');
-    Route::resource('rincian-user',RincianController::class);
-    Route::resource('rincian-sertifikasi',RincianSertifikasiController::class);
+    Route::resource('sertifikat-user',SertifikatUsersController::class);
+    Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
+    Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
+
+    Route::get('cetak-sertifikat/{event_skemaID}',[SertifikatUsersController::class,'cetak'])->name('cetak-sertifikat.cetak');
+    Route::get('cetak-sertifikat',[SertifikatUsersController::class,'cetak1']);
+    Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
-    Route::get('/dashboard',fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'admin_index']);
 
     Route::resource('/event', EventController::class);
     Route::resource('/penilaian', PenilaianController::class);
@@ -99,7 +97,8 @@ Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'd
 // AJAX Request -- Menu Sertifikat
 Route::get('sertifikat/fetchPesertaData/{id}', [SertifikatController::class, 'fetchPesertaData']);
 Route::get('sertifikat/fetchSertifikatData/{id}', [SertifikatController::class, 'fetchSertifikatData']);
-Route::get('sertifikat/checkSertifikat/{nomor_sertifikat}', [SertifikatController::class, 'checkSertifikat']);
+Route::get('sertifikat/showSertifikat/{id}/pdf', [SertifikatController::class, 'showSertifikat']);
+Route::get('sertifikat/checkSertifikat/{part1}/{part2}/{part3}/{part4}/{part5}', [SertifikatController::class, 'checkSertifikat']);
 
 Route::post('/exportToPDF', [SertifikatController::class, 'exportToPDF'])->name('exportToPDF');
 Route::post('sertifikat/storeSertifikatData', [SertifikatController::class, 'storeSertifikatData']);
