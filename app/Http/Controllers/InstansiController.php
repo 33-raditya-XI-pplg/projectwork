@@ -69,7 +69,7 @@ class InstansiController extends Controller
                   ->where('instansi_id', $id)->count();
       $checkChildID2 = DB::table('tb_event')
                   ->where('instansi_id', $id)->count();
-      $checkChildID3 = DB::table('tb_event')
+      $checkChildID3 = DB::table('tb_ttd')
                   ->where('instansi_id', $id)->count();
 
       if ($checkChildID1 > 0 || $checkChildID2 > 0 || $checkChildID3 > 0) {
