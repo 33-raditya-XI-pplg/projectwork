@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
-use Illuminate\Support\Facades\Storage;
-
 use App\Models\Ttd;
 use App\Models\Instansi;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SignatureController extends Controller
 {
@@ -64,6 +65,14 @@ class SignatureController extends Controller
     public function destroy($id)
     {
         $foto = Ttd::find($id)->path_ttd;
+        $checkChildID = DB::table('tb_penandatangan')
+                    ->where('ttd_id', $id)->count();
+
+        if ($checkChildID > 0) {
+            Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+            return redirect()->back();
+        }
+        
         unlink(public_path($foto));
         Ttd::destroy($id);
         toast('Tanda Tangan berhasil dihapus.', 'success');

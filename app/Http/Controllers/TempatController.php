@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Tempat;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TempatController extends Controller
 {
@@ -25,7 +26,7 @@ class TempatController extends Controller
     //      ]);
     //   }
 
-      tempat::create($request->all());
+      Tempat::create($request->all());
       Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan');
 
       return redirect()->back();
@@ -39,7 +40,7 @@ class TempatController extends Controller
     //      ]);
     //   }
 
-      $tempat = tempat::find($id);
+      $tempat = Tempat::find($id);
       $tempat->update($request->all());
       Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
 
@@ -48,7 +49,14 @@ class TempatController extends Controller
 
    public function destroy($id)
    {
-      tempat::destroy($id);
+      $checkChildID = Event::where('tempat_id', $id)->count();
+
+      if ($checkChildID > 0) {
+          Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+          return redirect()->back();
+      }
+      
+      Tempat::destroy($id);
       toast('Tempat berhasil dihapus.', 'success');
 
       return redirect()->back();

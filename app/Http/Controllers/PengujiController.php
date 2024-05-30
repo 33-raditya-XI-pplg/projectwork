@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Instansi;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PengujiController extends Controller
 {
@@ -81,6 +82,17 @@ class PengujiController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        
+        if ($user->level == 'Penguji') {
+            $checkChildID = DB::table('tb_menguji')
+                            ->where('user_id', $id)
+                            ->count();
+
+            if ($checkChildID > 0) {
+                Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+                return redirect()->back();
+            }
+        }
 
         // BUG : Somehow path_foto not exists
         // quick fix : let-say path_foto can't be manually deleted on public_path

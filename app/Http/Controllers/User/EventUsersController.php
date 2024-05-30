@@ -37,7 +37,9 @@ class EventUsersController extends Controller
             $query->where('tb_tempat.id_tempat', 'like', '%' . $request->nama_tuk . '%');
         }
 
-        $data_event = $query->where('tb_event.visibilitas', 'publik')
+        $data_event = $query
+                        ->where('tb_event.visibilitas', 'publik')
+                        ->where('tb_event.status', 'Aktif')
                         ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
                         ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
                         ->paginate(9);

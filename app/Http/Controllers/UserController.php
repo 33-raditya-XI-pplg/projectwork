@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
+use App\Imports\FirstSheetImport;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\User\NilaiController;
-use App\Imports\FirstSheetImport;
-use App\Imports\UsersImport;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -26,7 +27,6 @@ class UserController extends Controller
     }
 
     public function store(Request $request) {
-        dd($request);
         if (!$request->has('status')) {
             $request->merge([
             'status' => 'Nonaktif'
@@ -89,6 +89,17 @@ class UserController extends Controller
     public function destroy($id) {
         $user = User::findOrFail($id);
 
+        if ($user->level == 'Pengguna') {
+            $checkChildID = DB::table('tb_peserta')
+                            ->where('user_id', $id)
+                            ->count();
+
+            if ($checkChildID > 0) {
+                Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+                return redirect()->back();
+            }
+        }
+        
         // BUG : Somehow path_foto not exists
         // quick fix : let-say path_foto can't be manually deleted on public_path
         // if (!empty($user->path_foto) && Storage::exists($user->path_foto)) {

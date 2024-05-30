@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Instansi;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class InstansiController extends Controller
 {
@@ -63,6 +64,19 @@ class InstansiController extends Controller
    public function destroy($id)
    {
       $logo = Instansi::find($id)->path_logo;
+
+      $checkChildID1 = DB::table('tb_user')
+                  ->where('instansi_id', $id)->count();
+      $checkChildID2 = DB::table('tb_event')
+                  ->where('instansi_id', $id)->count();
+      $checkChildID3 = DB::table('tb_event')
+                  ->where('instansi_id', $id)->count();
+
+      if ($checkChildID1 > 0 || $checkChildID2 > 0 || $checkChildID3 > 0) {
+          Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+          return redirect()->back();
+      }
+
       unlink(public_path($logo));
       Instansi::destroy($id);
       toast('Instansi berhasil dihapus.', 'success');

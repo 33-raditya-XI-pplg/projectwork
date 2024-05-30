@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 use App\Models\Rentang_Nilai as Rentang;
+use RealRashid\SweetAlert\Facades\Alert;
+
 class RentangNilaiController extends Controller
 {
     public function index() {
@@ -32,6 +34,13 @@ class RentangNilaiController extends Controller
     }
 
     public function destroy($id) {
+        $checkChildID = DB::table('tb_event_skema_rentang_nilai')
+                        ->where('rentang_nilai_id', $id)->count();
+
+        if ($checkChildID > 0) {
+            Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+            return redirect()->back();
+        }
 
         Rentang::destroy($id);
 

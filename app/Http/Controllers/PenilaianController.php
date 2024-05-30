@@ -158,7 +158,7 @@ class PenilaianController extends Controller
         $eventSkemaID = $request->event_skemaID;
         $nilaiSubSkema = $request->nilaiSubSkema;
         $created_by = $request->createdBy;
-// dd($request);
+
         DB::beginTransaction();
 
         try {

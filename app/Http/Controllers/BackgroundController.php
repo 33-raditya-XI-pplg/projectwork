@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event_Skema;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Background;
@@ -94,8 +95,17 @@ class BackgroundController extends Controller
     public function destroy(string $id)
     {
         $bg = Background::find($id)->path_bg;
+
+        $checkChildID = Event_Skema::where('background_id', $id)->count();
+
+        if ($checkChildID > 0) {
+            Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+            return redirect()->back();
+        }
+
         unlink(public_path($bg));
         Background::destroy($id);
+
         toast('Background terhapus!','success');
         return redirect()->back();
     }
