@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row">
                 <div class="col mb-3">
-                    @if (method_field('PUT'))
+                    @if (isset($pengguna))
                         <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                     @else
                         <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
