@@ -56,9 +56,9 @@
                             <th scope="col" width="5%">No</th>
                             <th scope="col" width="20%">Skema</th>
                             <th scope="col" width="20%">Status Sertifikat</th>
-                            <th scope="col" width="20%">Nilai <span style="color: grey; font-size: 15px;">avg</span></th>
+                            <th scope="col" width="15%">Nilai <span style="color: grey; font-size: 15px;">avg</span></th>
                             <th scope="col" width="20%">Keterangan</th>
-                            <th scope="col" width="8%" class="text-center">Aksi</th>
+                            <th scope="col" width="10%" class="text-center">Aksi</th>
                         </thead>
 
                         <tbody class="table-responsive" style="vertical-align: middle">

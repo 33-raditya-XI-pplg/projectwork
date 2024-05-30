@@ -88,7 +88,6 @@ class SertifikatUsersController extends Controller
                     )
                     ->where('tb_peserta.user_id', Auth::user()->id_user)
                     ->where('tb_event_skema.event_id', $eventID)
-                    ->groupBy('tb_event.id_event')
                     ->first();
 
         $data_skema = DB::table('tb_peserta')
