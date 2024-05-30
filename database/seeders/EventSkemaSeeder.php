@@ -18,7 +18,6 @@ class EventSkemaSeeder extends Seeder
                 'event_id' => 1,
                 'skema_id' => 1,
                 'background_id' => 3,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -26,7 +25,6 @@ class EventSkemaSeeder extends Seeder
                 'event_id' => 1,
                 'skema_id' => 2,
                 'background_id' => 1,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -34,7 +32,6 @@ class EventSkemaSeeder extends Seeder
                 'event_id' => 2,
                 'skema_id' => 3,
                 'background_id' => 2,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -42,7 +39,6 @@ class EventSkemaSeeder extends Seeder
                 'event_id' => 2,
                 'skema_id' => 4,
                 'background_id' => 2,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -50,7 +46,6 @@ class EventSkemaSeeder extends Seeder
                 'event_id' => 3,
                 'skema_id' => 5,
                 'background_id' => 2,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ],
@@ -58,7 +53,6 @@ class EventSkemaSeeder extends Seeder
                 'event_id' => 3,
                 'skema_id' => 6,
                 'background_id' => 2,
-                'status' => 'Aktif',
 
                 'created_by' => 0,
             ]

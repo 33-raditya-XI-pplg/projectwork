@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema');
             $table->foreignId('background_id')->constrained('tb_background', 'id_background');
 
-            $table->string('status');
-
             $table->integer('created_by')->nullable(); 
             $table->integer('updated_by')->nullable(); 
             $table->timestamps();
