@@ -2,12 +2,9 @@
 @section('title', 'Pengguna')
 @section('content')
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between mb-3">
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item h5">Master Data</li>
-                <li class="breadcrumb-item active h5"><a href="#">User</a></li>
-            </ol>
+
         </nav>
         <div>
             <button type="button" class="btn btn-success rounded text-white" data-bs-toggle="modal" data-bs-target="#excel">
