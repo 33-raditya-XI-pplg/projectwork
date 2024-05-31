@@ -74,7 +74,6 @@ class SkemaController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request);
         DB::beginTransaction();
         try {
             if ($request->has('icon')) {
@@ -96,22 +95,15 @@ class SkemaController extends Controller
             
             $existingSubSkemaIds = $request->input('sub_skema_ids', []);
 
-            $checkChildID1 = Sub_Skema::where('skema_id', $skema->id_skema)
-                            ->whereIn('id_sub_skema', $existingSubSkemaIds)->count();
-            // $checkChildID2 = Nilai_Peserta::whereIn('sub_skema_id', $existingSubSkemaIds)->count();
+            $checkChildID1 = Event_Skema::where('skema_id', $skema->id_skema)->count();
+            
             $checkChildID2 = DB::table('tb_nilai_peserta')
                             ->join('tb_event_skema', 'tb_nilai_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
                             ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                             ->where('skema_id', $skema->id_skema)
                             ->whereNotNull('sub_skema_id')
                             ->exists();
-            // DB::table('tb_nilai_peserta')
-            //                 ->join('tb_event_skema', 'tb_nilai_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-            //                 ->where('skema_id', $skema->id_skema)
-            //                 ->where('sub_skema_id')
-            //                 ->exists();
 
-            // dd($existingSubSkemaIds, $checkChildID1, $checkChildID2);
             if ($checkChildID1 > 0 || $checkChildID2 > 0) {
                 Alert::error('Gagal mengubah!', 'Tidak dapat mengubah karena data masih digunakan.');
                 return redirect()->back();
@@ -127,8 +119,6 @@ class SkemaController extends Controller
             
             if (!empty($request->sub_skema)) {
                 foreach ($request->sub_skema as $subSkemaId => $subSkemaValue) {    
-                    // if (!empty($subSkemaValue) && Sub_Skema::where('id_sub_skema', !$subSkemaId)
-                    //     ->whereIn('skema_id', $skema->id_skema)) {
                     if (!empty($subSkemaValue) && !Sub_Skema::where('id_sub_skema', $subSkemaId)
                         ->whereIn('skema_id', [$skema->id_skema])->exists()) {
                     
