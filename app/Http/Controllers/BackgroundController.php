@@ -103,8 +103,16 @@ class BackgroundController extends Controller
             return redirect()->back();
         }
 
-        unlink(public_path($bg));
-        Background::destroy($id);
+        if (!empty($bg)) {
+            if( file_exists(public_path($bg)) ) {
+                unlink(public_path($bg));
+                Background::destroy($id);
+            } else {
+                Background::destroy($id);
+            }
+        } else {
+            Background::destroy($id);
+        }
 
         toast('Background terhapus!','success');
         return redirect()->back();

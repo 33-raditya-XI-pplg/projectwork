@@ -64,7 +64,7 @@ class SignatureController extends Controller
 
     public function destroy($id)
     {
-        $foto = Ttd::find($id)->path_ttd;
+        $ttd = Ttd::find($id);
         $checkChildID = DB::table('tb_penandatangan')
                     ->where('ttd_id', $id)->count();
 
@@ -73,8 +73,17 @@ class SignatureController extends Controller
             return redirect()->back();
         }
         
-        unlink(public_path($foto));
-        Ttd::destroy($id);
+        if (!empty($ttd->path_ttd)) {
+            if( file_exists(public_path($ttd->path_ttd)) ) {
+                unlink(public_path($ttd->path_ttd));
+                $ttd->delete();
+            } else {
+                $ttd->delete();
+            }
+        } else {
+            $ttd->delete();
+        }
+
         toast('Tanda Tangan berhasil dihapus.', 'success');
 
         return redirect()->back();

@@ -73,12 +73,21 @@ class InstansiController extends Controller
                   ->where('instansi_id', $id)->count();
 
       if ($checkChildID1 > 0 || $checkChildID2 > 0 || $checkChildID3 > 0) {
-          Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
-          return redirect()->back();
+         Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+         return redirect()->back();
       }
 
-      unlink(public_path($logo));
-      Instansi::destroy($id);
+      if (!empty($logo)) {
+         if( file_exists(public_path($logo)) ) {
+            unlink(public_path($logo));
+            Instansi::destroy($id);
+         } else {
+            Instansi::destroy($id);
+         }
+      } else {
+            Instansi::destroy($id);
+      }
+
       toast('Instansi berhasil dihapus.', 'success');
 
       return redirect()->back();

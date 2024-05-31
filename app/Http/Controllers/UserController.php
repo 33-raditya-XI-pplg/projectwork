@@ -100,16 +100,16 @@ class UserController extends Controller
             }
         }
         
-        // BUG : Somehow path_foto not exists
-        // quick fix : let-say path_foto can't be manually deleted on public_path
-        // if (!empty($user->path_foto) && Storage::exists($user->path_foto)) {
-        //     Storage::delete($user->path_foto);
-        // }
         if (!empty($user->path_foto)) {
-            unlink(public_path($user->path_foto));
+            if( file_exists(public_path($user->path_foto)) ) {
+                unlink(public_path($user->path_foto));
+                $user->delete();
+            } else {
+                $user->delete();
+            }
+        } else {
             $user->delete();
         }
-        $user->delete();
 
         toast('Pengguna terhapus!','success');
         return redirect()->back();

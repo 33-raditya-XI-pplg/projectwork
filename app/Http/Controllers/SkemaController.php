@@ -166,16 +166,16 @@ class SkemaController extends Controller
             return redirect()->back();
         }
         
-        // BUG : Somehow path_foto not exists
-        // quick fix : let-say path_foto can't be manually deleted on public_path
-        // if (!empty($user->path_foto) && Storage::exists($user->path_foto)) {
-        //     Storage::delete($user->path_foto);
-        // }
-        if (!empty($skema->path_icon)) {
-            unlink(public_path($skema->path_icon));
+        if (!empty($skema->path_foto)) {
+            if( file_exists(public_path($skema->path_foto)) ) {
+                unlink(public_path($skema->path_foto));
+                $skema->delete();
+            } else {
+                $skema->delete();
+            }
+        } else {
             $skema->delete();
         }
-        $skema->delete();
 
         toast('Skema berhasil dihapus.', 'success');
 
