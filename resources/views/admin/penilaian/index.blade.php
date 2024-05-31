@@ -264,7 +264,7 @@
         function fetchDetailData(skemaID) {
             Swal.fire({
                 title: 'Memuat...',
-                text: 'Sabar wir.',
+                text: 'Sedang Memproses!',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -408,7 +408,7 @@
                             else {
                                 banyakData = '<span style="color: red; font-weight: bold;">Nilai kurang =  ' + row.banyak_nilai_nol + '</span>';
                                 nilaiData = '<span style="color: red; font-weight: bold;"> ' + formatNumber(row.avg_nilai) + '</span>'
-                                inisialNilaiData = '<span style="color: red; font-weight: bold;">Nilai Kurang wir</span>'
+                                inisialNilaiData = '<span style="color: red; font-weight: bold;">Nilai Kurang</span>'
                                 
                                 row.updated_at != null ? 
                                     timestampsNilaiData = '<span style="color: red; font-weight: bold;">'+ formatTimestamps(row.updated_at) +'</span>' :

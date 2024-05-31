@@ -40,7 +40,7 @@
                                 <div class="mb-3">
                                     <label for="nama_ttd" class="form-label">Nama Peserta</label>
                                     <select class="chosen-select form-control" id="peserta_select" disabled>
-                                        <option hidden disabled selected>Pilih Skema Dulu wir</option>
+                                        <option hidden disabled selected>Pilih Skema Dulu</option>
                                         <!-- Ajax Response Here -->
                                     </select>
                                 </div>
@@ -151,7 +151,7 @@
 
         Swal.fire({
             title: 'Memproses...',
-            text: 'Sabar wir.',
+            text: 'Sedang Memproses!',
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
@@ -246,7 +246,7 @@
         function fetchDetailData(skemaID) {
             Swal.fire({
                 title: 'Memuat...',
-                text: 'Sabar wir.',
+                text: 'Sedang Memproses!',
                 allowOutsideClick: false,
                 didOpen: () => {
                     Swal.showLoading();
@@ -328,7 +328,7 @@
                             // console.log('Tidak ada peserta')
                             Swal.fire({
                                 title: 'Tidak ada peserta pada <span style="color: red;">'+data_skema.nama_skema+'</span>',
-                                text: 'Tambah Peserta dulu wir',
+                                text: 'Tambah Peserta dulu',
                                 icon: 'info',
                             });
 
@@ -653,7 +653,7 @@
 
         Swal.fire({
             title: 'Memuat...',
-            text: 'Sabar wir.',
+            text: 'Sedang Memproses!',
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
