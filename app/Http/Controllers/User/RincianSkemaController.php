@@ -19,8 +19,7 @@ class RincianSkemaController extends Controller
                         ->where('tb_event_skema.id_event_skema', $event_skemaID)
                         ->get();
 
-        $data_skema = DB::table('tb_peserta')
-                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+        $data_skema = DB::table('tb_event_skema')
                         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
                         ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                         ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
@@ -29,7 +28,6 @@ class RincianSkemaController extends Controller
                                 'tb_skema.nama_skema',
                                 'tb_tempat.nama_tempat'
                         )
-                        ->where('tb_peserta.user_id', Auth::user()->id_user)
                         ->where('tb_event_skema.id_event_skema', $event_skemaID)
                         ->first();
 
