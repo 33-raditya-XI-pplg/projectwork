@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('judul');
             $table->string('slug')->unique();
-            $table->text('ringkasan');
+            // $table->text('ringkasan');
             $table->text('body');
 
             $table->integer('created_by')->nullable();
