@@ -36,6 +36,7 @@ use App\Http\Controllers\ProfilPerusahaanController;
 use App\Http\Controllers\User\RincianSkemaController;
 use App\Http\Controllers\User\SertifikatUsersController;
 
+use App\Http\Controllers\BlogKategoriController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\TestimoniController;
 /*
@@ -234,6 +235,11 @@ Route::post('sertifikat/updateSertifikatData', [SertifikatController::class, 'up
 Route::delete('sertifikat/destroySertifikatData/{id}', [SertifikatController::class, 'destroySertifikatData']);
 
 require __DIR__.'/auth.php';
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::post('/blog', [BlogController::class, 'store'])->name('blog.store');
+Route::put('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+Route::put('/admin/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
 Route::put('/faq/{id}', [FaqController::class, 'update'])->name('faq.update');

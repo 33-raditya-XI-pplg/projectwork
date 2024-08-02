@@ -18,11 +18,10 @@ return new class extends Migration
 
             $table->string('judul');
             $table->string('slug')->unique();
-            $table->text('ringkasan');
             $table->text('body');
-            
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }
