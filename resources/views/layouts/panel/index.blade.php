@@ -16,7 +16,7 @@
     <meta name="author" content="@yield('meta.author', config('variable.AUTHOR'))">
     <meta name="keywords" content="@yield('meta.keywords', config('variable.KEYWORDS'))">
     <meta name="robots" content="index, follow">
-    
+
     <link rel="icon" href="{{ asset('assets/img/icon.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/img/icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +33,10 @@
     <link rel="stylesheet" href="{{ asset('assets/css/chosen.css') }}">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css"
         rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js">
+        <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js">
+
+        <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
     @stack('style')
 
     {{-- @include('layouts.env') --}}
@@ -63,7 +67,7 @@
                         @php
                             $menu = request()->segment(count(request()->segments()));
                         @endphp
-                        @if (in_array($menu, 
+                        @if (in_array($menu,
                                     [
                                         'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat',
                                         'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat'
@@ -98,6 +102,8 @@
     {{-- <script src="{{ asset('assets/js/main.js') }}"></script> --}}
     <script src="{{ asset('assets/js/chosen.jquery.js') }}"></script>
     <script src="{{ asset('assets/js/panel.js') }}"></script>
+    <script src="{{asset('assets/js/custom.js')}}"></script>
+    <script></script>
     <script>
         var button = document.getElementById('add')
         button.style.display = 'none';
@@ -143,10 +149,56 @@
                     });
             });
         });
+
+        $("#image_upload_form").validate({
+    rules: {
+      nama: {
+        required: true,
+        minlength: 255
+      }
+    },
+
+    kategori: {
+        nama: {
+          required: true,
+          minlength: 255
+        },
+        image:{
+            required:true,
+            extensions: "png|jpep|jpg|bmp"
+        }
+      },
+
+
+
+    messages: {
+      nama: {
+        required: "Please enter an Image Caption",
+        minlength:("max. 255 charackter")
+      },
+      kategori: {
+        required: "Please select category",
+
+      },
+      image: {
+        required: "Please upload image",
+        extensions:"only jpeg,p"
+
+      },
+
+    }
+  });
+
+
     </script>
     @stack('script')
     @include('sweetalert::alert')
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
 
 </body>
+
+
 
 </html>
