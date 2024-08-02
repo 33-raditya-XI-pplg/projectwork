@@ -249,3 +249,7 @@ Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.in
 Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
 Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
 Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni.index');
+Route::post('/testimoni', [TestimoniController::class, 'store'])->name('testimoni.store');
+Route::put('/testimoni{testimoni}', [TestimoniController::class, 'update'])->name('testimoni.update');
+Route::delete('/testimoni{testimoni}', [TestimoniController::class, 'destroy'])->name('testimoni.destroy');
