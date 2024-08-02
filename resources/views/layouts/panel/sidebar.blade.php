@@ -106,6 +106,64 @@
                 </div>
             </li>
             @endif
+
+            @if(Auth::user()->level == 'Admin')
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
+                <a href="" class="item-link">
+                    <i class="fas fa-file link-icon"></i>
+                    <span>Management</span>
+                </a>
+                <div class="card-header mt-3" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
+                <div class="sub-menu">
+                    <ul class="sub-menu-content">
+                        <small class="text-muted">USER</small>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'profil' : '' }}">
+                            <a href="{{ route('profil.index') }}" class="sub-menu-link"><i class="fas fa-city"></i>
+                                <span>Profil Perusahaan</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'partner' : '' }}">
+                            <a href="{{ route('partner.index') }}" class="sub-menu-link"><i class="fas fa-users"></i>
+                                <span>Partner</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'page' ? 'active' : '' }}">
+                            <a href="{{ route('page.index') }}" class="sub-menu-link"><i class="fa fa-retweet"></i>
+                                <span> Page</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'kategori' : '' }}">
+                            <a href="{{ route('kategori.index') }}" class="sub-menu-link"><i class="fas fa-align-justify"></i>
+                                <span>Kategori</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'blog' : '' }}">
+                            <a href="{{ route('blog.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
+                                <span> Blog</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'blogkategori' : '' }}">
+                            <a href="{{ route('blogkategori.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
+                                <span> Blog Kategori</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'galeri' : '' }}">
+                            <a href="{{ route('galeri.index') }}" class="sub-menu-link"><i class="fas fa-image"></i>
+                                <span> Galeri</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'video' : '' }}">
+                            <a href="{{ route('video.index') }}" class="sub-menu-link"><i class="fas fa-video"></i>
+                                <span> Video</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'testimoni' : '' }}">
+                            <a href="{{ route('testimoni.index') }}" class="sub-menu-link"><i class="fas fa-star"></i>
+                                <span> Testimoni</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'faq' : '' }}">
+                            <a href="{{ route('faq.index') }}" class="sub-menu-link"><i class="fas fa-envelope"></i>
+                                <span> Faq</span></a>
+                        </li>
+
+
+                    </ul>
+                </div>
+                </div>
+            </li>
+            @endif
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
                 <a href="{{ route('profile.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>

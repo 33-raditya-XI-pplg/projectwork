@@ -25,6 +25,7 @@ use App\Http\Controllers\User\EventUsersController;
 use App\Http\Controllers\User\RincianSkemaController;
 use App\Http\Controllers\User\SertifikatUsersController;
 
+use App\Http\Controllers\TestimoniController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -106,3 +107,7 @@ Route::post('sertifikat/updateSertifikatData', [SertifikatController::class, 'up
 Route::delete('sertifikat/destroySertifikatData/{id}', [SertifikatController::class, 'destroySertifikatData']);
 
 require __DIR__.'/auth.php';
+Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni.index');
+Route::post('/testimoni', [TestimoniController::class, 'store'])->name('testimoni.store');
+Route::put('/testimoni{testimoni}', [TestimoniController::class, 'update'])->name('testimoni.update');
+Route::delete('/testimoni{testimoni}', [TestimoniController::class, 'destroy'])->name('testimoni.destroy');

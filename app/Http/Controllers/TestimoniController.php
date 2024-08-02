@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Page;
+use App\Models\Testimoni;
+use Illuminate\Http\Request;
+
+class TestimoniController extends Controller
+{
+    public function index()
+    {
+        $testimoni = Testimoni::all();
+        $page = Page::all();
+        return view('admin.testimoni.index', compact('testimoni', 'page'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'page_id' => 'required|integer',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'tanggal' => 'required|date',
+            'rating' => 'required|integer|min:1|max:5',
+            'isi_testimoni' => 'required|string',
+            'status_publikasi' => 'required|boolean',
+            'created_by' => 'required|integer',
+        ]);
+
+        Testimoni::create([
+            'page_id' => $request->page_id,
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'tanggal' => $request->tanggal,
+            'rating' => $request->rating,
+            'isi_testimoni' => $request->isi_testimoni,
+            'status_publikasi' => $request->status_publikasi,
+            'created_by' => $request->created_by,
+        ]);
+
+        return redirect()->route('testimoni.index')
+            ->with('success', 'Testimoni created successfully.');
+    }
+
+    public function update(Request $request, Testimoni $testimoni)
+{
+    $request->validate([
+        'page_id' => 'required|integer',
+        'nama' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'tanggal' => 'required|date',
+        'rating' => 'required|integer|min:1|max:5',
+        'isi_testimoni' => 'required|string',
+        'status_publikasi' => 'required|boolean',
+        'updated_by' => 'required|integer',
+    ]);
+
+    $testimoni->update($request->only([
+        'page_id',
+        'nama',
+        'email',
+        'tanggal',
+        'rating',
+        'isi_testimoni',
+        'status_publikasi',
+        'updated_by',
+    ]));
+
+    return redirect()->route('testimoni.index')
+        ->with('success', 'Testimoni updated successfully.');
+}
+
+
+    public function destroy(Testimoni $testimoni)
+    {
+        $testimoni->delete();
+
+        return redirect()->route('testimoni.index')
+            ->with('success', 'Testimoni deleted successfully.');
+    }
+
+    // Uncomment and implement if needed
+    /*
+    public function create()
+    {
+        $page = Page::all();
+        return view('admin.testimoni.create', compact('page'));
+    }
+
+    public function edit(Testimoni $testimoni)
+    {
+        $page = Page::all();
+        return view('admin.testimoni.edit', compact('testimoni', 'page'));
+    }
+
+    public function show(Testimoni $testimoni)
+    {
+        return view('admin.testimoni.show', compact('testimoni'));
+    }
+    */
+}
