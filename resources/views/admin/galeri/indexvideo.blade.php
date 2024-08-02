@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <h1>Video</h1>
+    <h1>Video Management</h1>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-2">
@@ -11,7 +11,6 @@
                     <div class="panel-heading">Welcome</div>
                 </div>
                 <a href="{{ route('video.create') }}" class="btn btn-primary btn-block mt-3" data-bs-toggle="modal" data-bs-target="#uploadVideoModal">Upload Video</a>
-                {{-- <a href="{{ route('galeri.index') }}" class="btn btn-primary btn-block mt-3">Back</a> --}}
             </div>
         </div>
     </div>
@@ -25,8 +24,8 @@
                         <thead>
                             <tr>
                                 <th>Video</th>
-                                <th>Description</th>
-                                <th>Actions</th>
+                                <th>Deskripsi</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +53,7 @@
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton{{ $video->id_galeri }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Aksi
+                                                Actions
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $video->id_galeri }}">
                                                 <li>
@@ -101,12 +100,10 @@
 
                                             <div class="form-group">
                                                 <label for="kategori">Category</label>
-                                                <select name="kategori" class="form-control" required>
-                                                    <option value="partner" {{ $video->kategori == 'partner' ? 'selected' : '' }}>Partner</option>
-                                                    <option value="klien" {{ $video->kategori == 'klien' ? 'selected' : '' }}>Client</option>
-                                                    <option value="gambar" {{ $video->kategori == 'gambar' ? 'selected' : '' }}>Image</option>
-                                                    <option value="video" {{ $video->kategori == 'video' ? 'selected' : '' }}>Video</option>
+                                                <select name="kategori" class="form-control" disabled>
+                                                    <option value="video" selected>Video</option>
                                                 </select>
+                                                <input type="hidden" name="kategori" value="video">
                                             </div>
 
                                             <div class="form-group">
@@ -131,58 +128,60 @@
                         </div>
                     @endforeach
 
-                   <!-- Upload Video Modal -->
-<div class="modal fade" id="uploadVideoModal" tabindex="-1" aria-labelledby="uploadVideoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="uploadVideoModalLabel">Upload Video</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <form action="{{ route('video.store') }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="nama">Name</label>
-                        <input type="text" name="nama" class="form-control" id="nama" required>
+                    <!-- Upload Video Modal -->
+                    <div class="modal fade" id="uploadVideoModal" tabindex="-1" aria-labelledby="uploadVideoModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title" id="uploadVideoModalLabel">Upload Video</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <!-- Modal Body -->
+                                <div class="modal-body">
+                                    <form action="{{ route('video.store') }}" method="POST">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="nama">Name</label>
+                                            <input type="text" name="nama" class="form-control" id="nama" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="page_id">Page ID</label>
+                                            <select name="page_id" class="form-control" id="page_id" required>
+                                                <option value="">Select Page ID</option>
+                                                @foreach ($pages as $page)
+                                                    <option value="{{ $page->id_page }}">{{ $page->id_page }} - {{ $page->nama_page }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="kategori">Category</label>
+                                            <select name="kategori" class="form-control" disabled>
+                                                <option value="video" selected>Video</option>
+                                            </select>
+                                            <input type="hidden" name="kategori" value="video">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="path_file">Video URL</label>
+                                            <input type="url" name="path_file" class="form-control" id="path_file" placeholder="Enter YouTube video URL" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="deskripsi">Description</label>
+                                            <textarea name="deskripsi" class="form-control" id="deskripsi" placeholder="Enter description" required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                                    </form>
+                                </div>
+                                <!-- Modal Footer -->
+                                <div class="modal-footer bg-light">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="page_id">Page ID</label>
-                        <select name="page_id" class="form-control" id="page_id" required>
-                            <option value="">Select Page ID</option>
-                            @foreach ($pages as $page)
-                                <option value="{{ $page->id_page }}">{{ $page->id_page }} - {{ $page->nama_page }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="kategori">Category</label>
-                        <select name="kategori" class="form-control" id="kategori" required>
-                            <option value="partner">Partner</option>
-                            <option value="klien">Client</option>
-                            <option value="gambar">Image</option>
-                            <option value="video">Video</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="path_file">Video URL</label>
-                        <input type="url" name="path_file" class="form-control" id="path_file" placeholder="Enter YouTube video URL" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="deskripsi">Description</label>
-                        <textarea name="deskripsi" class="form-control" id="deskripsi" placeholder="Enter description" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Upload</button>
-                </form>
-            </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 @endsection
