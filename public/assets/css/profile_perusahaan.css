@@ -1,0 +1,13 @@
+/* style.css */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+.hero {
+    text-align: center;
+    padding: 50px;
+}
+
+/* Gaya untuk slider akan ditambahkan di sini */

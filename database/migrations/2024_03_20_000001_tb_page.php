@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('id_page');
             $table->string('nama_page');
             $table->text('deskripsi')->nullable();
-            
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->string('pindah_halaman');
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

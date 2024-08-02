@@ -12,6 +12,9 @@ class Galeri extends Model
     protected $table = "tb_galeri";
     protected $primaryKey = 'id_galeri';
     protected $guarded = ['id_galeri'];
+    protected $fillable = [
+        'page_id', 'nama', 'path_file', 'kategori', 'deskripsi', 'created_by', 'updated_by',
+    ];
 
     public function galeriPage() // FK many-to-one dengan tb_page
     {
