@@ -36,6 +36,7 @@ use App\Http\Controllers\ProfilPerusahaanController;
 use App\Http\Controllers\User\RincianSkemaController;
 use App\Http\Controllers\User\SertifikatUsersController;
 
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\TestimoniController;
 /*
 |--------------------------------------------------------------------------
@@ -233,3 +234,7 @@ Route::post('sertifikat/updateSertifikatData', [SertifikatController::class, 'up
 Route::delete('sertifikat/destroySertifikatData/{id}', [SertifikatController::class, 'destroySertifikatData']);
 
 require __DIR__.'/auth.php';
+Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
+Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
+Route::put('/faq/{id}', [FaqController::class, 'update'])->name('faq.update');
+Route::delete('/admin/faq/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
