@@ -1,27 +1,38 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SkemaController;
+use App\Http\Controllers\VideoController;
+
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\TempatController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\PartnerController;
+
 use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\InstansiController;
+use App\Http\Controllers\KategoriController;
+
+
+
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SignatureController;
 use App\Http\Controllers\BackgroundController;
-
 use App\Http\Controllers\EventSkemaController;
 use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\SertifikatController;
-
-
+use App\Http\Controllers\BlogKategoriController;
 use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EventUsersController;
+use App\Http\Controllers\ProfilPerusahaanController;
 use App\Http\Controllers\User\RincianSkemaController;
 use App\Http\Controllers\User\SertifikatUsersController;
 
@@ -62,6 +73,121 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function(){
     Route::put('/event/{event}/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
     Route::post('/event/{event}/skema/{skema}/students', [EventSkemaController::class, 'storeStudents'])->name('event-skema.store-student');
     Route::delete('/event/skema/{skema}/students/{id}', [EventSkemaController::class, 'destroyStudents'])->name('event-skema.delete-student');
+
+
+
+    Route::resource('galeri', GaleriController::class);
+    Route::get('/galeri',[ GaleriController::class,'index'])->name('index');
+    Route::get('admin/galeri', [GaleriController::class, 'index'])->name('galeri.index');
+    Route::get('admin/create', [GaleriController::class, 'create'])->name('galeri.create');
+
+    Route::post('admin/store',[GaleriController::class,'store'])->name('galeri.store');
+    Route::get('admin/show', [GaleriController::class, 'show'])->name('galeri.show');
+    Route::get('galeri/{id}/edit', [GaleriController::class, 'edit'])->name('galeri.edit');
+Route::put('galeri/{id}', [GaleriController::class, 'update'])->name('galeri.update');
+Route::delete('/galeri/{id}', [GaleriController::class, 'destroy'])->name('galeri.destroy');
+
+
+;
+
+Route::get('/video/index', [VideoController::class, 'index'])->name('video.index');
+Route::post('/video/store', [VideoController::class, 'store'])->name('video.store');
+Route::get('/video/create', [VideoController::class, 'create'])->name('video.create');
+Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.show');
+Route::get('/video/{id}/edit', [VideoController::class, 'edit'])->name('video.edit');
+Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('video.destroy');
+Route::get('/video/{id}/edit', [VideoController::class, 'edit'])->name('video.edit');
+Route::put('/video/{id}', [VideoController::class, 'update'])->name('video.update');
+Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('video.destroy');
+
+
+// Galeri video End
+
+//Page start
+
+Route::get('/page', [PageController::class, 'index'])->name('page.index');
+Route::post('/page', [PageController::class, 'store'])->name('page.store');
+Route::put('/page/{id}', [PageController::class, 'update'])->name('page.update');
+Route::delete('/admin/pages/{id}', [PageController::class, 'destroy'])->name('page.destroy');
+
+Route::put('/admin/page/{id}', [PageController::class, 'update'])->name('page.update');
+
+Route::get('/admin/page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
+
+//page end
+
+//kategori start
+Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+
+
+//kategori end
+
+// blog start
+Route::resource('admin/blog', BlogController::class);
+
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::post('/blog', [BlogController::class, 'store'])->name('blog.store');
+
+Route::put('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+
+
+
+Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
+Route::put('/admin/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+
+// blog end
+
+// Profile perusahaan start
+Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
+Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
+
+Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
+
+
+Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->name('profil.destroy');
+
+// profile perusahaan end
+
+
+Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
+
+Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
+
+// Correct route for updating blogkategori
+Route::put('/blogkategori/{id}', [BlogKategoriController::class, 'update'])->name('blogkategori.update');
+
+
+
+
+
+
+Route::delete('/blogkategori/{id_blog_kategori}', [BlogKategoriController::class, 'destroy'])->name('blogkategori.destroy');
+
+
+// Partner start
+
+
+
+
+Route::get('/partner', [PartnerController::class, 'index'])->name('partner.index');
+
+Route::post('/partner', [PartnerController::class, 'store'])->name('partner.store');
+
+
+Route::put('/admin/partner/{id}', [PartnerController::class, 'update'])->name('partner.update');
+
+
+Route::delete('admin/partner/{partner}', [PartnerController::class, 'destroy'])->name('partner.destroy');
+
+
+
+
+
 
 
     Route::group(['prefix' => 'master'], function () {
@@ -107,7 +233,3 @@ Route::post('sertifikat/updateSertifikatData', [SertifikatController::class, 'up
 Route::delete('sertifikat/destroySertifikatData/{id}', [SertifikatController::class, 'destroySertifikatData']);
 
 require __DIR__.'/auth.php';
-Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni.index');
-Route::post('/testimoni', [TestimoniController::class, 'store'])->name('testimoni.store');
-Route::put('/testimoni{testimoni}', [TestimoniController::class, 'update'])->name('testimoni.update');
-Route::delete('/testimoni{testimoni}', [TestimoniController::class, 'destroy'])->name('testimoni.destroy');

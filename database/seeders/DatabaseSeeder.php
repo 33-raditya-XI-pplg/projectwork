@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
             EventSkemaRentangNilaiSeeder::class,
 
             PenandatanganSeeder::class,
-            NilaiPesertaSeeder::class
+            NilaiPesertaSeeder::class,
+            PageTableSeeder::class,
         ]);
     }
 }
