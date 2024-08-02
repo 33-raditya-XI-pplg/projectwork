@@ -38,6 +38,7 @@ use App\Http\Controllers\User\SertifikatUsersController;
 
 use App\Http\Controllers\BlogKategoriController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\TestimoniController;
 /*
 |--------------------------------------------------------------------------
@@ -244,3 +245,7 @@ Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
 Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
 Route::put('/faq/{id}', [FaqController::class, 'update'])->name('faq.update');
 Route::delete('/admin/faq/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
+Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
+Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
+Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
