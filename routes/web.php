@@ -39,6 +39,7 @@ use App\Http\Controllers\User\SertifikatUsersController;
 use App\Http\Controllers\BlogKategoriController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TestimoniController;
 /*
 |--------------------------------------------------------------------------
@@ -253,3 +254,7 @@ Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni
 Route::post('/testimoni', [TestimoniController::class, 'store'])->name('testimoni.store');
 Route::put('/testimoni{testimoni}', [TestimoniController::class, 'update'])->name('testimoni.update');
 Route::delete('/testimoni{testimoni}', [TestimoniController::class, 'destroy'])->name('testimoni.destroy');
+Route::get('/slider', [SliderController::class, 'index'])->name('slider.index');
+Route::post('/slider', [SliderController::class, 'store'])->name('slider.store');
+Route::put('/slider{slider}', [SliderController::class, 'update'])->name('slider.update');
+Route::delete('/slider{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
