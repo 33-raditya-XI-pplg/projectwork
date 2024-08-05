@@ -7,51 +7,38 @@
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
-                @auth
-                    @if(optional(Auth::user())->level == 'Pengguna')
-                        <a href="{{ url('user/dashboard') }}" class="item-link">
-                            <i class="fa fa-home link-icon"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    @else
-                        <a href="{{ url('admin/dashboard') }}" class="item-link">
-                            <i class="fa fa-home link-icon"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    @endif
+                @if(Auth::user()->level == 'Pengguna')
+                    <a href="{{ url('user/dashboard') }}" class="item-link">
+                        <i class="fa fa-home link-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
                 @else
-                    <!-- Code for guests or unauthorized access -->
-                    <a href="{{ url('login') }}" class="item-link">
-                        <i class="fa fa-sign-in link-icon"></i>
-                        <span>Login</span>
+                    <a href="{{ url('admin/dashboard') }}" class="item-link">
+                        <i class="fa fa-home link-icon"></i>
+                        <span>Dashboard</span>
                     </a>
-                @endauth
+                @endif
             </li>
-
-            @auth
-            @if(optional(Auth::user())->level == 'Admin')
-                <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
-                    <a href="{{ route('event.index') }}" class="item-link">
-                        <i class="fas fa-bullhorn link-icon"></i>
-                        <span>Event</span>
-                    </a>
-                </li>
-                <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
-                    <a href="{{ route('penilaian.index') }}" class="item-link">
-                        <i class="fas fa-tasks link-icon"></i>
-                        <span>Penilaian</span>
-                    </a>
-                </li>
-                <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }} position-relative">
-                    <a href="{{ route('sertifikat.index') }}" class="item-link">
-                        <i class="fas fa-award link-icon"></i>
-                        <span>Sertifikat</span>
-                    </a>
-                </li>
+            @if(Auth::user()->level == 'Admin')
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
+                <a href="{{ route('event.index') }}" class="item-link">
+                    <i class="fas fa-bullhorn link-icon"></i>
+                    <span>Event</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
+                <a href="{{route('penilaian.index')}}" class="item-link">
+                    <i class="fas fa-tasks link-icon"></i>
+                    <span>Penilaian</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }} position-relative">
+                <a href="{{route('sertifikat.index')}}" class="item-link">
+                    <i class="fas fa-award link-icon"></i>
+                    <span>Sertifikat</span>
+                </a>
+            </li>
             @endif
-        @endauth
-
-        @auth
             @if(Auth::user()->level == 'Pengguna')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event-user' ? 'active' : '' }}">
                 <a href="{{ route('event-user.index') }}" class="item-link">
@@ -65,10 +52,7 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
-
             @endif
-            @endauth
-            @auth
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">
@@ -191,23 +175,15 @@
                 </a>
             </li>
         </ul>
-        @auth
-
-
         @if(Auth::user()->level == 'Pengguna')
         <div class="level" style="margin-top:325px"></div>
         @endif
-        @endauth
-        @auth
         @if(Auth::user()->level == 'Penguji')
         <div class="level" style="margin-top:215px"></div>
         @endif
-        @endauth
-        @auth
         @if(Auth::user()->level == 'Admin')
         <div class="level" style="margin-top:197px"></div>
         @endif
-        @endauth
         <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>
             <span class="triangles d-block"></span>
