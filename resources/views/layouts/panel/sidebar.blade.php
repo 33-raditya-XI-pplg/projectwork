@@ -149,6 +149,10 @@
                             <a href="{{ route('video.index') }}" class="sub-menu-link"><i class="fas fa-video"></i>
                                 <span> Video</span></a>
                         </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'slider' : '' }}">
+                            <a href="{{ route('slider.index') }}" class="sub-menu-link"><i class="fas fa-sliders"></i>
+                                <span> Slider</span></a>
+                        </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'testimoni' : '' }}">
                             <a href="{{ route('testimoni.index') }}" class="sub-menu-link"><i class="fas fa-star"></i>
                                 <span> Testimoni</span></a>
