@@ -7,38 +7,51 @@
     <div class="sidebar-menu-content">
         <ul class="sidebar-menu">
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
-                @if(Auth::user()->level == 'Pengguna')
-                    <a href="{{ url('user/dashboard') }}" class="item-link">
-                        <i class="fa fa-home link-icon"></i>
-                        <span>Dashboard</span>
-                    </a>
+                @auth
+                    @if(optional(Auth::user())->level == 'Pengguna')
+                        <a href="{{ url('user/dashboard') }}" class="item-link">
+                            <i class="fa fa-home link-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    @else
+                        <a href="{{ url('admin/dashboard') }}" class="item-link">
+                            <i class="fa fa-home link-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    @endif
                 @else
-                    <a href="{{ url('admin/dashboard') }}" class="item-link">
-                        <i class="fa fa-home link-icon"></i>
-                        <span>Dashboard</span>
+                    <!-- Code for guests or unauthorized access -->
+                    <a href="{{ url('login') }}" class="item-link">
+                        <i class="fa fa-sign-in link-icon"></i>
+                        <span>Login</span>
                     </a>
-                @endif
+                @endauth
             </li>
-            @if(Auth::user()->level == 'Admin')
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
-                <a href="{{ route('event.index') }}" class="item-link">
-                    <i class="fas fa-bullhorn link-icon"></i>
-                    <span>Event</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
-                <a href="{{route('penilaian.index')}}" class="item-link">
-                    <i class="fas fa-tasks link-icon"></i>
-                    <span>Penilaian</span>
-                </a>
-            </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }} position-relative">
-                <a href="{{route('sertifikat.index')}}" class="item-link">
-                    <i class="fas fa-award link-icon"></i>
-                    <span>Sertifikat</span>
-                </a>
-            </li>
+
+            @auth
+            @if(optional(Auth::user())->level == 'Admin')
+                <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event' ? 'active' : '' }}">
+                    <a href="{{ route('event.index') }}" class="item-link">
+                        <i class="fas fa-bullhorn link-icon"></i>
+                        <span>Event</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
+                    <a href="{{ route('penilaian.index') }}" class="item-link">
+                        <i class="fas fa-tasks link-icon"></i>
+                        <span>Penilaian</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat' ? 'active' : '' }} position-relative">
+                    <a href="{{ route('sertifikat.index') }}" class="item-link">
+                        <i class="fas fa-award link-icon"></i>
+                        <span>Sertifikat</span>
+                    </a>
+                </li>
             @endif
+        @endauth
+
+        @auth
             @if(Auth::user()->level == 'Pengguna')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event-user' ? 'active' : '' }}">
                 <a href="{{ route('event-user.index') }}" class="item-link">
@@ -52,7 +65,10 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
+
             @endif
+            @endauth
+            @auth
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">
@@ -106,6 +122,79 @@
                 </div>
             </li>
             @endif
+            @endauth
+
+            {{-- start --}}
+            @auth
+
+            @if(Auth::user()->level == 'Admin')
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'website' ? 'active' : '' }}">
+                <a href="" class="item-link">
+                    <i class="fas fa-file link-icon"></i>
+                    <span>Manajemen Website</span>
+                </a>
+                <div class="card-header mt-3" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
+                <div class="sub-menu">
+                    <ul class="sub-menu-content">
+                        {{-- <small class="text-muted">USER</small> --}}
+                        <li class="sub-menu-item {{ Request::segment(3) == 'blog' ? 'active' : '' }}">
+                            <a href="{{ route('blog.index') }}" class="sub-menu-link"><i class="fa fa-user"></i>
+                                <span> Blog</span></a>
+
+                        {{-- <small class="text-muted">SKEMA</small> --}}
+
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'kategori' ? 'active' : '' }}">
+                            <a href="{{ route('kategori.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span> Kategori</span></a>
+                        </li>
+
+                        <li class="sub-menu-item {{ Request::segment(3) == 'photos' ? 'active' : '' }}">
+                            <a href="{{ route('galeri.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span>Photos</span></a>
+                        </li>
+
+                        <li class="sub-menu-item {{ Request::segment(3) == 'video' ? 'active' : '' }}">
+                            <a href="{{ route('video.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span>Videos</span></a>
+                        </li>
+                        {{-- <small class="text-muted">DATA</small> --}}
+
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'page' ? 'active' : '' }}">
+                            <a href="{{ route('page.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span> Page</span></a>
+                        </li>
+
+                        <li class="sub-menu-item {{ Request::segment(3) == 'profile' ? 'active' : '' }}">
+                            <a href="{{ route('profil.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span>Profile Perusahaan </span></a>
+                        </li>
+
+                        <li class="sub-menu-item {{ Request::segment(3) == 'page' ? 'active' : '' }}">
+                            <a href="{{ route('partner.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span> Partner</span></a>
+                        </li>
+
+                        <li class="sub-menu-item {{ Request::segment(3) == 'page' ? 'active' : '' }}">
+                            <a href="{{ route('blogkategori.index') }}" class="sub-menu-link"><i class="fas fa-retweet"></i>
+                                <span> Blog Kategori</span></a>
+                        </li>
+
+
+
+                        </li>
+
+
+                    </ul>
+                </div>
+                </div>
+            </li>
+            @endif
+            @endauth
+
+            {{-- end --}}
+
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
                 <a href="{{ route('profile.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>
@@ -113,15 +202,23 @@
                 </a>
             </li>
         </ul>
+        @auth
+
+
         @if(Auth::user()->level == 'Pengguna')
         <div class="level" style="margin-top:325px"></div>
         @endif
+        @endauth
+        @auth
         @if(Auth::user()->level == 'Penguji')
         <div class="level" style="margin-top:215px"></div>
         @endif
+        @endauth
+        @auth
         @if(Auth::user()->level == 'Admin')
         <div class="level" style="margin-top:197px"></div>
         @endif
+        @endauth
         <div id="segitiga" class="segitiga">
             <span class="triangle d-block"></span>
             <span class="triangles d-block"></span>

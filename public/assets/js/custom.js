@@ -8,14 +8,14 @@ function readFile(input) {
         var validImageType = ['image/png', 'image/bmp', 'image/jpeg', 'image/jpg'];
         var htmlPreview;
 
-        // Check if the uploaded file type is a valid image type
+
         if (validImageType.includes(input.files[0].type)) {
-          // Generate HTML for valid image preview
+
           htmlPreview =
             '<img width="70%" height="300" src="' + e.target.result + '" />' +
             '<p>' + input.files[0].name + '</p>';
         } else {
-          // Display message for invalid image type
+
           htmlPreview =
             '<p>Image preview not available</p>' +
             '<p>' + input.files[0].name + '</p>';
