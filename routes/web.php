@@ -18,7 +18,7 @@ use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstansiController;
-use App\Http\Controllers\KategoriController;
+
 
 
 
@@ -28,7 +28,7 @@ use App\Http\Controllers\BackgroundController;
 use App\Http\Controllers\EventSkemaController;
 use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\SertifikatController;
-use App\Http\Controllers\BlogKategoriController;
+
 use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EventUsersController;
