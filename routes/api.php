@@ -3,9 +3,19 @@
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\SkemaController;
+use App\Http\Controllers\BlogKategoriController;
+use App\Http\Controllers\Api\Galeri\VideoController;
+use App\Http\Controllers\Api\Slider\SliderController;
+use App\Http\Controllers\Api\Partner\PartnerController;
+use App\Http\Controllers\Api\Testimoni\TestimoniController;
+use App\Http\Controllers\Api\ProfileCompany\ProfileCompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +37,9 @@ Route::get('/event', [Api\EventController::class, 'show']);
 
 Route::get('/shoow/{id}', [Api\SkemaController::class, 'shoow'])->name('shoow');
 Route::get('/evshow/{id}', [Api\EventController::class, 'shoow'])->name('evshow');
+Route::post('/event', [Api\EventController::class, 'store'])->name('store');
+Route::put('/event/{id}', [Api\EventController::class, 'update'])->name('update');
+Route::delete('/event/{id}', [Api\EventController::class, 'destroy'])->name('destroy');
 
 
 
@@ -60,6 +73,76 @@ Route::put('/profilecompany/{id}',[Api\ProfileCompany\ProfileCompanyController::
 Route::delete('/profilecompany/{id}',[Api\ProfileCompany\ProfileCompanyController::class,'destroy']);
 
 // API Profil End
+
+
+// API Testimoni Start
+Route::get('/testimoni',[Api\Testimoni\TestimoniController::class,'index']);
+Route::get('/testimoni/{id}',[Api\Testimoni\TestimoniController::class,'show']);
+Route::post('/testimoni',[Api\Testimoni\TestimoniController::class,'store']);
+Route::put('/testimoni/{id}',[Api\Testimoni\TestimoniController::class,'update']);
+Route::delete('/testimoni/{id}',[Api\Testimoni\TestimoniController::class,'destroy']);
+
+// API Testimoni End
+
+
+// Api Slide start
+Route::get('/slider',[Api\Slider\SliderController::class,'index']);
+Route::get('/slider/{id}',[Api\Slider\SliderController::class,'show']);
+Route::post('/slider', [Api\Slider\SliderController::class, 'store']);
+Route::put('/slider/{id}', [Api\Slider\SliderController::class, 'update']);
+Route::delete('/slider/{id}', [Api\Slider\SliderController::class, 'destroy']);
+// API slider End
+
+//Blog kategori start
+Route::get('/blogkategori',[Api\BlogKategori\BlogKategoriController::class,'index']);
+Route::get('/blogkategori/{id}',[Api\BlogKategori\BlogKategoriController::class,'show']);
+Route::post('/blogkategori',[Api\BlogKategori\BlogKategoriController::class,'store']);
+Route::put('/blogkategori/{id}',[Api\BlogKategori\BlogKategoriController::class,'update']);
+Route::delete('/blogkategori/{id}',[Api\BlogKategori\BlogKategoriController::class,'destroy']);
+
+
+//Blog kategori end
+
+
+// Kategor start
+Route::get('/kategori',[Api\Kategori\KategoriController::class,'index']);
+Route::get('/kategori/{id}',[Api\Kategori\KategoriController::class,'show']);
+Route::post('/kategori',[Api\Kategori\KategoriController::class,'store']);
+Route::put('/kategori/{id}',[Api\Kategori\KategoriController::class,'update']);
+Route::delete('/kategori/{id}',[Api\Kategori\KategoriController::class,'destroy']);
+
+// kategori end
+
+
+// faq start
+Route::get('/faq',[Api\Faq\FaqController::class,'index']);
+Route::get('/faq/{id}',[Api\Faq\FaqController::class,'show']);
+Route::post('/faq',[Api\Faq\FaqController::class,'store']);
+Route::put('/faq/{id}',[Api\Faq\FaqController::class,'update']);
+Route::delete('/faq/{id}',[Api\Faq\FaqController::class,'destroy']);
+
+// faq end
+
+
+// blog start
+Route::get('/blog',[Api\Blog\BlogController::class,'index']);
+Route::get('/blog/{id}',[Api\Blog\BlogController::class,'show']);
+Route::post('/blog',[Api\Blog\BlogController::class,'store']);
+Route::put('/blog/{id}',[Api\Blog\BlogController::class,'update']);
+Route::delete('/blog/{id}',[Api\Blog\BlogController::class,'destroy']);
+//blog end
+
+
+// page start
+Route::get('/page',[Api\Page\PageController::class,'index']);
+Route::get('/page/{id}',[Api\Page\PageController::class,'show']);
+Route::post('/page',[Api\Page\PageController::class,'store']);
+Route::put('/page/{id}',[Api\Page\PageController::class,'update']);
+Route::delete('/page/{id}',[Api\Page\PageController::class,'destroy']);
+
+
+
+// page end
 
 
 

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Skema;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
@@ -67,4 +68,122 @@ class EventController extends Controller
 
         return response()->json(['event' => $data], 200, [], JSON_PRETTY_PRINT);
     }
+
+
+
+    public function store(Request $request)
+    {
+        // Define validation rules
+        $rules = [
+            'instansi_id' => 'required|integer|exists:tb_instansi,id_instansi',
+            'tempat_id' => 'required|integer|exists:tb_tempat,id_tempat',
+            'jenis_event_id' => 'required|integer|exists:tb_jenis_event,id_jenis_event',
+            'nama_event' => 'required|string|max:255',
+            'tgl_mulai' => 'required|date',
+            'tgl_berakhir' => 'required|date|after_or_equal:tgl_mulai',
+            'biaya_regis' => 'required|integer',
+            'path_banner' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'status' => 'required|string|max:255',
+            'visibilitas' => 'required|in:privat,publik',
+            'created_by' => 'nullable|integer|exists:users,id',
+        ];
+
+        // Validate incoming request
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Create a new Event record
+        $event = Event::create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Event created successfully',
+            'data' => $event
+        ], 201);
+    }
+
+
+    public function update(Request $request, string $id)
+{
+    // Find the event by ID
+    $event = Event::find($id);
+
+    if (!$event) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Event not found'
+        ], 404);
+    }
+
+    // Define validation rules
+    $rules = [
+        'instansi_id' => 'required|integer|exists:tb_instansi,id_instansi',
+        'tempat_id' => 'required|integer|exists:tb_tempat,id_tempat',
+        'jenis_event_id' => 'required|integer|exists:tb_jenis_event,id_jenis_event',
+        'nama_event' => 'nullable|string|max:255',
+        'tgl_mulai' => 'nullable|date',
+        'tgl_berakhir' => 'nullable|date|after_or_equal:tgl_mulai',
+        'biaya_regis' => 'nullable|integer',
+        'path_banner' => 'nullable|string|max:255',
+        'deskripsi' => 'nullable|string',
+        'status' => 'nullable|string|max:255',
+        'visibilitas' => 'nullable|in:privat,publik',
+        'updated_by' => 'nullable|integer|exists:users,id', // Assuming users table exists
+    ];
+
+    // Validate incoming request
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 422);
+    }
+
+    // Update the event record
+    $event->update($request->all());
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Event updated successfully',
+        'data' => $event
+    ], 200);
+}
+
+public function destroy(string $id)
+{
+    // Find the event by ID
+    $event = Event::find($id);
+
+    if (!$event) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Event not found'
+        ], 404);
+    }
+
+    // Delete the event record
+    $event->delete();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Event deleted successfully'
+    ], 200);
+}
+
+
+
+
+
+
 }
