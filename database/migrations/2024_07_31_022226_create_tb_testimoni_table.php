@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->integer('rating')->check('rating >= 1 AND rating <= 5');
             $table->text('isi_testimoni');
+            $table->string('photo')->nullable();
             $table->boolean('status_publikasi')->default(false);
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

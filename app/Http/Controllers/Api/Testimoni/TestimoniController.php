@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\Testimoni;
 
-use App\Http\Controllers\Controller;
 use App\Models\Testimoni;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class TestimoniController extends Controller
 {
@@ -14,8 +15,12 @@ class TestimoniController extends Controller
     public function index()
     {
         try {
-
-            $data = Testimoni::get();
+            $data = Testimoni::all();
+            foreach ($data as $testimoni) {
+                if ($testimoni->photo) {
+                    $testimoni->photo_url = asset('storage/' . $testimoni->photo);
+                }
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'Data ditemukan',
@@ -28,37 +33,44 @@ class TestimoniController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    // Validate the incoming request data
-    $validatedData = $request->validate([
-        'page_id' => 'required|integer',
-        'nama' => 'required|string|max:100',
-        'email' => 'required|email|max:100',
-        'tanggal' => 'required|date',
-        'rating' => 'required|integer|min:1|max:5', // Assuming rating is between 1 and 5
-        'isi_testimoni' => 'required|string',
-        'status_publikasi' => 'required|boolean',
-        'created_by' => 'nullable|integer',
-        'updated_by' => 'nullable|integer'
-    ]);
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'page_id' => 'required|integer',
+            'nama' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'tanggal' => 'required|date',
+            'rating' => 'required|integer|min:1|max:5',
+            'isi_testimoni' => 'required|string',
+            'photo' => 'nullable|url', // Validate as URL
+            'status_publikasi' => 'required|boolean',
+            'created_by' => 'nullable|integer',
+            'updated_by' => 'nullable|integer'
+        ]);
 
-    // Create a new Testimoni record
-    $testimoni = Testimoni::create($validatedData);
+        // Use the photo URL if provided
+        if ($request->has('photo')) {
+            $validatedData['photo'] = $request->input('photo');
+        }
 
-    // Return a success response
-    return response()->json([
-        'status' => true,
-        'message' => 'Testimoni created successfully',
-        'data' => $testimoni
-    ], 201);
-}
+        // Create a new Testimoni record
+        $testimoni = Testimoni::create($validatedData);
+
+        // Return a success response
+        return response()->json([
+            'status' => true,
+            'message' => 'Testimoni created successfully',
+            'data' => $testimoni
+        ], 201);
+    }
+
+
 
 
     /**
@@ -68,6 +80,9 @@ class TestimoniController extends Controller
     {
         try {
             $data = Testimoni::findOrFail($id);
+            if ($data->photo) {
+                $data->photo_url = asset('storage/' . $data->photo);
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'Data ditemukan',
@@ -92,8 +107,9 @@ class TestimoniController extends Controller
             'nama' => 'nullable|string|max:100',
             'email' => 'nullable|email|max:100',
             'tanggal' => 'nullable|date',
-            'rating' => 'nullable|integer|min:1|max:5', // Assuming rating is between 1 and 5
+            'rating' => 'nullable|integer|min:1|max:5',
             'isi_testimoni' => 'nullable|string',
+            'photo' => 'nullable|url', // Validate as URL
             'status_publikasi' => 'nullable|boolean',
             'created_by' => 'nullable|integer',
             'updated_by' => 'nullable|integer'
@@ -110,6 +126,11 @@ class TestimoniController extends Controller
             ], 404);
         }
 
+        // Use the photo URL if provided
+        if ($request->has('photo')) {
+            $validatedData['photo'] = $request->input('photo');
+        }
+
         // Update the Testimoni record
         $testimoni->update($validatedData);
 
@@ -120,6 +141,8 @@ class TestimoniController extends Controller
             'data' => $testimoni
         ], 200);
     }
+
+
 
 
     /**

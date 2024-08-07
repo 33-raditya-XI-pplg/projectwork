@@ -22,6 +22,8 @@ class Partner extends Model
         'tanggal_bergabung',
         'status_partner',
         'logo',
+        'website_partner',
+
     ];
 
     protected $casts = [
