@@ -4,6 +4,15 @@
 
 <h1>Slider</h1>
 
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- Slider Carousel -->
+
+
+<!-- Slider Management Table -->
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -62,6 +71,28 @@
     </div>
 </div>
 
+<div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @foreach ($slider as $index => $slide)
+            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                <img src="{{ $slide->image_url }}" class="d-block w-100" alt="{{ $slide->title }}">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ $slide->title }}</h5>
+                    <p>{{ $slide->description }}</p>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#sliderCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#sliderCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -117,7 +148,6 @@
     </div>
 </div>
 
-<!-- Edit Modals -->
 <!-- Edit Modals -->
 @foreach ($slider as $row)
 <div class="modal modal-lg fade" id="edit{{ $row->id_slider }}" tabindex="-1" aria-labelledby="edit{{ $row->id_slider }}Label" aria-hidden="true">
@@ -176,6 +206,5 @@
     </div>
 </div>
 @endforeach
-
 
 @endsection
