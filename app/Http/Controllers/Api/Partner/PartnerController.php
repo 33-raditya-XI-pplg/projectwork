@@ -45,6 +45,7 @@ class PartnerController extends Controller
             'alamat_partner' => 'nullable|string|max:255',
             'jenis_partner' => 'nullable|string|max:100',
             'tanggal_bergabung' => 'nullable|date',
+            'website_partner' => 'nullable|url|max:255',
             'status_partner' => 'required|boolean',
             'logo' => 'required|string|max:255'
         ]);
@@ -96,8 +97,9 @@ class PartnerController extends Controller
             'alamat_partner' => 'nullable|string|max:255',
             'jenis_partner' => 'nullable|string|max:50',
             'tanggal_bergabung' => 'nullable|date',
+            'website_partner' => 'nullable|url|max:255',
             'status_partner' => 'nullable|boolean',
-            'logo' => 'nullable|string|max:255'
+            'logo' => 'nullable|string|max:255',
         ]);
 
 

@@ -20,6 +20,7 @@ class Testimoni extends Model
         'tanggal',
         'rating',
         'isi_testimoni',
+        'photo',
         'status_publikasi',
         'created_by',
         'updated_by'

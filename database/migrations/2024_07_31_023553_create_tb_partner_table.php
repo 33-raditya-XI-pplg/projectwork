@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('tanggal_bergabung')->nullable();
             $table->boolean('status_partner')->default(true);
             $table->string('logo');
+            $table->string('website_partner', 255)->nullable();
         });
     }
 

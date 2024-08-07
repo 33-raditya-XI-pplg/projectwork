@@ -27,80 +27,103 @@
     </button>
 </div>
 
-<div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-    <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
-            <div class="mt-4">
-                <table id="example" class="table table-striped">
-                    <thead class="fw-normal">
-                        <tr>
-                            <th>No</th>
-                            <th>Page Id</th>
-                            <th>Nama Partner</th>
-                            <th>Email Partner</th>
-                            <th>Nomor Telepon Partner</th>
-                            <th>Alamat Partner</th>
-                            <th>Jenis Partner</th>
-                            <th>Tanggal Bergabung</th>
-                            <th>Status Partner</th>
-                            <th>Logo</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody style="vertical-align: middle">
-                        @foreach ($partners as $partner)
-                            <tr>
-                                <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $partner->page->nama_page ?? 'N/A' }}</td>
-                                <td>{{ $partner->nama_partner }}</td>
-                                <td>{{ $partner->email_partner }}</td>
-                                <td>{{ $partner->telepon_partner ?? '-' }}</td>
-                                <td>{{ $partner->alamat_partner ?? '-' }}</td>
-                                <td>{{ $partner->jenis_partner ?? '-' }}</td>
-                                <td>{{ $partner->tanggal_bergabung ? $partner->tanggal_bergabung->format('d-m-Y') : '-' }}</td>
-                                <td>{{ $partner->status_partner ? 'Aktif' : 'Non-Aktif' }}</td>
-                                <td>
-                                    @if($partner->logo)
-                                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="Logo" width="50">
-                                    @else
-                                        <span>-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                            id="dropdownMenuButton{{ $partner->id_partner }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $partner->id_partner }}">
-                                            <li>
-                                                <!-- Update this link to trigger the modal -->
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id_partner }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <form action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this partner?');">
-                                                        <i class="fa-regular fa-trash-can"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
+<table id="example" class="table table-striped">
+    <thead class="fw-normal">
+        <tr>
+            <th>No</th>
+            <th>Page Id</th>
+            <th>Nama Partner</th>
+            <th>Email Partner</th>
+            <th>Nomor Telepon Partner</th>
+            <th>Alamat Partner</th>
+            <th>Jenis Partner</th>
+            <th>Tanggal Bergabung</th>
+            <th>Status Partner</th>
+            <th>Website</th>
+            <th>Logo</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody style="vertical-align: middle">
+        @foreach ($partners as $partner)
+            <tr>
+                <th scope="row">{{ $loop->iteration }}</th>
+                <td>{{ $partner->page->nama_page ?? 'N/A' }}</td>
+                <td>{{ $partner->nama_partner }}</td>
+                <td>{{ $partner->email_partner }}</td>
+                <td>{{ $partner->telepon_partner ?? '-' }}</td>
+                <td>{{ $partner->alamat_partner ?? '-' }}</td>
+                <td>{{ $partner->jenis_partner ?? '-' }}</td>
+                <td>{{ $partner->tanggal_bergabung ? $partner->tanggal_bergabung->format('d-m-Y') : '-' }}</td>
+                <td>{{ $partner->status_partner ? 'Aktif' : 'Non-Aktif' }}</td>
+                <td>
+                    @if($partner->website_partner)
+                        <a href="{{ $partner->website_partner }}" target="_blank" rel="noopener noreferrer">Link Website</a>
+                    @else
+                        <span>-</span>
+                    @endif
+                </td>
+                <td>
+                    @if($partner->logo)
+                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="Logo" width="50">
+                    @else
+                        <span>-</span>
+                    @endif
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                            id="dropdownMenuButton{{ $partner->id_partner }}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-bars"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $partner->id_partner }}">
+                            <li>
+                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id_partner }}">
+                                    <i class="fa-regular fa-pen-to-square"></i> Edit
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this partner?');">
+                                        <i class="fa-regular fa-trash-can"></i> Delete
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
 
 
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+{{-- logo Partner  --}}
+
+<h2>Logo Partner</h2>
+<div class="row">
+    @foreach ($partners as $partner)
+        <div class="col-md-4 text-center mb-4">
+            @if($partner->logo)
+                @if($partner->website_partner)
+                    <a href="{{ $partner->website_partner }}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama_partner }} Logo" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                    </a>
+                @else
+                    <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama_partner }} Logo" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                @endif
+            @else
+                <p class="text-muted">No logo available</p>
+            @endif
         </div>
-    </div>
+    @endforeach
 </div>
+
+
+
+
 
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="addPartnerModal" tabindex="-1" aria-labelledby="addPartnerLabel" aria-hidden="true">
@@ -174,6 +197,14 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="website_partner" class="form-label">Website Partner</label>
+                        <input type="url" class="form-control @error('website_partner') is-invalid @enderror" name="website_partner" id="website_partner" placeholder="https://example.com">
+                        @error('website_partner')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="modal-footer justify-content-between">
                         <div class="form-check form-switch">
                             <label for="status_partner" class="me-3">Status</label>
@@ -280,6 +311,15 @@
                             @endif
                         </div>
 
+                        <div class="mb-3">
+                            <label for="edit_website_partner_{{ $partner->id_partner }}" class="form-label">Website Partner</label>
+                            <input type="url" class="form-control @error('website_partner') is-invalid @enderror" name="website_partner" id="edit_website_partner_{{ $partner->id_partner }}" value="{{ $partner->website_partner }}" placeholder="https://example.com">
+                            @error('website_partner')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+
                         <div class="modal-footer justify-content-between">
                             <div class="form-check form-switch">
                                 <label for="edit_status_partner_{{ $partner->id_partner }}" class="me-3">Status </label>
@@ -297,18 +337,6 @@
             </div>
         </div>
     </div>
-
-
-    {{-- <div class="partner">
-        <ul>
-          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
-          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
-          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
-          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
-          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
-          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
-        </ul>
-      </div> --}}
 
 
 

@@ -20,6 +20,7 @@
                                 <th scope="col">Tanggal</th>
                                 <th scope="col">Rating</th>
                                 <th scope="col">Isi Testimoni</th>
+                                <th scope="col">Foto</th>
                                 <th scope="col">Status Publikasi</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -34,6 +35,14 @@
                                     <td>{{ $row->tanggal->format('Y-m-d') }}</td>
                                     <td>{{ $row->rating }}</td>
                                     <td>{{ $row->isi_testimoni }}</td>
+                                    <td>
+                                        @if($row->photo)
+    <img src="{{ asset('storage/' . $row->photo) }}" alt="Testimoni Foto" class="img-thumbnail" style="max-height: 100px;">
+@else
+    <p class="text-muted">No photo available</p>
+@endif
+
+                                    </td>
                                     <td>{{ $row->status_publikasi ? 'Published' : 'Unpublished' }}</td>
                                     <td>
                                         <div class="dropdown">
@@ -69,7 +78,7 @@
         </div>
     </div>
 
-{{-- insert modal --}}
+{{-- Insert Modal --}}
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -78,7 +87,7 @@
                     <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addForm" action="{{ route('testimoni.store') }}" method="POST">
+                    <form id="addForm" action="{{ route('testimoni.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
@@ -112,6 +121,10 @@
                             <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required></textarea>
                         </div>
                         <div class="mb-3">
+                            <label for="photo" class="form-label">Foto</label>
+                            <input type="file" class="form-control" name="photo" id="photo">
+                        </div>
+                        <div class="mb-3">
                             <label for="status_publikasi" class="form-label">Status Publikasi</label>
                             <select name="status_publikasi" class="form-select" required>
                                 <option value="1">Published</option>
@@ -142,7 +155,7 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('testimoni.update', $row->id_testimoni) }}" method="POST">
+                        <form action="{{ route('testimoni.update', $row->id_testimoni) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
@@ -183,6 +196,14 @@
                                 <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required>{{ $row->isi_testimoni }}</textarea>
                             </div>
                             <div class="mb-3">
+                                <label for="photo" class="form-label">Foto</label>
+                                <input type="file" class="form-control" name="photo" id="photo">
+                                @if($row->photo)
+                                <img src="{{ asset('storage/' . $row->photo) }}" alt="Testimoni Foto" class="img-thumbnail mt-2" style="max-height: 100px;">
+                            @endif
+
+                            </div>
+                            <div class="mb-3">
                                 <label for="status_publikasi" class="form-label">Status Publikasi</label>
                                 <select name="status_publikasi" class="form-select" required>
                                     <option value="1" {{ $row->status_publikasi ? 'selected' : '' }}>Published
@@ -205,36 +226,30 @@
         </div>
     @endforeach
 
-  <!-- Testimonials Section -->
-<div class="section__container">
-    <div class="header">
-        <p>TESTIMONIALS</p>
-        <h1>Ini Testimoni dari clients.</h1>
+    <!-- Testimonials Section -->
+    <div class="section__container">
+        <div class="header">
+            <p>TESTIMONIALS</p>
+            <h1>Ini Testimoni dari clients.</h1>
+        </div>
+        <div class="testimonials__grid">
+            @foreach ($testimonials as $testimonial)
+                <div class="card">
+                    <span><i class="ri-double-quotes-l"></i></span>
+                    <p>
+                        {{ $testimonial->isi_testimoni }}
+                    </p>
+                    <hr />
+                    @if($testimonial->photo)
+                    <img src="{{ asset('storage/' . $testimonial->photo) }}" alt="user" />
+                @endif
+
+                    <p class="name">{{ $testimonial->nama }}</p>
+                </div>
+            @endforeach
+        </div>
     </div>
-    <div class="testimonials__grid">
-        @foreach ($testimonials as $testimonial)
-            <div class="card">
-                <span><i class="ri-double-quotes-l"></i></span>
-                <p>
-                    {{ $testimonial->isi_testimoni }}
-                </p>
-                <hr />
-                <img src="{{ $testimonial->user_image_url }}" alt="user" />
-                <p class="name">{{ $testimonial->nama }}</p>
-            </div>
-        @endforeach
-    </div>
 
-</div>
-
-
-
-
-
-
-</script>
-
-<!-- Include SweetAlert2 library -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -284,6 +299,5 @@
         });
     });
 </script>
-
 
 @endsection

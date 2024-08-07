@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Models\Testimoni;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class TestimoniController extends Controller
 {
@@ -20,6 +22,7 @@ class TestimoniController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request data
         $request->validate([
             'page_id' => 'required|integer',
             'nama' => 'required|string|max:255',
@@ -27,10 +30,19 @@ class TestimoniController extends Controller
             'tanggal' => 'required|date',
             'rating' => 'required|integer|min:1|max:5',
             'isi_testimoni' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'status_publikasi' => 'required|boolean',
             'created_by' => 'required|integer',
         ]);
 
+        // Handle the photo upload
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            // Store the photo in the 'testimoni_photos' directory
+            $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
+        }
+
+        // Create a new Testimoni entry
         Testimoni::create([
             'page_id' => $request->page_id,
             'nama' => $request->nama,
@@ -38,6 +50,7 @@ class TestimoniController extends Controller
             'tanggal' => $request->tanggal,
             'rating' => $request->rating,
             'isi_testimoni' => $request->isi_testimoni,
+            'photo' => $photoPath,
             'status_publikasi' => $request->status_publikasi,
             'created_by' => $request->created_by,
         ]);
@@ -49,33 +62,53 @@ class TestimoniController extends Controller
     }
 
 
+
     public function update(Request $request, Testimoni $testimoni)
-{
-    $request->validate([
-        'page_id' => 'required|integer',
-        'nama' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'tanggal' => 'required|date',
-        'rating' => 'required|integer|min:1|max:5',
-        'isi_testimoni' => 'required|string',
-        'status_publikasi' => 'required|boolean',
-        'updated_by' => 'required|integer',
-    ]);
+    {
+        // Validate the request data
+        $request->validate([
+            'page_id' => 'required|integer',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'tanggal' => 'required|date',
+            'rating' => 'required|integer|min:1|max:5',
+            'isi_testimoni' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status_publikasi' => 'required|boolean',
+            'updated_by' => 'required|integer',
+        ]);
 
-    $testimoni->update($request->only([
-        'page_id',
-        'nama',
-        'email',
-        'tanggal',
-        'rating',
-        'isi_testimoni',
-        'status_publikasi',
-        'updated_by',
-    ]));
+        // Handle the photo upload
+        if ($request->hasFile('photo')) {
+            // Delete the old photo if it exists
+            if ($testimoni->photo) {
+                Storage::disk('public')->delete($testimoni->photo);
+            }
 
-    return redirect()->route('testimoni.index')
-        ->with('success', 'Testimoni updated successfully.');
-}
+            // Store the new photo and update the path
+            $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
+            $testimoni->photo = $photoPath;
+        }
+
+        // Update the Testimoni record
+        $testimoni->update($request->only([
+            'page_id',
+            'nama',
+            'email',
+            'tanggal',
+            'rating',
+            'isi_testimoni',
+            'status_publikasi',
+            'updated_by',
+        ]));
+
+        // Save the updated record including the new photo path
+        $testimoni->save();
+
+        return redirect()->route('testimoni.index')
+            ->with('success', 'Testimoni updated successfully.');
+    }
+
 
 
     public function destroy(Testimoni $testimoni)
