@@ -24,27 +24,30 @@ class BlogKategoriController extends Controller
     }
 
     public function store(Request $request) {
-
         $validatedData = $request->validate([
-            'blog_id' => 'required|integer|exists:tb_blog,id_blog',
-            'kategori_id' => 'required|integer|exists:tb_kategori,id_kategori'
+            'page_id' => 'required|exists:tb_page,id_page',
+            'judul' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+            'body' => 'required|string',
+            'status' => 'nullable|string',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
+        if ($request->hasFile('photo')) {
+            if (isset($validatedData['old_photo']) && Storage::disk('public')->exists($validatedData['old_photo'])) {
+                Storage::disk('public')->delete($validatedData['old_photo']);
+            }
 
-        $status = $request->has('status') ? $request->status : 'Draft';
+            $photoPath = $request->file('photo')->store('photos', 'public');
+            $validatedData['photo'] = $photoPath;
+        }
 
 
-        $validatedData['status'] = $status;
-        $validatedData['created_by'] = Auth::user()->id_user;
+        Blog::create($validatedData);
 
-
-        BlogKategori::create($validatedData);
-
-
-        Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
-
-        return redirect()->back();
+        return redirect()->route('blog.index')->with('success', 'Blog post created successfully.');
     }
+
 
 
 

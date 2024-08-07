@@ -24,43 +24,57 @@ class BlogController extends Controller
             'judul' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'body' => 'required|string',
-            'logo' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
-        $path = $request->file('logo')->store('public/banner-blog');
-        $request->merge(['path_banner' => Storage::url($path)]);
+        $data = $request->all();
 
-        Blog::create($request->all());
-        Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/photos', $filename);
+            $data['photo'] = $filename;
+        }
+
+        Blog::create($data);
+
+        Alert::success('Berhasil Tersimpan!', 'Data berhasil disimpan.');
 
         return redirect()->back();
     }
 
+
     public function update(Request $request, $id) {
-        $validatedData = $request->validate([
+        $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'judul' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
             'body' => 'required|string',
             'status' => 'nullable|string',
-            'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         $blog = Blog::findOrFail($id);
 
-        if ($request->hasFile('logo')) {
-            if ($blog->logo && Storage::disk('public')->exists($blog->logo)) {
-                Storage::disk('public')->delete($blog->logo);
+        $data = $request->all();
+
+        if ($request->hasFile('photo')) {
+            // Delete old file if it exists
+            if ($blog->photo && Storage::disk('public')->exists('photos/' . $blog->photo)) {
+                Storage::disk('public')->delete('photos/' . $blog->photo);
             }
 
-            $logoPath = $request->file('logo')->store('logos', 'public');
-            $validatedData['logo'] = $logoPath;
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/photos', $filename);
+            $data['photo'] = $filename;
         }
 
-        $blog->update($validatedData);
+        $blog->update($data);
 
         return redirect()->route('blog.index')->with('success', 'Blog post updated successfully.');
     }
+
 
     public function adminUpdate(Request $request, $id) {
         // Logika yang sama dengan update

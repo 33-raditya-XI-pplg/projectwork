@@ -1,7 +1,30 @@
 @extends('layouts.panel.index')
 @section('title', 'Blog')
 @section('content')
+<style>
+  .blog-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
 
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.blog-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 0; /* Remove border-radius from the image */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+
+</style>
 <h1>Blog</h1>
 
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -16,17 +39,25 @@
                             <th scope="col">Judul</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Body</th>
+                            <th scope="col">Photo</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody style="vertical-align: middle">
                         @foreach ($blog as $row)
                             <tr>
-                                <th scope="row">{{ $loop->index + 1 }}</th>
+                                <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
                                 <td>{{ $row->judul }}</td>
                                 <td>{{ $row->slug }}</td>
                                 <td>{{ Str::limit($row->body, 100) }}</td>
+                                <td>
+                                    <!-- Display the photo or a default image if not set -->
+
+                                    <img src="{{ $row->photo ? asset('storage/photos/' . $row->photo) : asset('images/default.jpg') }}" alt="{{ $row->judul }}" style="width: 100px; height: auto;">
+
+                                </td>
+
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton{{ $row->id_blog }}" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,9 +88,9 @@
     <div class="row">
         @foreach ($blog as $post)
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <!-- Fallback to default image if logo is not set -->
-                    <img src="{{ $post->logo ? asset('storage/' . $post->logo) : asset('images/default.jpg') }}" class="card-img-top" alt="{{ $post->judul }}">
+                <div class="card blog-card h-100 shadow-sm">
+                    <!-- Fallback to default image if photo is not set -->
+                    <img src="{{ $post->photo ? asset('storage/photos/' . $post->photo) : asset('images/default.jpg') }}" class="card-img-top" alt="{{ $post->judul }}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $post->judul }}</h5>
                         <p class="card-text">{{ Str::limit($post->body, 150) }}</p>
@@ -70,6 +101,10 @@
         @endforeach
     </div>
 </div>
+
+
+
+
 
 
 
@@ -103,8 +138,8 @@
                         <input type="text" class="form-control" name="slug" id="slug" required>
                     </div>
                     <div class="mb-3">
-                        <label for="logo" class="form-label">Upload Banner</label>
-                        <input class="form-control" name="logo" type="file" id="logo" accept=".png, .jpg, .jpeg" required>
+                        <label for="photo" class="form-label">Upload Photo</label>
+                        <input class="form-control" name="photo" type="file" id="photo" accept=".png, .jpg, .jpeg">
                     </div>
                     <div class="mb-3">
                         <label for="body" class="form-label">Body</label>
@@ -159,8 +194,12 @@
                             <input type="text" class="form-control" name="slug" id="slug" value="{{ $row->slug }}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="logo" class="form-label">Upload Banner</label>
-                            <input class="form-control" name="logo" type="file" id="logo" accept=".png, .jpg, .jpeg">
+                            <label for="photo" class="form-label">Upload Photo</label>
+                            <input class="form-control" name="photo" type="file" id="photo" accept=".png, .jpg, .jpeg">
+                            <!-- Display current photo if exists -->
+                            @if($row->photo)
+                                <img src="{{ asset('storage/' . $row->photo) }}" alt="{{ $row->judul }}" class="img-thumbnail mt-2" style="width: 100px; height: auto;">
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label for="body" class="form-label">Body</label>

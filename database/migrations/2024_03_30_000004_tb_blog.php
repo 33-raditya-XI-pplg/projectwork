@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             // $table->text('ringkasan');
             $table->text('body');
+            $table->string('photo')->nullable();
 
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

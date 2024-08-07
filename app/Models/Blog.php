@@ -12,6 +12,16 @@ class Blog extends Model
     protected $primaryKey = 'id_blog';
     protected $guarded = ['id_blog'];
 
+    protected $fillable = [
+        'page_id',
+        'judul',
+        'slug',
+        'body',
+        'photo',
+        'created_by',
+        'updated_by',
+    ];
+
     public function blogPage() // FK many-to-one dengan tb_page
     {
         return $this->belongsTo(Page::class, 'page_id', 'id_page');

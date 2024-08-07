@@ -4,58 +4,66 @@
 
 @push('style')
 
-
 <style>
-.section__container {
-    padding: 30px;
-}
+    .section__container {
+        padding: 30px;
+    }
 
-.header p {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
+    .header p {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
 
-.header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-} */
+    .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: #222;
+    }
 
-/* .profile__grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-}
+    /* Profile Grid */
+    .profile__grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
 
-.profile-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    padding: 20px;
-    max-width: 100%;
-    max-height: 80vh;
-    text-align: center;
-    width: 100%;
-    max-width: 600px;
-}
+    /* Profile Item Card */
+    .profile-item {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 100%;
+        width: 100%;
+        max-width: 600px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-/* .profile-image {
-    display: block;
-    max-width: 100%;
-    max-height: 60vh;
-    margin: 0 auto;
-    object-fit: contain;
-    margin-bottom: 20px;
-} */
+    .profile-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
 
-/* .profile-details {
-    text-align: left;
-    font-size: 1rem;
-    line-height: 1.5;
-} */
+    /* Profile Image */
+    .profile-image {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
 
-
-</style>
+    /* Profile Details */
+    .profile-details {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #555;
+    }
+    </style>
 @endpush
 
 <h1>Profil Perusahaan</h1>
@@ -119,7 +127,6 @@
         </div>
     </div>
 </div>
-
 <!-- Profile Section -->
 <div class="section__container mt-5">
     <div class="header">
