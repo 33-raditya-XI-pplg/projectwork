@@ -9,6 +9,9 @@
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+
+
+<!-- Tabel FAQ -->
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
     <table id="example" class="table">
         <thead class="fw-normal">
@@ -54,6 +57,8 @@
                     </td>
                 </tr>
 
+
+
                 <!-- Edit Modal -->
                 <div class="modal modal-lg fade" id="edit{{ $row->id_faq }}" tabindex="-1" aria-labelledby="editLabel{{ $row->id_faq }}" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -75,10 +80,10 @@
                                                     <label for="page" class="form-label">Page Id</label>
                                                     <select class="form-select" id="page_id" name="page_id">
                                                         <option selected disabled>Pilih...</option>
-                                                            @foreach($page as $a)
-                                                            <option value="{{ $a->id_page }}" {{ $row->page_id == $a->id_page ? 'selected' : '' }}>
-                                                            {{ $a->nama_page }}
-                                                            </option>
+                                                        @foreach($page as $a)
+                                                        <option value="{{ $a->id_page }}" {{ $row->page_id == $a->id_page ? 'selected' : '' }}>
+                                                        {{ $a->nama_page }}
+                                                        </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -177,5 +182,25 @@
     </div>
 </div>
 <!-- End of Insert Modal -->
+
+<!-- Daftar FAQ -->
+<div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+    <div class="accordion" id="faqAccordion">
+        @foreach ($faq as $index => $item)
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ $index }}">
+                    <button class="accordion-button @if($index !== 0) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="true" aria-controls="collapse{{ $index }}">
+                        {{ $item->pertanyaan }}
+                    </button>
+                </h2>
+                <div id="collapse{{ $index }}" class="accordion-collapse collapse @if($index === 0) show @endif" aria-labelledby="heading{{ $index }}" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        {{ $item->jawaban }}
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
 
 @endsection
