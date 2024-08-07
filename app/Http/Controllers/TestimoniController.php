@@ -12,8 +12,11 @@ class TestimoniController extends Controller
     {
         $testimoni = Testimoni::all();
         $page = Page::all();
-        return view('admin.testimoni.index', compact('testimoni', 'page'));
+        $testimonials = Testimoni::where('status_publikasi', 1)->orderBy('tanggal', 'desc')->get();
+        return view('admin.testimoni.index', compact('testimoni', 'page', 'testimonials'));
     }
+
+
 
     public function store(Request $request)
     {
@@ -39,9 +42,12 @@ class TestimoniController extends Controller
             'created_by' => $request->created_by,
         ]);
 
-        return redirect()->route('testimoni.index')
-            ->with('success', 'Testimoni created successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Testimoni created successfully.'
+        ]);
     }
+
 
     public function update(Request $request, Testimoni $testimoni)
 {
@@ -99,4 +105,12 @@ class TestimoniController extends Controller
         return view('admin.testimoni.show', compact('testimoni'));
     }
     */
+    public function fetchTestimonials()
+{
+    $testimonials = Testimoni::where('status_publikasi', 1)->orderBy('tanggal', 'desc')->get();
+    return response()->json([
+        'testimonials' => $testimonials
+    ]);
+}
+
 }

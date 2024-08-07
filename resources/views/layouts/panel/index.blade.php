@@ -35,8 +35,10 @@
         rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js">
         <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js">
-
         <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
+        <link rel="stylesheet" href="{{asset('assets/css/testimoni.css')}}">
+        <link rel="stylesheet" href="{{asset('assets/css/partner.css')}}">
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
     @stack('style')
 
     {{-- @include('layouts.env') --}}

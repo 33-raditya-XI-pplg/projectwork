@@ -293,9 +293,25 @@
                     </form>
 
                 </div>
+
             </div>
         </div>
     </div>
+
+
+    {{-- <div class="partner">
+        <ul>
+          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
+          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
+          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
+          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
+          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
+          <li> <img src="https://picsum.photos/200/300/" alt=""> <img src="https://picsum.photos/200/300/ng" alt=""> </li>
+        </ul>
+      </div> --}}
+
+
+
 @endforeach
 
 @endsection
