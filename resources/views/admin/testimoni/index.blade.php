@@ -33,7 +33,14 @@
                                     <td>{{ $row->nama }}</td>
                                     <td>{{ $row->email }}</td>
                                     <td>{{ $row->tanggal->format('Y-m-d') }}</td>
-                                    <td>{{ $row->rating }}</td>
+                                    <td>
+                                        @for ($i = 0; $i < $row->rating; $i++)
+                                            <i class="fa fa-star text-warning"></i>
+                                        @endfor
+                                        @for ($i = $row->rating; $i < 5; $i++)
+                                            <i class="fa fa-star-o text-muted"></i>
+                                        @endfor
+                                    </td>
                                     <td>{{ $row->isi_testimoni }}</td>
                                     <td>
                                         @if($row->photo)
