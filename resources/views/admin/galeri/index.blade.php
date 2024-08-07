@@ -3,174 +3,235 @@
 @section('title', 'Dashboard')
 
 @section('content')
-    <h1>Galeri</h1>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Welcome</div>
+<h1>Galeri</h1>
+@push('style')
+
+
+<style>
+
+    .gallery-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    /* Individual gallery item */
+    .gallery {
+        position: relative; /* Make it a containing block for absolute positioning */
+        width: 220px; /* Adjusted width for more space */
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Hover effect */
+    .gallery:hover {
+        border-color: #777;
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Image styling */
+    .gallery img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Description styling */
+    .desc {
+        padding: 10px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        border-top: 1px solid #ddd;
+        margin-bottom: 50px; /* Ensure there's enough space for buttons */
+    }
+
+    /* Button group styling */
+    .button-container {
+        display: flex;
+        gap: 5px;
+        justify-content: center; /* Center buttons horizontally */
+        position: absolute;
+        bottom: 10px; /* Adjust to fit the design */
+        left: 50%;
+        transform: translateX(-50%); /* Center buttons horizontally */
+    }
+
+    .button-container button,
+    .button-container form {
+        margin: 0; /* Remove any default margin */
+    }
+
+    .btn-group button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+
+    .btn-group button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Modal styling */
+    .modal-content {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .modal-header {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+</style>
+
+@endpush
+
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Welcome</div>
+            </div>
+
+            <!-- Button to trigger the modal -->
+            <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a>
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+            @endif
 
-                <!-- Button to trigger the modal -->
-                <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a>
-
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger mt-3">
+                        {{ $error }}
+                        <strong>Failed</strong>
                     </div>
-                @endif
+                @endforeach
+            @endif
 
-                @if ($errors->any())
-                    @foreach ($errors->all() as $error)
-                        <div class="alert alert-danger mt-3">
-                            {{ $error }}
-                            <strong>Failed</strong>
-                        </div>
-                    @endforeach
-                @endif
+            <!-- Gallery Section -->
+            <div class="card-body mt-4">
+                <div class="gallery-container">
+                    @forelse($galeri as $item)
+                        @if (!strpos($item->path_file, 'youtube.com') && !strpos($item->path_file, 'youtu.be'))
+                            <div class="gallery">
+                                <!-- Change anchor tag to open modal instead of new tab -->
+                                <a href="#" class="gallery-link" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ asset($item->path_file) }}" data-description="{{ $item->deskripsi }}">
+                                    <img src="{{ asset($item->path_file) }}" alt="{{ $item->deskripsi }}">
+                                </a>
+                                <div class="desc">{{ $item->deskripsi }}</div>
+                                <div class="button-container">
+                                    <a href="#editGaleriModal{{ $item->id_galeri }}" data-bs-toggle="modal" class="btn btn-primary btn-sm">Edit</a>
+                                    <form action="{{ route('galeri.destroy', $item->id_galeri) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
 
-                <!-- Table to display images -->
-                <div class="card-body mt-4">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Gambar</th>
-                                        <th>Deskripsi</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($galeri as $item)
-                                        @if (!strpos($item->path_file, 'youtube.com') && !strpos($item->path_file, 'youtu.be'))
-                                            <tr>
-                                                <td>
-                                                    <img src="{{ asset($item->path_file) }}" alt="{{ $item->deskripsi }}"
-                                                        style="width: 500px; height: auto;">
-                                                </td>
-                                                <td>{{ $item->deskripsi }}</td>
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-primary dropdown-toggle btn-sm"
-                                                            type="button" id="dropdownMenuButton{{ $item->id_galeri }}"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            Aksi
-                                                        </button>
-                                                        <ul class="dropdown-menu"
-                                                            aria-labelledby="dropdownMenuButton{{ $item->id_galeri }}">
-                                                            <li>
-                                                                <!-- Trigger Modal -->
-                                                                <button type="button" class="dropdown-item"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#editGaleriModal{{ $item->id_galeri }}">
-                                                                    Edit
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <form
-                                                                    action="{{ route('galeri.destroy', $item->id_galeri) }}"
-                                                                    method="POST" class="d-inline"
-                                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?');">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="dropdown-item text-danger">Delete</button>
-                                                                </form>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                            <!-- Edit Image Modal -->
+                            <div class="modal fade" id="editGaleriModal{{ $item->id_galeri }}" tabindex="-1" aria-labelledby="editGaleriModalLabel{{ $item->id_galeri }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <!-- Modal Header -->
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title" id="editGaleriModalLabel{{ $item->id_galeri }}">Edit Galeri</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('galeri.update', $item->id_galeri) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
 
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="editGaleriModal{{ $item->id_galeri }}"
-                                                tabindex="-1" aria-labelledby="editGaleriModalLabel{{ $item->id_galeri }}"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <!-- Modal Header -->
-                                                        <div class="modal-header bg-primary text-white">
-                                                            <h5 class="modal-title"
-                                                                id="editGaleriModalLabel{{ $item->id_galeri }}">Edit Galeri
-                                                            </h5>
-                                                            <button type="button" class="btn-close btn-close-white"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form action="{{ route('galeri.update', $item->id_galeri) }}"
-                                                                method="POST" enctype="multipart/form-data">
-                                                                @csrf
-                                                                @method('PUT')
-
-                                                                <div class="form-group">
-                                                                    <label for="image">Upload New Image
-                                                                        (Optional)</label>
-                                                                    <input type="file" name="image"
-                                                                        class="form-control" id="image">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="name">Name</label>
-                                                                    <input type="text" name="name"
-                                                                        class="form-control" id="name"
-                                                                        value="{{ $item->nama }}" required>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="description">Description</label>
-                                                                    <textarea name="description" class="form-control" id="description" required>{{ $item->deskripsi }}</textarea>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kategori">Pilih Kategori:</label>
-                                                                    <select class="form-control" id="kategori"
-                                                                        name="kategori" required>
-                                                                        <option value="">Select category</option>
-                                                                        <option value="partner"
-                                                                            {{ $item->kategori == 'partner' ? 'selected' : '' }}>
-                                                                            Partner</option>
-                                                                        <option value="klien"
-                                                                            {{ $item->kategori == 'klien' ? 'selected' : '' }}>
-                                                                            Klien</option>
-                                                                        <option value="gambar"
-                                                                            {{ $item->kategori == 'gambar' ? 'selected' : '' }}>
-                                                                            Gambar</option>
-                                                                        <option value="video"
-                                                                            {{ $item->kategori == 'video' ? 'selected' : '' }}>
-                                                                            Video</option>
-                                                                    </select>
-                                                                </div>
-
-                                                                <button type="submit"
-                                                                    class="btn btn-primary btn-block">Update</button>
-                                                            </form>
-                                                        </div>
-                                                        <!-- Modal Footer -->
-                                                        <div class="modal-footer bg-light">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
+                                                <div class="form-group">
+                                                    <label for="image">Upload New Image (Optional)</label>
+                                                    <input type="file" name="image" class="form-control" id="image">
                                                 </div>
-                                            </div>
-                                            <!-- End Modal -->
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">Tidak ada gambar ditemukan</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
 
-                            </table>
+                                                <div class="form-group">
+                                                    <label for="name">Name</label>
+                                                    <input type="text" name="name" class="form-control" id="name" value="{{ $item->nama }}" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="description">Description</label>
+                                                    <textarea name="description" class="form-control" id="description" required>{{ $item->deskripsi }}</textarea>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kategori">Pilih Kategori:</label>
+                                                    <select class="form-control" id="kategori" name="kategori" required>
+                                                        <option value="">Select category</option>
+                                                        <option value="partner" {{ $item->kategori == 'partner' ? 'selected' : '' }}>Partner</option>
+                                                        <option value="klien" {{ $item->kategori == 'klien' ? 'selected' : '' }}>Klien</option>
+                                                        <option value="gambar" {{ $item->kategori == 'gambar' ? 'selected' : '' }}>Gambar</option>
+                                                        <option value="video" {{ $item->kategori == 'video' ? 'selected' : '' }}>Video</option>
+                                                    </select>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary btn-block">Update</button>
+                                            </form>
+                                        </div>
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer bg-light">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Edit Image Modal -->
+                        @endif
+                    @empty
+                        <p class="text-center">Tidak ada gambar ditemukan</p>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- Image Preview Modal -->
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imageModalLabel">Image Preview</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img id="modalImage" src="" alt="" class="img-fluid">
+                            <p id="modalDescription" class="mt-3"></p>
                         </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
+</div>
+
+
+
+
 
     <!-- Add Image Modal -->
     <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
@@ -258,6 +319,8 @@
             </div>
         </div>
     </div>
+@push('script')
+
 
     <script>
         $(document).ready(function() {
@@ -323,6 +386,25 @@
             });
         });
     </script>
+
+            <!-- JavaScript to handle modal -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const galleryLinks = document.querySelectorAll('.gallery-link');
+                    const modalImage = document.getElementById('modalImage');
+                    const modalDescription = document.getElementById('modalDescription');
+
+                    galleryLinks.forEach(link => {
+                        link.addEventListener('click', function () {
+                            const imageSrc = this.getAttribute('data-image');
+                            const imageDescription = this.getAttribute('data-description');
+                            modalImage.src = imageSrc;
+                            modalDescription.textContent = imageDescription;
+                        });
+                    });
+                });
+            </script>
     <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    @endpush
 
 @endsection

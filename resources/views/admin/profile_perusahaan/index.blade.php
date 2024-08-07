@@ -2,6 +2,62 @@
 @section('title', 'Profil Perusahaan')
 @section('content')
 
+@push('style')
+
+
+<style>
+.section__container {
+    padding: 30px;
+}
+
+.header p {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+} */
+
+/* .profile__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.profile-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    max-width: 100%;
+    max-height: 80vh;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+/* .profile-image {
+    display: block;
+    max-width: 100%;
+    max-height: 60vh;
+    margin: 0 auto;
+    object-fit: contain;
+    margin-bottom: 20px;
+} */
+
+/* .profile-details {
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.5;
+} */
+
+
+</style>
+@endpush
+
 <h1>Profil Perusahaan</h1>
 
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -63,6 +119,31 @@
         </div>
     </div>
 </div>
+
+<!-- Profile Section -->
+<div class="section__container mt-5">
+    <div class="header">
+        <p>PROFIL PERUSAHAAN</p>
+        <h1>STRUKTUR ORGANISASI</h1>
+    </div>
+    <div class="profile__grid">
+        @foreach ($profil as $profile)
+            <div class="profile-item">
+                @if ($profile->path_struktur_organisasi)
+                    <img src="{{ asset('storage/' . $profile->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="profile-image">
+                @endif
+                <div class="profile-details">
+                    <p><strong>Tentang Kami:</strong> {{ $profile->tentang_kami }}</p>
+                    <p><strong>Visi:</strong> {{ $profile->visi }}</p>
+                    <p><strong>Misi:</strong> {{ $profile->misi }}</p>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+
+
 
 
 
