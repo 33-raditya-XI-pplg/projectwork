@@ -23,11 +23,11 @@
 <h1>Daftar Partner</h1>
 
 <!-- Button to open modal -->
-<div class="d-flex justify-content-end mb-3">
+{{-- <div class="d-flex justify-content-end mb-3">
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPartnerModal">
         Tambah Partner
     </button>
-</div>
+</div> --}}
 
 <table id="example" class="table table-striped">
     <thead class="fw-normal">
@@ -128,7 +128,7 @@
 
 
 <!-- Insert Modal -->
-<div class="modal modal-lg fade" id="addPartnerModal" tabindex="-1" aria-labelledby="addPartnerLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary-gradient text-white">

@@ -17,11 +17,8 @@
     </div>
     @endif
 
-
-    <button class="btn btn-primary rounded" id="tambahBtn" data-bs-toggle="modal" data-bs-target="#addPageModal">+ Tambah</button>
-
     <!-- Modal for Adding Page -->
-    <div class="modal modal-lg fade" id="addPageModal" tabindex="-1" aria-labelledby="addPageModalLabel" aria-hidden="true">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
@@ -105,41 +102,41 @@
                     </td>
                 </tr>
 
-
-
-
-               <!-- Edit Modal -->
-<div class="modal fade" id="edit{{ $page->id_page }}" tabindex="-1" aria-labelledby="editModalLabel{{ $page->id_page }}" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #007bff; color: white;">
-                <h5 class="modal-title" id="editModalLabel{{ $page->id_page }}">Edit Page</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('page.update', $page->id_page) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label for="nama_page_{{ $page->id_page }}" class="form-label">Nama Page</label>
-                        <input type="text" class="form-control" id="nama_page_{{ $page->id_page }}" name="nama_page" value="{{ $page->nama_page }}" required>
+                <!-- Edit Modal -->
+                <div class="modal fade" id="edit{{ $page->id_page }}" tabindex="-1" aria-labelledby="editModalLabel{{ $page->id_page }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header" style="background-color: #007bff; color: white;">
+                                <h5 class="modal-title" id="editModalLabel{{ $page->id_page }}">Edit Page</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('page.update', $page->id_page) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3">
+                                        <label for="nama_page_{{ $page->id_page }}" class="form-label">Nama Page</label>
+                                        <input type="text" class="form-control" id="nama_page_{{ $page->id_page }}" name="nama_page" value="{{ $page->nama_page }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deskripsi_{{ $page->id_page }}" class="form-label">Deskripsi</label>
+                                        <textarea class="form-control" id="deskripsi_{{ $page->id_page }}" name="deskripsi" required>{{ $page->deskripsi }}</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pindah_halaman_{{ $page->id_page }}" class="form-label">Link Halaman</label>
+                                        <input type="url" class="form-control" id="pindah_halaman_{{ $page->id_page }}" name="pindah_halaman" value="{{ $page->pindah_halaman }}" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="deskripsi_{{ $page->id_page }}" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi_{{ $page->id_page }}" name="deskripsi" required>{{ $page->deskripsi }}</textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nama_page_{{ $page->id_page }}" class="form-label">Link Halaman</label>
-                        <input type="url" class="form-control" id="pindah_halaman_{{ $page->pindah_halaman }}" name="pindah_halaman" value="{{ $page->pindah_halaman }}" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </form>
-            </div>
-        </div>
-        @endforeach
+                </div>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
-
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -152,6 +149,7 @@
                 CKEDITOR.replace('deskripsi_{{ $page->id_page }}');
             @endforeach
         }
+
         $('#addPageForm').on('submit', function (e) {
             e.preventDefault();
 
@@ -179,8 +177,58 @@
                 }
             });
         });
+
+        // Handle delete button confirmation
+        $('button[data-confirm-delete]').on('click', function (e) {
+            e.preventDefault();
+            var form = $(this).closest('form');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
 @endsection
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: '{{ $errors->first() }}',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+
+
+    @endpush
 
 @endsection

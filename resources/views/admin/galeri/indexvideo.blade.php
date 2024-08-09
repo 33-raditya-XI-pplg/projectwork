@@ -112,13 +112,13 @@
 
 
     <h1>Video Management</h1>
-    <div class="container">
+    {{-- <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <a href="{{ route('video.create') }}" class="btn btn-primary btn-block mt-3" data-bs-toggle="modal" data-bs-target="#uploadVideoModal">Upload Video</a>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Table to display videos -->
     <div class="container mt-4">
@@ -198,7 +198,7 @@
     @endforeach
 
     <!-- Upload Video Modal -->
-    <div class="modal fade" id="uploadVideoModal" tabindex="-1" aria-labelledby="uploadVideoModalLabel" aria-hidden="true">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">

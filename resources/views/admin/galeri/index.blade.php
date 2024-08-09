@@ -17,10 +17,10 @@
         padding: 10px;
     }
 
-    /* Individual gallery item */
+
     .gallery {
-        position: relative; /* Make it a containing block for absolute positioning */
-        width: 220px; /* Adjusted width for more space */
+        position: relative;
+        width: 220px;
         border: 2px solid #ddd;
         border-radius: 8px;
         overflow: hidden;
@@ -30,43 +30,43 @@
         flex-direction: column;
     }
 
-    /* Hover effect */
+
     .gallery:hover {
         border-color: #777;
         transform: scale(1.05);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
-    /* Image styling */
+
     .gallery img {
         width: 100%;
         height: auto;
         display: block;
     }
 
-    /* Description styling */
+
     .desc {
         padding: 10px;
         text-align: center;
         background: rgba(255, 255, 255, 0.9);
         border-top: 1px solid #ddd;
-        margin-bottom: 50px; /* Ensure there's enough space for buttons */
+        margin-bottom: 50px;
     }
 
-    /* Button group styling */
+
     .button-container {
         display: flex;
         gap: 5px;
-        justify-content: center; /* Center buttons horizontally */
+        justify-content: center;
         position: absolute;
-        bottom: 10px; /* Adjust to fit the design */
+        bottom: 10px;
         left: 50%;
-        transform: translateX(-50%); /* Center buttons horizontally */
+        transform: translateX(-50%);
     }
 
     .button-container button,
     .button-container form {
-        margin: 0; /* Remove any default margin */
+        margin: 0;
     }
 
     .btn-group button {
@@ -111,7 +111,7 @@
             </div>
 
             <!-- Button to trigger the modal -->
-            <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a>
+            {{-- <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a> --}}
 
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
@@ -234,7 +234,7 @@
 
 
     <!-- Add Image Modal -->
-    <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
+    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
