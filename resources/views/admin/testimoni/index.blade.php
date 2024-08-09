@@ -3,6 +3,34 @@
 @section('title', 'Testimoni')
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+@push('style')
+
+
+<style>.card {
+    text-align: center;
+}
+
+.rating {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.rating .fa {
+    font-size: 1.5rem;
+    color: #ccc;
+    margin-right: 0.2rem;
+}
+
+.rating .fa.filled {
+    color: #ffcc00;
+}
+
+
+</style>
+@endpush
 
     <h1>Testimoni</h1>
 
@@ -239,80 +267,119 @@
             </div>
         </div>
     @endforeach
-
-    <!-- Testimonials Section -->
-    <div class="section__container">
-        <div class="header">
-            <p>TESTIMONIALS</p>
-            <h1>Ini Testimoni dari clients.</h1>
-        </div>
-        <div class="testimonials__grid">
-            @foreach ($testimonials as $testimonial)
-                <div class="card">
-                    <span><i class="ri-double-quotes-l"></i></span>
-                    <p>
-                        {{ $testimonial->isi_testimoni }}
-                    </p>
-                    <hr />
-                    @if ($testimonial->photo)
-                        <img src="{{ asset('storage/' . $testimonial->photo) }}" alt="user" />
-                    @endif
-
-                    <p class="name">{{ $testimonial->nama }}</p>
-                </div>
-            @endforeach
-        </div>
+<!-- Testimonials Section -->
+<div class="section__container">
+    <div class="header">
+        <p>TESTIMONIALS</p>
+        <h1>Ini Testimoni dari clients.</h1>
     </div>
+    <div class="testimonials__grid">
+        @foreach ($testimonials as $testimonial)
+            <div class="card">
+                <span><i class="ri-double-quotes-l"></i></span>
+                <p>
+                    {{ $testimonial->isi_testimoni }}
+                </p>
+                <hr />
+                @if ($testimonial->photo)
+                    <img src="{{ asset('storage/' . $testimonial->photo) }}" alt="user" />
+                @endif
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <!-- Rating Stars -->
+                <div class="rating">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <i class="fa {{ $i <= $testimonial->rating ? 'fa-star filled' : 'fa-star' }}"></i>
+                    @endfor
+                </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('#addForm');
+                <p class="name">{{ $testimonial->nama }}</p>
+            </div>
+        @endforeach
+    </div>
+</div>
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(form);
-                fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content')
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: data.message,
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: data.message || 'Something went wrong.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    })
-                    .catch(error => {
+
+
+@push('script')
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('#addForm');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                            .getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Something went wrong.',
+                            text: data.message || 'Something went wrong.',
                             icon: 'error',
                             confirmButtonText: 'OK'
                         });
-                        console.error('Error:', error);
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
                     });
-            });
+                    console.error('Error:', error);
+                });
         });
-    </script>
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+@if (session('success'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK'
+        });
+    });
+</script>
+@endif
+
+@if ($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan!',
+            text: '{{ $errors->first() }}',
+            confirmButtonText: 'OK'
+        });
+    });
+</script>
+@endif
+@endpush
+
 
 @endsection

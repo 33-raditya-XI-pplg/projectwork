@@ -2,7 +2,9 @@
 @section('title', 'Partner')
 @section('content')
 
-@if (session('success'))
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+{{-- @if (session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
@@ -16,7 +18,7 @@
             @endforeach
         </ul>
     </div>
-@endif
+@endif --}}
 
 <h1>Daftar Partner</h1>
 
@@ -338,6 +340,36 @@
         </div>
     </div>
 
+    @push('script')
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: '{{ $errors->first() }}',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+@endpush
 
 
 @endforeach

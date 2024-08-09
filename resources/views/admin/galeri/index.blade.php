@@ -405,6 +405,36 @@
                 });
             </script>
     <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: '{{ $errors->first() }}',
+                confirmButtonText: 'OK'
+            });
+        });
+    </script>
+@endif
+
+
     @endpush
 
 @endsection
