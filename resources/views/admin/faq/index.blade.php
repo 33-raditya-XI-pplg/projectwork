@@ -154,23 +154,58 @@
 <!-- End of Insert Modal -->
 
 <!-- FAQ Accordion -->
-<div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-    <div class="accordion" id="faqAccordion">
-        @foreach ($faq as $index => $item)
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="heading{{ $index }}">
-                    <button class="accordion-button @if($index !== 0) collapsed @endif" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $index }}" aria-expanded="{{ $index === 0 ? 'true' : 'false' }}" aria-controls="collapse{{ $index }}">
-                        {{ $item->pertanyaan }}
-                    </button>
-                </h2>
-                <div id="collapse{{ $index }}" class="accordion-collapse collapse @if($index === 0) show @endif" aria-labelledby="heading{{ $index }}" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        {{ $item->jawaban }}
+<div class="bg-light rounded-4 px-4 py-4 mb-5 shadow-lg">
+    <div class="container">
+        <div class="row">
+            @foreach ($faq as $item)
+                <div class="col-md-4 mb-4">
+                    <div class="card border-0 rounded-3 overflow-hidden shadow-lg">
+                        <div class="card-body p-4 d-flex flex-column align-items-center justify-content-center">
+                            <div class="card-front bg-primary text-white rounded-3 p-4 d-flex align-items-center justify-content-center">
+                                <h5 class="mb-0">{{ $item->pertanyaan }}</h5>
+                            </div>
+                            <div class="card-back d-flex align-items-center justify-content-center p-4 text-dark bg-light rounded-3 position-absolute w-100 h-100">
+                                <p class="mb-0">{{ $item->jawaban }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 </div>
+
+<style>
+    .card {
+        perspective: 1000px;
+        position: relative;
+        overflow: hidden;
+        height: 300px;
+    }
+    .card-body {
+        position: relative;
+        z-index: 1;
+    }
+    .card-front, .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        transition: transform 0.6s;
+    }
+    .card-front {
+        background: linear-gradient(135deg, #007bff, #00d2ff);
+    }
+    .card-back {
+        transform: rotateY(180deg);
+    }
+    .card:hover .card-front {
+        transform: rotateY(180deg);
+    }
+    .card:hover .card-back {
+        transform: rotateY(0deg);
+    }
+</style>
+
 
 @endsection
