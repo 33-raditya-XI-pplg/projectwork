@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_blog');
             // Foreign Key
             $table->foreignId('page_id')->constrained('tb_page', 'id_page');
-
+            $table->foreignId('kategori_id')->constrained('tb_kategori', 'id_kategori');
             $table->string('judul');
             $table->string('slug')->unique();
             // $table->text('ringkasan');

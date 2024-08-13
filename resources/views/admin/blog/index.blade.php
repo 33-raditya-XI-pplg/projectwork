@@ -35,11 +35,12 @@
                     <thead class="fw-normal">
                         <tr>
                             <th>No</th>
-                            <th scope="col">Page Id</th>
+                            <th scope="col">Page Name</th>
                             <th scope="col">Judul</th>
                             <th scope="col">Slug</th>
                             <th scope="col">Body</th>
                             <th scope="col">Photo</th>
+                            <th scope="col">Kategori</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -47,15 +48,20 @@
                         @foreach ($blog as $row)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
+                                <td>{{ $row->page->nama_page ?? 'N/A' }}</td> <!-- Use eager loaded page relationship -->
                                 <td>{{ $row->judul }}</td>
                                 <td>{{ $row->slug }}</td>
-                                <td>{{ Str::limit($row->body, 100) }}</td>
+                                <td>{{ Str::limit(strip_tags($row->body), 100) }}</td>
                                 <td>
                                     <!-- Display the photo or a default image if not set -->
-
                                     <img src="{{ $row->photo ? asset('storage/photos/' . $row->photo) : asset('images/default.jpg') }}" alt="{{ $row->judul }}" style="width: 100px; height: auto;">
-
+                                </td>
+                                <td>
+                                    @forelse ($row->kategori as $category)
+                                        {{ $category->nama_kategori }}<br>
+                                    @empty
+                                        No categories
+                                    @endforelse
                                 </td>
 
                                 <td>
@@ -79,6 +85,7 @@
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -93,7 +100,8 @@
                     <img src="{{ $post->photo ? asset('storage/photos/' . $post->photo) : asset('images/default.jpg') }}" class="card-img-top" alt="{{ $post->judul }}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ $post->judul }}</h5>
-                        <p class="card-text">{{ Str::limit($post->body, 150) }}</p>
+                        <p class="card-text">{{ Str::limit(strip_tags($post->body), 150) }}</p>
+
                         <a href="{{ route('blog.show', $post->id_blog) }}" class="btn btn-primary mt-auto">Read More</a>
                     </div>
                 </div>
@@ -121,7 +129,7 @@
                     @csrf
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
                     <div class="mb-3">
-                        <label for="page_id" class="form-label">Page ID</label>
+                        <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                         <select class="form-select" name="page_id" aria-label="Default select example" required>
                             <option selected>Pilih ...</option>
                             @foreach ($page as $row)
@@ -130,20 +138,26 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="judul" class="form-label">Judul</label>
+                        <label for="judul" class="form-label">Judul <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="judul" id="judul" required>
                     </div>
                     <div class="mb-3">
-                        <label for="slug" class="form-label">Slug</label>
-                        <input type="text" class="form-control" name="slug" id="slug" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="photo" class="form-label">Upload Photo</label>
+                        <label for="photo" class="form-label">Upload Photo <span class="text-danger">*</span></label>
                         <input class="form-control" name="photo" type="file" id="photo" accept=".png, .jpg, .jpeg">
                     </div>
                     <div class="mb-3">
-                        <label for="body" class="form-label">Body</label>
+                        <label for="body" class="form-label">Body <span class="text-danger">*</span></label>
                         <textarea class="form-control ck-editor" id="body" name="body" rows="4"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="kategori_id" class="form-label">Kategori <span class="text-danger">*</span></label>
+                        {{-- <select class="form-select" name="page_id" aria-label="Default select example" required> --}}
+                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
+                            <option selected>Pilih ...</option>
+                            @foreach ($kategori as $row)
+                                <option value="{{ $row->id_kategori }}">{{ $row->nama_kategori }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
@@ -160,6 +174,8 @@
         </div>
     </div>
 </div>
+
+
 
 @foreach ($blog as $row)
     <!-- Edit Blog Modal -->
@@ -189,16 +205,17 @@
                             <label for="judul" class="form-label">Judul</label>
                             <input type="text" class="form-control" name="judul" id="judul" value="{{ $row->judul }}" required>
                         </div>
-                        <div class="mb-3">
+                        <!-- Remove slug input as it will be auto-generated -->
+                        <!-- <div class="mb-3">
                             <label for="slug" class="form-label">Slug</label>
                             <input type="text" class="form-control" name="slug" id="slug" value="{{ $row->slug }}" required>
-                        </div>
+                        </div> -->
                         <div class="mb-3">
                             <label for="photo" class="form-label">Upload Photo</label>
                             <input class="form-control" name="photo" type="file" id="photo" accept=".png, .jpg, .jpeg">
                             <!-- Display current photo if exists -->
                             @if($row->photo)
-                                <img src="{{ asset('storage/' . $row->photo) }}" alt="{{ $row->judul }}" class="img-thumbnail mt-2" style="width: 100px; height: auto;">
+                                <img src="{{ asset('storage/photos/' . $row->photo) }}" alt="{{ $row->judul }}" class="img-thumbnail mt-2" style="width: 100px; height: auto;">
                             @endif
                         </div>
                         <div class="mb-3">
@@ -220,6 +237,7 @@
             </div>
         </div>
     </div>
+
 @endforeach
 
 @endsection

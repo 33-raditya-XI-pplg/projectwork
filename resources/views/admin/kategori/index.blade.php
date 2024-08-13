@@ -126,17 +126,17 @@
                                 <input type="hidden" name="password" value="kategori">
                                 <input type="hidden" name="level" value="kategori">
                                 <div class="mb-3">
-                                    <label for="nama_kategori" class="form-label">Nama Kategori</label>
+                                    <label for="nama_kategori" class="form-label">Nama Kategori <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="nama_kategori" id="nama_kategori" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <label for="deskripsi" class="form-label">Deskripsi <span class="text-danger">*</span></label>
                                     <textarea class="form-control" id="deskripsi" name="deskripsi" required></textarea>
                                 </div>
 
                                 <div class="modal-footer justify-content-between mx-3">
                                     <div class="form-check form-switch mb-3">
-                                        <label for="status" class="me-3">Status</label>
+                                        <label for="status" class="me-3">Status </label>
                                         <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="Aktif">
                                     </div>
                                     <div>

@@ -59,17 +59,22 @@
                     <div class="card-body d-flex flex-column">
                         <h2 class="card-title mb-3">{{ $blog->judul }}</h2>
                         <p class="text-muted mb-4">{{ $blog->created_at->format('F j, Y') }}</p>
-                        <p class="card-text">{{ $blog->body }}</p>
+                        <div class="card-text">
+                            {!! preg_replace('/<\/?p[^>]*>/', '', $blog->body) !!}
+                        </div>
                         <a href="{{ route('blog.index') }}" class="btn btn-primary">Back to Blog List</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-@else
-    <div class="alert alert-warning" role="alert">
+{{-- @else
+    <p>No blog post found.</p>
+@endif --}}
+
+    {{-- <div class="alert alert-warning" role="alert">
         Blog not found.
-    </div>
+    </div> --}}
 @endif
 
 @endsection

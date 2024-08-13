@@ -17,7 +17,7 @@ use App\Models\Instansi;
 class ProfileController extends Controller
 {
     public function index() {
-        $data = auth()->user(); 
+        $data = auth()->user();
 
         return view('profile.index', compact('data'));
     }
@@ -30,9 +30,9 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user', 'instansi'));
     }
 
-    public function update(Request $request, $id) {   
+    public function update(Request $request, $id) {
         // dd($request);
-        
+
         if ($request->has('foto_pengguna')) {
 
             // Check if user has path_foto
@@ -58,7 +58,7 @@ class ProfileController extends Controller
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
                     $stored = $foto->storeAs('public/foto_admin', $filename);
-            
+
                     $request->merge([
                         'path_foto' => Storage::url($stored)
                     ]);
@@ -101,12 +101,12 @@ class ProfileController extends Controller
                 else {
                     $user->password = Hash::make($request->password_baru);
                     $user->save();
-    
+
                     Alert::success('Berhasil Tersimpan!', 'Password berhasil diperbarui');
                     return redirect()->back();
                 }
             }
-        }        
+        }
 
         $user->update($request->all());
 
@@ -127,7 +127,7 @@ class ProfileController extends Controller
             $user->delete();
         }
         $user->delete();
-        
+
         toast('Pengguna terhapus!','success');
         return redirect()->back();
     }

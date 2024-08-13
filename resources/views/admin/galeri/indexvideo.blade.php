@@ -106,12 +106,42 @@
         background-color: #0056b3;
         border-color: #004085;
     }
+    .video-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem; /* Adjust gap between items as needed */
+    }
+
+    .video-item {
+        flex: 1 1 calc(25% - 1rem); /* 4 items per row with a gap */
+        max-width: calc(25% - 1rem);
+        max-height: 320px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .video-item iframe {
+        max-height: 120px;
+    }
+
+    .desc {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 10px;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
 
 @endpush
 
 
-    <h1>Video Management</h1>
+    {{-- <h1>Video Management</h1> --}}
     {{-- <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -122,37 +152,49 @@
 
     <!-- Table to display videos -->
     <div class="container mt-4">
-        <div class="video-container">
-            @forelse($videos as $video)
-                <div class="video-item">
-                    @if(strpos($video->path_file, 'youtube.com') !== false || strpos($video->path_file, 'youtu.be') !== false)
-                        @php
-                            $videoId = '';
-                            if (preg_match('/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $video->path_file, $matches)) {
-                                $videoId = $matches[1];
-                            }
-                        @endphp
-                        @if($videoId)
-                            <iframe src="https://www.youtube.com/embed/{{ $videoId }}" frameborder="0" allowfullscreen></iframe>
+        <div class="video-section">
+            {{-- <h4>Videos</h4> --}}
+            <div class="video-container">
+                @forelse($videos as $video)
+                    <div class="video-item me-3 mb-3">
+                        @if(strpos($video->path_file, 'youtube.com') !== false || strpos($video->path_file, 'youtu.be') !== false)
+                            @php
+                                $videoId = '';
+                                if (preg_match('/(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $video->path_file, $matches)) {
+                                    $videoId = $matches[1];
+                                }
+                            @endphp
+                            @if($videoId)
+                                <iframe src="https://www.youtube.com/embed/{{ $videoId }}" frameborder="0" allowfullscreen></iframe>
+                            @endif
+                        @else
+                            <p>Invalid video URL</p>
                         @endif
-                    @else
-                        <p>Invalid video URL</p>
-                    @endif
-                    <div class="desc">{{ $video->deskripsi }}</div>
-                    <div class="button-container">
-                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editVideoModal{{ $video->id_galeri }}">Edit</a>
-                        <form action="{{ route('video.destroy', $video->id_galeri) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-primary btn-sm">Delete</button>
-                        </form>
+
+                        <!-- Display Description -->
+                        <div class="desc mt-2">
+                            <strong>Description:</strong> {{ $video->deskripsi }}
+                        </div>
+
+                        <!-- Edit and Delete Buttons -->
+                        <div class="button-container mt-2">
+                            <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editVideoModal{{ $video->id_galeri }}">Edit</a>
+                            <form action="{{ route('video.destroy', $video->id_galeri) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            @empty
-                <p class="text-center">No videos found</p>
-            @endforelse
+                @empty
+                    <p class="text-center">No videos found</p>
+                @endforelse
+            </div>
         </div>
     </div>
+
+
+
 
     <!-- Edit Video Modals -->
     @foreach($videos as $video)
@@ -202,18 +244,18 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="uploadVideoModalLabel">Upload Video</h5>
+                    <h5 class="modal-title" id="uploadVideoModalLabel">Upload Video </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('video.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label for="nama">Name</label>
+                            <label for="nama">Name <span class="text-danger">*</span></label>
                             <input type="text" name="nama" class="form-control" id="nama" required>
                         </div>
                         <div class="form-group">
-                            <label for="page_id">Page ID</label>
+                            <label for="page_id">Page ID <span class="text-danger">*</span></label>
                             <select name="page_id" class="form-control" id="page_id" required>
                                 <option value="">Select Page ID</option>
                                 @foreach ($pages as $page)
@@ -222,18 +264,26 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="kategori">Category</label>
-                            <select name="kategori" class="form-control" disabled>
+                            <label for="kategori">Kategori Otomatis terisi video</label>
+
+                            <!-- Hint text displayed as a read-only input field -->
+                            <input type="text" class="form-control" value="Video" readonly style="background-color: #ADD8E6;">
+
+                            <!-- The actual select field is hidden but still submitted with the form -->
+                            <select name="kategori" class="form-control d-none">
                                 <option value="video" selected>Video</option>
                             </select>
+
                             <input type="hidden" name="kategori" value="video">
                         </div>
+
+
                         <div class="form-group">
-                            <label for="path_file">Video URL</label>
+                            <label for="path_file">Video URL <span class="text-danger">*</span></label>
                             <input type="url" name="path_file" class="form-control" id="path_file" placeholder="Enter YouTube video URL" required>
                         </div>
                         <div class="form-group">
-                            <label for="deskripsi">Description</label>
+                            <label for="deskripsi">Description <span class="text-danger">*</span></label>
                             <textarea name="deskripsi" class="form-control" id="deskripsi" placeholder="Enter description" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Upload</button>

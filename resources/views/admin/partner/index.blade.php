@@ -20,7 +20,7 @@
     </div>
 @endif --}}
 
-<h1>Daftar Partner</h1>
+{{-- <h1>Daftar Partner</h1> --}}
 
 <!-- Button to open modal -->
 {{-- <div class="d-flex justify-content-end mb-3">
@@ -40,8 +40,8 @@
             <th>Alamat Partner</th>
             <th>Jenis Partner</th>
             <th>Tanggal Bergabung</th>
-            <th>Status Partner</th>
             <th>Website</th>
+            <th>Status Partner</th>
             <th>Logo</th>
             <th>Aksi</th>
         </tr>
@@ -57,7 +57,6 @@
                 <td>{{ $partner->alamat_partner ?? '-' }}</td>
                 <td>{{ $partner->jenis_partner ?? '-' }}</td>
                 <td>{{ $partner->tanggal_bergabung ? $partner->tanggal_bergabung->format('d-m-Y') : '-' }}</td>
-                <td>{{ $partner->status_partner ? 'Aktif' : 'Non-Aktif' }}</td>
                 <td>
                     @if($partner->website_partner)
                         <a href="{{ $partner->website_partner }}" target="_blank" rel="noopener noreferrer">Link Website</a>
@@ -65,6 +64,16 @@
                         <span>-</span>
                     @endif
                 </td>
+                <td>
+                    <button type="button" class="btn rounded-3
+                        {{ $partner->status_partner == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                        disabled>
+                        {{ $partner->status_partner == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                    </button>
+                </td>
+
+
+
                 <td>
                     @if($partner->logo)
                         <img src="{{ asset('storage/' . $partner->logo) }}" alt="Logo" width="50">
@@ -100,6 +109,7 @@
         @endforeach
     </tbody>
 </table>
+
 
 
 {{-- logo Partner  --}}
@@ -139,7 +149,7 @@
                 <form action="{{ route('partner.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="page_id" class="form-label">Page ID</label>
+                        <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                         <select class="form-select @error('page_id') is-invalid @enderror" name="page_id" id="page_id" required>
                             <option value="" disabled selected>Pilih ...</option>
                             @foreach ($pages as $page)
@@ -151,56 +161,56 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="nama_partner" class="form-label">Nama Partner</label>
+                        <label for="nama_partner" class="form-label">Nama Partner <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('nama_partner') is-invalid @enderror" name="nama_partner" id="nama_partner" required>
                         @error('nama_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="email_partner" class="form-label">Email Partner</label>
+                        <label for="email_partner" class="form-label">Email Partner <span class="text-danger">*</span></label>
                         <input type="email" class="form-control @error('email_partner') is-invalid @enderror" name="email_partner" id="email_partner" required>
                         @error('email_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="telepon_partner" class="form-label">Nomor Telepon Partner</label>
+                        <label for="telepon_partner" class="form-label">Nomor Telepon Partner <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('telepon_partner') is-invalid @enderror" name="telepon_partner" id="telepon_partner">
                         @error('telepon_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="alamat_partner" class="form-label">Alamat Partner</label>
+                        <label for="alamat_partner" class="form-label">Alamat Partner <span class="text-danger">*</span></label>
                         <textarea class="form-control @error('alamat_partner') is-invalid @enderror" id="alamat_partner" name="alamat_partner" rows="2"></textarea>
                         @error('alamat_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="jenis_partner" class="form-label">Jenis Partner</label>
+                        <label for="jenis_partner" class="form-label">Jenis Partner <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('jenis_partner') is-invalid @enderror" name="jenis_partner" id="jenis_partner">
                         @error('jenis_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="tanggal_bergabung" class="form-label">Tanggal Bergabung</label>
+                        <label for="tanggal_bergabung" class="form-label">Tanggal Bergabung <span class="text-danger">*</span></label>
                         <input type="date" class="form-control @error('tanggal_bergabung') is-invalid @enderror" name="tanggal_bergabung" id="tanggal_bergabung">
                         @error('tanggal_bergabung')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="logo" class="form-label">Upload Logo</label>
+                        <label for="logo" class="form-label">Upload Logo <span class="text-danger">*</span></label>
                         <input class="form-control @error('logo') is-invalid @enderror" name="logo" type="file" id="logo" accept=".png, .jpg, .jpeg">
                         @error('logo')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="website_partner" class="form-label">Website Partner</label>
+                        <label for="website_partner" class="form-label">Website Partner <span class="text-danger">*</span></label>
                         <input type="url" class="form-control @error('website_partner') is-invalid @enderror" name="website_partner" id="website_partner" placeholder="https://example.com">
                         @error('website_partner')
                             <div class="invalid-feedback">{{ $message }}</div>

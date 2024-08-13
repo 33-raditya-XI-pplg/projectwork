@@ -3,7 +3,7 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<h1>Galeri</h1>
+{{-- <h1>Galeri</h1> --}}
 @push('style')
 
 
@@ -107,7 +107,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Welcome</div>
+                <div class="panel-heading"></div>
             </div>
 
             <!-- Button to trigger the modal -->
@@ -249,7 +249,7 @@
                         @csrf
 
                         <div class="form-group mb-3">
-                            <label for="page_id">Page ID:</label>
+                            <label for="page_id">Page ID <span class="text-danger">*</span></label>
                             <select name="page_id" class="form-control" id="page_id" required>
                                 <option value="">Select Page ID</option>
                                 @foreach ($pages as $page)
@@ -264,14 +264,14 @@
 
                         <!-- Title input -->
                         <div class="form-group mb-3">
-                            <label for="nama">Judul :</label>
+                            <label for="nama">Judul <span class="text-danger">*</span></label>
                             <input type="text" name="nama" class="form-control" placeholder="Masukkan judul"
                                 id="nama">
                         </div>
 
                         <!-- Category Selection -->
                         <div class="form-group mb-3">
-                            <label for="kategori">Pilih Kategori:</label>
+                            <label for="kategori">Pilih Kategori <span class="text-danger">*</span></label>
                             <select class="form-control" id="kategori" name="kategori">
                                 <option value="">Select category</option>
                                 <option value="partner">Partner</option>
@@ -282,7 +282,7 @@
                         </div>
 
                         <div class="form-group mb-6">
-                            <label class="control-label">Upload Image or Video</label>
+                            <label class="control-label">Upload Image <span class="text-danger">*</span></label>
                             <div class="dropzone-wrapper">
                                 <div class="dropzone-desc">
                                     <i class="glyphicon glyphicon-download-alt"></i>
@@ -298,13 +298,16 @@
                                         style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
                                 </div>
                             </div>
+                            <div class="mt-2">
+                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                            </div>
                             <div id="image_error"></div>
                         </div>
 
 
                         <!-- Description (optional) -->
                         <div class="form-group mb-4">
-                            <label for="deskripsi">Deskripsi (optional):</label>
+                            <label for="deskripsi">Deskripsi <span class="text-danger">*</span></label>
                             <textarea name="deskripsi" class="form-control" placeholder="Tambahkan deskripsi (opsional)" id="deskripsi"></textarea>
                         </div>
 

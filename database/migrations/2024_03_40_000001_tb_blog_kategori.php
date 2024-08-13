@@ -8,11 +8,11 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * 
+     *
      * ====PIVOT TABLE====
      * tb_kategori to tb_blog
      */
-    public function up() 
+    public function up()
     {
         Schema::create('tb_blog_kategori', function (Blueprint $table) {
             $table->id('id_blog_kategori');
@@ -20,8 +20,8 @@ return new class extends Migration
             $table->foreignId('blog_id')->constrained('tb_blog', 'id_blog');
             $table->foreignId('kategori_id')->constrained('tb_kategori', 'id_kategori');
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

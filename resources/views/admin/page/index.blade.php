@@ -3,20 +3,6 @@
 @section('title', 'Page')
 
 @section('content')
-<div class="container mt-4">
-
-    @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-    @endif
-
     <!-- Modal for Adding Page -->
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -29,16 +15,26 @@
                     <form id="addPageForm" method="POST" action="{{ route('page.store') }}">
                         @csrf
                         <div class="mb-3">
-                            <label for="pageName" class="form-label">Nama Page</label>
+                            <label for="pageName" class="form-label">Nama Page <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="pageName" name="nama_page" required>
                         </div>
                         <div class="mb-3">
-                            <label for="pageDescription" class="form-label">Deskripsi Page</label>
+                            <label for="pageDescription" class="form-label">Deskripsi Page <span class="text-danger">*</span></label>
                             <textarea class="form-control ck-editor" id="pageDescription" name="deskripsi" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="pindah_halaman" class="form-label">Link Halaman</label>
+                            <label for="pindah_halaman" class="form-label">Link Halaman <span class="text-danger">*</span></label>
                             <input type="url" class="form-control" id="pindah_halaman" name="pindah_halaman" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="status" name="status" value="Aktif" checked>
+                                <label class="form-check-label" for="status">
+                                    Aktif
+                                </label>
+                            </div>
+
                         </div>
                         <div class="modal-footer justify-content-between mx-3">
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -50,6 +46,9 @@
         </div>
     </div>
 
+
+
+
     <div id="pageList" class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <table class="table">
             <thead class="fw-normal">
@@ -58,6 +57,7 @@
                     <th>Nama Page</th>
                     <th>Deskripsi</th>
                     <th>Pindah Halaman</th>
+                    <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -75,6 +75,13 @@
                         @else
                             -
                         @endif
+                    </td>
+                    <td>
+                        <button type="button" class="btn rounded-3
+                            {{ $page->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                            disabled>
+                            {{ $page->status == 'Aktif' ? 'Aktif' : 'Non-Aktif' }}
+                        </button>
                     </td>
                     <td>
                         <div class="dropdown">
@@ -126,17 +133,25 @@
                                         <label for="pindah_halaman_{{ $page->id_page }}" class="form-label">Link Halaman</label>
                                         <input type="url" class="form-control" id="pindah_halaman_{{ $page->id_page }}" name="pindah_halaman" value="{{ $page->pindah_halaman }}" required>
                                     </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <label for="status_{{ $page->id_page }}" class="form-label me-3">Status</label>
+                                        <input class="form-check-input" type="checkbox" id="status_{{ $page->id_page }}" name="status" value="Aktif" {{ $page->status == 'Aktif' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="status_{{ $page->id_page }}">
+                                            {{ $page->status == 'Aktif' ? 'Aktif' : 'Non-Aktif' }}
+                                        </label>
+                                    </div>
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 @endforeach
             </tbody>
         </table>
     </div>
-</div>
+@endsection
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -227,8 +242,4 @@
         });
     </script>
 @endif
-
-
-    @endpush
-
-@endsection
+@endpush

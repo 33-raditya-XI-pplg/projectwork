@@ -2,7 +2,7 @@
 @section('title', 'Blog')
 @section('content')
 
-<h1>Blog Kategori</h1>
+{{-- <h1>Blog Kategori</h1> --}}
 
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
     <div class="tab-content" id="nav-tabContent">
@@ -74,7 +74,7 @@
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
                     <div class="mb-3">
-                        <label for="blog_id" class="form-label">Blog ID</label>
+                        <label for="blog_id" class="form-label">Blog ID <span class="text-danger">*</span></label>
                         <select class="form-select" name="blog_id" aria-label="Default select example" required>
                             <option selected>Pilih ...</option>
                             @foreach ($blog as $row)
@@ -83,7 +83,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="kategori_id" class="form-label">Kategori ID</label>
+                        <label for="kategori_id" class="form-label">Kategori ID <span class="text-danger">*</span></label>
                         <select class="form-select" name="kategori_id" aria-label="Default select example" required>
                             <option selected>Pilih ...</option>
                             @foreach ($kategori as $row)

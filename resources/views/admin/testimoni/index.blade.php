@@ -48,7 +48,7 @@
                                 <th scope="col">Tanggal</th>
                                 <th scope="col">Rating</th>
                                 <th scope="col">Isi Testimoni</th>
-                                <th scope="col">Foto</th>
+                                {{-- <th scope="col">Foto</th> --}}
                                 <th scope="col">Status Publikasi</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -70,7 +70,7 @@
                                         @endfor
                                     </td>
                                     <td>{{ $row->isi_testimoni }}</td>
-                                    <td>
+                                    {{-- <td>
                                         @if ($row->photo)
                                             <img src="{{ asset('storage/' . $row->photo) }}" alt="Testimoni Foto"
                                                 class="img-thumbnail" style="max-height: 100px;">
@@ -78,7 +78,7 @@
                                             <p class="text-muted">No photo available</p>
                                         @endif
 
-                                    </td>
+                                    </td> --}}
                                     <td>{{ $row->status_publikasi ? 'Published' : 'Unpublished' }}</td>
                                     <td>
                                         <div class="dropdown">
@@ -89,9 +89,11 @@
                                             </a>
                                             <ul class="dropdown-menu"
                                                 aria-labelledby="dropdownMenuButton{{ $row->id_testimoni }}">
-                                                <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                <li>
+                                                    {{-- <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                         data-bs-target="#edit{{ $row->id_testimoni }}"><i
-                                                            class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                                            class="fa-regular fa-pen-to-square"></i> Edit</a> --}}
+                                                        </li>
                                                 <li>
                                                     <form action="{{ route('testimoni.destroy', $row->id_testimoni) }}"
                                                         method="POST" onsubmit="return confirm('Are you sure?');">
@@ -130,7 +132,7 @@
                         <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
                         <div class="mb-3">
-                            <label for="page_id" class="form-label">Page ID</label>
+                            <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                             <select class="form-select" name="page_id" aria-label="Default select example" required>
                                 <option selected>Pilih ...</option>
                                 @foreach ($page as $row)
@@ -139,28 +141,34 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="nama" class="form-label">Nama</label>
+                            <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="nama" id="nama" required>
                         </div>
                         <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" name="email" id="email" required>
                         </div>
                         <div class="mb-3">
-                            <label for="tanggal" class="form-label">Tanggal</label>
+                            <label for="tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
                             <input type="date" name="tanggal" class="form-control" placeholder="Tanggal" required>
                         </div>
                         <div class="mb-3">
-                            <label for="rating" class="form-label">Rating</label>
-                            <input type="number" name="rating" class="form-control" placeholder="Rating"
-                                min="1" max="5" required>
+                            <label for="rating" class="form-label">Rating <span class="text-danger">*</span></label>
+                            <select class="form-control" name="rating" id="rating" required>
+                                <option value="" disabled selected>Pilih Rating</option>
+                                <option value="1" {{ $row->rating == 1 ? 'selected' : '' }}>1</option>
+                                <option value="2" {{ $row->rating == 2 ? 'selected' : '' }}>2</option>
+                                <option value="3" {{ $row->rating == 3 ? 'selected' : '' }}>3</option>
+                                <option value="4" {{ $row->rating == 4 ? 'selected' : '' }}>4</option>
+                                <option value="5" {{ $row->rating == 5 ? 'selected' : '' }}>5</option>
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label for="isi_testimoni" class="form-label">Isi Testimoni</label>
+                            <label for="isi_testimoni" class="form-label">Isi Testimoni <span class="text-danger">*</span></label>
                             <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="photo" class="form-label">Foto</label>
+                            <label for="photo" class="form-label">Foto <span class="text-danger">*</span></label>
                             <input type="file" class="form-control" name="photo" id="photo">
                         </div>
                         <div class="mb-3">
@@ -227,15 +235,23 @@
                                 <input type="date" name="tanggal" value="{{ $row->tanggal->format('Y-m-d') }}"
                                     class="form-control" placeholder="Tanggal" required>
                             </div>
-                            <div class="mb-3">
+                            {{-- <div class="mb-3">
                                 <label for="rating" class="form-label">Rating</label>
                                 <input type="number" name="rating" value="{{ $row->rating }}" class="form-control"
                                     placeholder="Rating" min="1" max="5" required>
-                            </div>
+                            </div> --}}
                             <div class="mb-3">
-                                <label for="isi_testimoni" class="form-label">Isi Testimoni</label>
-                                <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required>{{ $row->isi_testimoni }}</textarea>
+                                <label for="rating" class="form-label">Rating</label>
+                                <select class="form-control" name="rating" id="rating" required>
+                                    <option value="" disabled selected>Pilih Rating</option>
+                                    <option value="1" {{ $row->rating == 1 ? 'selected' : '' }}>1</option>
+                                    <option value="2" {{ $row->rating == 2 ? 'selected' : '' }}>2</option>
+                                    <option value="3" {{ $row->rating == 3 ? 'selected' : '' }}>3</option>
+                                    <option value="4" {{ $row->rating == 4 ? 'selected' : '' }}>4</option>
+                                    <option value="5" {{ $row->rating == 5 ? 'selected' : '' }}>5</option>
+                                </select>
                             </div>
+
                             <div class="mb-3">
                                 <label for="photo" class="form-label">Foto</label>
                                 <input type="file" class="form-control" name="photo" id="photo">
@@ -245,6 +261,11 @@
                                 @endif
 
                             </div>
+                            <div class="mb-3">
+                                <label for="isi_testimoni" class="form-label">Isi Testimoni</label>
+                                <textarea class="form-control" style="height:150px" name="isi_testimoni" id="isi_testimoni" placeholder="Isi Testimoni" required>{{ $row->isi_testimoni }}</textarea>
+                            </div>
+
                             <div class="mb-3">
                                 <label for="status_publikasi" class="form-label">Status Publikasi</label>
                                 <select name="status_publikasi" class="form-select" required>

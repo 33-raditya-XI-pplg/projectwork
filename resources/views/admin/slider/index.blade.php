@@ -2,7 +2,15 @@
 @section('title', 'Slider')
 @section('content')
 
-<h1>Slider</h1>
+{{-- <h1>Slider</h1> --}}
+
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: blue;
+        border-radius: 50%;
+    }
+</style>
 
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +34,7 @@
                     <th>Page ID</th>
                     <th>Title</th>
                     <th>Description</th>
-                    <th>Image URL</th>
+                    {{-- <th>Image URL</th> --}}
                     <th>Position</th>
                     <th>Status</th>
                     <th>Actions</th>
@@ -39,12 +47,14 @@
                         <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
                         <td>{{ $row->title }}</td>
                         <td>{{ $row->description }}</td>
-                        <td><a href="{{ $row->image_url }}" target="_blank">{{ $row->image_url }}</a></td>
+                        {{-- <td><a href="{{ $row->image_url }}" target="_blank">{{ $row->image_url }}</a></td> --}}
                         <td>{{ $row->position }}</td>
                         <td>
-                            <span class="badge {{ $row->status == 'active' ? 'bg-success' : 'bg-secondary' }}">
-                                {{ $row->status == 'active' ? 'Active' : 'Inactive' }}
-                            </span>
+                            <button type="button" class="btn rounded-3
+                                {{ $row->status == 'active' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                disabled>
+                                {{ $row->status == 'active' ? 'Aktif' : 'NonAktif' }}
+                            </button>
                         </td>
                         <td>
                             <div class="dropdown">
@@ -77,12 +87,14 @@
     </div>
 </div>
 
-<!-- Slider Carousel -->
+<!-- Slider Carousel with Swipe Support -->
 <div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
     <div class="carousel-inner">
         @foreach ($slider as $index => $slide)
             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                <img src="{{ $slide->image_url }}" class="d-block w-100" alt="{{ $slide->title }}">
+                <div class="d-flex justify-content-center">
+                    <img src="{{ $slide->image_url }}" class="d-block" alt="{{ $slide->title }}" style="max-height: 500px; max-width: 80%;">
+                </div>
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ $slide->title }}</h5>
                     <p>{{ $slide->description }}</p>
@@ -100,6 +112,34 @@
     </button>
 </div>
 
+<!-- Add Swiper.js or Bootstrap Swipe Handling -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var carousel = document.querySelector('#sliderCarousel');
+        var touchStartX = 0;
+        var touchEndX = 0;
+
+        carousel.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+
+        carousel.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipeGesture();
+        });
+
+        function handleSwipeGesture() {
+            if (touchEndX < touchStartX) {
+                carousel.querySelector('.carousel-control-next').click();
+            }
+            if (touchEndX > touchStartX) {
+                carousel.querySelector('.carousel-control-prev').click();
+            }
+        }
+    });
+</script>
+
+
 <!-- Insert Modal -->
 <div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -109,35 +149,66 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('slider.store') }}" method="POST">
+                <form action="{{ route('slider.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="page_id" class="form-label">Page ID</label>
+                        <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                         <select class="form-select" name="page_id" aria-label="Select Page" required>
-                            <option selected>Select Page...</option>
+                            <option selected>Select Page... <span class="text-danger">*</span></option>
                             @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
+                        <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="title" id="title" required>
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
+                        <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="description" name="description" rows="4"></textarea>
                     </div>
+    <div class="mb-3">
+        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
+        <div class="dropzone-wrapper">
+            <div class="dropzone-desc">
+                <i class="glyphicon glyphicon-download-alt"></i>
+                <p>Choose an image file or drag it here.</p>
+            </div>
+            <input type="file" name="image_file" class="dropzone" id="image_file" accept="image/*" required>
+
+            <div id="image_preview" class="mt-3"
+                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
+                <img id="preview_image" src="" alt="Image preview"
+                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+            </div>
+        </div>
+        <div class="mt-2">
+            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+        </div>
+        <div id="image_error"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
+        <select class="form-select" name="position" id="position" required>
+            <option value="" disabled selected>Select Position</option>
+            @for ($i = 1; $i <= 5; $i++)
+                <option value="{{ $i }}"
+                    @if ($slider->pluck('position')->contains($i))
+                        disabled
+                        style="background-color: #f8d7da; color: #721c24;"
+                    @endif>
+                    {{ $i }}
+                </option>
+            @endfor
+        </select>
+    </div>
+
+
+
                     <div class="mb-3">
-                        <label for="image_url" class="form-label">Image URL</label>
-                        <input type="text" class="form-control" name="image_url" id="image_url" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="position" class="form-label">Position</label>
-                        <input type="number" class="form-control" name="position" id="position" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Status</label>
+                        <label for="status" class="form-label">Status </label>
                         <select name="status" class="form-select" required>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
@@ -152,6 +223,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Edit Modals -->
 @foreach ($slider as $row)
@@ -186,12 +258,31 @@
                     </div>
                     <div class="mb-3">
                         <label for="image_url" class="form-label">Image URL</label>
-                        <input type="text" class="form-control" name="image_url" id="image_url" value="{{ $row->image_url }}" required>
+                        <input type="file" class="form-control" name="image_file_edit" id="image_file_edit_{{ $row->id_slider }}" accept="image/*">
+
+                        <div id="image_preview_edit_{{ $row->id_slider }}" class="mt-3"
+                            style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
+                            <img id="preview_image_edit_{{ $row->id_slider }}" src="{{ $row->image_url }}" alt="Image preview"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label for="position" class="form-label">Position</label>
-                        <input type="number" class="form-control" name="position" id="position" value="{{ $row->position }}" required>
+                        <select class="form-select" name="position" id="position" required>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <option value="{{ $i }}"
+                                    @if ($slider->pluck('position')->contains($i) && $i != $row->position)
+                                        disabled
+                                        style="background-color: #f8d7da; color: #721c24;"
+                                    @endif
+                                    {{ $i == $row->position ? 'selected' : '' }}>
+                                    {{ $i }}
+                                </option>
+                            @endfor
+                        </select>
                     </div>
+
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <select name="status" class="form-select" required>
@@ -210,10 +301,35 @@
 </div>
 @endforeach
 
-
-
 @push('script')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('image_file').addEventListener('change', function(event) {
+                const input = event.target;
+                const preview = document.getElementById('preview_image');
+                const imagePreviewDiv = document.getElementById('image_preview');
+
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        imagePreviewDiv.style.padding = '0';  // Remove padding when the image is displayed
+                        imagePreviewDiv.style.border = 'none'; // Remove border when the image is displayed
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                    imagePreviewDiv.style.padding = '65px'; // Restore padding if no image
+                    imagePreviewDiv.style.border = '1px solid #ddd'; // Restore border if no image
+                }
+            });
+        });
+    </script>
+
     @if (session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -225,9 +341,9 @@
             });
         });
     </script>
-@endif
+    @endif
 
-@if ($errors->any())
+    @if ($errors->any())
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             Swal.fire({
@@ -237,10 +353,39 @@
                 confirmButtonText: 'OK'
             });
         });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+    @foreach ($slider as $row)
+        document.getElementById('image_file_edit_{{ $row->id_slider }}').addEventListener('change', function(event) {
+            const input = event.target;
+            const preview = document.getElementById('preview_image_edit_{{ $row->id_slider }}');
+            const imagePreviewDiv = document.getElementById('image_preview_edit_{{ $row->id_slider }}');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    imagePreviewDiv.style.padding = '0';  // Remove padding when the image is displayed
+                    imagePreviewDiv.style.border = 'none'; // Remove border when the image is displayed
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = '{{ $row->image_url }}';
+                imagePreviewDiv.style.padding = '65px'; // Restore padding if no image
+                imagePreviewDiv.style.border = '1px solid #ddd'; // Restore border if no image
+            }
+        });
+    @endforeach
+});
+
     </script>
-@endif
+
+    @endif
+@endpush
 
 
-    @endpush
 
 @endsection

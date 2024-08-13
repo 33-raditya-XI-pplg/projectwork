@@ -3,32 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Kategori;
 use App\Models\Page;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class BlogController extends Controller
 {
     public function index() {
-        $page = Page::all();
-        $blog = Blog::all();
-        return view('admin.blog.index', compact('page', 'blog'));
+        // Fetch all pages with pagination
+        $page = Page::paginate(10); // Adjust the number to your preference
+
+        // Fetch blogs with their categories with pagination
+        $blog = Blog::with('kategori')->paginate(10); // Adjust the number to your preference
+
+        // Fetch all categories
+        $kategori = Kategori::all();
+
+        return view('admin.blog.index', compact('page', 'blog', 'kategori'));
     }
+
+
 
     public function store(Request $request) {
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'judul' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
             'body' => 'required|string',
             'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
         $data = $request->all();
 
+        // Generate slug from title
+        $data['slug'] = Str::slug($request->input('judul'));
+
+        // Handle photo upload
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $filename = time() . '.' . $file->getClientOriginalExtension();
@@ -36,6 +51,7 @@ class BlogController extends Controller
             $data['photo'] = $filename;
         }
 
+        // Create blog entry
         Blog::create($data);
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil disimpan.');
@@ -48,9 +64,7 @@ class BlogController extends Controller
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'judul' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
             'body' => 'required|string',
-            'status' => 'nullable|string',
             'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
@@ -58,10 +72,14 @@ class BlogController extends Controller
 
         $data = $request->all();
 
+        // Generate slug from title
+        $data['slug'] = Str::slug($request->input('judul'));
+
+        // Handle photo upload
         if ($request->hasFile('photo')) {
-            // Delete old file if it exists
-            if ($blog->photo && Storage::disk('public')->exists('photos/' . $blog->photo)) {
-                Storage::disk('public')->delete('photos/' . $blog->photo);
+            // Delete old photo if exists
+            if ($blog->photo) {
+                Storage::delete('public/photos/' . $blog->photo);
             }
 
             $file = $request->file('photo');
@@ -72,8 +90,11 @@ class BlogController extends Controller
 
         $blog->update($data);
 
-        return redirect()->route('blog.index')->with('success', 'Blog post updated successfully.');
+        Alert::success('Berhasil Diperbarui!', 'Data berhasil diperbarui.');
+
+        return redirect()->back();
     }
+
 
 
     public function adminUpdate(Request $request, $id) {

@@ -23,24 +23,31 @@ class ProfilPerusahaanController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi data yang diterima
         $data = $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'tentang_kami' => 'required|string',
-            'path_struktur_organisasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi tambahan untuk tipe dan ukuran file
+            'path_struktur_organisasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'visi' => 'required|string',
             'misi' => 'required|string',
             'sejarah' => 'required|string',
-            'status' => 'nullable|string',
+            // 'status' => 'nullable|boolean', // Validasi status sebagai boolean
         ]);
 
+        // Jika ada file gambar yang di-upload
         if ($request->hasFile('path_struktur_organisasi')) {
+            // Menyimpan gambar dan mendapatkan path-nya
             $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
             $data['path_struktur_organisasi'] = $imagePath;
         }
 
+        // Menyimpan data ke database
         Profil_Perusahaan::create($data);
+
+        // Redirect dengan pesan sukses
         return redirect()->route('profil.index')->with('success', 'Data berhasil disimpan');
     }
+
 
 
 
