@@ -137,10 +137,10 @@
                             <a href="{{ route('blog.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
                                 <span> Blog</span></a>
                         </li>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'blogkategori' : '' }}">
+                        {{-- <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'blogkategori' : '' }}">
                             <a href="{{ route('blogkategori.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
                                 <span> Blog Kategori</span></a>
-                        </li>
+                        </li> --}}
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'galeri' : '' }}">
                             <a href="{{ route('galeri.index') }}" class="sub-menu-link"><i class="fas fa-image"></i>
                                 <span> Galeri</span></a>

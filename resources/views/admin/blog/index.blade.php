@@ -57,11 +57,7 @@
                                     <img src="{{ $row->photo ? asset('storage/photos/' . $row->photo) : asset('images/default.jpg') }}" alt="{{ $row->judul }}" style="width: 100px; height: auto;">
                                 </td>
                                 <td>
-                                    @forelse ($row->kategori as $category)
-                                        {{ $category->nama_kategori }}<br>
-                                    @empty
-                                        No categories
-                                    @endforelse
+                                    {{ $row->kategori->nama_kategori ?? 'N/A' }}
                                 </td>
 
                                 <td>

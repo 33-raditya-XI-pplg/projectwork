@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Kategori;
 use App\Models\User;
 use App\Models\Instansi;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Database\QueryException;
 
 class KategoriController extends Controller
 {
@@ -66,33 +68,24 @@ class KategoriController extends Controller
         }
     }
 
+
     public function destroy($id)
     {
-        $kategori = Kategori::findOrFail($id);
+        $kategori = Kategori::find($id);
 
-        if ($kategori->level == 'Kategori') {
-            $checkChildID = DB::table('tb_menguji')
-                            ->where('user_id', $id)
-                            ->count();
-
-            if ($checkChildID > 0) {
-                Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
-                return redirect()->back();
-            }
+        if (!$kategori) {
+            return redirect()->route('kategori.index')->with('error', 'Kategori tidak ditemukan.');
         }
 
-        if (!empty($kategori->path_foto)) {
-            if( file_exists(public_path($kategori->path_foto)) ) {
-                unlink(public_path($kategori->path_foto));
-                $kategori->delete();
-            } else {
-                $kategori->delete();
-            }
-        } else {
+        if ($kategori->blogs()->count() > 0) {
+            return redirect()->route('kategori.index')->with('error', 'Kategori ini tidak dapat dihapus karena sedang digunakan di halaman Blog.');
+        }
+
+        try {
             $kategori->delete();
+            return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus.');
+        } catch (QueryException $e) {
+            return redirect()->route('kategori.index')->with('error', 'Terjadi kesalahan saat menghapus kategori.');
         }
-
-        toast('User berhasil dihapus.', 'success');
-        return redirect()->back();
     }
 }

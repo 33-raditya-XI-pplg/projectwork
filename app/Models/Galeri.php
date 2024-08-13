@@ -20,4 +20,9 @@ class Galeri extends Model
     {
         return $this->belongsTo(Page::class, 'page_id', 'id_page');
     }
+    public function page()
+{
+    return $this->belongsTo(Page::class, 'page_id', 'id_page');
+}
+
 }

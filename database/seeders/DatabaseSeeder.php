@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             PenandatanganSeeder::class,
             NilaiPesertaSeeder::class,
             PageTableSeeder::class,
-            BlogSeeder::class,
+            // BlogSeeder::class,
             KategoriSeeder::class,
         ]);
     }

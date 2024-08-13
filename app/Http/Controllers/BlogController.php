@@ -16,17 +16,13 @@ use RealRashid\SweetAlert\Facades\Alert;
 class BlogController extends Controller
 {
     public function index() {
-        // Fetch all pages with pagination
-        $page = Page::paginate(10); // Adjust the number to your preference
-
-        // Fetch blogs with their categories with pagination
-        $blog = Blog::with('kategori')->paginate(10); // Adjust the number to your preference
-
-        // Fetch all categories
+        $page = Page::all();
+        $blog = Blog::all(); // Eager load 'kategori' and 'page'
         $kategori = Kategori::all();
-
         return view('admin.blog.index', compact('page', 'blog', 'kategori'));
     }
+
+
 
 
 

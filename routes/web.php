@@ -158,19 +158,19 @@ Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->n
 // profile perusahaan end
 
 
-Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
+// Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
 
-Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
+// Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
 
-// Correct route for updating blogkategori
-Route::put('/blogkategori/{id}', [BlogKategoriController::class, 'update'])->name('blogkategori.update');
-
-
+// // Correct route for updating blogkategori
+// Route::put('/blogkategori/{id}', [BlogKategoriController::class, 'update'])->name('blogkategori.update');
 
 
 
 
-Route::delete('/blogkategori/{id_blog_kategori}', [BlogKategoriController::class, 'destroy'])->name('blogkategori.destroy');
+
+
+// Route::delete('/blogkategori/{id_blog_kategori}', [BlogKategoriController::class, 'destroy'])->name('blogkategori.destroy');
 
 
 // Partner start

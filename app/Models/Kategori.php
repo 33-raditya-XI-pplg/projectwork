@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,9 +10,11 @@ class Kategori extends Model
     protected $table = "tb_kategori";
     protected $primaryKey = 'id_kategori';
     protected $guarded = ['id_kategori'];
-
-    public function kategoriBlog_Kategori() // PK Many-to-Many dengan tb_blog
+    public function blogs()
     {
-        return $this->belongsToMany(Blog::class, 'tb_blog_kategori', 'kategori_id', 'blog_id');
+        return $this->hasMany(Blog::class, 'kategori_id', 'id_kategori');
     }
+
+
+
 }

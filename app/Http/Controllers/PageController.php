@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Models\Page;
 use Illuminate\Support\Facades\Auth;
@@ -68,11 +68,84 @@ public function edit($id)
 
 
 
-    public function destroy($id)
-    {
-        $page = Page::findOrFail($id);
-        $page->delete();
+public function destroy($id)
+{
+    $page = Page::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Page deleted successfully.');
+    // Initialize an empty array to hold messages
+    $messages = [];
+
+    // Check each relationship and add a message if it's in use
+    if ($page->partners()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Partner.';
     }
+    if ($page->pageGaleri()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Galeri.';
+    }
+    if ($page->pageProfil()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Profil.';
+    }
+    if ($page->pageFaq()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+    }
+    if ($page->pageBlog()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Blog.';
+    }
+    if ($page->profilPerusahaan()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Profil Perusahaan.';
+    }
+
+    if ($page->sliders()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Slider.';
+    }
+
+    if ($page->testimoni()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman Testimoni.';
+    }
+
+    if ($page->faqs()->exists()) {
+        $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+    }
+
+    // If there are any messages, return the first one
+    if (!empty($messages)) {
+        $errorMessage = implode(' ', $messages);
+        return redirect()->back()->with('error', $errorMessage);
+    }
+
+    // Handle related records in tb_galeri
+    if ($page->pageGaleri()->exists()) {
+        // Optionally, you can choose to delete or detach related records
+        $page->pageGaleri()->delete(); // Or use detach if you just want to disassociate
+    }
+
+    // Handle related records in tb_profil_perusahaan
+    if ($page->profilPerusahaan()->exists()) {
+        // Optionally, you can choose to delete or detach related records
+        $page->profilPerusahaan()->delete(); // Or use detach if you just want to disassociate
+    }
+
+    if ($page->sliders()->exists()) {
+        // Optionally, you can choose to delete or detach related records
+        $page->sliders()->delete(); // Or use detach if you just want to disassociate
+    }
+
+    if ($page->testimoni()->exists()) {
+        // Optionally, you can choose to delete or detach related records
+        $page->testimoni()->delete(); // Or use detach if you just want to disassociate
+    }
+
+    if ($page->faqs()->exists()) {
+        $page->faqs()->delete(); // Or use detach if you just want to disassociate
+    }
+
+    // If not associated, delete the page
+    $page->delete();
+
+    return redirect()->back()->with('success', 'Page berhasil dihapus.');
+}
+
+
+
+
 }

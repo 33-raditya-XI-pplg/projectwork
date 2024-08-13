@@ -2,8 +2,24 @@
 @section('title', 'Kategori')
 @section('content')
 
-<h1>Kategori</h1>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+<h1>Kategori</h1>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 <!-- Bootstrap JS -->
@@ -39,10 +55,10 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <form action="{{ route('kategori.destroy', $row->id_kategori) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">
+                                    <form id="delete-form-{{ $row->id_kategori }}" action="{{ route('kategori.destroy', $row->id_kategori) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">
+                                        <button type="button" onclick="confirmDelete({{ $row->id_kategori }})" class="dropdown-item text-danger">
                                             <i class="fa-regular fa-trash-can"></i> Delete
                                         </button>
                                     </form>
@@ -154,5 +170,35 @@
     </div>
 </div>
 <!-- End of Insert Modal -->
+
+@if (session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "{{ session('error') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
+
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: 'Apakah Anda yakin ingin menghapus kategori ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
 
 @endsection

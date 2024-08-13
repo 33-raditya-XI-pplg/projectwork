@@ -18,23 +18,49 @@ class Page extends Model
         return $this->hasMany(Partner::class, 'page_id', 'id_page');
     }
 
-    public function pageGaleri() // PK one-to-many dengan tb_galeri
+    public function pageGaleri()
     {
-        return $this->hasMany(Galeri::class, 'galeri_id', 'id_galeri');
+        return $this->hasMany(Galeri::class, 'page_id', 'id_page');
     }
+
 
     public function pageProfil() // PK one-to-many dengan tb_profil
     {
-        return $this->hasMany(Profil::class, 'profil_id', 'id_profil');
+        return $this->hasMany(Profil_Perusahaan::class, 'page_id', 'id_profil_perusahaan');
     }
 
     public function pageFaq() // PK one-to-many dengan tb_faq
     {
-        return $this->hasMany(Faq::class, 'faq_id', 'id_faq');
+        return $this->hasMany(Faq::class, 'page_id', 'id_faq');
     }
 
     public function pageBlog() // PK one-to-many dengan tb_blog
     {
-        return $this->hasMany(Blog::class, 'blog_id', 'id_blog');
+        return $this->hasMany(Blog::class, 'page_id', 'id_page');
     }
+
+    public function profilPerusahaan()
+    {
+        return $this->hasMany(Profil_Perusahaan::class, 'page_id', 'id_page');
+    }
+
+
+    public function sliders()
+{
+    return $this->hasMany(Slider::class, 'page_id', 'id_page');
+}
+
+
+public function testimoni()
+{
+    return $this->hasMany(Testimoni::class, 'page_id', 'id_page');
+}
+
+public function faqs()
+{
+    return $this->hasMany(Faq::class, 'page_id', 'id_page');
+}
+
+
+
 }
