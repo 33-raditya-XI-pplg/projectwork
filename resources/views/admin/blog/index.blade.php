@@ -139,8 +139,22 @@
                     </div>
                     <div class="mb-3">
                         <label for="photo" class="form-label">Upload Photo <span class="text-danger">*</span></label>
-                        <input class="form-control" name="photo" type="file" id="photo" accept=".png, .jpg, .jpeg">
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Drag and drop an image file here or click to choose one.</p>
+                            </div>
+                            <input type="file" name="photo" class="dropzone" id="photo" accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+
+                            <!-- Image preview area -->
+                            <div id="image_preview" class="mt-3"
+                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 20px;">
+                                <img id="preview_image" src="" alt="Image preview"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                            </div>
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <label for="body" class="form-label">Body <span class="text-danger">*</span></label>
                         <textarea class="form-control ck-editor" id="body" name="body" rows="4"></textarea>
@@ -208,12 +222,32 @@
                         </div> -->
                         <div class="mb-3">
                             <label for="photo" class="form-label">Upload Photo</label>
-                            <input class="form-control" name="photo" type="file" id="photo" accept=".png, .jpg, .jpeg">
-                            <!-- Display current photo if exists -->
-                            @if($row->photo)
-                                <img src="{{ asset('storage/photos/' . $row->photo) }}" alt="{{ $row->judul }}" class="img-thumbnail mt-2" style="width: 100px; height: auto;">
-                            @endif
+                            <div class="dropzone-wrapper">
+                                <div class="dropzone-desc">
+                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                    <p>Drag and drop an image file here or click to choose one.</p>
+                                </div>
+                                <input type="file" name="photo" class="dropzone" id="photo" accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+
+                                <!-- Image preview area -->
+                                <div id="image_preview" class="mt-3"
+                                    style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 20px;">
+                                    <img id="preview_image" src="" alt="Image preview"
+                                        style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                                </div>
+
+                                <!-- Display current photo if exists -->
+                                @if($row->photo)
+                                    <div class="mt-2">
+                                        <img src="{{ asset('storage/photos/' . $row->photo) }}" alt="{{ $row->judul }}" class="img-thumbnail" style="width: 100px; height: auto;">
+                                    </div>
+                                @endif
+                            </div>
+                            @error('photo')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+
                         <div class="mb-3">
                             <label for="body" class="form-label">Body</label>
                             <textarea class="form-control ck-editor" id="body" name="body" rows="4">{{ $row->body }}</textarea>
@@ -233,6 +267,106 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function previewImage(event) {
+    const input = event.target;
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const preview = document.getElementById('preview_image');
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the preview image
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        const preview = document.getElementById('preview_image');
+        preview.src = '';
+        preview.style.display = 'none'; // Hide the preview image if no file
+    }
+}
+
+// Optional: Handle drag and drop events
+const dropzoneWrapper = document.querySelector('.dropzone-wrapper');
+
+dropzoneWrapper.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropzoneWrapper.classList.add('dragging');
+});
+
+dropzoneWrapper.addEventListener('dragleave', () => {
+    dropzoneWrapper.classList.remove('dragging');
+});
+
+dropzoneWrapper.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropzoneWrapper.classList.remove('dragging');
+
+    const file = event.dataTransfer.files[0];
+    if (file) {
+        const fileInput = document.getElementById('photo');
+        fileInput.files = event.dataTransfer.files; // Assign dropped file to the input
+
+        // Trigger the image preview
+        previewImage({ target: fileInput });
+    }
+});
+
+
+
+function previewImage(event) {
+    const input = event.target;
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const preview = document.getElementById('preview_image');
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the preview image
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        const preview = document.getElementById('preview_image');
+        preview.src = '';
+        preview.style.display = 'none'; // Hide the preview image if no file
+    }
+}
+
+// Optional: Handle drag and drop events
+const dropzoneWrapper = document.querySelector('.dropzone-wrapper');
+
+dropzoneWrapper.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropzoneWrapper.classList.add('dragging');
+});
+
+dropzoneWrapper.addEventListener('dragleave', () => {
+    dropzoneWrapper.classList.remove('dragging');
+});
+
+dropzoneWrapper.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropzoneWrapper.classList.remove('dragging');
+
+    const file = event.dataTransfer.files[0];
+    if (file) {
+        const fileInput = document.getElementById('photo');
+        fileInput.files = event.dataTransfer.files; // Assign dropped file to the input
+
+        // Trigger the image preview
+        previewImage({ target: fileInput });
+    }
+});
+
+
+    </script>
 
 @endforeach
 

@@ -63,6 +63,9 @@
         line-height: 1.6;
         color: #555;
     }
+
+
+
     </style>
 @endpush
 
@@ -91,7 +94,7 @@
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
-                                <td>{{ $row->tentang_kami }}</td>
+                                <td>{!! strip_tags($row->tentang_kami, '<br><strong><em>') !!}</td>
                                 {{-- <td>
                                     @if ($row->path_struktur_organisasi)
                                         <img src="{{ asset('storage/' . $row->path_struktur_organisasi) }}" alt="Struktur Organisasi" style="max-width: 150px; height: auto;">
@@ -99,9 +102,11 @@
                                         N/A
                                     @endif
                                 </td> --}}
-                                <td>{{ $row->visi }}</td>
-                                <td>{{ $row->misi }}</td>
-                                <td>{{ $row->sejarah }}</td>
+
+                                    <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
+                                    <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
+                                    <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td>
+
                                 <td>{{ $row->status ? 'Aktif' : 'Non-Aktif' }}</td>
                                 <td>
                                     <div class="dropdown">
@@ -142,9 +147,9 @@
                     <img src="{{ asset('storage/' . $profile->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="profile-image">
                 @endif
                 <div class="profile-details">
-                    <p><strong>Tentang Kami:</strong> {{ $profile->tentang_kami }}</p>
-                    <p><strong>Visi:</strong> {{ $profile->visi }}</p>
-                    <p><strong>Misi:</strong> {{ $profile->misi }}</p>
+                    <p><strong>Tentang Kami:</strong> {!! preg_replace('/<p>|<\/p>/', '', $profile->tentang_kami) !!}</p>
+                    <p><strong>Visi:</strong> {!! preg_replace('/<p>|<\/p>/', '', $profile->visi) !!}</p>
+                    <p><strong>Misi:</strong> {!! preg_replace('/<p>|<\/p>/', '', $profile->misi) !!}</p>
                 </div>
             </div>
         @endforeach
@@ -156,9 +161,11 @@
 
 
 
+
+
 <!-- Insert Modal -->
 <!-- Insert Modal -->
-<!-- Add Modal -->
+
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -184,27 +191,47 @@
                     <div class="mb-3">
                         <label for="tentang_kami" class="form-label">Tentang Kami <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="tentang_kami" id="tentang_kami" rows="4" required></textarea>
-
                     </div>
 
-                    <div class="mb-3">
-                        <label for="path_struktur_organisasi" class="form-label">Upload Struktur Organisasi Image <span class="text-danger">*</span></label>
-                        <input class="form-control" name="path_struktur_organisasi" type="file" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
+                    <div class="form-group mb-6">
+                        <label class="control-label">Upload Struktur Organisasi Image <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Choose an image file or drag it here.</p>
+                            </div>
+                            <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi"
+                                accept="image/*" onchange="previewImage(event)">
+
+                            <div id="image_preview" class="mt-3"
+                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
+                                <img id="preview_image" src="" alt="Image preview"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                        </div>
+                        <div id="image_error"></div>
                     </div>
+
+
+
+
 
                     <div class="mb-3">
                         <label for="visi" class="form-label">Visi <span class="text-danger">*</span></label>
-                        <textarea class="form-control " name="visi" id="visi" rows="3" required></textarea>
+                        <textarea class="form-control" name="visi" id="visi" rows="3" required></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="misi" class="form-label">Misi <span class="text-danger">*</span></label>
-                        <textarea class="form-control " name="misi" id="misi" rows="3" required></textarea>
+                        <textarea class="form-control" name="misi" id="misi" rows="3" required></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="sejarah" class="form-label">Sejarah <span class="text-danger">*</span></label>
-                        <textarea class="form-control " name="sejarah" id="sejarah" rows="4" required></textarea>
+                        <textarea class="form-control" name="sejarah" id="sejarah" rows="4" required></textarea>
                     </div>
 
                     <div class="modal-footer justify-content-between mx-3">
@@ -222,7 +249,6 @@
         </div>
     </div>
 </div>
-
 
 
 
@@ -258,24 +284,38 @@
                     </div>
                     <div class="mb-3">
                         <label for="path_struktur_organisasi" class="form-label">Upload Struktur Organisasi Image</label>
-                        <input class="form-control" name="path_struktur_organisasi" type="file" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
-                        @if ($row->path_struktur_organisasi)
-                            <div class="mt-2">
-                                <img src="{{ asset('storage/' . $row->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="img-fluid" style="max-width: 100px;">
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Choose an image file or drag it here.</p>
                             </div>
-                        @endif
+                            <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi"
+                                accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+
+                            <!-- Image preview area -->
+                            <div id="image_preview" class="mt-3"
+                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
+                                <img id="preview_image" src="{{ $row->path_struktur_organisasi ? asset('storage/' . $row->path_struktur_organisasi) : '' }}" alt="Image preview"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ $row->path_struktur_organisasi ? 'block' : 'none' }};">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                        </div>
+                        <div id="image_error"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="visi{{ $row->id_profil_perusahaan }}" class="form-label">Visi</label>
+                        <textarea class="form-control ck-editor" name="visi" id="visi{{ $row->id_profil_perusahaan }}" rows="3" required>{{ $row->visi }}</textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="visi" class="form-label">Visi</label>
-                        <input type="text" class="form-control" name="visi" id="visi" value="{{ $row->visi }}" required>
+                        <label for="misi{{ $row->id_profil_perusahaan }}" class="form-label">Misi</label>
+                        <textarea class="form-control ck-editor" name="misi" id="misi{{ $row->id_profil_perusahaan }}" rows="3" required>{{ $row->misi }}</textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="misi" class="form-label">Misi</label>
-                        <input type="text" class="form-control" name="misi" id="misi" value="{{ $row->misi }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="sejarah" class="form-label">Sejarah</label>
-                        <input type="text" class="form-control" name="sejarah" id="sejarah" value="{{ $row->sejarah }}" required>
+                        <label for="sejarah{{ $row->id_profil_perusahaan }}" class="form-label">Sejarah</label>
+                        <textarea class="form-control ck-editor" name="sejarah" id="sejarah{{ $row->id_profil_perusahaan }}" rows="4" required>{{ $row->sejarah }}</textarea>
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
@@ -295,50 +335,196 @@
 </div>
 @endforeach
 
-  <script src="https://cdn.ckeditor.com/ckeditor5/ckeditor.js"></script>
 
-
-
-  <script src="https://cdn.ckeditor.com/ckeditor5/ckeditor.js"></script>
 <script>
-//    document.addEventListener('DOMContentLoaded', function () {
-//     // Inisialisasi CKEditor hanya pada saat modal ditampilkan
-//     $('#add').on('shown.bs.modal', function () {
-//         ClassicEditor
-//             .create(document.querySelector('#tentang_kami'), {
-//                 toolbar: {
-//                     items: [
-//                         'bold', 'italic', 'link', '|', 'bulletedList', 'numberedList', '|', 'undo', 'redo'
-//                     ]
-//                 },
-//                 language: 'en',
-//             })
-//             .catch(error => {
-//                 console.error(error);
-//             });
-//     });
 
-//     @foreach ($profil as $row)
-//         $('#edit{{ $row->id_profil_perusahaan }}').on('shown.bs.modal', function () {
-//             ClassicEditor
-//                 .create(document.querySelector('#tentang_kami{{ $row->id_profil_perusahaan }}'), {
-//                     toolbar: {
-//                         items: [
-//                             'bold', 'italic', 'link', '|', 'bulletedList', 'numberedList', '|', 'undo', 'redo'
-//                         ]
-//                     },
-//                     language: 'en',
-//                 })
-//                 .catch(error => {
-//                     console.error(error);
-//                 });
-//         });
-//     @endforeach
-// });
+        $(document).ready(function() {
+            // Handle file input change event to show preview
+            $('#path_file').on('change', function(event) {
+                var input = event.target;
+                var file = input.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview_image').attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#preview_image').hide();
+                }
+            });
+        });
+
+
+
+
+
+        $(document).ready(function() {
+            // Handle file input change event to show preview
+            $('#path_file').on('change', function(event) {
+                var input = event.target;
+                var file = input.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview_image').attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#preview_image').hide();
+                }
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var fileInput = document.getElementById('path_file');
+            var previewImage = document.getElementById('preview_image');
+            var imagePreviewContainer = document.getElementById('image_preview');
+
+            fileInput.addEventListener('change', function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        // Set the src of the preview image
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block'; // Show the preview image
+                    }
+
+                    reader.readAsDataURL(file);
+                } else {
+                    xx
+                    // Hide the preview image if no file is selected
+                    previewImage.style.display = 'none';
+                }
+            });
+        });
+
+
+            <!-- JavaScript to handle modal -->
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const galleryLinks = document.querySelectorAll('.gallery-link');
+                    const modalImage = document.getElementById('modalImage');
+                    const modalDescription = document.getElementById('modalDescription');
+
+                    galleryLinks.forEach(link => {
+                        link.addEventListener('click', function () {
+                            const imageSrc = this.getAttribute('data-image');
+                            const imageDescription = this.getAttribute('data-description');
+                            modalImage.src = imageSrc;
+                            modalDescription.textContent = imageDescription;
+                        });
+                    });
+                });
+
+
+                function previewImage(event) {
+    const input = event.target;
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const preview = document.getElementById('preview_image');
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the preview image
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        const preview = document.getElementById('preview_image');
+        preview.src = '';
+        preview.style.display = 'none'; // Hide the preview image if no file
+    }
+}
+
+</script>
+
+<script>
+
+// Optional: Handle drag and drop for the file input
+const dropzone = document.querySelector('.dropzone-wrapper');
+
+dropzone.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    dropzone.classList.add('dragging');
+});
+
+dropzone.addEventListener('dragleave', function() {
+    dropzone.classList.remove('dragging');
+});
+
+dropzone.addEventListener('drop', function(event) {
+    event.preventDefault();
+    dropzone.classList.remove('dragging');
+
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        document.getElementById('path_struktur_organisasi').files = files;
+        previewImage({ target: document.getElementById('path_struktur_organisasi') });
+    }
+});
+
+
+
+function previewImage(event) {
+    const input = event.target;
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const preview = document.getElementById('preview_image');
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the preview image
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        const preview = document.getElementById('preview_image');
+        preview.src = '';
+        preview.style.display = 'none'; // Hide the preview image if no file
+    }
+}
+
+// Optional: Handle drag and drop for the file input
+const dropzone = document.querySelector('.dropzone-wrapper');
+
+dropzone.addEventListener('dragover', function(event) {
+    event.preventDefault();
+    dropzone.classList.add('dragging');
+});
+
+dropzone.addEventListener('dragleave', function() {
+    dropzone.classList.remove('dragging');
+});
+
+dropzone.addEventListener('drop', function(event) {
+    event.preventDefault();
+    dropzone.classList.remove('dragging');
+
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        document.getElementById('path_struktur_organisasi').files = files;
+        previewImage({ target: document.getElementById('path_struktur_organisasi') });
+    }
+});
+
+
+
+
+
+
 
 </script>
 
 
+<script src="https://cdn.ckeditor.com/ckeditor5/ckeditor5-build-classic/ckeditor.js"></script>
 
 
 @endsection

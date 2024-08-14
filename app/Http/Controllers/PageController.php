@@ -20,7 +20,7 @@ class PageController extends Controller
     {
         $request->validate([
             'nama_page' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
+            'deskripsi' => 'required|string',
             'pindah_halaman' => 'required|string|max:255'
         ]);
 

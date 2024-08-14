@@ -126,9 +126,10 @@
                                         <input type="text" class="form-control" id="nama_page_{{ $page->id_page }}" name="nama_page" value="{{ $page->nama_page }}" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="deskripsi_{{ $page->id_page }}" class="form-label">Deskripsi</label>
+                                        <label for="deskripsi_{{ $page->id_page }}" class="form-label">Deskripsi <span class="text-danger">*</span></label>
                                         <textarea class="form-control" id="deskripsi_{{ $page->id_page }}" name="deskripsi" required>{{ $page->deskripsi }}</textarea>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="pindah_halaman_{{ $page->id_page }}" class="form-label">Link Halaman</label>
                                         <input type="url" class="form-control" id="pindah_halaman_{{ $page->id_page }}" name="pindah_halaman" value="{{ $page->pindah_halaman }}" required>
