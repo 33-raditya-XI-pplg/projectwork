@@ -266,13 +266,13 @@
                         <div class="form-group mb-3">
                             <label for="nama">Judul <span class="text-danger">*</span></label>
                             <input type="text" name="nama" class="form-control" placeholder="Masukkan judul"
-                                id="nama">
+                                id="nama" required>
                         </div>
 
                         <!-- Category Selection -->
                         <div class="form-group mb-3">
                             <label for="kategori">Pilih Kategori <span class="text-danger">*</span></label>
-                            <select class="form-control" id="kategori" name="kategori">
+                            <select class="form-control" id="kategori" name="kategori" required>
                                 <option value="">Select category</option>
                                 <option value="partner">Partner</option>
                                 <option value="klien">Klien</option>
@@ -312,12 +312,17 @@
                         </div>
 
                         <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger me-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </div>
+
+
                     </form>
                     <!-- End Single Form -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
                 </div>
             </div>
         </div>

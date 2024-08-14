@@ -282,15 +282,20 @@
                             <label for="path_file">Video URL <span class="text-danger">*</span></label>
                             <input type="url" name="path_file" class="form-control" id="path_file" placeholder="Enter YouTube video URL" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-4">
                             <label for="deskripsi">Description <span class="text-danger">*</span></label>
                             <textarea name="deskripsi" class="form-control" id="deskripsi" placeholder="Enter description" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success">Simpan</button>
+                        </div>
+
+
                     </form>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
                 </div>
             </div>
         </div>

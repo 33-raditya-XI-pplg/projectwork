@@ -115,22 +115,26 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="addLabel">Add FAQ </h5>
+                <h5 class="modal-title" id="addLabel">Add FAQ</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('faq.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                         <select class="form-select" name="page_id" id="page_id" required>
-                            <option selected disabled>Select Page...</option>
+                            <option value="" disabled selected>Select Page...</option>
                             @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                             @endforeach
                         </select>
                     </div>
+
+
+
                     <div class="mb-3">
                         <label for="pertanyaan" class="form-label">Question <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="pertanyaan" id="pertanyaan" rows="4" required></textarea>
@@ -140,18 +144,21 @@
                         <label for="jawaban" class="form-label">Answer <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="jawaban" name="jawaban" rows="4" required></textarea>
                     </div>
+
                     <div class="mb-3 form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="status" name="status" value="Aktif">
                         <label class="form-check-label" for="status">Status</label>
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
 <!-- End of Insert Modal -->
 

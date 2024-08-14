@@ -28,6 +28,12 @@
         Tambah Partner
     </button>
 </div> --}}
+<style>
+.text-right {
+    text-align: right;
+}
+
+</style>
 
 <table id="example" class="table table-striped">
     <thead class="fw-normal">
@@ -176,42 +182,42 @@
                     </div>
                     <div class="mb-3">
                         <label for="telepon_partner" class="form-label">Nomor Telepon Partner <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('telepon_partner') is-invalid @enderror" name="telepon_partner" id="telepon_partner">
+                        <input type="text" class="form-control @error('telepon_partner') is-invalid @enderror" name="telepon_partner" id="telepon_partner" required>
                         @error('telepon_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="alamat_partner" class="form-label">Alamat Partner <span class="text-danger">*</span></label>
-                        <textarea class="form-control @error('alamat_partner') is-invalid @enderror" id="alamat_partner" name="alamat_partner" rows="2"></textarea>
+                        <textarea class="form-control @error('alamat_partner') is-invalid @enderror" id="alamat_partner" name="alamat_partner" rows="2" required></textarea>
                         @error('alamat_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="jenis_partner" class="form-label">Jenis Partner <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('jenis_partner') is-invalid @enderror" name="jenis_partner" id="jenis_partner">
+                        <input type="text" class="form-control @error('jenis_partner') is-invalid @enderror" name="jenis_partner" id="jenis_partner" required>
                         @error('jenis_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="tanggal_bergabung" class="form-label">Tanggal Bergabung <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control @error('tanggal_bergabung') is-invalid @enderror" name="tanggal_bergabung" id="tanggal_bergabung">
+                        <input type="date" class="form-control @error('tanggal_bergabung') is-invalid @enderror" name="tanggal_bergabung" id="tanggal_bergabung" required>
                         @error('tanggal_bergabung')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="logo" class="form-label">Upload Logo <span class="text-danger">*</span></label>
-                        <input class="form-control @error('logo') is-invalid @enderror" name="logo" type="file" id="logo" accept=".png, .jpg, .jpeg">
+                        <input class="form-control @error('logo') is-invalid @enderror" name="logo" type="file" id="logo" accept=".png, .jpg, .jpeg" required>
                         @error('logo')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="website_partner" class="form-label">Website Partner <span class="text-danger">*</span></label>
-                        <input type="url" class="form-control @error('website_partner') is-invalid @enderror" name="website_partner" id="website_partner" placeholder="https://example.com">
+                        <input type="url" class="form-control @error('website_partner') is-invalid @enderror" name="website_partner" id="website_partner" placeholder="https://example.com" required>
                         @error('website_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -223,16 +229,16 @@
                             <input class="form-check-input" type="checkbox" id="status_partner" name="status_partner" value="1" checked>
                         </div>
                     </div>
-                        <div>
-                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                        </div>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Edit Modal for each partner -->
 @foreach ($partners as $partner)
@@ -337,11 +343,14 @@
                                 <label for="edit_status_partner_{{ $partner->id_partner }}" class="me-3">Status </label>
                                 <input class="form-check-input" type="checkbox" id="edit_status_partner_{{ $partner->id_partner }}" name="status_partner" {{ $partner->status_partner ? 'checked' : '' }}>
                             </div>
-                            <div>
-                                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                            </div>
+
+
                         </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                        </div>
+
                     </form>
 
                 </div>

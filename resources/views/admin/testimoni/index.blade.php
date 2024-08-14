@@ -134,11 +134,14 @@
                         <div class="mb-3">
                             <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                             <select class="form-select" name="page_id" aria-label="Default select example" required>
-                                <option selected>Pilih ...</option>
+                                <option value="" disabled selected>Pilih ...</option>
                                 @foreach ($page as $row)
                                     <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                                 @endforeach
                             </select>
+                            @error('page_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>
@@ -168,7 +171,7 @@
                             <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="photo" class="form-label">Foto <span class="text-danger">*</span></label>
+                            <label for="photo" class="form-label">Foto </label>
                             <input type="file" class="form-control" name="photo" id="photo">
                         </div>
                         <div class="mb-3">
@@ -178,12 +181,12 @@
                                 <option value="0">Unpublished</option>
                             </select>
                         </div>
-                        <div class="modal-footer justify-content-between mx-3">
-                            <div>
-                                <button type="button" class="btn btn-danger rounded-3"
-                                    data-bs-dismiss="modal">Batal</button>
+                        {{-- <div class="modal-footer justify-content-between mx-3"> --}}
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
                                 <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                             </div>
+
                         </div>
                     </form>
                 </div>

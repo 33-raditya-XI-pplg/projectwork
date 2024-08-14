@@ -24,26 +24,30 @@ class FaqController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'page_id'=> 'required|integer',
-            'pertanyaan' => 'required|string|max:255',
-            'jawaban' => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'page_id'=> 'required|integer',
+        'pertanyaan' => 'required|string|max:255',
+        'jawaban' => 'nullable|string',
+    ], [
+        'page_id.required' => 'Page ID wajib diisi.',
+        'page_id.integer' => 'Page ID harus berupa angka.',
+        'pertanyaan.required' => 'Pertanyaan wajib diisi.',
+        'pertanyaan.max' => 'Pertanyaan tidak boleh lebih dari 255 karakter.',
+    ]);
 
+    Faq::create([
+        'page_id'=> $request->page_id,
+        'pertanyaan' => $request->pertanyaan,
+        'jawaban' => $request->jawaban,
+        'created_by' => Auth::id(),
+        'updated_by' => Auth::id(),
+    ]);
 
-            Faq::create([
-                'page_id'=> $request->page_id,
-                'pertanyaan' => $request->pertanyaan,
-                'jawaban' => $request->jawaban,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-            ]);
+    Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
+    return redirect()->back();
+}
 
-            Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
-            return redirect()->back();
-
-    }
 
     public function update(Request $request, $id)
     {

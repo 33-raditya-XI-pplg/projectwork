@@ -50,12 +50,12 @@ class PartnerController extends Controller
             'page_id' => 'required|exists:tb_page,id_page',
             'nama_partner' => 'required|string|max:255',
             'email_partner' => 'required|email|max:255|unique:tb_partner,email_partner',
-            'telepon_partner' => 'nullable|string|max:20',
-            'alamat_partner' => 'nullable|string|max:255',
-            'jenis_partner' => 'nullable|string|max:50',
-            'tanggal_bergabung' => 'nullable|date',
-            'website_partner' => 'nullable|url|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'telepon_partner' => 'required|string|max:20',
+            'alamat_partner' => 'required|string|max:255',
+            'jenis_partner' => 'required|string|max:50',
+            'tanggal_bergabung' => 'required|date',
+            'website_partner' => 'required|url|max:255',
+            'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'status_partner' => 'nullable|boolean',
         ]);
 

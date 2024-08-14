@@ -16,7 +16,7 @@ class KategoriController extends Controller
 {
     public function index() {
         $kategori = Kategori::all();
-        $kategori = Kategori::orderBy('created_at', 'desc')->get();
+        $kategori = Kategori::orderBy('created_at', 'asc')->get();
 
         confirmDelete('Hapus kategori', 'Apakah kamu yakin untuk menghapus?');
         return view('admin.kategori.index', compact('kategori'));
@@ -26,7 +26,7 @@ class KategoriController extends Controller
     {
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
+            'deskripsi' => 'required|string',
         ]);
 
         try {

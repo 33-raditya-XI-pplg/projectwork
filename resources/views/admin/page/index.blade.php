@@ -36,7 +36,7 @@
                             </div>
 
                         </div>
-                        <div class="modal-footer justify-content-between mx-3">
+                        <div class="modal-footer justify-content-end mx-3">
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                         </div>
