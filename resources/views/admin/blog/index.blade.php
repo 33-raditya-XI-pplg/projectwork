@@ -41,6 +41,7 @@
                             <th scope="col">Body</th>
                             {{-- <th scope="col">Photo</th> --}}
                             <th scope="col">Kategori</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
@@ -59,7 +60,13 @@
                                 <td>
                                     {{ $row->kategori->nama_kategori ?? 'N/A' }}
                                 </td>
-
+                                <td>
+                                    <button type="button" class="btn rounded-3
+                                        {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                        disabled>
+                                        {{ $row->status == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                                    </button>
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton{{ $row->id_blog }}" data-bs-toggle="dropdown" aria-expanded="false">

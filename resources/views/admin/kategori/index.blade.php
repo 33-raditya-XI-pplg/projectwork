@@ -34,6 +34,7 @@
                 <th>No</th>
                 <th scope="col">Nama Kategori</th>
                 <th scope="col">Deskripsi</th>
+                <th scope="col">Status</th>
                 <th scope="col">Aksi</th>
             </tr>
         </thead>
@@ -43,6 +44,13 @@
                     <th scope="row">{{ $index + 1 }}</th>
                     <td>{{ $row->nama_kategori }}</td>
                     <td>{{ $row->deskripsi }}</td>
+                    <td>
+                        <button type="button" class="btn rounded-3
+                            {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                            disabled>
+                            {{ $row->status == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                        </button>
+                    </td>
                     <td>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"

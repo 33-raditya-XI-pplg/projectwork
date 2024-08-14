@@ -106,7 +106,6 @@
                 </div>
             </li>
             @endif
-
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">
@@ -116,7 +115,7 @@
                 <div class="card-header mt-3" style="background-color:rgba(244, 244, 244, 1);border-radius:10px;">
                 <div class="sub-menu">
                     <ul class="sub-menu-content">
-                        <small class="text-muted">USER</small>
+                        <small class="text-muted">WEB</small>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'profil' : '' }}">
                             <a href="{{ route('profil.index') }}" class="sub-menu-link"><i class="fas fa-city"></i>
                                 <span>Profil Perusahaan</span></a>
@@ -141,14 +140,6 @@
                             <a href="{{ route('blogkategori.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
                                 <span> Blog Kategori</span></a>
                         </li> --}}
-                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'galeri' : '' }}">
-                            <a href="{{ route('galeri.index') }}" class="sub-menu-link"><i class="fas fa-image"></i>
-                                <span> Galeri</span></a>
-                        </li>
-                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'video' : '' }}">
-                            <a href="{{ route('video.index') }}" class="sub-menu-link"><i class="fas fa-video"></i>
-                                <span> Video</span></a>
-                        </li>
                         <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'slider' : '' }}">
                             <a href="{{ route('slider.index') }}" class="sub-menu-link"><i class="fas fa-sliders"></i>
                                 <span> Slider</span></a>
@@ -161,7 +152,15 @@
                             <a href="{{ route('faq.index') }}" class="sub-menu-link"><i class="fas fa-envelope"></i>
                                 <span> Faq</span></a>
                         </li>
-
+                        <small class="text-muted">GALERI</small>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'galeri' : '' }}">
+                            <a href="{{ route('galeri.index') }}" class="sub-menu-link"><i class="fas fa-image"></i>
+                                <span> Foto</span></a>
+                        </li>
+                        <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'video' : '' }}">
+                            <a href="{{ route('video.index') }}" class="sub-menu-link"><i class="fas fa-video"></i>
+                                <span> Video</span></a>
+                        </li>
 
                     </ul>
                 </div>

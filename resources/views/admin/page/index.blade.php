@@ -50,7 +50,8 @@
 
 
     <div id="pageList" class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
-        <table class="table">
+        <div class="tab-content" id="nav-tabContent">
+        <table id="example" class="table">
             <thead class="fw-normal">
                 <tr>
                     <th>No</th>
