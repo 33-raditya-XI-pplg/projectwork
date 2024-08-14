@@ -136,6 +136,15 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="kategori_id" class="form-label">Kategori <span class="text-danger">*</span></label>
+                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
+                            <option value="" disabled selected>Pilih ...</option>
+                            @foreach ($kategori as $row)
+                                <option value="{{ $row->id_kategori }}">{{ $row->nama_kategori }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <div class="mb-3">
                         <label for="judul" class="form-label">Judul <span class="text-danger">*</span></label>
@@ -163,15 +172,7 @@
                         <label for="body" class="form-label">Body <span class="text-danger">*</span></label>
                         <textarea class="form-control ck-editor" id="body" name="body" rows="4"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="kategori_id" class="form-label">Kategori <span class="text-danger">*</span></label>
-                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
-                            <option value="" disabled selected>Pilih ...</option>
-                            @foreach ($kategori as $row)
-                                <option value="{{ $row->id_kategori }}">{{ $row->nama_kategori }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
                     <div class="modal-footer justify-content-end">
                         <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
@@ -206,6 +207,16 @@
                             @foreach ($page as $element)
                                 <option value="{{ $element->id_page }}" {{ $element->id_page == $row->page_id ? 'selected' : '' }}>
                                     {{ $element->nama_page }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="kategori_id" class="form-label">Kategori</label>
+                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
+                            @foreach ($kategori as $element)
+                                <option value="{{ $element->id_kategori }}" {{ $element->id_kategori == $row->kategori_id ? 'selected' : '' }}>
+                                    {{ $element->nama_kategori }}
                                 </option>
                             @endforeach
                         </select>
@@ -253,16 +264,7 @@
                     </div>
 
                     <!-- Category -->
-                    <div class="mb-3">
-                        <label for="kategori_id" class="form-label">Kategori</label>
-                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
-                            @foreach ($kategori as $element)
-                                <option value="{{ $element->id_kategori }}" {{ $element->id_kategori == $row->kategori_id ? 'selected' : '' }}>
-                                    {{ $element->nama_kategori }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
 
                     <!-- Status & Buttons -->
                     <div class="modal-footer justify-content-between mx-3">
