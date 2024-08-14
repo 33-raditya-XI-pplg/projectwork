@@ -27,6 +27,7 @@ class BlogController extends Controller
 
 
     public function store(Request $request) {
+        // Validate the request
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'judul' => 'required|string|max:255',
@@ -38,6 +39,9 @@ class BlogController extends Controller
 
         // Generate slug from title
         $data['slug'] = Str::slug($request->input('judul'));
+
+        // Sanitize the 'body' field by stripping HTML tags
+        $data['body'] = strip_tags($request->body);
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
@@ -56,7 +60,9 @@ class BlogController extends Controller
     }
 
 
+
     public function update(Request $request, $id) {
+        // Validate the request
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'judul' => 'required|string|max:255',
@@ -70,6 +76,9 @@ class BlogController extends Controller
 
         // Generate slug from title
         $data['slug'] = Str::slug($request->input('judul'));
+
+        // Sanitize the 'body' field by stripping HTML tags
+        $data['body'] = strip_tags($request->body);
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
@@ -90,6 +99,7 @@ class BlogController extends Controller
 
         return redirect()->back();
     }
+
 
 
 

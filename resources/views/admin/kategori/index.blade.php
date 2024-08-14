@@ -19,11 +19,16 @@
 @endif
 
 <h1>Kategori</h1>
-<script src="https://cdn.ckeditor.com/ckeditor5/ckeditor.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- CKEditor 5 -->
+<script src="https://cdn.ckeditor.com/ckeditor5/ckeditor5-build-classic/ckeditor.js"></script>
+
+<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css" />
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
@@ -105,7 +110,6 @@
                                                     <textarea class="form-control" id="deskripsi{{ $row->id_kategori }}" name="deskripsi" rows="2">{{ $row->deskripsi }}</textarea>
                                                 </div>
 
-
                                                 <div class="modal-footer justify-content-between mx-3">
                                                     <div class="form-check form-switch">
                                                         <label for="status{{ $row->id_kategori }}" class="me-3">Status</label>
@@ -179,9 +183,8 @@
         </div>
     </div>
 </div>
+
 <!-- End of Insert Modal -->
-
-
 
 @if (session('error'))
     <script>
@@ -195,6 +198,11 @@
 @endif
 
 <script>
+
+
+
+
+
     function confirmDelete(id) {
         Swal.fire({
             title: 'Konfirmasi Hapus',
@@ -211,11 +219,14 @@
             }
         });
     }
+
+
+
+
+
+
 </script>
 
-
-
-<script src="https://cdn.ckeditor.com/ckeditor5/ckeditor5-build-classic/ckeditor.js"></script>
 
 
 

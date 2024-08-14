@@ -21,9 +21,10 @@ return new class extends Migration
             $table->text('visi');
             $table->text('misi');
             $table->text('sejarah');
+            $table->boolean('status')->nullable();
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

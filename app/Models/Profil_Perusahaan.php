@@ -21,6 +21,7 @@ class Profil_Perusahaan extends Model
         'visi',
         'misi',
         'sejarah',
+        'status',
         'created_by',
         'updated_by',
     ];

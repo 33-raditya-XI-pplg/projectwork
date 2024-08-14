@@ -102,18 +102,17 @@
                                         N/A
                                     @endif
                                 </td> --}}
+                                <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
+                                <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
+                                <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td>
+                                    <td>
+                                        <button type="button" class="btn rounded-3
+                                            {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                            disabled>
+                                            {{ $row->status ? 'Aktif' : 'Nonaktif' }}
+                                        </button>
+                                    </td>
 
-                                    <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
-                                    <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
-                                    <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td>
-
-                                        <td>
-                                            <button type="button" class="btn rounded-3
-                                                {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
-                                                disabled>
-                                                {{ $row->status == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
-                                            </button>
-                                        </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -140,6 +139,7 @@
         </div>
     </div>
 </div>
+
 <!-- Profile Section -->
 <div class="section__container mt-5">
     <div class="header">
@@ -167,11 +167,7 @@
 
 
 
-
-
-<!-- Insert Modal -->
-<!-- Insert Modal -->
-
+<!-- Modal HTML -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -208,7 +204,6 @@
                             </div>
                             <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi"
                                 accept="image/*" onchange="previewImage(event)">
-
                             <div id="image_preview" class="mt-3"
                                 style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
                                 <img id="preview_image" src="" alt="Image preview"
@@ -220,10 +215,6 @@
                         </div>
                         <div id="image_error"></div>
                     </div>
-
-
-
-
 
                     <div class="mb-3">
                         <label for="visi" class="form-label">Visi <span class="text-danger">*</span></label>
@@ -243,13 +234,16 @@
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
                             <label for="status" class="me-3">Status</label>
-                            <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
+                            <input class="form-check-input" type="checkbox" id="status" name="status" value="1"
+                                   {{ isset($row) && $row->status ? 'checked' : '' }}>
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                         </div>
                     </div>
+
+
                 </form>
             </div>
         </div>
@@ -325,14 +319,19 @@
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
-                            <label for="edit_status_profil_{{ $row->id_profil_perusahaan }}" class="me-3">Status </label>
-                            <input class="form-check-input" type="checkbox" id="edit_status_profil_{{ $row->id_profil_perusahaan }}" name="status" {{ $row->status ? 'checked' : '' }}>
+                            <label for="edit_status_profil_{{ $row->id_profil_perusahaan }}" class="me-3">Status</label>
+                            <input class="form-check-input" type="checkbox" id="edit_status_profil_{{ $row->id_profil_perusahaan }}" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                            <!-- Hidden input field for unchecked status -->
+                            <input type="hidden" name="status_hidden" value="0">
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
                         </div>
                     </div>
+
+
+
                 </form>
             </div>
         </div>
@@ -529,7 +528,35 @@ dropzone.addEventListener('drop', function(event) {
 </script>
 
 
-<script src="https://cdn.ckeditor.com/ckeditor5/ckeditor5-build-classic/ckeditor.js"></script>
 
+{{-- <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script> --}}
+<script src="https://cdn.ckeditor.com/4.24.0/standard/ckeditor.js"></script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize CKEditor on modal show
+        var addModal = document.getElementById('add');
+        addModal.addEventListener('shown.bs.modal', function () {
+            if (typeof CKEDITOR !== 'undefined') {
+                CKEDITOR.replace('tentang_kami');
+                CKEDITOR.replace('visi');
+                CKEDITOR.replace('misi');
+                CKEDITOR.replace('sejarah');
+            }
+        });
+
+        // Ensure CKEditor is destroyed when modal is hidden
+        addModal.addEventListener('hidden.bs.modal', function () {
+            if (typeof CKEDITOR !== 'undefined') {
+                CKEDITOR.instances['tentang_kami'].destroy();
+                CKEDITOR.instances['visi'].destroy();
+                CKEDITOR.instances['misi'].destroy();
+                CKEDITOR.instances['sejarah'].destroy();
+            }
+        });
+    });
+</script>
 
 @endsection

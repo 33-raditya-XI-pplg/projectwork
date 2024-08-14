@@ -31,8 +31,16 @@ class ProfilPerusahaanController extends Controller
             'visi' => 'required|string',
             'misi' => 'required|string',
             'sejarah' => 'required|string',
-            // 'status' => 'nullable|boolean', // Validasi status sebagai boolean
+            'status' => 'nullable|boolean', // Validasi status sebagai boolean
         ]);
+
+        // Sanitize fields by stripping HTML tags
+        $data['tentang_kami'] = strip_tags($data['tentang_kami']);
+        $data['visi'] = strip_tags($data['visi']);
+        $data['misi'] = strip_tags($data['misi']);
+        $data['sejarah'] = strip_tags($data['sejarah']);
+
+        $data['status'] = $request->has('status') ? true : false;
 
         // Jika ada file gambar yang di-upload
         if ($request->hasFile('path_struktur_organisasi')) {
@@ -52,6 +60,8 @@ class ProfilPerusahaanController extends Controller
 
 
 
+
+
     public function update(Request $request, $id)
     {
         $profil = Profil_Perusahaan::findOrFail($id);
@@ -63,11 +73,20 @@ class ProfilPerusahaanController extends Controller
             'visi' => 'required|string',
             'misi' => 'required|string',
             'sejarah' => 'required|string',
-            'status' => 'nullable|string',
+            'status' => 'nullable|boolean', // Validasi status sebagai boolean
         ]);
 
-        if ($request->hasFile('path_struktur_organisasi')) {
+        // Sanitize fields by stripping HTML tags
+        $data['tentang_kami'] = strip_tags($data['tentang_kami']);
+        $data['visi'] = strip_tags($data['visi']);
+        $data['misi'] = strip_tags($data['misi']);
+        $data['sejarah'] = strip_tags($data['sejarah']);
 
+        // Handle status
+        $data['status'] = $request->has('status') ? true : false;
+
+        if ($request->hasFile('path_struktur_organisasi')) {
+            // Delete old image if exists
             if ($profil->path_struktur_organisasi) {
                 Storage::disk('public')->delete($profil->path_struktur_organisasi);
             }
@@ -77,8 +96,11 @@ class ProfilPerusahaanController extends Controller
         }
 
         $profil->update($data);
-        return redirect()->route('profil.index');
+
+        return redirect()->route('profil.index')->with('success', 'Data berhasil diperbarui');
     }
+
+
 
 
 
