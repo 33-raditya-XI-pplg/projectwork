@@ -2,7 +2,7 @@
 @section('title', 'Faq')
 @section('content')
 
-{{-- <h1>FAQ</h1> --}}
+<h1>FAQ</h1>
 
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -10,15 +10,16 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <!-- FAQ Management Table -->
+{{-- <h3 class="mb-0">FAQ</h3> --}}
 <div class="bg-white rounded-4 px-3 py-4 mb-5 shadow-lg">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">FAQ Management</h3>
+
         {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
             <i class="fa-solid fa-plus"></i> Add FAQ
         </button> --}}
     </div>
-    <table id="example" class="table table-striped table-bordered">
-        <thead class="table-light">
+    <table id="example" class="table">
+        <thead class="fw-normal">
             <tr>
                 <th>No</th>
                 <th>Page Id</th>

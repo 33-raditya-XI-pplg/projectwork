@@ -2,7 +2,7 @@
 @section('title', 'Slider')
 @section('content')
 
-{{-- <h1>Slider</h1> --}}
+<h1>Slider</h1>
 
 <style>
     .carousel-control-prev-icon,
@@ -18,17 +18,18 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <!-- Slider Management Table -->
+{{-- <h3 class="mb-0">Slider</h3> --}}
 <div class="bg-white rounded-4 px-3 py-4 mb-5 shadow-lg">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">Slider Management</h3>
+
         {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
             <i class="fa-solid fa-plus"></i> Add Slider
         </button> --}}
     </div>
 
     <div class="table-responsive">
-        <table id="example" class="table table-striped table-bordered">
-            <thead class="table-light">
+        <table id="example" class="table">
+            <thead class="fw-normal">
                 <tr>
                     <th>No</th>
                     <th>Page ID</th>

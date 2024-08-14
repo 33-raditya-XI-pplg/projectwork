@@ -107,7 +107,13 @@
                                     <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
                                     <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td>
 
-                                <td>{{ $row->status ? 'Aktif' : 'Non-Aktif' }}</td>
+                                        <td>
+                                            <button type="button" class="btn rounded-3
+                                                {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                                disabled>
+                                                {{ $row->status == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                                            </button>
+                                        </td>
                                 <td>
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -236,8 +242,8 @@
 
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
-                            <label for="status" class="me-3">Status </label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="Publish" checked>
+                            <label for="status" class="me-3">Status</label>
+                            <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -319,9 +325,8 @@
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
-                            <label for="status" class="me-3">Status </label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="status" name="status"
-                                value="Publish" {{ $row->status == 'Publish' ? 'checked' : '' }}>
+                            <label for="edit_status_profil_{{ $row->id_profil_perusahaan }}" class="me-3">Status </label>
+                            <input class="form-check-input" type="checkbox" id="edit_status_profil_{{ $row->id_profil_perusahaan }}" name="status" {{ $row->status ? 'checked' : '' }}>
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
