@@ -40,7 +40,7 @@ class GaleriController extends Controller
         $validatedData = $request->validate([
             'page_id' => 'required|integer',
             'nama' => 'required|string|max:255',
-            'path_file' => 'required|file|mimes:jpg,jpeg,png,bmp|max:10240',
+           'path_file' => 'required|file|mimes:jpg,jpeg,png,bmp|max:2048',
             'kategori' => 'required|in:partner,klien,gambar,video',
             'deskripsi' => 'nullable|string',
             'created_by' => 'nullable|integer',
