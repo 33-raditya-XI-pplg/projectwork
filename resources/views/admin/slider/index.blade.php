@@ -143,7 +143,7 @@
 
 
 <!-- Insert Modal -->
-<div class="modal fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -167,8 +167,8 @@
                         <input type="text" class="form-control" name="title" id="title" required>
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                        <label for="description" class="form-label">Description<span class="text-danger">*</span></label>
+                        <textarea class="form-control ck-editor" id="description" name="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Upload Image <span class="text-danger">*</span></label>
@@ -205,6 +205,7 @@
                             @endfor
                         </select>
                     </div>
+                    <div class="modal-footer justify-content-between mx-3">
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <div class="form-check form-switch">
@@ -213,9 +214,10 @@
                         </div>
                         <small class="form-text text-muted"></small>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Save</button>
+                    <div>
+                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    </div>
                     </div>
                 </form>
             </div>
@@ -226,7 +228,8 @@
 
 <!-- Edit Modals -->
 @foreach ($slider as $row)
-<div class="modal fade" id="edit{{ $row->id_slider }}" tabindex="-1" aria-labelledby="edit{{ $row->id_slider }}Label" aria-hidden="true">
+<div class="modal modal-lg fade" id="edit{{ $row->id_slider }}" tabindex="-1"
+    aria-labelledby="edit{{ $row->id_slider }}Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -253,7 +256,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="4">{{ $row->description }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $row->description) }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="image_file_edit" class="form-label">Image</label>
@@ -281,7 +284,7 @@
                             @endfor
                         </select>
                     </div>
-
+                    <div class="modal-footer justify-content-between mx-3">
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
                         <div class="form-check form-switch">
@@ -292,9 +295,10 @@
                         </div>
                         <small class="form-text text-muted">Check to set status as active. Uncheck for inactive.</small>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                    <div>
+                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
+                    </div>
                     </div>
                 </form>
             </div>

@@ -193,7 +193,8 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
+                            </small>
                         </div>
                         <div id="image_error"></div>
                     </div>

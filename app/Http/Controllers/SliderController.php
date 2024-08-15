@@ -25,11 +25,14 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image_file' => 'required|image|mimes:jpg,jpeg,png,bmp|max:2048',
             'position' => 'required|integer',
-            'status' => 'nullable|boolean', // Validate as boolean and nullable
+            'status' => 'nullable|boolean',
         ]);
 
+        // Clean the description to remove unwanted <p> tags
+        $cleanDescription = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->description);
+
         // Upload image
-        $image_url = null; // Initialize image_url
+        $image_url = null;
         if ($request->hasFile('image_file')) {
             $imageName = time() . '.' . $request->image_file->extension();
             $request->image_file->move(public_path('images/sliders'), $imageName);
@@ -39,36 +42,37 @@ class SliderController extends Controller
         Slider::create([
             'page_id' => $request->page_id,
             'title' => $request->title,
-            'description' => $request->description,
-            'image_url' => $image_url, // Use the uploaded image URL
+            'description' => $cleanDescription,
+            'image_url' => $image_url,
             'position' => $request->position,
-            'status' => $request->boolean('status', false), // Default to false if status is null
+            'status' => $request->boolean('status', false),
         ]);
 
         return redirect()->route('slider.index')
             ->with('success', 'Slider created successfully.');
     }
 
+
     public function update(Request $request, Slider $slider)
     {
-        // Validate the request
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image_file_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for image upload
+            'image_file_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'position' => 'required|integer',
-            'status' => 'nullable|boolean', // Validate as boolean and nullable
-            'status_hidden' => 'nullable|boolean', // Hidden field validation
+            'status' => 'nullable|boolean',
+            'status_hidden' => 'nullable|boolean',
         ]);
+
+        // Clean the description to remove unwanted <p> tags
+        $cleanDescription = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->description);
 
         // Handle image upload
         if ($request->hasFile('image_file_edit')) {
-            // Store the new image
             $imagePath = $request->file('image_file_edit')->store('public/images');
             $imageUrl = Storage::url($imagePath);
 
-            // Update the slider with the new image URL
             $slider->image_url = $imageUrl;
         }
 
@@ -79,9 +83,9 @@ class SliderController extends Controller
         $slider->update([
             'page_id' => $request->page_id,
             'title' => $request->title,
-            'description' => $request->description,
+            'description' => $cleanDescription,
             'position' => $request->position,
-            'status' => $status, // Use the determined status value
+            'status' => $status,
         ]);
 
         return redirect()->route('slider.index')

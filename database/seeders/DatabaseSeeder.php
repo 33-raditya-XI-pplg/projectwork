@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             SkemaSeeder::class,
             BackgroundSeeder::class,
             JenisEventSeeder::class,
-
             UserSeeder::class,
             TtdSeeder::class,
             EventSeeder::class,
@@ -30,12 +29,11 @@ class DatabaseSeeder extends Seeder
             PesertaSeeder::class,
             MengujiSeeder::class,
             EventSkemaRentangNilaiSeeder::class,
-
             PenandatanganSeeder::class,
             NilaiPesertaSeeder::class,
             PageTableSeeder::class,
-            // BlogSeeder::class,
             KategoriSeeder::class,
+              // BlogSeeder::class,
         ]);
     }
 }

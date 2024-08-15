@@ -31,6 +31,7 @@
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="mt-4">
+                <div class="table-responsive">
                 <table id="example" class="table">
                     <thead class="fw-normal">
                         <tr>
@@ -283,14 +284,16 @@
                     </div>
 
                     <!-- Status & Buttons -->
+                    <div class="modal-footer justify-content-between mx-3">
                     <div class="mb-3 form-check form-switch">
                         <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
                         <label class="form-check-label" for="status">Aktif</label>
                     </div>
 
-                    <div class="modal-footer justify-content-between mx-3">
-                        <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                    <div>
+                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
+                    </div>
                     </div>
                 </form>
             </div>

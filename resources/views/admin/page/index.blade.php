@@ -111,7 +111,7 @@
                     </div>
 
                     <!-- Edit Modal -->
-                    <div class="modal fade" id="edit{{ $page->id_page }}" tabindex="-1" aria-labelledby="editModalLabel{{ $page->id_page }}" aria-hidden="true">
+                    <div class="modal modal-lg fade" id="edit{{ $page->id_page }}" tabindex="-1" aria-labelledby="editLabel{{ $page->id_page }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header" style="background-color: #007bff; color: white;">
@@ -134,6 +134,7 @@
                                             <label for="pindah_halaman_{{ $page->id_page }}" class="form-label">Link Halaman</label>
                                             <input type="url" class="form-control" id="pindah_halaman_{{ $page->id_page }}" name="pindah_halaman" value="{{ $page->pindah_halaman }}" required>
                                         </div>
+                                        <div class="modal-footer justify-content-between mx-3">
                                         <div class="form-check form-switch mb-3">
                                             <label for="status_{{ $page->id_page }}" class="form-label me-3">Status</label>
                                             <input class="form-check-input" type="checkbox" id="status_{{ $page->id_page }}" name="status" value="1" {{ $page->status ? 'checked' : '' }}>
@@ -141,7 +142,11 @@
                                                 {{ $page->status ? 'Aktif' : 'Non-Aktif' }}
                                             </label>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Update</button>
+                                        <div>
+                                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
+                                        </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
