@@ -21,6 +21,7 @@ return new class extends Migration
             // $table->text('ringkasan');
             $table->text('body');
             $table->string('photo')->nullable();
+            $table->boolean('status')->nullable();
 
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

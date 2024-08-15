@@ -51,9 +51,9 @@
                     <td>{{ $row->deskripsi }}</td>
                     <td>
                         <button type="button" class="btn rounded-3
-                            {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                            {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
                             disabled>
-                            {{ $row->status == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                            {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                         </button>
                     </td>
                     <td>
@@ -92,40 +92,35 @@
                                 <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                {{-- Form --}}
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col">
-                                            <form action="{{ route('kategori.update', $row->id_kategori) }}" method="POST" enctype="multipart/form-data">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
-                                                <div class="mb-3">
-                                                    <label for="nama_kategori{{ $row->id_kategori }}" class="form-label">Nama Kategori</label>
-                                                    <input type="text" class="form-control" name="nama_kategori"
-                                                           id="nama_kategori{{ $row->id_kategori }}" value="{{ $row->nama_kategori }}" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="deskripsi{{ $row->id_kategori }}" class="form-label">Deskripsi</label>
-                                                    <textarea class="form-control" id="deskripsi{{ $row->id_kategori }}" name="deskripsi" rows="2">{{ $row->deskripsi }}</textarea>
-                                                </div>
+                                <form action="{{ route('kategori.update', $row->id_kategori) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+                                    <div class="mb-3">
+                                        <label for="nama_kategori{{ $row->id_kategori }}" class="form-label">Nama Kategori</label>
+                                        <input type="text" class="form-control" name="nama_kategori"
+                                               id="nama_kategori{{ $row->id_kategori }}" value="{{ $row->nama_kategori }}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="deskripsi{{ $row->id_kategori }}" class="form-label">Deskripsi</label>
+                                        <textarea class="form-control" id="deskripsi{{ $row->id_kategori }}" name="deskripsi" rows="2">{{ $row->deskripsi }}</textarea>
+                                    </div>
 
-                                                <div class="modal-footer justify-content-between mx-3">
-                                                    <div class="form-check form-switch">
-                                                        <label for="status{{ $row->id_kategori }}" class="me-3">Status</label>
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="status{{ $row->id_kategori }}"
-                                                               name="status" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>
-                                                    </div>
-                                                    <div>
-                                                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                    <div class="modal-footer justify-content-between mx-3">
+                                        <div class="form-check form-switch">
+                                            <label for="status{{ $row->id_kategori }}" class="me-3">Status</label>
+                                            <input class="form-check-input" type="checkbox" role="switch" id="status{{ $row->id_kategori }}"
+                                                   name="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="status{{ $row->id_kategori }}">
+                                                {{ $row->status ? 'Aktif' : 'Nonaktif' }}
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                                         </div>
                                     </div>
-                                </div>
-                                {{-- End Form --}}
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -134,8 +129,8 @@
             @endforeach
         </tbody>
     </table>
-</div>
 
+</div>
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -145,7 +140,6 @@
                 <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 {{-- Form --}}
                 <div class="container">
                     <div class="row">
@@ -163,16 +157,14 @@
                                     <label for="deskripsi" class="form-label">Deskripsi <span class="text-danger">*</span></label>
                                     <textarea class="form-control" id="deskripsi" name="deskripsi" required></textarea>
                                 </div>
-
+                                <div class="form-check form-switch mb-3">
+                                    <label for="status" class="form-label me-3">Status</label>
+                                    <input class="form-check-input" type="checkbox" id="status" name="status" value="1">
+                                    <label class="form-check-label" for="status"></label>
+                                </div>
                                 <div class="modal-footer justify-content-between mx-3">
-                                    <div class="form-check form-switch mb-3">
-                                        <label for="status" class="me-3">Status </label>
-                                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="Aktif">
-                                    </div>
-                                    <div>
-                                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                                    </div>
+                                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                                 </div>
                             </form>
                         </div>
@@ -183,6 +175,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- End of Insert Modal -->
 

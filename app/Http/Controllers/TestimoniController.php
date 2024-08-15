@@ -14,7 +14,7 @@ class TestimoniController extends Controller
     {
         $testimoni = Testimoni::all();
         $page = Page::all();
-        $testimonials = Testimoni::where('status_publikasi', 1)->orderBy('tanggal', 'desc')->get();
+        $testimonials = Testimoni::where('status', 1)->orderBy('tanggal', 'desc')->get();
         return view('admin.testimoni.index', compact('testimoni', 'page', 'testimonials'));
     }
 
@@ -31,7 +31,7 @@ class TestimoniController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'isi_testimoni' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status_publikasi' => 'required|boolean',
+            'status' => 'nullable|boolean',
             'created_by' => 'required|integer',
         ]);
 
@@ -51,7 +51,7 @@ class TestimoniController extends Controller
             'rating' => $request->rating,
             'isi_testimoni' => $request->isi_testimoni,
             'photo' => $photoPath,
-            'status_publikasi' => $request->status_publikasi,
+            'status' => $request->status, // Use the status field from request
             'created_by' => $request->created_by,
         ]);
 
@@ -63,18 +63,12 @@ class TestimoniController extends Controller
 
 
 
+
     public function update(Request $request, Testimoni $testimoni)
     {
-        // Validate the request data
+        // Validasi hanya untuk status dan updated_by
         $request->validate([
-            'page_id' => 'required|integer',
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'tanggal' => 'required|date',
-            'rating' => 'required|integer|min:1|max:5',
-            'isi_testimoni' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status_publikasi' => 'required|boolean',
+            'status' => 'nullable|boolean',
             'updated_by' => 'required|integer',
         ]);
 
@@ -90,24 +84,18 @@ class TestimoniController extends Controller
             $testimoni->photo = $photoPath;
         }
 
-        // Update the Testimoni record
-        $testimoni->update($request->only([
-            'page_id',
-            'nama',
-            'email',
-            'tanggal',
-            'rating',
-            'isi_testimoni',
-            'status_publikasi',
-            'updated_by',
-        ]));
-
-        // Save the updated record including the new photo path
-        $testimoni->save();
+        // Update only the status field
+        $testimoni->update([
+            'status' => $request->status,
+            'updated_by' => $request->updated_by,
+            // No need to include other fields
+        ]);
 
         return redirect()->route('testimoni.index')
             ->with('success', 'Testimoni updated successfully.');
     }
+
+
 
 
 

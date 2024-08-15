@@ -12,8 +12,9 @@ class Faq extends Model
     protected $table = "tb_faq";
     protected $primaryKey = 'id_faq';
     protected $guarded = ['id_faq'];
+    protected $fillable = ['page_id', 'pertanyaan', 'jawaban', 'created_by', 'updated_by', 'status'];
 
-    public function faqPage() // FK many-to-one dengan tb_page
+    public function faqPage()
     {
         return $this->belongsTo(Page::class, 'page_id', 'id_page');
     }

@@ -52,9 +52,9 @@
                         <td>{{ $row->position }}</td>
                         <td>
                             <button type="button" class="btn rounded-3
-                                {{ $row->status == 'active' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
                                 disabled>
-                                {{ $row->status == 'active' ? 'Aktif' : 'NonAktif' }}
+                                {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                             </button>
                         </td>
                         <td>
@@ -85,6 +85,7 @@
                 @endforeach
             </tbody>
         </table>
+
     </div>
 </div>
 
@@ -169,55 +170,52 @@
                         <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="description" name="description" rows="4"></textarea>
                     </div>
-    <div class="mb-3">
-        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
-        <div class="dropzone-wrapper">
-            <div class="dropzone-desc">
-                <i class="glyphicon glyphicon-download-alt"></i>
-                <p>Choose an image file or drag it here.</p>
-            </div>
-            <input type="file" name="image_file" class="dropzone" id="image_file" accept="image/*" required>
-
-            <div id="image_preview" class="mt-3"
-                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
-                <img id="preview_image" src="" alt="Image preview"
-                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
-            </div>
-        </div>
-        <div class="mt-2">
-            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
-        </div>
-        <div id="image_error"></div>
-    </div>
-
-    <div class="mb-3">
-        <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
-        <select class="form-select" name="position" id="position" required>
-            <option value="" disabled selected>Select Position</option>
-            @for ($i = 1; $i <= 5; $i++)
-                <option value="{{ $i }}"
-                    @if ($slider->pluck('position')->contains($i))
-                        disabled
-                        style="background-color: #f8d7da; color: #721c24;"
-                    @endif>
-                    {{ $i }}
-                </option>
-            @endfor
-        </select>
-    </div>
-
-
-
                     <div class="mb-3">
-                        <label for="status" class="form-label">Status </label>
-                        <select name="status" class="form-select" required>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
+                        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Choose an image file or drag it here.</p>
+                            </div>
+                            <input type="file" name="image_file" class="dropzone" id="image_file" accept="image/*" required>
+
+                            <div id="image_preview" class="mt-3"
+                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
+                                <img id="preview_image" src="" alt="Image preview"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                        </div>
+                        <div id="image_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
+                        <select class="form-select" name="position" id="position" required>
+                            <option value="" disabled selected>Select Position</option>
+                            @for ($i = 1; $i <= 5; $i++)
+                                <option value="{{ $i }}"
+                                    @if ($slider->pluck('position')->contains($i))
+                                        disabled
+                                        style="background-color: #f8d7da; color: #721c24;"
+                                    @endif>
+                                    {{ $i }}
+                                </option>
+                            @endfor
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
+                            <label class="form-check-label" for="status"></label>
+                        </div>
+                        <small class="form-text text-muted"></small>
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
                     </div>
                 </form>
             </div>
@@ -236,7 +234,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('slider.update', $row->id_slider) }}" method="POST">
+                <form action="{{ route('slider.update', $row->id_slider) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
@@ -258,7 +256,7 @@
                         <textarea class="form-control" id="description" name="description" rows="4">{{ $row->description }}</textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="image_url" class="form-label">Image URL</label>
+                        <label for="image_file_edit" class="form-label">Image</label>
                         <input type="file" class="form-control" name="image_file_edit" id="image_file_edit_{{ $row->id_slider }}" accept="image/*">
 
                         <div id="image_preview_edit_{{ $row->id_slider }}" class="mt-3"
@@ -286,10 +284,13 @@
 
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
-                        <select name="status" class="form-select" required>
-                            <option value="active" {{ $row->status == 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ $row->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                        </select>
+                        <div class="form-check form-switch">
+                            <label for="edit_status_profil_{{ $row->id_slider }}" class="me-3">Status</label>
+                            <input class="form-check-input" type="checkbox" id="edit_status_profil_{{ $row->id_slider }}" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                            <!-- Hidden input field for unchecked status -->
+                            <input type="hidden" name="status_hidden" value="0">
+                        </div>
+                        <small class="form-text text-muted">Check to set status as active. Uncheck for inactive.</small>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -300,6 +301,9 @@
         </div>
     </div>
 </div>
+
+
+
 @endforeach
 
 @push('script')

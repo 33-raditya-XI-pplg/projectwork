@@ -167,7 +167,7 @@
 
 
 
-<!-- Modal HTML -->
+<!-- Modal Add -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -252,7 +252,7 @@
 
 
 
-
+{{-- modal edit --}}
 @foreach ($profil as $row)
 <div class="modal modal-lg fade" id="edit{{ $row->id_profil_perusahaan }}" tabindex="-1" aria-labelledby="edit{{ $row->id_profil_perusahaan }}Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

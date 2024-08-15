@@ -18,6 +18,7 @@ class Blog extends Model
         'slug',
         'body',
         'photo',
+        'status',
         'created_by',
         'updated_by',
     ];

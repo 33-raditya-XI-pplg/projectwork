@@ -25,12 +25,13 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image_file' => 'required|image|mimes:jpg,jpeg,png,bmp|max:2048',
             'position' => 'required|integer',
-            'status' => 'required|in:active,inactive',
+            'status' => 'nullable|boolean', // Validate as boolean and nullable
         ]);
 
         // Upload image
+        $image_url = null; // Initialize image_url
         if ($request->hasFile('image_file')) {
-            $imageName = time().'.'.$request->image_file->extension();
+            $imageName = time() . '.' . $request->image_file->extension();
             $request->image_file->move(public_path('images/sliders'), $imageName);
             $image_url = 'images/sliders/' . $imageName;
         }
@@ -41,7 +42,7 @@ class SliderController extends Controller
             'description' => $request->description,
             'image_url' => $image_url, // Use the uploaded image URL
             'position' => $request->position,
-            'status' => $request->status,
+            'status' => $request->boolean('status', false), // Default to false if status is null
         ]);
 
         return redirect()->route('slider.index')
@@ -57,7 +58,8 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image_file_edit' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for image upload
             'position' => 'required|integer',
-            'status' => 'required|in:active,inactive',
+            'status' => 'nullable|boolean', // Validate as boolean and nullable
+            'status_hidden' => 'nullable|boolean', // Hidden field validation
         ]);
 
         // Handle image upload
@@ -70,18 +72,25 @@ class SliderController extends Controller
             $slider->image_url = $imageUrl;
         }
 
+        // Determine the status value
+        $status = $request->input('status', 0) == '1' ? 1 : 0;
+
         // Update other fields
-        $slider->update($request->only([
-            'page_id',
-            'title',
-            'description',
-            'position',
-            'status',
-        ]));
+        $slider->update([
+            'page_id' => $request->page_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'position' => $request->position,
+            'status' => $status, // Use the determined status value
+        ]);
 
         return redirect()->route('slider.index')
             ->with('success', 'Slider updated successfully.');
     }
+
+
+
+
 
 
     public function destroy(Slider $slider)

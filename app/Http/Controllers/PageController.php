@@ -22,7 +22,8 @@ class PageController extends Controller
         $request->validate([
             'nama_page' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'pindah_halaman' => 'required|string|max:255'
+            'pindah_halaman' => 'required|string|max:255',
+            'status' => 'nullable|boolean' // Validate status as nullable boolean
         ]);
 
         try {
@@ -34,6 +35,7 @@ class PageController extends Controller
                 'nama_page' => $request->nama_page,
                 'deskripsi' => $sanitizedDeskripsi,
                 'pindah_halaman' => $request->pindah_halaman,
+                'status' => $request->has('status') ? true : false, // Handle the status field
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
             ]);
@@ -44,22 +46,27 @@ class PageController extends Controller
         }
     }
 
-
-
-
     public function update(Request $request, $id)
     {
         $request->validate([
             'nama_page' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'pindah_halaman' => 'required|string|max:255'
+            'pindah_halaman' => 'required|string|max:255',
+            'status' => 'nullable|boolean' // Validate status as nullable boolean
         ]);
 
         $page = Page::findOrFail($id);
-        $page->update($request->all());
+        $page->update([
+            'nama_page' => $request->nama_page,
+            'deskripsi' => strip_tags($request->deskripsi),
+            'pindah_halaman' => $request->pindah_halaman,
+            'status' => $request->has('status') ? true : false, // Handle the status field
+            'updated_by' => Auth::id(),
+        ]);
 
         return redirect()->route('page.index')->with('success', 'Page updated successfully.');
     }
+
 
 
 

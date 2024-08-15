@@ -21,7 +21,7 @@ class Testimoni extends Model
         'rating',
         'isi_testimoni',
         'photo',
-        'status_publikasi',
+        'status',
         'created_by',
         'updated_by'
     ];

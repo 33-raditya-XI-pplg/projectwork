@@ -53,7 +53,7 @@
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="" style="vertical-align: middle">
+                        <tbody style="vertical-align: middle">
                             @foreach ($testimoni as $row)
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
@@ -77,26 +77,31 @@
                                         @else
                                             <p class="text-muted">No photo available</p>
                                         @endif
-
                                     </td> --}}
-                                    <td>{{ $row->status_publikasi ? 'Published' : 'Unpublished' }}</td>
+                                    <td>
+                                        <button type="button" class="btn rounded-3
+                                            {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                            disabled>
+                                            {{ $row->status ? 'Aktif' : 'Nonaktif' }}
+                                        </button>
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                id="dropdownMenuButton{{ $row->id_testimoni }}" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
+                                               id="dropdownMenuButton{{ $row->id_testimoni }}" data-bs-toggle="dropdown"
+                                               aria-expanded="false">
                                                 <i class="fa-solid fa-bars"></i>
                                             </a>
                                             <ul class="dropdown-menu"
                                                 aria-labelledby="dropdownMenuButton{{ $row->id_testimoni }}">
                                                 <li>
-                                                    {{-- <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                         data-bs-target="#edit{{ $row->id_testimoni }}"><i
-                                                            class="fa-regular fa-pen-to-square"></i> Edit</a> --}}
-                                                        </li>
+                                                            class="fa-regular fa-pen-to-square"></i> Edit</a>
+                                                </li>
                                                 <li>
                                                     <form action="{{ route('testimoni.destroy', $row->id_testimoni) }}"
-                                                        method="POST" onsubmit="return confirm('Are you sure?');">
+                                                          method="POST" onsubmit="return confirm('Are you sure?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="dropdown-item text-danger">
@@ -111,6 +116,9 @@
                             @endforeach
                         </tbody>
                     </table>
+
+
+
                 </div>
             </div>
         </div>
@@ -122,12 +130,10 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
                     <h5 class="modal-title" id="addLabel">Tambah Testimoni</h5>
-                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addForm" action="{{ route('testimoni.store') }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form id="addForm" action="{{ route('testimoni.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
@@ -143,50 +149,55 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="nama" id="nama" required>
                         </div>
+
                         <div class="mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" name="email" id="email" required>
                         </div>
+
                         <div class="mb-3">
                             <label for="tanggal" class="form-label">Tanggal <span class="text-danger">*</span></label>
                             <input type="date" name="tanggal" class="form-control" placeholder="Tanggal" required>
                         </div>
+
                         <div class="mb-3">
                             <label for="rating" class="form-label">Rating <span class="text-danger">*</span></label>
                             <select class="form-control" name="rating" id="rating" required>
                                 <option value="" disabled selected>Pilih Rating</option>
-                                <option value="1" {{ $row->rating == 1 ? 'selected' : '' }}>1</option>
-                                <option value="2" {{ $row->rating == 2 ? 'selected' : '' }}>2</option>
-                                <option value="3" {{ $row->rating == 3 ? 'selected' : '' }}>3</option>
-                                <option value="4" {{ $row->rating == 4 ? 'selected' : '' }}>4</option>
-                                <option value="5" {{ $row->rating == 5 ? 'selected' : '' }}>5</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <label for="isi_testimoni" class="form-label">Isi Testimoni <span class="text-danger">*</span></label>
                             <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required></textarea>
                         </div>
+
                         <div class="mb-3">
                             <label for="photo" class="form-label">Foto </label>
                             <input type="file" class="form-control" name="photo" id="photo">
                         </div>
+
                         <div class="mb-3">
                             <label for="status_publikasi" class="form-label">Status Publikasi</label>
-                            <select name="status_publikasi" class="form-select" required>
-                                <option value="1">Published</option>
-                                <option value="0">Unpublished</option>
-                            </select>
-                        </div>
-                        {{-- <div class="modal-footer justify-content-between mx-3"> --}}
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="status" id="status_publikasi" value="1">
+                                <label class="form-check-label" for="status">Published</label>
                             </div>
+                        </div>
 
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -194,102 +205,111 @@
         </div>
     </div>
 
+
+
     <!-- Edit Modals -->
     @foreach ($testimoni as $row)
-        <div class="modal modal-lg fade" id="edit{{ $row->id_testimoni }}" tabindex="-1"
-            aria-labelledby="edit{{ $row->id_testimoni }}Label" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary-gradient text-white">
-                        <h5 class="modal-title" id="edit{{ $row->id_testimoni }}Label">Edit Testimoni</h5>
-                        <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('testimoni.update', $row->id_testimoni) }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+    <div class="modal modal-lg fade" id="edit{{ $row->id_testimoni }}" tabindex="-1" aria-labelledby="edit{{ $row->id_testimoni }}Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-gradient text-white">
+                    <h5 class="modal-title" id="edit{{ $row->id_testimoni }}Label">Edit Testimoni</h5>
+                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('testimoni.update', $row->id_testimoni) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
 
-                            <div class="mb-3">
-                                <label for="page_id" class="form-label">Page ID</label>
-                                <select class="form-select" name="page_id" aria-label="Default select example" required>
-                                    @foreach ($page as $element)
-                                        <option value="{{ $element->id_page }}"
-                                            {{ $element->id_page == $row->page_id ? 'selected' : '' }}>
-                                            {{ $element->nama_page }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nama" class="form-label">Nama</label>
-                                <input type="text" class="form-control" name="nama" id="nama"
-                                    value="{{ $row->nama }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" id="email"
-                                    value="{{ $row->email }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="tanggal" class="form-label">Tanggal</label>
-                                <input type="date" name="tanggal" value="{{ $row->tanggal->format('Y-m-d') }}"
-                                    class="form-control" placeholder="Tanggal" required>
-                            </div>
-                            {{-- <div class="mb-3">
-                                <label for="rating" class="form-label">Rating</label>
-                                <input type="number" name="rating" value="{{ $row->rating }}" class="form-control"
-                                    placeholder="Rating" min="1" max="5" required>
-                            </div> --}}
-                            <div class="mb-3">
-                                <label for="rating" class="form-label">Rating</label>
-                                <select class="form-control" name="rating" id="rating" required>
-                                    <option value="" disabled selected>Pilih Rating</option>
-                                    <option value="1" {{ $row->rating == 1 ? 'selected' : '' }}>1</option>
-                                    <option value="2" {{ $row->rating == 2 ? 'selected' : '' }}>2</option>
-                                    <option value="3" {{ $row->rating == 3 ? 'selected' : '' }}>3</option>
-                                    <option value="4" {{ $row->rating == 4 ? 'selected' : '' }}>4</option>
-                                    <option value="5" {{ $row->rating == 5 ? 'selected' : '' }}>5</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="photo" class="form-label">Foto</label>
-                                <input type="file" class="form-control" name="photo" id="photo">
-                                @if ($row->photo)
-                                    <img src="{{ asset('storage/' . $row->photo) }}" alt="Testimoni Foto"
-                                        class="img-thumbnail mt-2" style="max-height: 100px;">
-                                @endif
-
-                            </div>
-                            <div class="mb-3">
-                                <label for="isi_testimoni" class="form-label">Isi Testimoni</label>
-                                <textarea class="form-control" style="height:150px" name="isi_testimoni" id="isi_testimoni" placeholder="Isi Testimoni" required>{{ $row->isi_testimoni }}</textarea>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="status_publikasi" class="form-label">Status Publikasi</label>
-                                <select name="status_publikasi" class="form-select" required>
-                                    <option value="1" {{ $row->status_publikasi ? 'selected' : '' }}>Published
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="page_id_display" class="form-label">Page ID</label>
+                            <select class="form-select" name="page_id_display" aria-label="Default select example" disabled>
+                                @foreach ($page as $element)
+                                    <option value="{{ $element->id_page }}"
+                                        {{ $element->id_page == $row->page_id ? 'selected' : '' }}>
+                                        {{ $element->nama_page }}
                                     </option>
-                                    <option value="0" {{ !$row->status_publikasi ? 'selected' : '' }}>Unpublished
-                                    </option>
-                                </select>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="nama" class="form-label">Nama</label>
+                            <input type="text" class="form-control" name="nama" id="nama" value="{{ $row->nama }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="tanggal" class="form-label">Tanggal</label>
+                            <input type="date" name="tanggal" value="{{ $row->tanggal->format('Y-m-d') }}" class="form-control" placeholder="Tanggal" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="rating" class="form-label">Rating</label>
+                            <select class="form-control" name="rating" id="rating" disabled>
+                                <option value="" disabled selected>Pilih Rating</option>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    <option value="{{ $i }}" {{ $row->rating == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="photo" class="form-label">Foto</label>
+                            @if ($row->photo)
+                                <img src="{{ asset('storage/' . $row->photo) }}" alt="Testimoni Foto" class="img-thumbnail mt-2" style="max-height: 100px;">
+                            @else
+                                <p>Tidak ada foto yang diunggah.</p>
+                            @endif
+                            <input type="hidden" name="photo" value="{{ $row->photo }}">
+                        </div>
+
+
+                        <div class="mb-3">
+                            <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
+                            <label for="isi_testimoni" class="form-label">Isi Testimoni</label>
+                            <textarea class="form-control" style="height:150px" name="isi_testimoni" id="isi_testimoni" placeholder="Isi Testimoni" readonly>{{ $row->isi_testimoni }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="text-primary">Field ini dapat diedit oleh admin.</p>
+                            <label for="status" class="form-label">Status Publikasi</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                                <label class="form-check-label" for="status">
+                                    {{ $row->status ? 'Published' : 'Unpublished' }}
+                                </label>
                             </div>
-                            <div class="modal-footer justify-content-between mx-3">
-                                <div>
-                                    <button type="button" class="btn btn-danger rounded-3"
-                                        data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
-                                </div>
+                        </div>
+
+                        <div class="modal-footer justify-content-between mx-3">
+                            <div>
+                                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
+
+
+
+
+
+
     @endforeach
 <!-- Testimonials Section -->
 <div class="section__container">

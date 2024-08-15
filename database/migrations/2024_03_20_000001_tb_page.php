@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create("tb_page", function (Blueprint $table) {
+        Schema::create('tb_page', function (Blueprint $table) {
             $table->id('id_page');
             $table->string('nama_page');
             $table->text('deskripsi')->nullable();
             $table->string('pindah_halaman');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
+            $table->boolean('status')->nullable(); // Adding the status column with a default value of true
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

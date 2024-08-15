@@ -24,15 +24,19 @@ class KategoriController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'deskripsi' => 'nullable|string', // Make deskripsi nullable
+            'status' => 'nullable|boolean' // Add status validation
         ]);
 
         try {
+            // Create a new Kategori entry
             Kategori::create([
                 'nama_kategori' => $request->nama_kategori,
                 'deskripsi' => $request->deskripsi,
+                'status' => $request->has('status') ? true : false, // Handle status
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
             ]);
@@ -45,18 +49,25 @@ class KategoriController extends Controller
         }
     }
 
+
     public function update(Request $request, $id)
     {
+        // Validate the request
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
+            'deskripsi' => 'nullable|string', // Make deskripsi nullable
+            'status' => 'nullable|boolean' // Add status validation
         ]);
 
         try {
+            // Find the existing Kategori
             $kategori = Kategori::findOrFail($id);
+
+            // Update the Kategori entry
             $kategori->update([
                 'nama_kategori' => $request->nama_kategori,
                 'deskripsi' => $request->deskripsi,
+                'status' => $request->has('status') ? true : false, // Handle status
                 'updated_by' => Auth::id(),
             ]);
 
@@ -67,6 +78,7 @@ class KategoriController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
 
 
     public function destroy($id)

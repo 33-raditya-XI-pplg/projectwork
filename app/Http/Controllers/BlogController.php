@@ -33,6 +33,7 @@ class BlogController extends Controller
             'judul' => 'required|string|max:255',
             'body' => 'required|string',
             'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'status' => 'nullable|boolean', // Add validation for status
         ]);
 
         $data = $request->all();
@@ -51,6 +52,9 @@ class BlogController extends Controller
             $data['photo'] = $filename;
         }
 
+        // Ensure status is set (default to false if not provided)
+        $data['status'] = $request->has('status') ? $request->status : false;
+
         // Create blog entry
         Blog::create($data);
 
@@ -61,6 +65,8 @@ class BlogController extends Controller
 
 
 
+
+
     public function update(Request $request, $id) {
         // Validate the request
         $request->validate([
@@ -68,6 +74,7 @@ class BlogController extends Controller
             'judul' => 'required|string|max:255',
             'body' => 'required|string',
             'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'status' => 'nullable|boolean', // Add validation for status
         ]);
 
         $blog = Blog::findOrFail($id);
@@ -93,12 +100,16 @@ class BlogController extends Controller
             $data['photo'] = $filename;
         }
 
+        // Ensure status is set (default to false if not provided)
+        $data['status'] = $request->has('status') ? $request->status : false;
+
         $blog->update($data);
 
         Alert::success('Berhasil Diperbarui!', 'Data berhasil diperbarui.');
 
         return redirect()->back();
     }
+
 
 
 

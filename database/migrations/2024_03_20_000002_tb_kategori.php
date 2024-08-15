@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id('id_kategori');
             $table->string('nama_kategori');
             $table->text('deskripsi')->nullable();
+            $table->boolean('status')->nullable(); // Adding the status column with nullable property
 
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

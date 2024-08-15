@@ -10,20 +10,22 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-    {
-        Schema::create('tb_faq', function (Blueprint $table) {
-            $table->id('id_faq');
-            // Foreign Key
-            $table->foreignId('page_id')->constrained('tb_page', 'id_page');
+{
+    Schema::create('tb_faq', function (Blueprint $table) {
+        $table->id('id_faq');
+        // Foreign Key
+        $table->foreignId('page_id')->constrained('tb_page', 'id_page');
 
-            $table->string('pertanyaan');
-            $table->string('jawaban');
-            
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
-            $table->timestamps();
-        });
-    }
+        $table->string('pertanyaan');
+        $table->string('jawaban');
+
+        $table->integer('created_by')->nullable();
+        $table->integer('updated_by')->nullable();
+        $table->string('status')->nullable(); // Add this line
+        $table->timestamps();
+    });
+}
+
 
     /**
      * Reverse the migrations.

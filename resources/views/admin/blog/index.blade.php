@@ -62,9 +62,9 @@
                                 </td>
                                 <td>
                                     <button type="button" class="btn rounded-3
-                                        {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                        {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
                                         disabled>
-                                        {{ $row->status == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                                        {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                     </button>
                                 </td>
                                 <td>
@@ -88,6 +88,7 @@
                         @endforeach
                     </tbody>
                 </table>
+
 
             </div>
         </div>
@@ -131,6 +132,7 @@
                 <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
                         <select class="form-select" name="page_id" id="page_id" aria-label="Default select example" required>
@@ -143,6 +145,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="kategori_id" class="form-label">Kategori <span class="text-danger">*</span></label>
                         <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
@@ -157,6 +160,7 @@
                         <label for="judul" class="form-label">Judul <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" name="judul" id="judul" required>
                     </div>
+
                     <div class="mb-3">
                         <label for="photo" class="form-label">Upload Photo <span class="text-danger">*</span></label>
                         <div class="dropzone-wrapper">
@@ -180,6 +184,11 @@
                         <textarea class="form-control ck-editor" id="body" name="body" rows="4"></textarea>
                     </div>
 
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="1">
+                        <label class="form-check-label" for="status">Status Aktif</label>
+                    </div>
+
                     <div class="modal-footer justify-content-end">
                         <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
@@ -192,9 +201,10 @@
 
 
 
+
 @foreach ($blog as $row)
    <!-- Edit Blog Modal -->
-<div class="modal modal-lg fade" id="edit{{ $row->id_blog }}" tabindex="-1" aria-labelledby="edit{{ $row->id_blog }}Label" aria-hidden="true">
+   <div class="modal modal-lg fade" id="edit{{ $row->id_blog }}" tabindex="-1" aria-labelledby="edit{{ $row->id_blog }}Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary-gradient text-white">
@@ -218,6 +228,8 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <!-- Kategori -->
                     <div class="mb-3">
                         <label for="kategori_id" class="form-label">Kategori</label>
                         <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
@@ -270,25 +282,22 @@
                         <textarea class="form-control ck-editor" id="body" name="body" rows="4">{{ $row->body }}</textarea>
                     </div>
 
-                    <!-- Category -->
-
-
                     <!-- Status & Buttons -->
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                        <label class="form-check-label" for="status">Aktif</label>
+                    </div>
+
                     <div class="modal-footer justify-content-between mx-3">
-                        <div class="form-check form-switch">
-                            <label for="status" class="me-3">Status </label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="Publish" {{ $row->status == 'Publish' ? 'checked' : '' }}>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                        </div>
+                        <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
 

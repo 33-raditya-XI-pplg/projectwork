@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('tb_slider', function (Blueprint $table) {
             $table->bigIncrements('id_slider');
-            // foreign key
+            // Foreign key
             $table->foreignId('page_id')->constrained('tb_page', 'id_page');
             $table->string('title', 255);
             $table->text('description')->nullable();
             $table->string('image_url', 255);
             $table->integer('position');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->boolean('status')->nullable(); // Updated to boolean and nullable
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

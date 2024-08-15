@@ -25,6 +25,7 @@
                 <th>Page Id</th>
                 <th>Pertanyaan</th>
                 <th>Jawaban</th>
+                <th>Status</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -35,6 +36,13 @@
                     <td>{{ \App\Models\Page::find($row->page_id)->nama_page }}</td>
                     <td>{{ $row->pertanyaan }}</td>
                     <td>{{ $row->jawaban }}</td>
+                    <td>
+                        <button type="button" class="btn rounded-3
+                            {{ $row->status === 'true' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                            disabled>
+                            {{ $row->status === 'true' ? 'Aktif' : 'Nonaktif' }}
+                        </button>
+                    </td>
                     <td>
                         <div class="dropdown">
                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton{{ $row->id_faq }}" data-bs-toggle="dropdown" aria-expanded="false">
@@ -93,7 +101,7 @@
                                         <textarea class="form-control" id="jawaban" name="jawaban" rows="4" required>{{ $row->jawaban }}</textarea>
                                     </div>
                                     <div class="mb-3 form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="status{{ $row->id_faq }}" name="status" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>
+                                        <input class="form-check-input" type="checkbox" id="status{{ $row->id_faq }}" name="status" value="true" {{ $row->status === 'true' ? 'checked' : '' }}>
                                         <label class="form-check-label" for="status{{ $row->id_faq }}">Status</label>
                                     </div>
                                     <div class="modal-footer">
@@ -109,6 +117,7 @@
             @endforeach
         </tbody>
     </table>
+
 </div>
 
 <!-- Insert Modal -->
@@ -134,8 +143,6 @@
                         </select>
                     </div>
 
-
-
                     <div class="mb-3">
                         <label for="pertanyaan" class="form-label">Question <span class="text-danger">*</span></label>
                         <textarea class="form-control" name="pertanyaan" id="pertanyaan" rows="4" required></textarea>
@@ -147,20 +154,20 @@
                     </div>
 
                     <div class="mb-3 form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="status" name="status" value="Aktif">
-                        <label class="form-check-label" for="status">Status</label>
+                        <input class="form-check-input" type="checkbox" id="status" name="status" value="true">
+                        <label class="form-check-label" for="status">Active</label>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Simpan</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Save</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
 </div>
+
 <!-- End of Insert Modal -->
 
 <!-- FAQ Accordion -->
