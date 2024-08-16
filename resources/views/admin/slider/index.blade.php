@@ -186,7 +186,8 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
+                            </small>
                         </div>
                         <div id="image_error"></div>
                     </div>
@@ -256,7 +257,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $row->description) }}</textarea>
+                        <textarea class="form-control ck-editor" id="description" name="description" rows="3">{{ old('description', $row->description) }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label for="image_file_edit" class="form-label">Image</label>
@@ -393,6 +394,31 @@
     </script>
 
     @endif
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menghapus',
+            text: "{{ session('error') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: "{{ session('success') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
 @endpush
 
 

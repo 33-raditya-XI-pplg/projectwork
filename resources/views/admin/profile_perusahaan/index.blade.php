@@ -271,7 +271,7 @@
                                     <p>Choose an image file or drag it here.</p>
                                 </div>
                                 <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi"
-                                    accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+                                    accept=".png, .jpg, .jpeg">
 
                                 <!-- Image preview area -->
                                 <div id="image_preview" class="mt-3"
@@ -285,6 +285,34 @@
                             </div>
                             <div id="image_error"></div>
                         </div>
+
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var fileInput = document.getElementById('path_struktur_organisasi');
+                            var previewImage = document.getElementById('preview_image');
+                            var imagePreviewContainer = document.getElementById('image_preview');
+
+                            fileInput.addEventListener('change', function(event) {
+                                var file = event.target.files[0];
+                                if (file) {
+                                    var reader = new FileReader();
+
+                                    reader.onload = function(e) {
+                                        // Set the src of the preview image
+                                        previewImage.src = e.target.result;
+                                        previewImage.style.display = 'block'; // Show the preview image
+                                    };
+
+                                    reader.readAsDataURL(file);
+                                } else {
+                                    // Hide the preview image if no file is selected
+                                    previewImage.style.display = 'none';
+                                }
+                            });
+                        });
+                        </script>
+
+
 
                         <div class="mb-3">
                             <label for="visi" class="form-label">Visi</label>
@@ -339,17 +367,9 @@
         });
     }
 
-    function previewImage(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('preview_image').src = e.target.result;
-            document.getElementById('image_preview').style.display = 'flex';
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    }
+
+
+
 
     function previewImageEdit(event) {
         const file = event.target.files[0];
@@ -382,6 +402,9 @@
             });
         });
     });
+
+
+
 </script>
 @endpush
 

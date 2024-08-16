@@ -124,8 +124,8 @@
         </div>
     </div>
 
-    {{-- Insert Modal --}}
-    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
+     {{-- Insert Modal --}}
+     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
@@ -179,7 +179,8 @@
 
                         <div class="mb-3">
                             <label for="isi_testimoni" class="form-label">Isi Testimoni <span class="text-danger">*</span></label>
-                            <textarea class="form-control" style="height:150px" name="isi_testimoni" placeholder="Isi Testimoni" required></textarea>
+                            <textarea class="form-control ck-editor" id="isi_testimoni" name="isi_testimoni" rows="3"></textarea>
+                            <span class="form-text text-danger">Harap masukkan minimal 3 kalimat.</span>
                         </div>
 
                         <div class="mb-3">

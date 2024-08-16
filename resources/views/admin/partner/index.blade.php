@@ -230,8 +230,8 @@
                             <input class="form-check-input" type="checkbox" id="status_partner" name="status_partner" value="1" checked>
                         </div>
                     </div>
-                    <div>
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                     </div>
                 </form>
@@ -347,10 +347,11 @@
 
 
                         </div>
-                        <div class="text-right">
-                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                         </div>
+
 
                     </form>
 

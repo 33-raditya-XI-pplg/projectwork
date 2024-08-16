@@ -24,62 +24,77 @@ class FaqController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'page_id' => 'required|integer',
-            'pertanyaan' => 'required|string|max:255',
-            'jawaban' => 'nullable|string',
-            'status' => 'nullable|string', // Add validation for status
-        ], [
-            'page_id.required' => 'Page ID wajib diisi.',
-            'page_id.integer' => 'Page ID harus berupa angka.',
-            'pertanyaan.required' => 'Pertanyaan wajib diisi.',
-            'pertanyaan.max' => 'Pertanyaan tidak boleh lebih dari 255 karakter.',
-            'status.string' => 'Status harus berupa string.',
-        ]);
+{
+    // Validasi data request
+    $request->validate([
+        'page_id' => 'required|integer',
+        'pertanyaan' => 'required|string|max:255',
+        'jawaban' => 'nullable|string',
+        'status' => 'nullable|string', // Tambahkan validasi untuk status jika diperlukan
+    ], [
+        'page_id.required' => 'Page ID wajib diisi.',
+        'page_id.integer' => 'Page ID harus berupa angka.',
+        'pertanyaan.required' => 'Pertanyaan wajib diisi.',
+        'pertanyaan.max' => 'Pertanyaan tidak boleh lebih dari 255 karakter.',
+        'status.string' => 'Status harus berupa string.',
+    ]);
 
-        Faq::create([
-            'page_id' => $request->page_id,
-            'pertanyaan' => $request->pertanyaan,
-            'jawaban' => $request->jawaban,
-            'status' => $request->status, // Include status
-            'created_by' => Auth::id(),
+    // Bersihkan tag <p> dari pertanyaan dan jawaban
+    $cleanPertanyaan = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->pertanyaan);
+    $cleanJawaban = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->jawaban);
+
+    // Simpan data FAQ
+    Faq::create([
+        'page_id' => $request->page_id,
+        'pertanyaan' => $cleanPertanyaan,
+        'jawaban' => $cleanJawaban,
+        'status' => $request->status, // Sertakan status
+        'created_by' => Auth::id(),
+        'updated_by' => Auth::id(),
+    ]);
+
+    Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
+    return redirect()->back();
+}
+
+
+public function update(Request $request, $id)
+{
+    // Validasi data request
+    $request->validate([
+        'pertanyaan' => 'required|string|max:255',
+        'jawaban' => 'nullable|string',
+        'status' => 'nullable|string', // Tambahkan validasi untuk status
+    ], [
+        'pertanyaan.required' => 'Pertanyaan wajib diisi.',
+        'pertanyaan.max' => 'Pertanyaan tidak boleh lebih dari 255 karakter.',
+        'status.string' => 'Status harus berupa string.',
+    ]);
+
+    try {
+        // Temukan FAQ berdasarkan ID
+        $faq = Faq::findOrFail($id);
+
+        // Bersihkan tag <p> dari pertanyaan dan jawaban
+        $cleanPertanyaan = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->pertanyaan);
+        $cleanJawaban = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->jawaban);
+
+        // Perbarui data FAQ
+        $faq->update([
+            'pertanyaan' => $cleanPertanyaan,
+            'jawaban' => $cleanJawaban,
+            'status' => $request->status, // Sertakan status
             'updated_by' => Auth::id(),
         ]);
 
-        Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
+        Alert::success('Berhasil Diperbarui!', 'Data berhasil diubah.');
         return redirect()->back();
+    } catch (\Exception $e) {
+        Alert::error('Gagal Memperbarui!', 'Terjadi kesalahan saat memperbarui data.');
+        return redirect()->back()->withErrors(['error' => $e->getMessage()]);
     }
+}
 
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'pertanyaan' => 'required|string|max:255',
-            'jawaban' => 'nullable|string',
-            'status' => 'nullable|string', // Add validation for status
-        ], [
-            'pertanyaan.required' => 'Pertanyaan wajib diisi.',
-            'pertanyaan.max' => 'Pertanyaan tidak boleh lebih dari 255 karakter.',
-            'status.string' => 'Status harus berupa string.',
-        ]);
-
-        try {
-            $faq = Faq::findOrFail($id);
-            $faq->update([
-                'pertanyaan' => $request->pertanyaan,
-                'jawaban' => $request->jawaban,
-                'status' => $request->status, // Include status
-                'updated_by' => Auth::id(),
-            ]);
-
-            Alert::success('Berhasil Diperbarui!', 'Data berhasil diubah.');
-            return redirect()->back();
-        } catch (\Exception $e) {
-            Alert::error('Gagal Memperbarui!', 'Terjadi kesalahan saat memperbarui data.');
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
-    }
 
 
     public function destroy($id)

@@ -190,13 +190,17 @@
                                                     </select>
                                                 </div>
 
-                                                <button type="submit" class="btn btn-primary btn-block">Update</button>
+
                                             </form>
                                         </div>
                                         <!-- Modal Footer -->
                                         <div class="modal-footer bg-light">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <div class="d-flex justify-content-end w-100">
+                                                <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success">Update</button>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +303,8 @@
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
+                                </small>
                             </div>
                             <div id="image_error"></div>
                         </div>

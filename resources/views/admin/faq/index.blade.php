@@ -95,12 +95,12 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="pertanyaan" class="form-label">Pertanyaan</label>
-                                        <textarea class="form-control" name="pertanyaan" id="pertanyaan" rows="4" required>{{ $row->pertanyaan }}</textarea>
+                                        <textarea class="form-control ck-editor" name="pertanyaan" id="pertanyaan" rows="4" required>{{ $row->pertanyaan }}</textarea>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="jawaban" class="form-label">Jawaban</label>
-                                        <textarea class="form-control" id="jawaban" name="jawaban" rows="4" required>{{ $row->jawaban }}</textarea>
+                                        <textarea class="form-control ck-editor" id="jawaban" name="jawaban" rows="4" required>{{ $row->jawaban }}</textarea>
                                     </div>
                                     <div class="modal-footer justify-content-between mx-3">
                                     <div class="mb-3 form-check form-switch">
@@ -121,6 +121,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 </div>
 
 <!-- Insert Modal -->
@@ -147,13 +148,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="pertanyaan" class="form-label">Pertanyaan <span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="pertanyaan" id="pertanyaan" rows="4" required></textarea>
+                        <label for="pertanyaan" class="form-label">Pertanyaan<span class="text-danger">*</span></label>
+                        <textarea class="form-control ck-editor" id="pertanyaan" name="pertanyaan" rows="3"></textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label for="jawaban" class="form-label">Jawaban <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="jawaban" name="jawaban" rows="4" required></textarea>
+                        <label for="jawaban" class="form-label">Jawaban<span class="text-danger">*</span></label>
+                        <textarea class="form-control ck-editor" id="jawaban" name="jawaban" rows="3"></textarea>
                     </div>
 
                     <div class="mb-3 form-check form-switch">
@@ -226,6 +227,31 @@
         transform: rotateY(0deg);
     }
 </style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menghapus',
+            text: "{{ session('error') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: "{{ session('success') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
 
 
 @endsection

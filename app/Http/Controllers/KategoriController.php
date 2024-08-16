@@ -23,61 +23,69 @@ class KategoriController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validate the request
-        $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string', // Make deskripsi nullable
-            'status' => 'nullable|boolean' // Add status validation
+{
+    // Validasi request
+    $request->validate([
+        'nama_kategori' => 'required|string|max:255',
+        'deskripsi' => 'nullable|string', // Buat deskripsi nullable
+        'status' => 'nullable|boolean' // Tambahkan validasi status
+    ]);
+
+    // Bersihkan deskripsi untuk menghapus tag <p> yang tidak diinginkan
+    $cleanDeskripsi = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->deskripsi);
+
+    try {
+        // Buat entri Kategori baru
+        Kategori::create([
+            'nama_kategori' => $request->nama_kategori,
+            'deskripsi' => $cleanDeskripsi, // Gunakan deskripsi yang sudah dibersihkan
+            'status' => $request->has('status') ? true : false, // Tangani status
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
-        try {
-            // Create a new Kategori entry
-            Kategori::create([
-                'nama_kategori' => $request->nama_kategori,
-                'deskripsi' => $request->deskripsi,
-                'status' => $request->has('status') ? true : false, // Handle status
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-            ]);
-
-            Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
-            return redirect()->back();
-        } catch (\Exception $e) {
-            Alert::error('Gagal Menyimpan!', 'Terjadi kesalahan saat menyimpan data.');
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
+        return redirect()->back();
+    } catch (\Exception $e) {
+        Alert::error('Gagal Menyimpan!', 'Terjadi kesalahan saat menyimpan data.');
+        return redirect()->back()->withErrors(['error' => $e->getMessage()]);
     }
+}
 
 
-    public function update(Request $request, $id)
-    {
-        // Validate the request
-        $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string', // Make deskripsi nullable
-            'status' => 'nullable|boolean' // Add status validation
+
+public function update(Request $request, $id)
+{
+    // Validasi request
+    $request->validate([
+        'nama_kategori' => 'required|string|max:255',
+        'deskripsi' => 'nullable|string', // Buat deskripsi nullable
+        'status' => 'nullable|boolean' // Tambahkan validasi status
+    ]);
+
+    // Bersihkan deskripsi untuk menghapus tag <p> yang tidak diinginkan
+    $cleanDeskripsi = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->deskripsi);
+
+    try {
+        // Temukan Kategori yang ada
+        $kategori = Kategori::findOrFail($id);
+
+        // Perbarui entri Kategori
+        $kategori->update([
+            'nama_kategori' => $request->nama_kategori,
+            'deskripsi' => $cleanDeskripsi, // Gunakan deskripsi yang sudah dibersihkan
+            'status' => $request->has('status') ? true : false, // Tangani status
+            'updated_by' => Auth::id(),
         ]);
 
-        try {
-            // Find the existing Kategori
-            $kategori = Kategori::findOrFail($id);
-
-            // Update the Kategori entry
-            $kategori->update([
-                'nama_kategori' => $request->nama_kategori,
-                'deskripsi' => $request->deskripsi,
-                'status' => $request->has('status') ? true : false, // Handle status
-                'updated_by' => Auth::id(),
-            ]);
-
-            Alert::success('Berhasil Diperbarui!', 'Data berhasil diubah.');
-            return redirect()->back();
-        } catch (\Exception $e) {
-            Alert::error('Gagal Memperbarui!', 'Terjadi kesalahan saat memperbarui data.');
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+        Alert::success('Berhasil Diperbarui!', 'Data berhasil diubah.');
+        return redirect()->back();
+    } catch (\Exception $e) {
+        Alert::error('Gagal Memperbarui!', 'Terjadi kesalahan saat memperbarui data.');
+        return redirect()->back()->withErrors(['error' => $e->getMessage()]);
     }
+}
+
 
 
 

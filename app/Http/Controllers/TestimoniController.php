@@ -21,45 +21,57 @@ class TestimoniController extends Controller
 
 
     public function store(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'page_id' => 'required|integer',
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'tanggal' => 'required|date',
-            'rating' => 'required|integer|min:1|max:5',
-            'isi_testimoni' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'status' => 'nullable|boolean',
-            'created_by' => 'required|integer',
-        ]);
+{
+    // Validasi data request
+    $request->validate([
+        'page_id' => 'required|integer',
+        'nama' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'tanggal' => 'required|date',
+        'rating' => 'required|integer|min:1|max:5',
+        'isi_testimoni' => 'required|string',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        'status' => 'nullable|boolean',
+        'created_by' => 'required|integer',
+    ]);
 
-        // Handle the photo upload
-        $photoPath = null;
-        if ($request->hasFile('photo')) {
-            // Store the photo in the 'testimoni_photos' directory
-            $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
-        }
+    // Tangani unggahan foto
+    $photoPath = null;
+    if ($request->hasFile('photo')) {
+        // Simpan foto di direktori 'testimoni_photos'
+        $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
+    }
 
-        // Create a new Testimoni entry
+    // Bersihkan isi_testimoni untuk menghapus tag <p> yang tidak diinginkan
+    $cleanIsiTestimoni = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->isi_testimoni);
+
+    try {
+        // Buat entri Testimoni baru
         Testimoni::create([
             'page_id' => $request->page_id,
             'nama' => $request->nama,
             'email' => $request->email,
             'tanggal' => $request->tanggal,
             'rating' => $request->rating,
-            'isi_testimoni' => $request->isi_testimoni,
+            'isi_testimoni' => $cleanIsiTestimoni, // Gunakan isi_testimoni yang sudah dibersihkan
             'photo' => $photoPath,
-            'status' => $request->status, // Use the status field from request
+            'status' => $request->has('status') ? true : false, // Tangani status
             'created_by' => $request->created_by,
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Testimoni created successfully.'
+            'message' => 'Testimoni berhasil dibuat.'
         ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal membuat testimoni.',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
 
 
 

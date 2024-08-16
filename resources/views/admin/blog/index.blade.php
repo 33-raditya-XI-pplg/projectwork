@@ -95,6 +95,7 @@
         </div>
     </div>
 </div>
+</div>
 
 <div class="container my-5">
     <div class="row">
@@ -177,7 +178,10 @@
                                 <img id="preview_image" src="" alt="Image preview"
                                     style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
                             </div>
+
                         </div>
+                        <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
+                        </small>
                     </div>
 
                     <div class="mb-3">
@@ -353,6 +357,30 @@
 });
 
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menghapus',
+            text: "{{ session('error') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: "{{ session('success') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
 
 
 @endforeach

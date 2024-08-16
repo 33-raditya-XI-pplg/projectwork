@@ -128,7 +128,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="deskripsi_{{ $page->id_page }}" class="form-label">Deskripsi <span class="text-danger">*</span></label>
-                                            <textarea class="form-control" id="deskripsi_{{ $page->id_page }}" name="deskripsi" required>{{ $page->deskripsi }}</textarea>
+                                            <textarea class="form-control ck-editor" id="deskripsi_{{ $page->id_page }}" name="deskripsi" required>{{ $page->deskripsi }}</textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="pindah_halaman_{{ $page->id_page }}" class="form-label">Link Halaman</label>
