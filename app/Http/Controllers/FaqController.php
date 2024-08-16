@@ -97,33 +97,30 @@ public function update(Request $request, $id)
 
 
 
-    public function destroy($id)
-    {
-        $faq = Faq::findOrFail($id);
+public function destroy($id)
+{
+    $faq = Faq::findOrFail($id);
 
-        if ($faq->level == 'Faq') {
-            $checkChildID = DB::table('tb_faq')
-                            ->where('user_id', $id)
-                            ->count();
+    if ($faq->level == 'Faq') {
+        $checkChildID = DB::table('tb_faq')
+                        ->where('user_id', $id)
+                        ->count();
 
-            if ($checkChildID > 0) {
-                Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
-                return redirect()->back();
-            }
+        if ($checkChildID > 0) {
+            Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+            return redirect()->back();
         }
-
-        if (!empty($faq->path_foto)) {
-            if( file_exists(public_path($faq->path_foto)) ) {
-                unlink(public_path($faq->path_foto));
-                $faq->delete();
-            } else {
-                $faq->delete();
-            }
-        } else {
-            $faq->delete();
-        }
-
-        toast('Faq berhasil dihapus.', 'success');
-        return redirect()->back();
     }
+
+    if (!empty($faq->path_foto)) {
+        if (file_exists(public_path($faq->path_foto))) {
+            unlink(public_path($faq->path_foto));
+        }
+    }
+
+    $faq->delete();
+
+    Alert::success('Berhasil Menghapus!', 'FAQ berhasil dihapus.');
+    return redirect()->back();
+}
 }

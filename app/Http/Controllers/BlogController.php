@@ -119,7 +119,8 @@ class BlogController extends Controller
         return $this->update($request, $id);
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $blog = Blog::find($id);
 
         if ($blog) {
@@ -129,10 +130,10 @@ class BlogController extends Controller
             }
 
             $blog->delete();
-            toast('Blog terhapus!', 'success');
+            Alert::success('Success', 'Blog terhapus!');
         } else {
             Log::error("Blog not found with ID: " . $id);
-            toast('Blog not found!', 'error');
+            Alert::error('Error', 'Blog not found!');
         }
 
         return redirect()->back();

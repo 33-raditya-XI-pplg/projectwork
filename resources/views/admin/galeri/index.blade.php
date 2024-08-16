@@ -189,16 +189,17 @@
                                                         <option value="video" {{ $item->kategori == 'video' ? 'selected' : '' }}>Video</option>
                                                     </select>
                                                 </div>
+                                                <div class="d-flex justify-content-end w-100">
+                                                    <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Update</button>
+                                                </div>
 
 
                                             </form>
                                         </div>
                                         <!-- Modal Footer -->
                                         <div class="modal-footer bg-light">
-                                            <div class="d-flex justify-content-end w-100">
-                                                <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-success">Update</button>
-                                            </div>
+
                                         </div>
 
                                     </div>

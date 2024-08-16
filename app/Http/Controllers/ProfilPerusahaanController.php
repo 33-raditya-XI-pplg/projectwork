@@ -23,7 +23,6 @@ class ProfilPerusahaanController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi data yang diterima
         $data = $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'tentang_kami' => 'required|string',
@@ -31,36 +30,27 @@ class ProfilPerusahaanController extends Controller
             'visi' => 'required|string',
             'misi' => 'required|string',
             'sejarah' => 'required|string',
-            'status' => 'nullable|boolean', // Validasi status sebagai boolean
+            'status' => 'nullable|boolean',
         ]);
 
-        // Sanitize fields by stripping HTML tags
+        // Sanitize fields
         $data['tentang_kami'] = strip_tags($data['tentang_kami']);
         $data['visi'] = strip_tags($data['visi']);
         $data['misi'] = strip_tags($data['misi']);
         $data['sejarah'] = strip_tags($data['sejarah']);
-
         $data['status'] = $request->has('status') ? true : false;
 
-        // Jika ada file gambar yang di-upload
+        // Handle image upload
         if ($request->hasFile('path_struktur_organisasi')) {
-            // Menyimpan gambar dan mendapatkan path-nya
             $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
             $data['path_struktur_organisasi'] = $imagePath;
         }
 
-        // Menyimpan data ke database
         Profil_Perusahaan::create($data);
 
-        // Redirect dengan pesan sukses
-        return redirect()->route('profil.index')->with('success', 'Data berhasil disimpan');
+        Alert::success('Success', 'Profil Perusahaan berhasil ditambahkan!');
+        return redirect()->route('profil.index');
     }
-
-
-
-
-
-
 
     public function update(Request $request, $id)
     {
@@ -69,22 +59,21 @@ class ProfilPerusahaanController extends Controller
         $data = $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'tentang_kami' => 'required|string',
-            'path_struktur_organisasi' => 'nullable|image',
+            'path_struktur_organisasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'visi' => 'required|string',
             'misi' => 'required|string',
             'sejarah' => 'required|string',
-            'status' => 'nullable|boolean', // Validasi status sebagai boolean
+            'status' => 'nullable|boolean',
         ]);
 
-        // Sanitize fields by stripping HTML tags
+        // Sanitize fields
         $data['tentang_kami'] = strip_tags($data['tentang_kami']);
         $data['visi'] = strip_tags($data['visi']);
         $data['misi'] = strip_tags($data['misi']);
         $data['sejarah'] = strip_tags($data['sejarah']);
-
-        // Handle status
         $data['status'] = $request->has('status') ? true : false;
 
+        // Handle image upload
         if ($request->hasFile('path_struktur_organisasi')) {
             // Delete old image if exists
             if ($profil->path_struktur_organisasi) {
@@ -97,7 +86,8 @@ class ProfilPerusahaanController extends Controller
 
         $profil->update($data);
 
-        return redirect()->route('profil.index')->with('success', 'Data berhasil diperbarui');
+        Alert::success('Success', 'Profil Perusahaan berhasil diperbarui!');
+        return redirect()->route('profil.index');
     }
 
 
@@ -110,17 +100,15 @@ class ProfilPerusahaanController extends Controller
 
 
 
-
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $profil = Profil_Perusahaan::find($id);
 
         if ($profil) {
             $bannerPath = public_path($profil->path_banner);
 
-
             if (is_file($bannerPath)) {
                 try {
-
                     if (unlink($bannerPath)) {
                         Log::info("Successfully deleted file: " . $bannerPath);
                     } else {
@@ -133,12 +121,11 @@ class ProfilPerusahaanController extends Controller
                 Log::warning("Path is not a file or does not exist: " . $bannerPath);
             }
 
-
             $profil->delete();
-            toast('Profil terhapus!', 'success');
+            Alert::success('Berhasil Menghapus!', 'Profil terhapus!');
         } else {
-            Log::error("Blog not found with ID: " . $id);
-            toast('Profil not found!', 'error');
+            Log::error("Profil not found with ID: " . $id);
+            Alert::error('Gagal Menghapus!', 'Profil not found!');
         }
 
         return redirect()->back();

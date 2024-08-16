@@ -228,15 +228,16 @@
                                 <label for="deskripsi">Description</label>
                                 <textarea name="deskripsi" class="form-control" placeholder="Enter description" required>{{ $video->deskripsi }}</textarea>
                             </div>
+                            <div class="modal-footer bg-light">
+                                <div class="d-flex justify-content-end w-100">
+                                    <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Update Video</button>
+                                </div>
+                            </div>
 
                         </form>
                     </div>
-                    <div class="modal-footer bg-light">
-                        <div class="d-flex justify-content-end w-100">
-                            <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Update Video</button>
-                        </div>
-                    </div>
+
 
                 </div>
             </div>

@@ -364,7 +364,7 @@
     @push('script')
 
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     @if (session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -376,7 +376,7 @@
             });
         });
     </script>
-@endif
+@endif --}}
 
 @if ($errors->any())
     <script>
@@ -392,7 +392,29 @@
 @endif
 @endpush
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+@if(session('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Menghapus',
+            text: "{{ session('error') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: "{{ session('success') }}",
+            showConfirmButton: true
+        });
+    </script>
+@endif
 @endforeach
 
 @endsection
