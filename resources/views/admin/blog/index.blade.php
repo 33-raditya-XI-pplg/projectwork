@@ -1,6 +1,10 @@
 @extends('layouts.panel.index')
 @section('title', 'Blog')
 @section('content')
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
   .blog-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -74,16 +78,41 @@
                                             <i class="fa-solid fa-bars"></i>
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_blog }}">
-                                            <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}"><i class="fa-regular fa-pen-to-square"></i> Edit</a></li>
                                             <li>
-                                                <form action="{{ route('blog.destroy', $row->id_blog) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form id="deleteForm{{ $row->id_blog }}" action="{{ route('blog.destroy', $row->id_blog) }}" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger"><i class="fa-regular fa-trash-can pe-none"></i> Delete</button>
+                                                    <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_blog }}')">
+                                                        <i class="fa-regular fa-trash-can pe-none"></i> Delete
+                                                    </button>
                                                 </form>
                                             </li>
                                         </ul>
                                     </div>
+
+                                    <script>
+                                        function confirmDelete(blogId) {
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "You won't be able to revert this!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, delete it!',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    document.getElementById('deleteForm' + blogId).submit();
+                                                }
+                                            });
+                                        }
+                                    </script>
                                 </td>
                             </tr>
                         @endforeach

@@ -7,6 +7,12 @@
 @push('style')
 
 
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 
 <style>
 
@@ -179,12 +185,32 @@
                         <!-- Edit and Delete Buttons -->
                         <div class="button-container mt-2">
                             <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editVideoModal{{ $video->id_galeri }}">Edit</a>
-                            <form action="{{ route('video.destroy', $video->id_galeri) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <form id="deleteForm{{ $video->id_galeri }}" action="{{ route('video.destroy', $video->id_galeri) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="confirmDelete('{{ $video->id_galeri }}')">
+                                    Delete
+                                </button>
                             </form>
                         </div>
+                        <script>
+                            function confirmDelete(videoId) {
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!',
+                                    cancelButtonText: 'Cancel'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById('deleteForm' + videoId).submit();
+                                    }
+                                });
+                            }
+                        </script>
                     </div>
                 @empty
                     <p class="text-center">No videos found</p>

@@ -4,6 +4,10 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @push('style')
 
@@ -88,29 +92,45 @@
                                     <td>
                                         <div class="dropdown">
                                             <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                               id="dropdownMenuButton{{ $row->id_testimoni }}" data-bs-toggle="dropdown"
-                                               aria-expanded="false">
+                                                id="dropdownMenuButton{{ $row->id_testimoni }}" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa-solid fa-bars"></i>
                                             </a>
-                                            <ul class="dropdown-menu"
-                                                aria-labelledby="dropdownMenuButton{{ $row->id_testimoni }}">
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_testimoni }}">
                                                 <li>
-                                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#edit{{ $row->id_testimoni }}"><i
-                                                            class="fa-regular fa-pen-to-square"></i> Edit</a>
+                                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_testimoni }}">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                                                    </a>
                                                 </li>
                                                 <li>
-                                                    <form action="{{ route('testimoni.destroy', $row->id_testimoni) }}"
-                                                          method="POST" onsubmit="return confirm('Are you sure?');">
+                                                    <form id="deleteForm{{ $row->id_testimoni }}" action="{{ route('testimoni.destroy', $row->id_testimoni) }}" method="POST" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger">
+                                                        <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_testimoni }}')">
                                                             <i class="fa-regular fa-trash-can pe-none"></i> Delete
                                                         </button>
                                                     </form>
                                                 </li>
                                             </ul>
                                         </div>
+
+                                        <script>
+                                            function confirmDelete(testimoniId) {
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "You won't be able to revert this!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, delete it!',
+                                                    cancelButtonText: 'Cancel'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('deleteForm' + testimoniId).submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
                                     </td>
                                 </tr>
                             @endforeach

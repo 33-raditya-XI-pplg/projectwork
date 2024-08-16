@@ -6,7 +6,10 @@
 
 
 
-
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <div id="pageList" class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <div class="tab-content" id="nav-tabContent">
@@ -56,15 +59,34 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <form action="{{ route('page.destroy', $page->id_page) }}" method="POST" style="display: inline;">
+                                        <form id="deleteForm{{ $page->id_page }}" action="{{ route('page.destroy', $page->id_page) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger" data-confirm-delete="true">
+                                            <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $page->id_page }}')">
                                                 <i class="fa-regular fa-trash-can pe-none"></i> Delete
                                             </button>
                                         </form>
                                     </li>
                                 </ul>
+
+                                <script>
+                                    function confirmDelete(pageId) {
+                                        Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: "You won't be able to revert this!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, delete it!',
+                                            cancelButtonText: 'Cancel'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('deleteForm' + pageId).submit();
+                                            }
+                                        });
+                                    }
+                                </script>
                             </div>
                         </td>
                     </tr>

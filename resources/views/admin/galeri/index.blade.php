@@ -3,6 +3,10 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {{-- <h1>Galeri</h1> --}}
 @push('style')
 
@@ -142,12 +146,32 @@
                                 <div class="desc">{{ $item->deskripsi }}</div>
                                 <div class="button-container">
                                     <a href="#editGaleriModal{{ $item->id_galeri }}" data-bs-toggle="modal" class="btn btn-primary btn-sm">Edit</a>
-                                    <form action="{{ route('galeri.destroy', $item->id_galeri) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?');">
+                                    <form id="deleteForm{{ $item->id_galeri }}" action="{{ route('galeri.destroy', $item->id_galeri) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-primary btn-sm">Delete</button>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="confirmDelete('{{ $item->id_galeri }}')">
+                                            Delete
+                                        </button>
                                     </form>
                                 </div>
+                                <script>
+                                    function confirmDelete(galeriId) {
+                                        Swal.fire({
+                                            title: 'Are you sure?',
+                                            text: "You won't be able to revert this!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Yes, delete it!',
+                                            cancelButtonText: 'Cancel'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('deleteForm' + galeriId).submit();
+                                            }
+                                        });
+                                    }
+                                </script>
                             </div>
 
                             <!-- Edit Image Modal -->

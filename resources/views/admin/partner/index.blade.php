@@ -3,6 +3,11 @@
 @section('content')
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 CSS -->
+
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 {{-- @if (session('success'))
     <div class="alert alert-success">
@@ -97,16 +102,36 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <form action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
+                                                <form id="deleteForm{{ $partner->id_partner }}" action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure you want to delete this partner?');">
+                                                    <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $partner->id_partner }}')">
                                                         <i class="fa-regular fa-trash-can"></i> Delete
                                                     </button>
                                                 </form>
                                             </li>
                                         </ul>
                                     </div>
+
+                                    <script>
+                                        function confirmDelete(partnerId) {
+                                            Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "You won't be able to revert this!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, delete it!',
+                                                cancelButtonText: 'Cancel'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    document.getElementById('deleteForm' + partnerId).submit();
+                                                }
+                                            });
+                                        }
+                                    </script>
+
                                 </td>
                             </tr>
                         @endforeach
@@ -364,6 +389,9 @@
     @push('script')
 
 
+
+
+
     {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     @if (session('success'))
     <script>
@@ -413,6 +441,41 @@
             text: "{{ session('success') }}",
             showConfirmButton: true
         });
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+    // Select all delete buttons inside dropdown menus
+    document.querySelectorAll('.dropdown-item.text-danger').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default behavior of the button
+
+            const form = this.closest('form'); // Find the closest form element
+
+            if (form) {
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: 'Apakah Anda yakin ingin menghapus ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Submit the form if confirmed
+                    }
+                });
+            } else {
+                console.error('No form found for the delete button');
+            }
+        });
+    });
+});
+
+
+
     </script>
 @endif
 @endforeach

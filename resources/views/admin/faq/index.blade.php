@@ -6,6 +6,10 @@
 
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Include SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
@@ -46,7 +50,8 @@
                     </td>
                     <td>
                         <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton{{ $row->id_faq }}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                id="dropdownMenuButton{{ $row->id_faq }}" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa-solid fa-bars"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_faq }}">
@@ -56,16 +61,35 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <form action="{{ route('faq.destroy', $row->id_faq) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus faq ini?');">
+                                    <form id="deleteForm{{ $row->id_faq }}" action="{{ route('faq.destroy', $row->id_faq) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">
+                                        <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_faq }}')">
                                             <i class="fa-regular fa-trash-can"></i> Delete
                                         </button>
                                     </form>
                                 </li>
                             </ul>
                         </div>
+
+                        <script>
+                            function confirmDelete(faqId) {
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!',
+                                    cancelButtonText: 'Cancel'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById('deleteForm' + faqId).submit();
+                                    }
+                                });
+                            }
+                        </script>
                     </td>
                 </tr>
 

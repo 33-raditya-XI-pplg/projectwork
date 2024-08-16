@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use id;
 use App\Models\Page;
 use App\Models\Partner;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Database\QueryException;
+
 
 class PartnerController extends Controller
 {
@@ -170,16 +173,23 @@ class PartnerController extends Controller
      */
     public function destroy(Partner $partner)
     {
-        // Hapus logo dari storage jika ada
-        if ($partner->logo) {
-            Storage::disk('public')->delete($partner->logo);
+        try {
+            // Hapus logo dari storage jika ada
+            if ($partner->logo) {
+                Storage::disk('public')->delete($partner->logo);
+            }
+
+            // Hapus partner
+            $partner->delete();
+
+            // Redirect dengan notifikasi SweetAlert
+            Alert::success('Berhasil Menghapus!', 'Partner berhasil dihapus.');
+        } catch (QueryException $e) {
+            // Redirect dengan notifikasi SweetAlert untuk kesalahan
+            Alert::error('Terjadi Kesalahan!', 'Partner gagal dihapus.');
         }
 
-        // Hapus partner
-        $partner->delete();
-
-        // Redirect dengan notifikasi SweetAlert
-        Alert::success('Berhasil Menghapus!', 'Partner berhasil dihapus.');
         return redirect()->route('partner.index');
     }
+
 }

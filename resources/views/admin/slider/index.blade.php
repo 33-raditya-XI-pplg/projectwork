@@ -14,6 +14,9 @@
 
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
@@ -70,16 +73,35 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <form action="{{ route('slider.destroy', $row->id_slider) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this slider?');">
+                                        <form id="deleteForm{{ $row->id_slider }}" action="{{ route('slider.destroy', $row->id_slider) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger">
+                                            <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_slider }}')">
                                                 <i class="fa-regular fa-trash-can"></i> Delete
                                             </button>
                                         </form>
                                     </li>
                                 </ul>
                             </div>
+
+                            <script>
+                                function confirmDelete(sliderId) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        cancelButtonText: 'Cancel'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('deleteForm' + sliderId).submit();
+                                        }
+                                    });
+                                }
+                            </script>
                         </td>
                     </tr>
                 @endforeach
