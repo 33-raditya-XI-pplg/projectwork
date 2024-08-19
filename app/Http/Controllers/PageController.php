@@ -158,7 +158,4 @@ public function destroy($id)
     return redirect()->back()->with('success', 'Page berhasil dihapus.');
 }
 
-
-
-
 }
