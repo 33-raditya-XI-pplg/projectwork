@@ -20,10 +20,10 @@ class VideoController extends Controller
      */
     public function index()
     {
-        // Fetch all pages
+
         $pages = Page::all();
 
-        // Fetch all videos with category 'video'
+
         $videos = Galeri::where('kategori', 'video')->get();
 
         return view('admin.galeri.indexvideo', compact('videos', 'pages'));

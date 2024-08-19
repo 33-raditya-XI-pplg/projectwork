@@ -32,7 +32,7 @@ class EventController extends Controller
         $evt = Event::find($id);
 
         $skema = Event_Skema::where('event_id', $evt->id_event)->get();
-        
+
         confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
 
         return view('admin.event.rincian-evt', compact('evt', 'skema', 'id'));
@@ -72,15 +72,15 @@ class EventController extends Controller
         if ($request->has('logo')) {
             $banner = $request->file('logo');
             $name  = 'banner_'. $request->nama_event. '.' .$banner->getClientOriginalExtension();
-            unlink(public_path(Event::find($id)->path_banner)); //hapus file
+            unlink(public_path(Event::find($id)->path_banner));
 
-            $stored = $banner->storeAs('public/banner-evt', $name); //simpan
+            $stored = $banner->storeAs('public/banner-evt', $name);
 
             $request->merge([
-                'path_banner' => Storage::url($stored) //input path
+                'path_banner' => Storage::url($stored)
             ]);
         }
-        // dd($request->all());
+
         $evt->update($request->all());
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diubah.');
 

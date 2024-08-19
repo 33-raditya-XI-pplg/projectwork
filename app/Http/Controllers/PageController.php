@@ -18,24 +18,24 @@ class PageController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request
+
         $request->validate([
             'nama_page' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'pindah_halaman' => 'required|string|max:255',
-            'status' => 'nullable|boolean' // Validate status as nullable boolean
+            'status' => 'nullable|boolean'
         ]);
 
         try {
-            // Sanitize the 'deskripsi' field by stripping HTML tags
+
             $sanitizedDeskripsi = strip_tags($request->deskripsi);
 
-            // Create a new Page entry
+
             Page::create([
                 'nama_page' => $request->nama_page,
                 'deskripsi' => $sanitizedDeskripsi,
                 'pindah_halaman' => $request->pindah_halaman,
-                'status' => $request->has('status') ? true : false, // Handle the status field
+                'status' => $request->has('status') ? true : false,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
             ]);
@@ -52,7 +52,7 @@ class PageController extends Controller
             'nama_page' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'pindah_halaman' => 'required|string|max:255',
-            'status' => 'nullable|boolean' // Validate status as nullable boolean
+            'status' => 'nullable|boolean'
         ]);
 
         $page = Page::findOrFail($id);
@@ -60,7 +60,7 @@ class PageController extends Controller
             'nama_page' => $request->nama_page,
             'deskripsi' => strip_tags($request->deskripsi),
             'pindah_halaman' => $request->pindah_halaman,
-            'status' => $request->has('status') ? true : false, // Handle the status field
+            'status' => $request->has('status') ? true : false,
             'updated_by' => Auth::id(),
         ]);
 
@@ -85,10 +85,10 @@ public function destroy($id)
 {
     $page = Page::findOrFail($id);
 
-    // Initialize an empty array to hold messages
+
     $messages = [];
 
-    // Check each relationship and add a message if it's in use
+
     if ($page->partners()->exists()) {
         $messages[] = 'Page ini masih digunakan di halaman Partner.';
     }
@@ -120,39 +120,39 @@ public function destroy($id)
         $messages[] = 'Page ini masih digunakan di halaman FAQ.';
     }
 
-    // If there are any messages, return the first one
+
     if (!empty($messages)) {
         $errorMessage = implode(' ', $messages);
         return redirect()->back()->with('error', $errorMessage);
     }
 
-    // Handle related records in tb_galeri
+
     if ($page->pageGaleri()->exists()) {
-        // Optionally, you can choose to delete or detach related records
-        $page->pageGaleri()->delete(); // Or use detach if you just want to disassociate
+
+        $page->pageGaleri()->delete();
     }
 
-    // Handle related records in tb_profil_perusahaan
+
     if ($page->profilPerusahaan()->exists()) {
-        // Optionally, you can choose to delete or detach related records
-        $page->profilPerusahaan()->delete(); // Or use detach if you just want to disassociate
+
+        $page->profilPerusahaan()->delete();
     }
 
     if ($page->sliders()->exists()) {
-        // Optionally, you can choose to delete or detach related records
-        $page->sliders()->delete(); // Or use detach if you just want to disassociate
+
+        $page->sliders()->delete();
     }
 
     if ($page->testimoni()->exists()) {
-        // Optionally, you can choose to delete or detach related records
-        $page->testimoni()->delete(); // Or use detach if you just want to disassociate
+
+        $page->testimoni()->delete();
     }
 
     if ($page->faqs()->exists()) {
-        $page->faqs()->delete(); // Or use detach if you just want to disassociate
+        $page->faqs()->delete();
     }
 
-    // If not associated, delete the page
+
     $page->delete();
 
     return redirect()->back()->with('success', 'Page berhasil dihapus.');

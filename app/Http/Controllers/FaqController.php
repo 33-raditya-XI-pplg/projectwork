@@ -25,12 +25,12 @@ class FaqController extends Controller
 
     public function store(Request $request)
 {
-    // Validasi data request
+
     $request->validate([
         'page_id' => 'required|integer',
         'pertanyaan' => 'required|string|max:255',
         'jawaban' => 'nullable|string',
-        'status' => 'nullable|string', // Tambahkan validasi untuk status jika diperlukan
+        'status' => 'nullable|string',
     ], [
         'page_id.required' => 'Page ID wajib diisi.',
         'page_id.integer' => 'Page ID harus berupa angka.',
@@ -39,16 +39,16 @@ class FaqController extends Controller
         'status.string' => 'Status harus berupa string.',
     ]);
 
-    // Bersihkan tag <p> dari pertanyaan dan jawaban
+
     $cleanPertanyaan = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->pertanyaan);
     $cleanJawaban = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->jawaban);
 
-    // Simpan data FAQ
+
     Faq::create([
         'page_id' => $request->page_id,
         'pertanyaan' => $cleanPertanyaan,
         'jawaban' => $cleanJawaban,
-        'status' => $request->status, // Sertakan status
+        'status' => $request->status,
         'created_by' => Auth::id(),
         'updated_by' => Auth::id(),
     ]);
@@ -60,11 +60,11 @@ class FaqController extends Controller
 
 public function update(Request $request, $id)
 {
-    // Validasi data request
+
     $request->validate([
         'pertanyaan' => 'required|string|max:255',
         'jawaban' => 'nullable|string',
-        'status' => 'nullable|string', // Tambahkan validasi untuk status
+        'status' => 'nullable|string',
     ], [
         'pertanyaan.required' => 'Pertanyaan wajib diisi.',
         'pertanyaan.max' => 'Pertanyaan tidak boleh lebih dari 255 karakter.',
@@ -72,18 +72,18 @@ public function update(Request $request, $id)
     ]);
 
     try {
-        // Temukan FAQ berdasarkan ID
+
         $faq = Faq::findOrFail($id);
 
-        // Bersihkan tag <p> dari pertanyaan dan jawaban
+
         $cleanPertanyaan = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->pertanyaan);
         $cleanJawaban = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->jawaban);
 
-        // Perbarui data FAQ
+
         $faq->update([
             'pertanyaan' => $cleanPertanyaan,
             'jawaban' => $cleanJawaban,
-            'status' => $request->status, // Sertakan status
+            'status' => $request->status,
             'updated_by' => Auth::id(),
         ]);
 

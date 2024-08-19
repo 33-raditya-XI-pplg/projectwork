@@ -27,19 +27,19 @@ class KategoriController extends Controller
     // Validasi request
     $request->validate([
         'nama_kategori' => 'required|string|max:255',
-        'deskripsi' => 'nullable|string', // Buat deskripsi nullable
-        'status' => 'nullable|boolean' // Tambahkan validasi status
+        'deskripsi' => 'nullable|string',
+        'status' => 'nullable|boolean'
     ]);
 
-    // Bersihkan deskripsi untuk menghapus tag <p> yang tidak diinginkan
+
     $cleanDeskripsi = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->deskripsi);
 
     try {
-        // Buat entri Kategori baru
+
         Kategori::create([
             'nama_kategori' => $request->nama_kategori,
-            'deskripsi' => $cleanDeskripsi, // Gunakan deskripsi yang sudah dibersihkan
-            'status' => $request->has('status') ? true : false, // Tangani status
+            'deskripsi' => $cleanDeskripsi,
+            'status' => $request->has('status') ? true : false,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ]);
@@ -59,22 +59,22 @@ public function update(Request $request, $id)
     // Validasi request
     $request->validate([
         'nama_kategori' => 'required|string|max:255',
-        'deskripsi' => 'nullable|string', // Buat deskripsi nullable
-        'status' => 'nullable|boolean' // Tambahkan validasi status
+        'deskripsi' => 'nullable|string',
+        'status' => 'nullable|boolean'
     ]);
 
-    // Bersihkan deskripsi untuk menghapus tag <p> yang tidak diinginkan
+
     $cleanDeskripsi = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->deskripsi);
 
     try {
-        // Temukan Kategori yang ada
+
         $kategori = Kategori::findOrFail($id);
 
-        // Perbarui entri Kategori
+
         $kategori->update([
             'nama_kategori' => $request->nama_kategori,
-            'deskripsi' => $cleanDeskripsi, // Gunakan deskripsi yang sudah dibersihkan
-            'status' => $request->has('status') ? true : false, // Tangani status
+            'deskripsi' => $cleanDeskripsi,
+            'status' => $request->has('status') ? true : false,
             'updated_by' => Auth::id(),
         ]);
 

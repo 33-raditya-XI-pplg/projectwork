@@ -40,7 +40,7 @@ class ProfilPerusahaanController extends Controller
         $data['sejarah'] = strip_tags($data['sejarah']);
         $data['status'] = $request->has('status') ? true : false;
 
-        // Handle image upload
+
         if ($request->hasFile('path_struktur_organisasi')) {
             $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
             $data['path_struktur_organisasi'] = $imagePath;
@@ -66,16 +66,16 @@ class ProfilPerusahaanController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        // Sanitize fields
+
         $data['tentang_kami'] = strip_tags($data['tentang_kami']);
         $data['visi'] = strip_tags($data['visi']);
         $data['misi'] = strip_tags($data['misi']);
         $data['sejarah'] = strip_tags($data['sejarah']);
         $data['status'] = $request->has('status') ? true : false;
 
-        // Handle image upload
+
         if ($request->hasFile('path_struktur_organisasi')) {
-            // Delete old image if exists
+
             if ($profil->path_struktur_organisasi) {
                 Storage::disk('public')->delete($profil->path_struktur_organisasi);
             }

@@ -22,7 +22,7 @@ class TestimoniController extends Controller
 
     public function store(Request $request)
 {
-    // Validasi data request
+
     $request->validate([
         'page_id' => 'required|integer',
         'nama' => 'required|string|max:255',
@@ -35,14 +35,14 @@ class TestimoniController extends Controller
         'created_by' => 'required|integer',
     ]);
 
-    // Tangani unggahan foto
+
     $photoPath = null;
     if ($request->hasFile('photo')) {
-        // Simpan foto di direktori 'testimoni_photos'
+
         $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
     }
 
-    // Bersihkan isi_testimoni untuk menghapus tag <p> yang tidak diinginkan
+
     $cleanIsiTestimoni = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->isi_testimoni);
 
     try {
@@ -53,9 +53,9 @@ class TestimoniController extends Controller
             'email' => $request->email,
             'tanggal' => $request->tanggal,
             'rating' => $request->rating,
-            'isi_testimoni' => $cleanIsiTestimoni, // Gunakan isi_testimoni yang sudah dibersihkan
+            'isi_testimoni' => $cleanIsiTestimoni,
             'photo' => $photoPath,
-            'status' => $request->has('status') ? true : false, // Tangani status
+            'status' => $request->has('status') ? true : false,
             'created_by' => $request->created_by,
         ]);
 
@@ -78,29 +78,29 @@ class TestimoniController extends Controller
 
     public function update(Request $request, Testimoni $testimoni)
     {
-        // Validasi hanya untuk status dan updated_by
+
         $request->validate([
             'status' => 'nullable|boolean',
             'updated_by' => 'required|integer',
         ]);
 
-        // Handle the photo upload
+
         if ($request->hasFile('photo')) {
-            // Delete the old photo if it exists
+
             if ($testimoni->photo) {
                 Storage::disk('public')->delete($testimoni->photo);
             }
 
-            // Store the new photo and update the path
+
             $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
             $testimoni->photo = $photoPath;
         }
 
-        // Update only the status field
+
         $testimoni->update([
             'status' => $request->status,
             'updated_by' => $request->updated_by,
-            // No need to include other fields
+
         ]);
 
         return redirect()->route('testimoni.index')

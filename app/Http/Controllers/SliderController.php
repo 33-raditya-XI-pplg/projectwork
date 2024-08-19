@@ -28,10 +28,9 @@ class SliderController extends Controller
             'status' => 'nullable|boolean',
         ]);
 
-        // Clean the description to remove unwanted <p> tags
+
         $cleanDescription = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->description);
 
-        // Upload image
         $image_url = null;
         if ($request->hasFile('image_file')) {
             $imageName = time() . '.' . $request->image_file->extension();
@@ -65,10 +64,10 @@ class SliderController extends Controller
             'status_hidden' => 'nullable|boolean',
         ]);
 
-        // Clean the description to remove unwanted <p> tags
+
         $cleanDescription = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->description);
 
-        // Handle image upload
+
         if ($request->hasFile('image_file_edit')) {
             $imagePath = $request->file('image_file_edit')->store('public/images');
             $imageUrl = Storage::url($imagePath);
@@ -76,10 +75,10 @@ class SliderController extends Controller
             $slider->image_url = $imageUrl;
         }
 
-        // Determine the status value
+
         $status = $request->input('status', 0) == '1' ? 1 : 0;
 
-        // Update other fields
+
         $slider->update([
             'page_id' => $request->page_id,
             'title' => $request->title,

@@ -174,18 +174,18 @@ class PartnerController extends Controller
     public function destroy(Partner $partner)
     {
         try {
-            // Hapus logo dari storage jika ada
+
             if ($partner->logo) {
                 Storage::disk('public')->delete($partner->logo);
             }
 
-            // Hapus partner
+
             $partner->delete();
 
-            // Redirect dengan notifikasi SweetAlert
+
             Alert::success('Berhasil Menghapus!', 'Partner berhasil dihapus.');
         } catch (QueryException $e) {
-            // Redirect dengan notifikasi SweetAlert untuk kesalahan
+
             Alert::error('Terjadi Kesalahan!', 'Partner gagal dihapus.');
         }
 
