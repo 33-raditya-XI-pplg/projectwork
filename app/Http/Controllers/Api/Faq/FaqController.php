@@ -96,7 +96,7 @@ class FaqController extends Controller
         if (!$faq) {
             return response()->json([
                 'status' => false,
-                'message' => 'Blog category not found'
+                'message' => 'faq not found'
             ], 404);
         }
 

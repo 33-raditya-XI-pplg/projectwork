@@ -136,19 +136,34 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        $Kategori = Kategori::find($id);
+        $kategori = Kategori::find($id);
 
-        if (!$Kategori) {
+        if (!$kategori) {
             return response()->json([
                 'status' => false,
-                'message' => 'category not found'
+                'message' => 'Kategori tidak ditemukan'
             ], 404);
         }
-        $Kategori->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'category deleted successfully'
-        ], 200);
+        if ($kategori->blogs()->count() > 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Kategori ini tidak dapat dihapus karena sedang digunakan di halaman Blog.'
+            ], 400);
+        }
+
+        try {
+            $kategori->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Kategori berhasil dihapus'
+            ], 200);
+        } catch (QueryException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat menghapus kategori.'
+            ], 500);
+        }
     }
+
     }

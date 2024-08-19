@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Blog;
 
 
 use App\Models\Blog;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
@@ -37,16 +39,15 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi input
         $rules = [
-            'page_id' => 'required|integer|exists:tb_page,id_page', // Assuming there's a blogs table
-            'judul' => 'required|string',
-            'slug' => 'required|string',
+            'page_id' => 'required|integer|exists:tb_page,id_page',
+            'judul' => 'required|string|max:255',
             'body' => 'required|string',
-            'created_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
-            'updated_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'status' => 'nullable|boolean',
         ];
 
-        // Validate incoming request
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -57,15 +58,35 @@ class BlogController extends Controller
             ], 422);
         }
 
-        // Create a new BLog record
-        $blog = Blog::create($request->all());
+        $data = $request->all();
+
+        // Generate slug dari judul
+        $data['slug'] = Str::slug($request->input('judul'));
+
+        // Strip HTML tags dari body
+        $data['body'] = strip_tags($request->body);
+
+        // Handle upload gambar
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/photos', $filename);
+            $data['photo'] = $filename;
+        }
+
+        // Set status
+        $data['status'] = $request->has('status') ? $request->status : false;
+
+        // Buat record blog baru
+        $blog = Blog::create($data);
 
         return response()->json([
             'status' => true,
-            'message' => 'BLog created successfully',
+            'message' => 'Blog created successfully',
             'data' => $blog
         ], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -97,21 +118,19 @@ class BlogController extends Controller
         if (!$blog) {
             return response()->json([
                 'status' => false,
-                'message' => 'Blog category not found'
+                'message' => 'Blog not found'
             ], 404);
         }
 
-        // Define validation rules
+        // Validasi input
         $rules = [
-            'page_id' => 'required|integer|exists:tb_page,id_page', // Assuming there's a blogs table
-            'judul' => 'required|string',
-            'slug' => 'required|string',
+            'page_id' => 'required|integer|exists:tb_page,id_page',
+            'judul' => 'required|string|max:255',
             'body' => 'required|string',
-            'created_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
-            'updated_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'status' => 'nullable|boolean',
         ];
 
-        // Validate incoming request
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -122,15 +141,39 @@ class BlogController extends Controller
             ], 422);
         }
 
-        // Update the record
-        $blog->update($request->all());
+        $data = $request->all();
+
+        // Generate slug dari judul
+        $data['slug'] = Str::slug($request->input('judul'));
+
+        // Strip HTML tags dari body
+        $data['body'] = strip_tags($request->body);
+
+        // Handle upload gambar dan hapus gambar lama
+        if ($request->hasFile('photo')) {
+            if ($blog->photo) {
+                Storage::delete('public/photos/' . $blog->photo);
+            }
+
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/photos', $filename);
+            $data['photo'] = $filename;
+        }
+
+        // Set status
+        $data['status'] = $request->has('status') ? $request->status : false;
+
+        // Update record blog
+        $blog->update($data);
 
         return response()->json([
             'status' => true,
-            'message' => 'BLog updated successfully',
+            'message' => 'Blog updated successfully',
             'data' => $blog
         ], 200);
     }
+
 
     /**
      * Remove the specified resource from storage.

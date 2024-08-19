@@ -46,7 +46,7 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image_url' => 'required|string|max:255',
             'position' => 'required|integer',
-            'status' => 'required|in:active,inactive',
+            'status' => 'required|boolean',
         ];
 
         // Validate incoming request
@@ -113,7 +113,7 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image_url' => 'nullable|string|max:255',
             'position' => 'nullable|integer',
-            'status' => 'nullable|in:active,inactive'
+            'status' => 'nullable|boolean'
         ]);
 
         // Find the existing Slider record

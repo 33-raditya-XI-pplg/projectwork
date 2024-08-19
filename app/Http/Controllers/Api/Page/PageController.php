@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\Page;
 
-use App\Http\Controllers\Controller;
 use App\Models\Page;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
@@ -37,14 +38,12 @@ class PageController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'nama_page' => 'required|string', // Assuming there's a blogs table
+            'nama_page' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'pindah_halaman' => 'required|string',
-            'created_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
-            'updated_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
+            'pindah_halaman' => 'required|string|max:255',
+            'status' => 'nullable|boolean'
         ];
 
-        // Validate incoming request
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -55,15 +54,32 @@ class PageController extends Controller
             ], 422);
         }
 
-        // Create a new BLog record
-        $page = Page::create($request->all());
+        try {
+            $sanitizedDeskripsi = strip_tags($request->deskripsi);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'BLog created successfully',
-            'data' => $page
-        ], 201);
+            $page = Page::create([
+                'nama_page' => $request->nama_page,
+                'deskripsi' => $sanitizedDeskripsi,
+                'pindah_halaman' => $request->pindah_halaman,
+                'status' => $request->has('status') ? true : false,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Page created successfully',
+                'data' => $page
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error occurred: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -95,20 +111,17 @@ class PageController extends Controller
         if (!$page) {
             return response()->json([
                 'status' => false,
-                'message' => 'Blog category not found'
+                'message' => 'Page not found'
             ], 404);
         }
 
-        // Define validation rules
         $rules = [
-            'nama_page' => 'required|string', // Assuming there's a blogs table
+            'nama_page' => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'pindah_halaman' => 'required|string',
-            'created_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
-            'updated_by' => 'nullable|integer|exists:users,id', // Assuming there's a users table
+            'pindah_halaman' => 'required|string|max:255',
+            'status' => 'nullable|boolean'
         ];
 
-        // Validate incoming request
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -119,15 +132,35 @@ class PageController extends Controller
             ], 422);
         }
 
-        // Update the record
-        $page->update($request->all());
+        try {
+            $sanitizedDeskripsi = strip_tags($request->deskripsi);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Page updated successfully',
-            'data' => $page
-        ], 200);
+            // Menggunakan isset untuk mengecek apakah field 'status' ada di request
+            $status = $request->has('status') ? $request->input('status') : false;
+
+            $page->update([
+                'nama_page' => $request->nama_page,
+                'deskripsi' => $sanitizedDeskripsi,
+                'pindah_halaman' => $request->pindah_halaman,
+                'status' => $status,
+                'updated_by' => Auth::id(),
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Page updated successfully',
+                'data' => $page
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error occurred: ' . $e->getMessage()
+            ], 500);
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -143,13 +176,74 @@ class PageController extends Controller
             ], 404);
         }
 
-        // Delete the record
-        $page->delete();
+        $messages = [];
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Page deleted successfully'
-        ], 200);
+        if ($page->partners()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Partner.';
+        }
+        if ($page->pageGaleri()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Galeri.';
+        }
+        if ($page->pageProfil()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Profil.';
+        }
+        if ($page->pageFaq()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+        }
+        if ($page->pageBlog()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Blog.';
+        }
+        if ($page->profilPerusahaan()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Profil Perusahaan.';
+        }
+        if ($page->sliders()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Slider.';
+        }
+        if ($page->testimoni()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Testimoni.';
+        }
+        if ($page->faqs()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+        }
+
+        if (!empty($messages)) {
+            $errorMessage = implode(' ', $messages);
+            return response()->json([
+                'status' => false,
+                'message' => $errorMessage
+            ], 400);
+        }
+
+        try {
+            if ($page->pageGaleri()->exists()) {
+                $page->pageGaleri()->delete();
+            }
+            if ($page->profilPerusahaan()->exists()) {
+                $page->profilPerusahaan()->delete();
+            }
+            if ($page->sliders()->exists()) {
+                $page->sliders()->delete();
+            }
+            if ($page->testimoni()->exists()) {
+                $page->testimoni()->delete();
+            }
+            if ($page->faqs()->exists()) {
+                $page->faqs()->delete();
+            }
+
+            $page->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Page deleted successfully'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error occurred: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     }
