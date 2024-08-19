@@ -91,46 +91,7 @@
                         </td>
                     </tr>
                     <!-- Modal for Adding Page -->
-                    <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary-gradient text-white">
-                                    <h5 class="modal-title" id="addPageModalLabel">Tambah Page</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="addPageForm" method="POST" action="{{ route('page.store') }}">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="pageName" class="form-label">Nama Page <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="pageName" name="nama_page" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="pageDescription" class="form-label">Deskripsi Page <span class="text-danger">*</span></label>
-                                            <textarea class="form-control ck-editor" id="pageDescription" name="deskripsi" rows="3"></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="pindah_halaman" class="form-label">Link Halaman <span class="text-danger">*</span></label>
-                                            <input type="url" class="form-control" id="pindah_halaman" name="pindah_halaman" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="status" class="form-label">Status</label>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="status" name="status" value="1">
-                                                <label class="form-check-label" for="status">
-                                                    Aktif
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer justify-content-end mx-3">
-                                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <!-- Edit Modal -->
                     <div class="modal modal-lg fade" id="edit{{ $page->id_page }}" tabindex="-1" aria-labelledby="editLabel{{ $page->id_page }}" aria-hidden="true">
@@ -177,6 +138,47 @@
                     @endforeach
                 </tbody>
             </table>
+
+            <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary-gradient text-white">
+                            <h5 class="modal-title" id="addPageModalLabel">Tambah Page</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addPageForm" method="POST" action="{{ route('page.store') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="pageName" class="form-label">Nama Page <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="pageName" name="nama_page" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pageDescription" class="form-label">Deskripsi Page <span class="text-danger">*</span></label>
+                                    <textarea class="form-control ck-editor" id="pageDescription" name="deskripsi" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="pindah_halaman" class="form-label">Link Halaman <span class="text-danger">*</span></label>
+                                    <input type="url" class="form-control" id="pindah_halaman" name="pindah_halaman" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="status" name="status" value="1">
+                                        <label class="form-check-label" for="status">
+                                            Aktif
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-end mx-3">
+                                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
     </div>
 @endsection
