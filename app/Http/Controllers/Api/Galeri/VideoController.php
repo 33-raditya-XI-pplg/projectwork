@@ -12,27 +12,41 @@ class VideoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        try {
+    public function index(Request $request)
+{
+    try {
+        // Mulai query untuk mengambil data berdasarkan kategori 'video' dan urutan 'nama'
+        $data = Galeri::where('kategori', 'video')->orderBy('nama', 'asc');
 
-            $data = Galeri::where('kategori', 'video')->orderBy('nama', 'asc')->get();
+        // Ambil input 'nama_page' dari request
+        $page_nama = $request->input('nama_page');
 
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data ditemukan',
-                'data' => $data
-            ], 200);
-        } catch (\Exception $e) {
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Terjadi kesalahan saat mengambil data',
-                'error' => $e->getMessage()
-            ], 500);
+        // Jika 'nama_page' tidak kosong, tambahkan join dan filter berdasarkan nama Page
+        if (!empty($page_nama)) {
+            $data = $data->join('tb_page', 'tb_galeri.page_id', '=', 'tb_page.id_page')
+                         ->where('tb_page.nama_page', $page_nama)
+                         ->select('tb_galeri.*'); // Pilih kolom dari tabel Galeri
         }
+
+        // Eksekusi query dan ambil data
+        $data = $data->get();
+
+        // Response jika data ditemukan
+        return response()->json([
+            'status' => true,
+            'message' => 'Data ditemukan',
+            'data' => $data
+        ], 200);
+    } catch (\Exception $e) {
+        // Response jika terjadi kesalahan
+        return response()->json([
+            'status' => false,
+            'message' => 'Terjadi kesalahan saat mengambil data',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
 
 
     /**

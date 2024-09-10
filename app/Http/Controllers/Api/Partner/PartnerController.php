@@ -11,11 +11,25 @@ class PartnerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            // Mulai query Blog
+            $data = Partner::query();
 
-            $data = Partner::orderBy('nama_partner', 'asc')->get();
+            // Ambil input 'nama_page' dari request
+            $page_nama = $request->input('nama_page');
+
+            // Jika 'page_nama' tidak kosong, tambahkan join dan filter berdasarkan nama Page
+            if (!empty($page_nama)) {
+                $data = $data->join('tb_page', 'tb_partner.page_id', '=', 'tb_page.id_page')
+                    ->where('tb_page.nama_page', $page_nama)
+                    ->select('tb_partner.*'); // Pilih kolom dari tabel Blog
+            }
+
+            // Eksekusi query dan dapatkan data
+            $data = $data->get();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Data ditemukan',
@@ -28,7 +42,6 @@ class PartnerController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-
     }
 
     /**
@@ -148,5 +161,4 @@ class PartnerController extends Controller
             'message' => 'Partner deleted successfully',
         ], 200);
     }
-
 }
