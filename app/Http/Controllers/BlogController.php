@@ -22,6 +22,15 @@ class BlogController extends Controller
         return view('admin.blog.index', compact('page', 'blog', 'kategori'));
     }
 
+    // $data = Blog::query();
+
+    //     $page_id = $request->input('page_id');
+    //     if (!empty($page_id)) {
+    //         $data = $data->where('page_id',$page_id);
+    //     }
+
+    //     $data = $data->get()->map();
+
 
 
 

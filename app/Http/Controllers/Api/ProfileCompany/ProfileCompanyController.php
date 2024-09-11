@@ -12,25 +12,38 @@ class ProfileCompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        try {
+    public function index(Request $request)
+{
+    try {
+        // Mulai query Blog
+        $data = Profil_Perusahaan::query();
 
-            $data = Profil_Perusahaan::get();
-            return response()->json([
-                'status' => true,
-                'message' => 'Data ditemukan',
-                'data' => $data
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data tidak ditemukan',
-                'error' => $e->getMessage()
-            ], 500);
+        // Ambil input 'nama_page' dari request
+        $page_nama = $request->input('nama_page');
+
+        // Jika 'page_nama' tidak kosong, tambahkan join dan filter berdasarkan nama Page
+        if (!empty($page_nama)) {
+            $data = $data->join('tb_page', 'tb_profil_perusahaan.page_id', '=', 'tb_page.id_page')
+                         ->where('tb_page.nama_page', $page_nama)
+                         ->select('tb_profil_perusahaan.*'); // Pilih kolom dari tabel Blog
         }
 
+        // Eksekusi query dan dapatkan data
+        $data = $data->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data ditemukan',
+            'data' => $data
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 
     /**
      * Store a newly created resource in storage.

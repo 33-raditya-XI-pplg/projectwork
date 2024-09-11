@@ -12,28 +12,50 @@ class TestimoniController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        try {
-            $data = Testimoni::all();
-            foreach ($data as $testimoni) {
-                if ($testimoni->photo) {
-                    $testimoni->photo_url = asset('storage/' . $testimoni->photo);
-                }
-            }
-            return response()->json([
-                'status' => true,
-                'message' => 'Data ditemukan',
-                'data' => $data
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data tidak ditemukan',
-                'error' => $e->getMessage()
-            ], 500);
+    public function index(Request $request)
+{
+    try {
+        // Mulai query Testimoni
+        $data = Testimoni::query();
+
+        // Ambil input 'nama_page' dari request
+        $page_nama = $request->input('nama_page');
+
+        // Jika 'nama_page' tidak kosong, tambahkan join dan filter berdasarkan nama Page
+        if (!empty($page_nama)) {
+            $data = $data->join('tb_page', 'tb_testimoni.page_id', '=', 'tb_page.id_page')
+                         ->where('tb_page.nama_page', $page_nama)
+                         ->select('tb_testimoni.*'); // Pilih kolom dari tabel Testimoni
         }
+
+        // Eksekusi query dan ambil data
+        $data = $data->get();
+
+        // Tambahkan URL untuk setiap testimoni yang memiliki foto
+        $data = $data->map(function ($testimoni) {
+            if ($testimoni->photo) {
+                $testimoni->photo_url = asset('storage/' . $testimoni->photo);
+            }
+            return $testimoni;
+        });
+
+        // Response jika data ditemukan
+        return response()->json([
+            'status' => true,
+            'message' => 'Data ditemukan',
+            'data' => $data
+        ], 200);
+    } catch (\Exception $e) {
+        // Response jika terjadi kesalahan
+        return response()->json([
+            'status' => false,
+            'message' => 'Data tidak ditemukan',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
+
 
     /**
      * Store a newly created resource in storage.

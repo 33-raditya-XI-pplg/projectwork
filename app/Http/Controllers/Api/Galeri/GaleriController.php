@@ -12,11 +12,22 @@ class GaleriController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
 
-            $data = Galeri::orderBy('nama', 'asc')->get();
+            $data = Galeri::orderBy('nama', 'asc');
+
+            $page_nama = $request->input('nama_page');
+
+            if (!empty($page_nama)) {
+                $data = $data->join('tb_page', 'tb_galeri.page_id', '=', 'tb_page.id_page')
+                    ->where('tb_page.nama_page', $page_nama)
+                    ->select('tb_galeri.*'); // Pilih kolom dari tabel Galeri
+            }
+
+            $data = $data->get();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Data ditemukan',
@@ -39,18 +50,18 @@ class GaleriController extends Controller
         $dataGaleri = new Galeri();
 
         $rules = [
-            'page_id'=>'required',
+            'page_id' => 'required',
             'nama' => 'required',
             'path_file' => 'required',
             'kategori' => 'required',
             'deskripsi' => 'required',
         ];
-        $validator = Validator::make($request->all(),$rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json([
-                'status'=>false,
-                'message' =>'Gagal memasukkan data',
-                'data'=>$validator->errors()
+                'status' => false,
+                'message' => 'Gagal memasukkan data',
+                'data' => $validator->errors()
 
             ]);
         }
@@ -77,18 +88,15 @@ class GaleriController extends Controller
     public function show(string $id)
     {
         $data = Galeri::find($id);
-        if($data){
+        if ($data) {
             return response()->json([
                 'status' => true,
                 'message' => 'Data ditemukan',
                 'data' => $data
             ], 200);
-
-
-
-        }else{
+        } else {
             return response()->json([
-                'status' =>false,
+                'status' => false,
                 'message' => 'data tidak di temukan',
             ]);
         }
@@ -165,7 +173,7 @@ class GaleriController extends Controller
 
 
 
-$post = $dataGaleri->delete();
+        $post = $dataGaleri->delete();
 
 
         return response()->json([
@@ -173,7 +181,5 @@ $post = $dataGaleri->delete();
             'message' => 'Sukses melakukan delete data',
             'data' => $dataGaleri
         ], 200);
-
-
     }
 }
