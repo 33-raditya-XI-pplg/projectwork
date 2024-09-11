@@ -33,8 +33,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/chosen.css') }}">
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css"
         rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js">
-        <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js">
+        {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js">
+        <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"> --}}
         <link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
         <link rel="stylesheet" href="{{asset('assets/css/testimoni.css')}}">
         <link rel="stylesheet" href="{{asset('assets/css/partner.css')}}">
@@ -90,6 +90,12 @@
     </div>
 
 
+        {{-- <li class="sub-menu-item {{ Request::segment(3) == 'user' ? 'blogkategori' : '' }}">
+        <a href="{{ route('blogkategori.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
+            <span> Blog Kategori</span></a>
+    </li> --}}
+
+
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -105,6 +111,8 @@
     <script src="{{ asset('assets/js/chosen.jquery.js') }}"></script>
     <script src="{{ asset('assets/js/panel.js') }}"></script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script></script>
     <script>
         var button = document.getElementById('add')
@@ -190,17 +198,8 @@
 
     }
   });
-
-
     </script>
     @stack('script')
     @include('sweetalert::alert')
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-
-
 </body>
-
-
-
 </html>
