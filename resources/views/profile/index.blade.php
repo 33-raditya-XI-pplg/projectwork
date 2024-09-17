@@ -31,7 +31,6 @@
                         <div class="row">
                             <div class="col-10 pt-2">
                                 <h3 class="mb-3">{{ $data->nama_lengkap   }}</h3>
-
                                 <h5><i class="fa-solid fa-id-badge"></i>&emsp;&nbsp;{{ $data->level   }}</h5>
                                 <h5><i class="fa-regular fa-envelope"></i>&emsp;{{ $data->email  }}</h5>
                                 <h5><i class="fa-solid fa-location-dot"></i>&emsp;&nbsp;{{ $data->alamat ?? 'Tidak tersedia' }} - {{ $data->alamat_kota ?? 'Tidak tersedia' }}</h5>
@@ -39,7 +38,11 @@
                             </div>
                             <div class="col-2">
                                 <div class="card-tittle text-end">
+                                    @if(Auth::user()->level == 'Admin')
                                     <a href="{{ route('profile.edit') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    @elseif(Auth::user()->level == 'Pengguna')
+                                    <a href="{{ route('profile.edit-user') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    @endif
                                 </div>
                                 <div id="segitiga">
                                     <span class="triangle d-block"></span>

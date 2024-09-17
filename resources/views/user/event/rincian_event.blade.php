@@ -21,7 +21,7 @@
                     <img id="img-rincian" src="{{ $banner }}" class="img-fluid mx-auto d-block" alt="Banner Event">
                     <hr>
                     <br>
-                    <p class="mt-2 mb-4">{{ $data_event->deskripsi }}</p>
+                    <p class="mt-2 mb-4">{!! strip_tags($data_event->deskripsi ) !!}</p>
                     <div class="row">
                         <div class="mb-4 col-6">
                             <h6 class="fs-5 ls-2">Event</h6>

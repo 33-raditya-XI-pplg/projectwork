@@ -59,7 +59,6 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     {{-- form --}}
                     <div class="container">
                         <div class="row">

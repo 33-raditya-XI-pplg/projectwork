@@ -32,11 +32,14 @@
                         <th scope="row">{{ $loop->index + 1 }}</th>
                         <td>{{ $row->nama_lengkap }}</td>
                         <td>{{ $row->email }}</td>
-                        <td>{{ $row->nomor_induk }}</td>
-                        <td>{{ $row->jenis_kelamin }}</td>
-                        <td><button type="button"
-                                class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
-                                disabled>{{ $row->status }}</button>
+                        <td>{{ $row->nomor_induk ?? '-' }}</td>
+                        <td>{{ $row->jenis_kelamin ?? '-' }}</td>
+                        <td>
+                            <button type="button"
+                            class="btn rounded-3 {{ $row->status == 'Verified' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                            onclick="toggleStatus({{ $row->id_user }}, this)">
+                            {{ $row->status }}
+                        </button>
                         <td>
                             <div class="dropdown">
                                 <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -88,8 +91,84 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+    <script>
+function toggleStatus(userId, button) {
+    if (!button) {
+        console.error('Elemen button tidak terdefinisi');
+        return;
+    }
+  
+    let currentStatus = button.innerText.trim();
+    let newStatus = (currentStatus === 'Verified') ? 'Belum Verified' : 'Verified';
+
+    console.log('UserID: ', userId, 'Current Status: ', currentStatus, 'New Status: ', newStatus);
+
+    $.ajax({
+        url: '{{ route('user.updateStatus', ':id') }}'.replace(':id', userId),
+        type: 'POST',
+        data: {
+            _token: '{{ csrf_token() }}',
+            status: newStatus
+        },
+        success: function(response) {
+            console.log('Respon server: ', response.message);  
+            
+            if(response.message.includes('Profie Pengguna belum lengkap')){
+               Swal.fire({
+                icon:'error',
+                title:'Gagal Verifikasi',
+                text:'Pengguna belum melengkapi profile. Tidak dapat memverifikasi.'
+               })
+                return;
+            }
+
+            if (newStatus === 'Verified') {
+                button.classList.remove('btn-outline-danger');
+                button.classList.add('btn-outline-success');
+            } else {
+                button.classList.remove('btn-outline-success');
+                button.classList.add('btn-outline-danger');
+            }
+
+            button.innerText = newStatus;
+        },
+        error: function(xhr, status, error) {
+            if(xhr.status === 400) {
+                Swal.fire({
+                    icon:'error',
+                    title:'Kesalahan',
+                    text:xhr.responseJSON.message,
+                    position:'top',
+                    width:'450px',
+                    showConfirmButton:false,
+                    timer:5000,
+                    toast:true,
+                });
+            }else{
+                console.error('Gagal memperbarui status: ' + error);
+                Swal.fire({
+                    icon:'error',
+                    title:'Kesalahan',
+                    text:'Terjadi kesalahan saat memperbarui status',
+                });
+            }
+        }
+    });
+}
+    </script>
+    
+        
 
 @endsection
+
+
+
+
+
+
+
 
 {{-- @push('script')
     <script>

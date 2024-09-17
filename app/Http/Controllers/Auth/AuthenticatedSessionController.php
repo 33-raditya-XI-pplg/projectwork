@@ -29,7 +29,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/admin/dashboard');
+
+        $user = Auth::user();
+        if ($user->level == 'Admin') {
+            return redirect('/admin/dashboard');
+        } elseif ($user->level == 'Pengguna') {
+            return redirect('/user/dashboard'); // Ganti dengan rute yang sesuai untuk pengguna
+        } else {
+            return redirect('/'); // Default redirect if level does not match
+        }
 
         // return redirect()->intended(RouteServiceProvider::HOME);
     }

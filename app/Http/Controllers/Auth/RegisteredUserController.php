@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'nama_lengkap' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -40,12 +40,14 @@ class RegisteredUserController extends Controller
             'nama_lengkap' => $request->nama_lengkap,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'level' => 'Pengguna',
+            'status' => 'Belum Verified',
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect('/admin/dashboard');
+        return redirect('/user/dashboard');
     }
 }

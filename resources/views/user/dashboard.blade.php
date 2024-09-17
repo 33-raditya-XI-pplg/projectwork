@@ -1,6 +1,7 @@
 @extends('layouts.panel.index')
 @section('title', 'Dashboard')
 @push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         .accordion-button {
             display: flex;
@@ -12,6 +13,10 @@
         }
         .accordion-button span {
             text-align: right;
+        }
+        .colored-toast {
+        border-radius: 8px; /* Membuat sudut lebih membulat */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan */
         }
     </style>
 @endpush
@@ -105,7 +110,7 @@
 
                                 <div id="collapse{{ $row->id_event }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $row->id_event }}" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <p>{{ $row->deskripsi }}</p>
+                                        <p>{!! strip_tags($row->deskripsi) !!}</p>
                                     </div>
                                 </div>
                             </div>
@@ -116,4 +121,39 @@
 
             </div>
         </div>
+        @if (!$isProfileComplete)
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                title: 'Profil Belum Lengkap',
+                text: 'Lengkapi profil Anda sekarang!',
+                icon: 'warning',
+                toast:true,
+                position:'top-end',
+                showCancelButton: true,
+                confirmButtonText: 'Update Profil',
+                cancelButtonText: 'Nanti',
+                customClass:{
+                    popup:'colored-toast'
+                },
+                background:'#fff3cd',
+                iconColor:'#ffcc00',
+
+                didOpen:()=>{
+                const popup = Swal.getPopup();
+                popup.style.borderRadius = '10px';      
+                popup.style.position = 'fixed';                 
+                popup.style.top = '20px';   
+                popup.style.right = '140px';   
+                popup.style.maxWidth = '338px';             
+                
+            }         
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('profile.edit-user', Auth::user()->id_user) }}";
+                }
+            });
+        </script>
+    @endif
 @endsection

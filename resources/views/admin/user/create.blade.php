@@ -128,14 +128,14 @@
 
                     <div class="modal-footer justify-content-between mt-3">
                         <div class="form-check form-switch mb-3">
-                            <label for="status" class="me-3">Status</label>
+                            {{-- <label for="status" class="me-3">Status</label>
                             @if (isset($pengguna))
                                 <input class="form-check-input" type="checkbox" role="switch" id="status"
-                                    name="status" value="Aktif" {{ $pengguna->status == 'Aktif' ? 'checked' : '' }}>
+                                    name="status" value="Verified" {{ $pengguna->status == 'Verified' ? 'checked' : '' }}>
                             @elseif (!isset($pengguna))
                                 <input class="form-check-input" type="checkbox" role="switch" id="status"
-                                    name="status" value="Aktif" {{ $user->status == 'Aktif' ? 'checked' : '' }}>
-                            @endif
+                                    name="status" value="Verified" {{ $user->status == 'Verified' ? 'checked' : '' }}>
+                            @endif --}}
                         </div>
                         <div class="d-flex justify-content-end mb-2">
                             <button type="submit" class="btn btn-success rounded text-white">Simpan</button>

@@ -22,28 +22,31 @@ class EventUsersController extends Controller
         $query = Event::query();
 
         if ($request->has('tgl_mulai') && $request->tgl_mulai) {
-            $query->where('tb_event.tgl_mulai', '>=', Carbon::parse($request->tgl_mulai));
+            $query->whereDate('tb_event.tgl_mulai', '>=', Carbon::parse($request->tgl_mulai)->toDateString());
         }
 
         if ($request->has('tgl_berakhir') && $request->tgl_berakhir) {
-            $query->where('tb_event.tgl_berakhir', '<=', Carbon::parse($request->tgl_berakhir));
+            $query->whereDate('tb_event.tgl_berakhir', '<=', Carbon::parse($request->tgl_berakhir)->toDateString());
         }
 
         if ($request->has('nama_jenis_event') && $request->nama_jenis_event) {
-            $query->where('tb_jenis_event.id_jenis_event', 'like', '%' . $request->nama_jenis_event . '%');
+            $query->where('tb_event.jenis_event_id', $request->nama_jenis_event);
         }
 
         if ($request->has('nama_tuk') && $request->nama_tuk) {
-            $query->where('tb_tempat.id_tempat', 'like', '%' . $request->nama_tuk . '%');
+            $query->where('tb_event.tempat_id', $request->nama_tuk);
         }
+        // dd($request->all());
 
         $data_event = $query
-                        ->where('tb_event.visibilitas', 'publik')
-                        ->where('tb_event.status', 'Aktif')
-                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-                        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-                        ->paginate(9);
+            ->where('tb_event.visibilitas', 'publik')
+            ->where('tb_event.status', 'Berlangsung')
+            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+            ->paginate(9);
 
+
+        // dd($query->toSql(), $query->getBindings());
         return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat'));
     }
 
@@ -53,35 +56,39 @@ class EventUsersController extends Controller
         $userID = Auth::user()->id_user;
 
         $data_event = DB::table('tb_event_skema')
-                    ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                    ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-                    ->select('tb_event.nama_event', 'tb_event.deskripsi', 'tb_event.path_banner',
-                             'tb_event.tgl_mulai', 'tb_event.tgl_berakhir',
-                             'tb_tempat.nama_tempat'
-                    )
-                    ->where('tb_event_skema.event_id', $eventID)
-                    ->first();
+            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+            ->select(
+                'tb_event.nama_event',
+                'tb_event.deskripsi',
+                'tb_event.path_banner',
+                'tb_event.tgl_mulai',
+                'tb_event.tgl_berakhir',
+                'tb_tempat.nama_tempat'
+            )
+            ->where('tb_event_skema.event_id', $eventID)
+            ->first();
 
         $data_skema = DB::table('tb_event')
-                        ->join('tb_event_skema', 'tb_event.id_event', '=', 'tb_event_skema.event_id')
-                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+            ->join('tb_event_skema', 'tb_event.id_event', '=', 'tb_event_skema.event_id')
+            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
 
-                        ->leftJoin('tb_peserta', function ($join) use ($userID) {
-                            $join->on('tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
-                                 ->where('tb_peserta.user_id', '=', $userID);
-                        })
+            ->leftJoin('tb_peserta', function ($join) use ($userID) {
+                $join->on('tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+                    ->where('tb_peserta.user_id', '=', $userID);
+            })
 
-                        ->select(
-                            'tb_event_skema.id_event_skema',
-                            'tb_skema.nama_skema',
-                            DB::raw('CASE WHEN tb_peserta.id_peserta IS NOT NULL THEN 1 ELSE 0 END as telah_terdaftar')
-                        )
-                        ->where('tb_event_skema.event_id', $eventID)
-                        ->get();
+            ->select(
+                'tb_event_skema.id_event_skema',
+                'tb_skema.nama_skema',
+                DB::raw('CASE WHEN tb_peserta.id_peserta IS NOT NULL THEN 1 ELSE 0 END as telah_terdaftar')
+            )
+            ->where('tb_event_skema.event_id', $eventID)
+            ->get();
 
         $banner = asset($data_event->path_banner);
-        
+
         return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner'));
     }
 

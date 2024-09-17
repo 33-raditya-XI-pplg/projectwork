@@ -318,7 +318,7 @@
                                     <div class="mb-3">
                                         <label for="tanggal_mulai" class="form-label">Tanggal Event</label>
                                         <input type="date" class="form-control" name="tgl_mulai"
-                                            id="tanggal_mulai" placeholder="DD/MM/YYYY" required>
+                                            id="tgl_mulai" placeholder="DD/MM/YYYY" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="jenis_event_id" class="form-label">Jenis Event</label>
@@ -347,7 +347,7 @@
                                     <label for="instansi_id" class="form-label">Nama Instansi</label>
                                     <select class="form-select" name="instansi_id" aria-label="Default select example"
                                             required>
-                                            <option selected>Pilih ...</option>
+                                            <option disabled selected>Pilih ...</option>
                                             @foreach ($instansi as $row)
                                             <option value="{{ $row->id_instansi }}" >{{ $row->nama_instansi }}</option>
                                             @endforeach
@@ -478,8 +478,8 @@
                                     <label for="visibilitas" class="form-label">Visibilitas</label>
                                     <select class="form-select text-capitalize" name="visibilitas" aria-label="Default select example"
                                             required>
-                                            <option class="text-capitalize" {{ $row->visibilitas == 'publish' ? 'selected' : '' }}>publik</option>
-                                            <option class="text-capitalize" {{ $row->visibilitas == 'privat' ? 'selected' : '' }}>privat</option>
+                                            <option class="text-capitalize"  {{ $row->visibilitas == 'publish' ? 'selected' : '' }}>publik</option>
+                                            <option class="text-capitalize"  {{ $row->visibilitas == 'privat' ? 'selected' : '' }}>privat</option>
                                         </select>
                                 </div>
                             </div>
@@ -502,7 +502,7 @@
                     <div class="form-check form-switch">
                         <label for="status" class="me-3">Status </label>
                         <input class="form-check-input" type="checkbox" role="switch" id="status"
-                            name="status" value="Publish" {{ $row->status == 'Publish' ? 'checked' : '' }}>
+                            name="status"  {{ $row->status == 'Selesai' || $row->status == 'Berlangsung' || $row->status == 'Publish' ? 'checked' : '' }}>
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3"

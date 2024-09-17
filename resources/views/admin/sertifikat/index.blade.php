@@ -5,7 +5,6 @@
     <div class="container mt-4">
         <div class="bg-white rounded-4 px-3 py-4 mb-3 shadow-lg">
             <div class="card-title mb-3 fw-semibold" style="font-size:18px">Pilih Event & Skema</div>
-
             <div class="d-flex flex-row mx-2">
                 <div class="card-header me-2 w-100 mx-1">
                     <select id="event_select" name="event_select" class="chosen-select form-control">
@@ -21,7 +20,6 @@
                     </select>
                 </div>
                 <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1" disabled>Submit</button>
-
             </div>
         </div>
     </div>
@@ -29,10 +27,8 @@
     <div class="container mt-2">
         <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
             <div class="card-title mb-4 fw-semibold" style="font-size:18px">Detail Sertifikat</div>
-
             <div class="container">
                 <div class="row">
-
                     <div class="col">
                         <div class="row">
                             <div class="col-6">

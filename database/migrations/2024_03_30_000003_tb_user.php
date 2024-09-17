@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
-            $table->string('no_telp', 20)->nullable(); 
+            $table->string('no_telp', 20)->nullable();
 
             $table->string('nama_sekolah')->nullable();
             $table->string('jurusan')->nullable();

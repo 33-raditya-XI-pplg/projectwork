@@ -17,22 +17,29 @@ use App\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
-    public function index() {
-        $data = auth()->user();
+    public function index()
+    {
+        // Ambil data yang diperlukan, misalnya data pengguna
+        $data = auth()->user(); // Ambil data pengguna yang login, misalnya
 
-        return view('profile.index', compact('data'));
+        // Periksa level pengguna
+        if ($data->level == 'Pengguna' || $data->level == 'Admin') {
+            return view('profile.index', compact('data')); // Kirim data ke view
+        } else {
+            abort(403, 'Unauthorized action.');
+        }
     }
 
-    public function edit() {
+    public function edit()
+    {
         $id = Auth::user()->id_user;
         $instansi = Instansi::get();
         $user = User::findOrFail($id);
-
         return view('profile.edit', compact('user', 'instansi'));
     }
 
-    public function update(Request $request, $id) {
-        // dd($request);
+    public function update(Request $request, $id)
+    {
 
         if ($request->has('foto_pengguna')) {
 
@@ -42,19 +49,16 @@ class ProfileController extends Controller
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
                     $foto->storeAs('public/foto_admin', $filename);
-                }
-                elseif (Auth::user()->isLevel('Penguji')) {
+                } elseif (Auth::user()->isLevel('Penguji')) {
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
                     $foto->storeAs('public/foto_penguji', $filename);
-                }
-                elseif (Auth::user()->isLevel('Pengguna')) {
+                } elseif (Auth::user()->isLevel('Pengguna')) {
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
                     $foto->storeAs('public/foto_pengguna', $filename);
                 }
-            }
-            else {
+            } else {
                 if (Auth::user()->isLevel('Admin')) {
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
@@ -63,8 +67,7 @@ class ProfileController extends Controller
                     $request->merge([
                         'path_foto' => Storage::url($stored)
                     ]);
-                }
-                elseif (Auth::user()->isLevel('Penguji')) {
+                } elseif (Auth::user()->isLevel('Penguji')) {
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
                     $stored = $foto->storeAs('public/foto_penguji', $filename);
@@ -72,8 +75,7 @@ class ProfileController extends Controller
                     $request->merge([
                         'path_foto' => Storage::url($stored)
                     ]);
-                }
-                elseif (Auth::user()->isLevel('Pengguna')) {
+                } elseif (Auth::user()->isLevel('Pengguna')) {
                     $foto = $request->file('foto_pengguna');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
                     $stored = $foto->storeAs('public/foto_pengguna', $filename);
@@ -84,7 +86,6 @@ class ProfileController extends Controller
                 }
             }
             // END Check path_foto
-
         }
 
         $user = User::find($id);
@@ -93,13 +94,11 @@ class ProfileController extends Controller
             if (!Hash::check($request->password_lama, $user->password)) {
                 Alert::error('Gagal Tersimpan!', 'Password lama salah');
                 return redirect()->back();
-            }
-            else {
+            } else {
                 if ($request->password_baru != $request->konfirmasi_password_baru) {
                     Alert::error('Gagal Tersimpan!', 'Password baru tidak sama');
                     return redirect()->back();
-                }
-                else {
+                } else {
                     $user->password = Hash::make($request->password_baru);
                     $user->save();
 
@@ -109,13 +108,23 @@ class ProfileController extends Controller
             }
         }
 
-        $user->update($request->all());
+
+        $user->alamat = $request->input('alamat');
+        $user->save();
+
+        $user->update($request->except('alamat'));
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
-        return redirect()->route('profile.index');
+        if (Auth::user()->level == 'Admin') {
+            return redirect()->route('profile.index'); // or another route
+
+        } else {
+            return redirect()->route('profile-user.index'); // or another route
+        }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $user = User::findOrFail($id);
 
         // BUG : Somehow path_foto not exists
@@ -129,7 +138,7 @@ class ProfileController extends Controller
         }
         $user->delete();
 
-        toast('Pengguna terhapus!','success');
+        toast('Pengguna terhapus!', 'success');
         return redirect()->back();
     }
 

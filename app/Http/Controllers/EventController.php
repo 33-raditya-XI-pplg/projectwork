@@ -14,12 +14,26 @@ use Illuminate\Support\Carbon;
 
 class EventController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         $instansi = Instansi::get();
         $tempat = Tempat::get();
         $jenisEvt = JenisEvt::get();
+
         $evt = Event::get();
+        $today = Carbon::today();
+        foreach ($evt as $event) {
+            if ($today->lt($event->tgl_mulai)) {
+                $event->status = 'Publish';
+            } elseif ($today->gte($event->tgl_berakhir)) {
+                $event->status = 'Selesai';
+            } else {
+                $event->status = 'Berlangsung';
+            }
+            $event->save();
+        }
+
         $evt_draft = Event::where('status', 'Draft')->get();
         $evt_pub = Event::where('status', 'Publish')->get();
         $evt_live = Event::where('status', 'Berlangsung')->get();
@@ -28,7 +42,8 @@ class EventController extends Controller
         return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end'));
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $evt = Event::find($id);
 
         $skema = Event_Skema::where('event_id', $evt->id_event)->get();
@@ -39,20 +54,41 @@ class EventController extends Controller
     }
 
 
-    public function store(Request $request) {
-
-        if (!$request->has('status')) {
-            $request->merge([
-                'status' => 'Draft'
-            ]);
-        }
+    public function store(Request $request)
+    {
+        // if (!$request->has('status')) {
+        //     $request->merge([
+        //         'status' => 'Draft'
+        //     ]);
+        // }
 
         $banner = $request->file('logo');
-        $name = 'banner_' . $request->nama_event. '.' .$banner->getClientOriginalExtension();
+        $name = 'banner_' . $request->nama_event . '.' . $banner->getClientOriginalExtension();
         $stored = $banner->storeAs('public/banner-evt', $name);
 
         $request->merge([
             'path_banner' => Storage::url($stored)
+        ]);
+
+        $status = $request->has('status') ? 'Publish' : 'Draft';
+
+        if ($status === 'Publish') {
+
+            $today = carbon::today();
+            $tgl_mulai = carbon::parse($request->tgl_mulai);
+            $tgl_berakhir = carbon::parse($request->tgl_berakhir);
+
+            if ($today->lt($tgl_mulai)) {
+                $status = 'Publish';
+            } elseif ($today->between($tgl_mulai, $tgl_berakhir)) {
+                $status = 'Berlangsung';
+            } else {
+                $status = 'Selesai';
+            }
+        }
+
+        $request->merge([
+            'status' => $status
         ]);
 
         Event::create($request->all());
@@ -62,16 +98,18 @@ class EventController extends Controller
         return redirect()->back();
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
+        // if (!$request->has('status')) {
+        //     $request->merge([
+        //         'status' => 'Draft'
+        //     ]);
+        // }
         $evt = Event::find($id);
-        if (!$request->has('status')) {
-            $request->merge([
-                'status' => 'Draft'
-            ]);
-        }
+
         if ($request->has('logo')) {
             $banner = $request->file('logo');
-            $name  = 'banner_'. $request->nama_event. '.' .$banner->getClientOriginalExtension();
+            $name = 'banner_' . $request->nama_event . '.' . $banner->getClientOriginalExtension();
             unlink(public_path(Event::find($id)->path_banner));
 
             $stored = $banner->storeAs('public/banner-evt', $name);
@@ -81,17 +119,48 @@ class EventController extends Controller
             ]);
         }
 
+        $status = $request->has('status') ? 'Publish' : 'Draft';
+
+        if ($status === 'Publish') {
+
+            $today = carbon::today();
+            $tgl_mulai = carbon::parse($request->tgl_mulai);
+            $tgl_berakhir = carbon::parse($request->tgl_berakhir);
+
+            if ($today->lt($tgl_mulai)) {
+                $status = 'Publish';
+            } elseif ($today->between($tgl_mulai, $tgl_berakhir)) {
+                $status = 'Berlangsung';
+            } else {
+                $status = 'Selesai';
+            }
+        }
+
+        $request->merge([
+            'status' => $status
+        ]);
+
         $evt->update($request->all());
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diubah.');
 
         return redirect()->back();
     }
 
-    public function destroy($id) {
-        $banner = Event::find($id)->path_banner;
-        unlink(public_path($banner));
-        Event::destroy($id);
-        toast('Event terhapus!','success');
+    public function destroy($id)
+    {
+        $event = Event::find($id);
+        if ($event) {
+            $bannerPath = public_path($event->path_banner);
+
+            if (file_exists($bannerPath)) {
+                unlink($bannerPath);
+            }
+            Event::destroy($id);
+            toast('Event terhapus!', 'success');
+        } else {
+            toast('Event tidak ditemukan!', 'error');
+        }
+
         return redirect()->back();
     }
 }

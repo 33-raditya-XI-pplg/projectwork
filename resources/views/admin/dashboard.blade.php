@@ -1,6 +1,7 @@
 @extends('layouts.panel.index')
 @section('title', 'Dashboard')
 @push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         .accordion-button {
             display: flex;
@@ -13,9 +14,34 @@
         .accordion-button span {
             text-align: right;
         }
+        .colored-toast {
+        border-radius: 20px; 
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        padding: 20px; 
+        max-width: 400px; 
+    }
+
+    .alert-title {
+        font-size: 1.5rem; 
+        font-weight: bold; 
+    }
+
+    .alert-text {
+        font-size: 1rem; 
+    }
+
+    .btn-confirm {
+        background-color: #3085d6; 
+        color: #fff; 
+    }
+
+    .btn-cancel {
+        background-color: #6c757d; 
+        color: #fff; 
+    }
     </style>
 @endpush
-@section('content')
+@section('content')    
     <div class="container">
         <div class="card bg-primary-gradient text-white rounded-3 shadow-lg" style="height: 7rem;">
             <div class="card-body d-flex align-items-center justify-content-between mx-3">
@@ -105,7 +131,7 @@
 
                                 <div id="collapse{{ $row->id_event }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $row->id_event }}" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
-                                        <p>{{ $row->deskripsi }}</p>
+                                        <p>{!! strip_tags($row->deskripsi) !!}</p>
                                     </div>
                                 </div>
                             </div>
@@ -116,4 +142,50 @@
 
             </div>
         </div>
+ @if($usersToVerify->count() > 0)
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            title: 'Perhatian!',
+            text: 'Ada {{ $usersToVerify->count() }} pengguna yang belum diverifikasi. Silakan verifikasi pengguna tersebut.',
+            icon: 'info',
+            toast:true,
+            position:'top-end',
+            showCancelButton: true,
+            confirmButtonText: 'Verifikasi Sekarang',
+            cancelButtonText: 'Nanti Saja',
+            customClass:{
+                popup:'colored-toast',
+                title:'alert-title',
+                text:'alert-text',
+                confirmButton:'btn-confirm',
+                cancelButton:'btn-cancel',
+            },
+            background:'#f1f1f1',          
+            didOpen:()=>{
+                const popup = Swal.getPopup();
+                popup.style.borderRadius = '20px';
+                popup.style.fontSize = '1rem';
+                popup.style.position = 'fixed';                 
+                popup.style.top = '20px';   
+                popup.style.right = '200px';   
+                popup.style.maxWidth = '408px'; 
+                Swal.getTitle().style.fontSize = '1.5rem';
+                Swal.getContent().style.fontSize = '1rem';
+                Swal.getConfirmButton().style.backgroundColor = '#3085d6';
+                Swal.getCancelButton().style.backgroundColor = '#6c757d';
+                Swal.getConfirmButton().style.color = '#fff';
+                Swal.getCancelButton().style.color = '#fff';     
+                
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {                
+                window.location.href = '{{ route("user.index") }}';
+            }
+        });
+    });
+</script>
+@endif
 @endsection
+
+

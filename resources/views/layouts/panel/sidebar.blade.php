@@ -25,7 +25,7 @@
                     <i class="fas fa-bullhorn link-icon"></i>
                     <span>Event</span>
                 </a>
-            </li>
+            </li>      
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'penilaian' ? 'active' : '' }}">
                 <a href="{{route('penilaian.index')}}" class="item-link">
                     <i class="fas fa-tasks link-icon"></i>
@@ -52,6 +52,14 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
+        @if(Auth::user()->level == 'Pengguna')
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile-user' ? 'active' : '' }}">
+                <a href="{{ route('profile-user.index') }}" class="item-link">
+                    <i class="fa fa-user link-icon"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+        @endif
             @endif
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
@@ -161,17 +169,26 @@
                             <a href="{{ route('video.index') }}" class="sub-menu-link"><i class="fas fa-video"></i>
                                 <span> Video</span></a>
                         </li>
-                    </ul>
+                    </ul>                    
                 </div>
                 </div>
             </li>
-            @endif
+            @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
                 <a href="{{ route('profile.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>
                     <span>Profile</span>
                 </a>
             </li>
+            @endif
+                       {{-- <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
+                <a href="{{ route('profile.index') }}" class="item-link">
+                    <i class="fa fa-user link-icon"></i>
+                    <span>Profile</span>
+                </a>
+            </li> --}}
+            @endif        
+ 
         </ul>
         @if(Auth::user()->level == 'Pengguna')
         <div class="level" style="margin-top:325px"></div>

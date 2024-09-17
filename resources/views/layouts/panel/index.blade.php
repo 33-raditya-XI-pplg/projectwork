@@ -72,11 +72,11 @@
                         @if (in_array($menu,
                                     [
                                         'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat',
-                                        'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat'
+                                        'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user'
                                     ]
                                 )
                             )
-                            <button class="btn btn-primary rounded" id="add">+ Tambah</button>
+                            {{-- <button class="btn btn-primary rounded" id="add">+ Tambah</button> --}}
                         @else
                             <button class="btn btn-primary rounded" id="tambahBtn" data-bs-toggle="modal" data-bs-target="#add">+
                                 Tambah</button>
@@ -99,6 +99,7 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js">
     </script>
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>

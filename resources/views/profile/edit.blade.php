@@ -7,7 +7,11 @@
         <h4 class="mt-2">Edit Profile</h4>
     </div>
     <div class="card-body">
+        @if(Auth::user()->level == 'Admin')
         <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        @elseif(Auth::user()->level == 'Pengguna')
+        <form action="{{ route('profile-user.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        @endif
             @csrf
             @method('PUT')
             <div class="mb-3 row">
@@ -61,13 +65,7 @@
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" value="{{ $user->tempat_lahir }}">
                     </div>
-                </div>
-                <div class="mb-3 row">
-                    <label for="pekerjaan" class="col-sm-2 col-form-label">Pekerjaan</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="pekerjaan" name="pekerjaan" value="{{ $user->pekerjaan }}">
-                    </div>
-                </div>
+                </div>          
             @endif
             
             <div class="mb-3 row">
@@ -79,13 +77,13 @@
             <div class="mb-3 row">
                 <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $user->alamat }}">
+                    <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $user->alamat }}">      
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="alamat_kota" class="col-sm-2 col-form-label">Pilih Kota</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $user->alamat_kota }}">
+                    <input type="text" class="form-control" id="alamat_kota" name="alamat_kota" value="{{ $user->alamat_kota }}">
                 </div>
                 <!-- <div class="col-sm-10">
                     <select class="form-select" aria-label="Default select example" id="alamat_kota" name="alamat_kota">
@@ -164,7 +162,7 @@
             <div class="mb-3 row">
                 <label for="alamat_kota_perusahaan" class="col-sm-2 col-form-label">Pilih Kota</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $user->alamat_kota_perusahaan }}">
+                    <input type="text" class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" value="{{ $user->alamat_kota_perusahaan }}">
                 </div>
                 <!-- <div class="col-sm-10">
                     <select class="form-select" aria-label="Default select example" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan">
@@ -203,8 +201,7 @@
             <div class="d-flex justify-content-end mb-2">
                 <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
             </div>
-        </form>
-        
+        </form>        
     </div>
 </div>
 

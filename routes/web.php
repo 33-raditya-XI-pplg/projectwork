@@ -59,6 +59,10 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
     Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
     Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
     Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
+    //profile
+    Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names(['profile-user', 'profile-user.update']);
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
+
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
@@ -89,6 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::resource('skema', SkemaController::class);
         Route::resource('background', BackgroundController::class);
         Route::resource('/user', UserController::class)->except('show');
+        Route::post('user/update-status/{id}', [UserController::class, 'updateStatus'])->name('user.updateStatus');
         Route::post('user/import', [UserController::class, 'import'])->name('user.import');
         Route::resource('/penguji', PengujiController::class);
         Route::resource('/instansi', InstansiController::class);

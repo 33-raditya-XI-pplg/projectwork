@@ -17,16 +17,18 @@ use Illuminate\Support\Facades\Auth;
 
 class EventSkemaController extends Controller
 {
-    public function create($id) {
+    public function create($id)
+    {
         $skema = Skema::get();
         $bg = Background::get();
         $ttd = Ttd::get();
         $rn = Rentang_Nilai::distinct()->pluck('nama_konversi_nilai');
         $penguji = User::where('level', 'Penguji')->get();
-        return view('admin.event.create-skema', compact('skema', 'id' ,'bg', 'ttd', 'rn', 'penguji'));
+        return view('admin.event.create-skema', compact('skema', 'id', 'bg', 'ttd', 'rn', 'penguji'));
     }
 
-    public function store(Request $request, $idEvt) {
+    public function store(Request $request, $idEvt)
+    {
 
         $request->validate([
             'skema_id' => 'required | not_in:0',
@@ -48,23 +50,24 @@ class EventSkemaController extends Controller
         $id = $eventSkema->id_event_skema;
         $evtSkema = Event_Skema::find($id);
         $rn_id = Rentang_Nilai::where('nama_konversi_nilai', $request->input('nama_konversi_nilai'))
-                                ->pluck('id_rentang_nilai');
+            ->pluck('id_rentang_nilai');
         // // // $tgl_event = Event::where('id_event', $request->event_id)->pluck('tgl_mulai')->first();
 
         $evtSkema->event_skemaPenandatangan()->attach($request->input('ttd_id'), ['created_by' => $createdBy]);
         $evtSkema->event_skemaMenguji()->attach($request->input('user_id'), ['created_by' => $createdBy]);
         $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->attach($rn_id, ['created_by' => $createdBy]);
-        
+
         return redirect()->route('event.rincian', $idEvt);
     }
 
-    public function edit($evt, $id) {
+    public function edit($evt, $id)
+    {
 
         $evtSkema = Event_Skema::find($id);
         $ttd_id = $evtSkema->event_skemaPenandatangan()->pluck('ttd_id')->toArray(); //fix
         $penguji_id = $evtSkema->event_skemaMenguji()->pluck('user_id')->toArray();
         $rn_id = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
-                          ->pluck('nama_konversi_nilai');
+            ->pluck('nama_konversi_nilai');
 
         $skema = Skema::get();
         $bg = Background::get();
@@ -72,11 +75,12 @@ class EventSkemaController extends Controller
         $rn = Rentang_Nilai::distinct()->pluck('nama_konversi_nilai');
         $penguji = User::where('level', 'Penguji')->get();
 
-        return view('admin.event.edit-skema', compact('evt','evtSkema', 'skema', 'bg', 'ttd', 'rn', 'penguji', 'id', 'ttd_id', 'penguji_id', 'rn_id'));
+        return view('admin.event.edit-skema', compact('evt', 'evtSkema', 'skema', 'bg', 'ttd', 'rn', 'penguji', 'id', 'ttd_id', 'penguji_id', 'rn_id'));
 
     }
 
-    public function update(Request $request, $evt, $id) {
+    public function update(Request $request, $evt, $id)
+    {
         $evtSkema = Event_Skema::find($id);
         $updatedBy = $request->input('updated_by');
 
@@ -87,7 +91,7 @@ class EventSkemaController extends Controller
         ]);
 
         $rn_id = Rentang_Nilai::where('nama_konversi_nilai', $request->input('nama_konversi_nilai'))
-                                ->pluck('id_rentang_nilai');
+            ->pluck('id_rentang_nilai');
         $evtSkema->event_skemaPenandatangan()->syncWithPivotValues($request->input('ttd_id'), ['updated_by' => $updatedBy]);
         $evtSkema->event_skemaMenguji()->syncWithPivotValues($request->input('user_id'), ['updated_by' => $updatedBy]);
         $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->syncWithPivotValues($rn_id, ['updated_by' => $updatedBy]);
@@ -95,7 +99,8 @@ class EventSkemaController extends Controller
         return redirect()->route('event.rincian', $evt);
     }
 
-    public function destroy($idEvent, $idSkema) {
+    public function destroy($idEvent, $idSkema)
+    {
         $evt = Event::find($idEvent);
         $evt->skema()->detach($idSkema);
         Alert::success('Berhasil!', 'Skema telah dihapus!');
@@ -103,14 +108,15 @@ class EventSkemaController extends Controller
         return redirect()->back();
     }
 
-    public function show($evt, $id2) {
+    public function show($evt, $id2)
+    {
         $evtSkema = Event_Skema::find($id2);
         $ttd = $evtSkema->event_skemaPenandatangan()->pluck('nama_ttd');
         $penguji = $evtSkema->event_skemaMenguji()->pluck('nama_lengkap');
         $peserta = $evtSkema->event_skemaDaftar_Peserta()->get();
         // dd($peserta);
         $rn = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
-                       ->pluck('nama_konversi_nilai');
+            ->pluck('nama_konversi_nilai');
         confirmDelete('Hapus Peserta', 'Apakah kamu yakin untuk menghapus?');
 
         return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'rn', 'penguji', 'evt', 'peserta'));
@@ -118,21 +124,23 @@ class EventSkemaController extends Controller
 
     // Peserta
 
-    public function addStudent($evt, $skema) {
+    public function addStudent($evt, $skema)
+    {
         $instansi = Instansi::get();
         $evtSkema = Event_Skema::find($skema);
 
         return view('admin.event.add-student', compact('evt', 'skema', 'instansi'));
     }
 
-    public function search($instansi, $skema) {
+    public function search($instansi, $skema)
+    {
         $evtSkema = Event_Skema::find($skema);
         $id = $evtSkema->event_skemaDaftar_Peserta->pluck('id_user')->toArray();
 
         $peserta = User::select('id_user', 'nama_lengkap', 'email', 'jenis_kelamin')
-                        ->where('instansi_id', $instansi)
-                        ->where('level', 'pengguna')->get();
-                        
+            ->where('instansi_id', $instansi)
+            ->where('level', 'pengguna')->get();
+
         $peserta->each(function ($item) use ($id) {
             $item['exist'] = in_array($item->id_user, $id);
         });
@@ -140,7 +148,8 @@ class EventSkemaController extends Controller
         return response()->json($peserta);
     }
 
-    public function storeStudents($event, $skema, Request $request) {
+    public function storeStudents($event, $skema, Request $request)
+    {
 
         // validasi
         $request->validate([
@@ -149,12 +158,13 @@ class EventSkemaController extends Controller
 
         $evtSkema = Event_Skema::find($skema);
         $evtSkema->event_skemaDaftar_Peserta()->syncWithPivotValues($request
-                 ->input('user_id'), ['created_by' => Auth::user()->id_user]);
+            ->input('user_id'), ['created_by' => Auth::user()->id_user]);
 
-        return redirect()->route('event-skema.show', [$event,$skema]);
+        return redirect()->route('event-skema.show', [$event, $skema]);
     }
 
-    public function destroyStudents($skema, $id) {
+    public function destroyStudents($skema, $id)
+    {
         $evtSkema = Event_Skema::find($skema);
         $evtSkema->event_skemaDaftar_Peserta()->detach($id);
         return back();
