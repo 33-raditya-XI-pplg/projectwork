@@ -63,6 +63,7 @@ class EventUsersController extends Controller
                 'tb_event.deskripsi',
                 'tb_event.path_banner',
                 'tb_event.tgl_mulai',
+                'tb_event.biaya_regis',
                 'tb_event.tgl_berakhir',
                 'tb_tempat.nama_tempat'
             )
@@ -106,12 +107,21 @@ class EventUsersController extends Controller
             return redirect()->back();
         }
 
-        $uploadPembayaran = DB::table('tb_upload_pembayaran')
-            ->where('user_id', $userID)
-            ->where('event_id', $request->event_skema_id)
+        $eventSkema = DB::table('tb_event_skema')
+            ->where('id_event_skema', $request->event_skema_id)
             ->first();
 
-        if (!$uploadPembayaran) {
+        if (!$eventSkema) {
+            Alert::error('Gagal Mendaftar!', 'Event skema tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        $uploadPembayaran = DB::table('tb_upload_pembayaran')
+            ->where('user_id', $userID)
+            ->where('event_id', $eventSkema->event_id)
+            ->first();
+
+        if (!$uploadPembayaran || $uploadPembayaran->status_pembayaran !== 'Sudah Dibayar') {
             Alert::error('Gagal mendaftar !', 'Anda belum melakukan pembayaran untuk event ini.');
             return redirect()->back();
         }

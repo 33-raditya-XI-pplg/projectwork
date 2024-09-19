@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Upload_pembayaran;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\DB;
 
 class UploadPembayaranController extends Controller
 {
@@ -28,7 +30,7 @@ class UploadPembayaranController extends Controller
                     'tb_upload_pembayaran.user_id',
                     'tb_user.nama_lengkap',
                 )
-                ->whereIn('tb_upload_pembayaran.status_pembayaran', ['Menunggu', 'Sudah Dibayar'])
+                ->where('tb_upload_pembayaran.status_pembayaran', 'Menunggu', )
                 ->get();
             // dd($upload);
             return view('admin.upload.index', compact('upload'));
@@ -39,7 +41,9 @@ class UploadPembayaranController extends Controller
                 ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
                     $join->on('tb_event.id_event', '=', 'tb_upload_pembayaran.event_id')
                         ->where('tb_upload_pembayaran.user_id', '=', $userId);
+
                 })
+                ->where('tb_event.status', 'Berlangsung')
                 ->select(
                     'tb_event.id_event',
                     'tb_event.nama_event',
@@ -47,6 +51,7 @@ class UploadPembayaranController extends Controller
                     'tb_upload_pembayaran.status_pembayaran',
                     'tb_event.tgl_mulai',
                     'tb_event.tgl_berakhir',
+                    'tb_event.status',
 
                 )
                 // ->whereNotNull('tb_upload_pembayaran.bukti_pembayaran')
@@ -95,15 +100,31 @@ class UploadPembayaranController extends Controller
     public function updateStatus(Request $request, $id_upload_pembayaran)
     {
         // dd($request->all(), $id_upload_pembayaran);
-        $request->validate([
-            'status' => 'required|in:Sudah Dibayar',
-        ]);
 
         $upload = Upload_pembayaran::findOrFail($id_upload_pembayaran);
-
         $upload->status_pembayaran = $request->input('status');
         $upload->save();
 
-        return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+        if ($request->input('status') == 'Ditolak') {
+            // Hapus data "Menunggu" dari tabel terkait, misalnya tabel tb_peserta
+            DB::table('tb_upload_pembayaran')
+                ->where('user_id', $upload->user_id)
+                ->where('id_upload_pembayaran', $id_upload_pembayaran)
+
+                ->delete();
+
+            // Tambahkan Alert jika pembayaran ditolak
+            Alert::error('Pembayaran Ditolak', 'Pembayaran telah ditolak dan data menunggu dihapus.');
+        } elseif ($request->input('status') == 'Sudah Dibayar') {
+            // Tambahkan Alert jika pembayaran diselesaikan
+            Alert::success('Pembayaran Diselesaikan', 'Pembayaran telah diselesaikan.');
+        }
+        DB::transaction(function () use ($upload, $id_upload_pembayaran) {
+            DB::table('tb_upload_pembayaran')
+                ->where('user_id', $upload->user_id)
+                ->where('id_upload_pembayaran', $id_upload_pembayaran)
+                ->delete();
+        });
+        return redirect()->back();
     }
 }

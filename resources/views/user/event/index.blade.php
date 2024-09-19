@@ -100,7 +100,7 @@
                     <div class="container">
                         <div class="text-left mt-3">
                             <h5>{{ $row->nama_event }}</h5>
-                            <p class="deskripsi">{{ $row->deskripsi }}</p>
+                            <p class="deskripsi">{!! strip_tags($row->deskripsi) !!}</p>
                         </div>
                         <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
                             <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>

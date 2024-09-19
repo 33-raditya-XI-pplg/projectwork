@@ -27,17 +27,23 @@
                             <h6 class="fs-5 ls-2">Event</h6>
                             <p class="mb-0">{{ $data_event->nama_event }}</p>
                         </div>
-                        <div class="mb-4 col-6">
+                        <div class="mb-4 col-6"  style="position:relative; left:-50px;">
                             <h6 class="fs-5 ls-2">TUK</h6>
-                            <p class="mb-0">{{ $data_event->nama_tempat }}</p>
+                            <p class="mb-3">{{ $data_event->nama_tempat }}</p>
                         </div>
-                        <div class="col-6">
-                            <h6 class="fs-5 ls-2">Tanggal Mulai</h6>
-                            <p class="mb-0">{{ $data_event->tgl_mulai }}</p>
-                        </div>
-                        <div class="col-6">
-                            <h6 class="fs-5 ls-2">Tanggal Berakhir</h6>
-                            <p class="mb-0">{{ $data_event->tgl_berakhir }}</p>
+                        <div class="col-12 d-flex flex-row justify-content-between align-items-center">                        
+                            <div class="d-flex flex-column me-7">
+                                <h6 class="fs-5 ls-2">Tanggal Mulai</h6>
+                                <p class="mb-0">{{ $data_event->tgl_mulai }}</p>
+                            </div>
+                            <div class="d-flex flex-column me-4">
+                                <h6 class="fs-5 ls-2">Tanggal Berakhir</h6>
+                                <p class="mb-0">{{ $data_event->tgl_berakhir }}</p>
+                            </div>
+                            <div class="d-flex flex-column me-4">
+                                <h6 class="fs-5 ls-2">harga Registrasi</h6>
+                                <p class="mb-0">{{ $data_event->biaya_regis }}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="back mt-4 mb-3">

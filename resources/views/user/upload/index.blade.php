@@ -18,7 +18,7 @@
                         <th scope="col" width="20%">Event</th>
                         <th scope="col" width="15%">Tanggal Mulai</th>
                         <th scope="col" width="15%">Tanggal Berakhir</th>
-                        <th scope="col" width="8%">Status</th>
+                        <th scope="col" width="8%">Status Pembayaran </th>
                         <th scope="col" width="8%" class="text-center">Aksi</th>
                     </thead>
  

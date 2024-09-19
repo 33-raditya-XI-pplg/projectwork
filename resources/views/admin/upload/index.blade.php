@@ -34,7 +34,7 @@
                                 <td>{{ $row->tgl_berakhir }}</td>
                                 <td>{{ $row->status_pembayaran ?? 'Belum Dibayar' }}</td>
                                 <td class="text-center">                                                               
-                                    <div class="dropdown">
+                                    <div class="dropdown" >
                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton{{ $row->id_upload_pembayaran }}" data-bs-toggle="dropdown" aria-expanded="false">                                            
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_upload_pembayaran }}">
@@ -49,6 +49,15 @@
                                                     @method('PUT')
                                                     <button type="submit" class="dropdown-item" name="status" value="Sudah Dibayar">
                                                         <i class="fa fa-check"></i> Selesaikan
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form action="{{ route('upload.updateStatus',$row->id_upload_pembayaran) }}" method="POST" style="display: inline-block;">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="submit" class="dropdown-item" name="status" value="Belum Dibayar">
+                                                        <i class="fa fa-time"></i>Ditolak
                                                     </button>
                                                 </form>
                                             </li>
