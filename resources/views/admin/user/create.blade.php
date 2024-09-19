@@ -82,8 +82,16 @@
                     
                     <div class="mt-3">
                         <label for="nama_sekolah" class="form-label">Nama Sekolah/Universitas</label>
-                        <input type="text" class="form-control" name="nama_sekolah" id="nama_sekolah"
-                            required value="{{ isset($pengguna) ? $pengguna->nama_sekolah : '' }}">
+                        <select class="form-select" name="instansi_id" id="instansi_id" required>
+                            <option selected disabled>Pilih Sekolah/Universitas... </option>
+                            @foreach ($institutions as $id_instansi => $name)
+                                <option value="{{ $id_instansi }}"{{ isset($pengguna) && $pengguna->nama_sekolah == $id_instansi ? 'selected':'' }}>
+                                    {{ $name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        {{-- <input type="text" class="form-control" name="nama_sekolah" id="nama_sekolah"
+                            required value="{{ isset($pengguna) ? $pengguna->nama_sekolah : '' }}"> --}}
                     </div>
                     <div class="mt-3">
                         <label for="jurusan" class="form-label">Jurusan</label>
@@ -105,25 +113,25 @@
                     <div class="mt-3">
                         <label for="nama_perusahaan" class="form-label">Nama Perusahaan</label>
                         <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan"
-                            required value="{{ isset($pengguna) ? $pengguna->nama_perusahaan : '' }}">
+                             value="{{ isset($pengguna) ? $pengguna->nama_perusahaan : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="alamat_perusahaan" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="alamat_perusahaan" name="alamat_perusahaan" rows="2" required>{{ isset($pengguna) ? $pengguna->alamat_perusahaan : '' }}</textarea>
+                        <textarea class="form-control" id="alamat_perusahaan" name="alamat_perusahaan" rows="2" >{{ isset($pengguna) ? $pengguna->alamat_perusahaan : '' }}</textarea>
                     </div>
                     <div class="mt-3">
                         <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
-                        <textarea class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" rows="2" required>{{ isset($pengguna) ? $pengguna->alamat_kota_perusahaan : '' }}</textarea>
+                        <textarea class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" rows="2" >{{ isset($pengguna) ? $pengguna->alamat_kota_perusahaan : '' }}</textarea>
                     </div>
                     <div class="mt-3">
                         <label for="jabatan_pekerjaan" class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="jabatan_pekerjaan" id="jabatan_pekerjaan"
-                            required value="{{ isset($pengguna) ? $pengguna->jabatan_pekerjaan : '' }}">
+                             value="{{ isset($pengguna) ? $pengguna->jabatan_pekerjaan : '' }}">
                     </div>
                     <div class="mt-3">
                         <label for="no_telp_perusahaan" class="form-label">Telepon</label>
                         <input type="text" class="form-control" name="no_telp_perusahaan" id="no_telp_perusahaan"
-                            required value="{{ isset($pengguna) ? $pengguna->no_telp_perusahaan : '' }}">
+                             value="{{ isset($pengguna) ? $pengguna->no_telp_perusahaan : '' }}">
                     </div>
 
                     <div class="modal-footer justify-content-between mt-3">

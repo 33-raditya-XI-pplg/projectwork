@@ -38,6 +38,12 @@
                     <span>Sertifikat</span>
                 </a>
             </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'uploadPembayaran' ? 'active' : '' }} position-relative">
+                <a href="{{route('uploadPembayaran.index')}}" class="item-link">
+                    <i class="fas fa-file-arrow-up"></i>
+                    <span>Upload Bukti Pembayaran </span>
+                </a>
+            </li>
             @endif
             @if(Auth::user()->level == 'Pengguna')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event-user' ? 'active' : '' }}">
@@ -50,6 +56,12 @@
                 <a href="{{route('sertifikat-user.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
                     <span>Sertifikat</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'uploadPembayaran-user' ? 'active' : '' }} position-relative">
+                <a href="{{route('uploadPembayaran-user.index')}}" class="item-link">
+                    <i class="fas fa-file-arrow-up"></i>
+                    <span>Upload Bukti Pembayaran </span>
                 </a>
             </li>
         @if(Auth::user()->level == 'Pengguna')

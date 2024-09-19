@@ -25,7 +25,8 @@ class UserController extends Controller
 
     public function create(User $user)
     {
-        return view('admin.user.create', compact('user'));
+        $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
+        return view('admin.user.create', compact('user', 'institutions'));
     }
 
     public function store(Request $request)
@@ -53,8 +54,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $pengguna = User::findOrFail($id);
-
-        return view('admin.user.create', compact('pengguna'));
+        $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
+        return view('admin.user.create', compact('pengguna', 'institutions'));
     }
 
     public function update(Request $request, $id)

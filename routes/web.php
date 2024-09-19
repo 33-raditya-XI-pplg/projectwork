@@ -2,6 +2,8 @@
 
 
 
+use App\Http\Controllers\UploadPembayaranController;
+use App\Models\Upload_pembayaran;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PageController;
@@ -59,6 +61,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
     Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
     Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
     Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
+
+    Route::resource('uploadPembayaran-user', UploadPembayaranController::class);
     //profile
     Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names(['profile-user', 'profile-user.update']);
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
@@ -87,6 +91,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     //sertifikat
     Route::resource('sertifikat', SertifikatController::class);
+
+    Route::resource('uploadPembayaran', UploadPembayaranController::class);
+    Route::put('/update-status/{id_upload_pembayaran}', [UploadPembayaranController::class, 'updateStatus'])->name('upload.updateStatus');
+
 
     Route::group(['prefix' => 'master'], function () {
         Route::resource('tandatangan', SignatureController::class);

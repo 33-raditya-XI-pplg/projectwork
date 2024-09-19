@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id('id_user');
             // Foreign Key
             $table->foreignId('instansi_id')->nullable()->constrained('tb_instansi', 'id_instansi');
-
             $table->string('nama_lengkap');
             $table->string('email')->unique();
             $table->string('password');

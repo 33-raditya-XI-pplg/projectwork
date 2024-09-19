@@ -72,7 +72,7 @@
                         @if (in_array($menu,
                                     [
                                         'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat',
-                                        'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user'
+                                        'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user','uploadPembayaran-user','uploadPembayaran'
                                     ]
                                 )
                             )
@@ -115,10 +115,10 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script></script>
-    <script>
+    {{-- <script>
         var button = document.getElementById('add')
         button.style.display = 'none';
-    </script>
+    </script> --}}
     <script>
         function previewFile() {
             const file = $("#formFileSm").files[0];

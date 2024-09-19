@@ -30,7 +30,13 @@ class Event extends Model
         return $this->belongsTo(Jenis_Event::class, 'jenis_event_id', 'id_jenis_event');
     }
 
-    public function skema() {
+    public function skema()
+    {
         return $this->belongsToMany(Event_Skema::class, 'tb_event_skema', 'event_id', 'skema_id');
+    }
+
+    public function uploadPembayaran()
+    {
+        return $this->hasMany(Upload_pembayaran::class, 'event_id', 'id_event');
     }
 }

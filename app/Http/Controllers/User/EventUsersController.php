@@ -106,9 +106,20 @@ class EventUsersController extends Controller
             return redirect()->back();
         }
 
+        $uploadPembayaran = DB::table('tb_upload_pembayaran')
+            ->where('user_id', $userID)
+            ->where('event_id', $request->event_skema_id)
+            ->first();
+
+        if (!$uploadPembayaran) {
+            Alert::error('Gagal mendaftar !', 'Anda belum melakukan pembayaran untuk event ini.');
+            return redirect()->back();
+        }
+
         DB::table('tb_peserta')->insert([
             'user_id' => $userID,
             'event_skema_id' => $request->event_skema_id,
+            'upload_pembayaran_id' => $uploadPembayaran->id_upload_pembayaran,
             'created_by' => $userID,
             'created_at' => now()
         ]);
