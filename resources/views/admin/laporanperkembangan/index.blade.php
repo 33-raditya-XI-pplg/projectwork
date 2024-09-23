@@ -11,7 +11,7 @@
                 <select id="event_select" name="event_select" class="chosen-select form-control">
                     <option hidden disabled selected>Pilih Event</option>
                     @foreach ($events as $event)
-                        <option value="{{ $event->id }}">{{ $event->nama_event }}</option>
+                        <option value="{{ $event->id_event }}">{{ $event->nama_event }}</option>
                     @endforeach
                 </select>
             </div>
@@ -178,131 +178,464 @@
 
 @endsection
 
-@section('scripts')
+@push('script')
 <script>
-    // AJAX untuk mengambil data skema saat event dipilih
-    $('#event').on('change', function () {
-        var eventId = $(this).val();
-        if (eventId) {
-            $.get(`/admin/laporan-perkembangan/fetch-skema-data/${eventId}`, function (data) {
-                $('#skema').empty().append('<option value="">-- Pilih Skema --</option>');
-                $.each(data, function (key, value) {
-                    $('#skema').append(`<option value="${value.id}">${value.nama_skema}</option>`);
-                });
+    $(".chosen-select").chosen()
 
-                // Memuat pengguna yang mengikuti event
-                loadUsers(eventId, $('#skema').val());
-            });
-        }
-    });
+    $(document).ready(function() {
+        var skemaID;
+        var event_skemaID
+        var pesertaID;
 
-    // AJAX untuk mengambil data laporan berdasarkan skema yang dipilih
-    $('#skema').on('change', function () {  
-        var skemaId = $(this).val();
-        var eventId = $('#event').val();
-        if (skemaId && eventId) {
-            $.get(`/admin/laporan-perkembangan/fetch-laporan-data/${skemaId}`, function (data) {
-                var rows = '';
-                $.each(data, function (index, laporan) {
-                    rows += `<tr>
-                                <td>${index + 1}</td>
-                                <td>${laporan.nama_peserta}</td>
-                                <td>${laporan.event.nama_event}</td>
-                                <td>${laporan.skema.nama_skema}</td>
-                                <td>${laporan.tanggal_penilaian}</td>
-                                <td>
-                                    <button class="btn btn-warning edit-laporan" data-id="${laporan.id}">Edit</button>
-                                    <button class="btn btn-danger delete-laporan" data-id="${laporan.id}">Delete</button>
-                                </td>
-                             </tr>`;
-                });
-                $('#laporan-perkembangan-table tbody').html(rows);
+        var data_laporan_perkembangan;
+        var data_skema;
+        var data_sub_skema;
 
-                // Memuat pengguna yang mengikuti event dan skema
-                loadUsers(eventId, skemaId);
-            });
-        }
-    });
-
-    // Fungsi untuk memuat daftar pengguna yang mengikuti event dan skema
-    function loadUsers(eventId, skemaId) {
-        if (eventId && skemaId) {
-            $.get(`/admin/laporan-perkembangan/fetch-users/${eventId}/${skemaId}`, function (data) {
-                $('#user-list').empty();
-                $.each(data, function (key, user) {
-                    $('#user-list').append(`<li class="list-group-item">${user.name}</li>`);
-                });
-            });
-        } else {
-            $('#user-list').empty();
-        }
-    }
-
-    // Tambah Laporan (Modal)
-    $('#btn-tambah-laporan').on('click', function () {
-        $('#laporan-form')[0].reset();
-        $('#laporan-id').val('');
-        $('#laporanModalLabel').text('Tambah Laporan Perkembangan');
-    });
-
-    // Simpan Laporan
-    $('#laporan-form').on('submit', function (e) {
-        e.preventDefault();
-        var id = $('#laporan-id').val();
-        var url = id ? `/admin/laporan-perkembangan/update/${id}` : '/admin/laporan-perkembangan/store';
-        var method = id ? 'PUT' : 'POST';
-        var formData = {
-            nama_peserta: $('#nama_peserta').val(),
-            tanggal_penilaian: $('#tanggal_penilaian').val(),
-            event_id: $('#event').val(),
-            skema_id: $('#skema').val(),
-        };
-
-        $.ajax({
-            url: url,
-            type: method,
-            data: formData,
-            success: function (response) {
-                $('#laporanModal').modal('hide');
-                // Reload tabel setelah simpan data
-                $('#skema').trigger('change');
-            },
-            error: function (error) {
-                console.log(error);
-                alert('Gagal menyimpan data!');
+        // round Nilai function
+        function formatNumber(value) {
+            var num = parseFloat(value);
+            if (isNaN(num)) {
+                return '0'; 
             }
-        });
-    });
+            var fixedValue = num.toFixed(1);
 
-    // Edit Laporan
-    $(document).on('click', '.edit-laporan', function () {
-        var id = $(this).data('id');
-        $.get(`/admin/laporan-perkembangan/edit/${id}`, function (data) {
-            $('#laporanModal').modal('show');
-            $('#laporan-id').val(data.id);
-            $('#nama_peserta').val(data.nama_peserta);
-            $('#tanggal_penilaian').val(data.tanggal_penilaian);
-            $('#laporanModalLabel').text('Edit Laporan Perkembangan');
-        });
-    });
+            return fixedValue.endsWith('.0') ? parseInt(fixedValue) : fixedValue;
+        }
 
-    // Delete Laporan
-    $(document).on('click', '.delete-laporan', function () {
-        if (confirm('Yakin ingin menghapus laporan ini?')) {
-            var id = $(this).data('id');
-            $.ajax({
-                url: `/admin/laporan-perkembangan/destroy/${id}`,
-                type: 'DELETE',
-                success: function (response) {
-                    // Reload tabel setelah hapus data
-                    $('#skema').trigger('change');
-                },
-                error: function (error) {
-                    console.log(error);
-                    alert('Gagal menghapus data!');
+        // delete Sweet Alert function
+        function confirmDelete(title, text) {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            });
+        }
+
+        // format Date function
+        function formatDate(dateString) {
+            var dateParts = dateString.split("-");
+            var year = dateParts[0];
+            var month = dateParts[1];
+            var day = dateParts[2];
+
+            var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+            return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
+        }
+
+        // format Timestamps function
+        function fetchDetailData(skemaID) {
+            Swal.fire({
+                title: 'Memuat...',
+                text: 'Sedang Memproses!',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
                 }
             });
+
+            $.ajax({
+                url: '/laporanperkembangan/fetchSkemaData/' + skemaID,
+                type: "GET",
+                dataType: "json",
+                
+                success: function(response) {
+                    Swal.close();
+                    if(response){
+                        data_skema = response.data_skema;
+                        data_penguji = response.data_penguji;
+                        data_sub_skema = response.data_sub_skema;
+                        data_peserta= response.data_peserta;
+                        data_laporan_perkembangan = response.data_laporan_perkembangan;
+
+                        var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent;
+                        
+                        // Input Disabled 
+                        $('#nama_event').val(data_skema.nama_event);
+                        $('#jenis_event').val(data_skema.nama_jenis_event);
+
+                        $('#nama_skema').val(data_skema.nama_skema);
+                        $('#tempat_skema').val(data_skema.nama_tempat);
+
+                        $('#tgl_mulai').val(formatDate(data_skema.tgl_mulai));
+                        $('#tgl_selesai').val(formatDate(data_skema.tgl_berakhir));
+
+                        var listPenguji = document.getElementById('list_penguji');
+                        var btnSelengkapnya = document.getElementById('btnSelengkapnya');
+                        var btnSedikit = document.getElementById('btnSedikit');
+
+                        function renderPenguji(names) {
+                            listPenguji.innerHTML = ''; 
+
+                            names.forEach(function(name) {
+                                var listItem = document.createElement('li');
+                                listItem.textContent = name;
+                                listItem.classList.add('list-group-item');
+                                listPenguji.appendChild(listItem);
+                            });
+                        }
+
+                        // Tampilkan hanya 2 penguji awal
+                        var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(function(penguji) {
+                            return penguji.nama_lengkap;
+                        });
+                        renderPenguji(initialPenguji);
+
+                        // Tentukan apakah tombol "Selengkapnya" perlu ditampilkan
+                        if (data_penguji.event_skema_menguji.length <= 2) {
+                            btnSelengkapnya.style.display = 'none';
+                        } else {
+                            btnSelengkapnya.style.display = '';
+                        }
+
+                        // Tambahkan event listener untuk tombol Selengkapnya
+                        btnSelengkapnya.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var allPenguji = data_penguji.event_skema_menguji.map(function(penguji) {
+                                return penguji.nama_lengkap;
+                            });
+                            renderPenguji(allPenguji);
+                            btnSelengkapnya.style.display = 'none'; 
+                            btnSedikit.style.display = 'inline'; 
+                        });
+
+                        // Tambahkan event listener untuk tombol Sedikit
+                        btnSedikit.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(function(penguji) {
+                                return penguji.nama_lengkap;
+                            });
+                            renderPenguji(initialPenguji);
+                            btnSedikit.style.display = 'none'; 
+                            btnSelengkapnya.style.display = 'inline'; 
+                        });
+                        
+                        if (data_skema.status === "Aktif") {
+                            $('#status').prop('checked', true);
+                        } else {
+                            $('#status').prop('checked', false);
+                        }
+
+                        // Table daftar peserta
+                        $('#example').DataTable().destroy();
+                        $('tbody').html("");
+                        $('#dropdown-menu').html("");
+
+                        $.each(data_peserta, function(index, row) {
+    var num = index + 1;
+    var buttonAction;
+
+    if (row.catatan != null) {
+        buttonAction = 
+        '<li>\
+            <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
+                <i class="fa-regular fa-pen-to-square"></i>\
+             Edit</a>\
+        </li>\
+        <li>\
+            <a href="#" class="dropdown-item text-danger delete_nilai_btn" data-id="' + row.id_peserta + '">\
+                <i class="fa-regular fa-trash-can pe-none"></i>\
+             Delete</a>\
+        </li>';
+    } else {
+        buttonAction = 
+        '<li>\
+            <a href="#" class="dropdown-item text-primary create_nilai_btn" data-id="' + row.id_peserta + '">\
+                <i class="fa-regular fa-pen-to-square"></i>\
+             Tambah</a>\
+        </li>';
+    }
+
+    $('tbody').append(
+        '<tr>\
+            <td>' + num + '</td>\
+            <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
+            <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
+            <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) : 'Tanggal tidak tersedia') + '</td>\
+            <td>\
+                <div class="dropdown px-3">\
+                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
+                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
+                        <i class="fa-solid fa-bars"></i>\
+                    </a>\
+                    <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                        ' + buttonAction + '\
+                    </ul>\
+                </div>\
+            </td>\
+        </tr>'
+    );
+});
+                        $("#example").DataTable();
+
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal memuat data',
+                        text: 'Tidak dapat mengambil data dari server!'
+                    });
+                }
+                
+            });
         }
+
+        ///////
+
+        // Event Dropdown
+        $('#event_select').on('change', function() {
+            var eventID = $(this).val();
+            $('#search_btn').prop('disabled', true);
+
+            if(eventID) {
+                $.ajax({
+                    url: '/laporanperkembangan/fetchEventData/'+eventID,
+                    type: "GET",
+                    dataType: "json",
+
+                success: function(response) {
+                console.log("Response from server: ", response);
+                if (response.data) {
+                    var data = response.data;
+
+                    $('#skema_select').empty();
+                    $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>'); 
+                    
+                    $.each(data, function(key, row) {
+                        $('#skema_select').append('<option value="' + row.id_skema + '">' + row.nama_skema + '</option>');
+                    });
+
+                    $('#skema_select').trigger("chosen:updated");
+                }
+            },
+                });
+            }
+
+        });
+
+        /////
+
+        $('#skema_select').on('change', function() {
+            skemaID = $(this).val();
+
+            if (skemaID) {
+                $('#search_btn').prop('disabled', false);
+            }
+        });
+
+        // Search Button -- fetch Detail Data
+        $('#search_btn').on('click', function() {
+            $('input[type="text"]').val('');
+            $('input[type="date"]').val('');
+            $('input[type="checkbox"]').prop('checked', false);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data berhasil dicari.'
+            });
+            
+            fetchDetailData(skemaID);
+        
+        });
+
+        // Create Modal Trigger
+        $(document).on('click', '.create_laporan_btn', function (e){
+            e.preventDefault()
+            pesertaID = $(this).data('id')
+
+            $.ajax({
+                url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
+                type: "get",
+                dataType: "json",
+
+                success: function(response) {
+                    var data_peserta_create = response.data_peserta;
+                    
+                    $('#createLaporanModal').modal('show');
+                    $('#create_nama_peserta').val(data_peserta_create.nama_lengkap);
+                    $('#create_nama_skema').val(data_skema.nama_skema);
+
+                    $('#nilai-sub-skema-wrapper').html("")
+                    $('.nilai_sub_skema').val('')
+
+                    $.each(data_sub_skema, function(index, row) {
+                        $('#nilai-sub-skema-wrapper').append(
+                            '<div class="px-1 mb-3 row">\
+                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                                <div class="col-sm-4 d-flex justify-content-end">\
+                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                        style="height: 35px;">Nilai</label>\
+                                    <input type="hidden" class="create_id_sub_skema" value="' + row.id_sub_skema + '">\
+                                    <input type="number" class="form-control rounded-0 rounded-end create_nilai_sub_skema"\
+                                        style="width: 100px; height: 35px;">\
+                                </div>\
+                            </div>'
+                        );
+                        
+                    });
+                    
+                }
+                
+            });
+        });
+
+        // Edit Modal Trigger
+        $(document).on('click', '.edit_laporan_btn', function (e){
+            e.preventDefault()
+            pesertaID = $(this).data('id')
+
+            $.ajax({
+                url: '/laporanerkembangan/fetchNilaiData/' + pesertaID,
+                type: "get",
+                dataType: "json",
+
+                success: function(response) {
+                    var data_peserta_edit = response.data_nilai;
+                    
+                    $('#editLaporanModal').modal('show');
+                    $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
+                    $('#edit_nama_skema').val(data_skema.nama_skema);
+
+                    $('#edit-nilai-sub-skema-wrapper').html("")
+                    $('.nilai_sub_skema').val('')
+                    $.each(data_peserta_edit, function(index, row) {
+                        $('#edit-nilai-sub-skema-wrapper').append(
+                            '<div class="px-1 mb-3 row">\
+                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                                <div class="col-sm-4 d-flex justify-content-end">\
+                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                        style="height: 35px;">Nilai</label>\
+                                    <input type="hidden" class="edit_id_sub_skema" value="' + row.sub_skema_id + '">\
+                                    <input type="number" class="form-control rounded-0 rounded-end edit_nilai_sub_skema"\
+                                        style="width: 100px; height: 35px;" value="' + row.nilai + '">\
+                                </div>\
+                            </div>'
+                        );
+
+                    });
+                    
+                }
+                
+            });
+        });
+
+        // Store function -- to store and update
+        $(document).on('click', '#store_laporan_btn', function () {
+            var btnIdentifier = $(this).val();
+            var createdBy = $('#created_by').val();
+
+            var create_nilai_data = [];
+            var create_sub_skemaID = [];
+
+            if (btnIdentifier != 0) {
+                $('.create_id_sub_skema').each(function() {
+                    var sub_skemaID = $(this).val();
+                    create_sub_skemaID.push(sub_skemaID);
+                });
+
+                $('.create_nilai_sub_skema').each(function() {
+                    var nilai = $(this).val();
+                    create_nilai_data.push(nilai);
+                });
+            } else {
+                $('.edit_id_sub_skema').each(function() {
+                    var sub_skemaID = $(this).val();
+                    create_sub_skemaID.push(sub_skemaID);
+                });
+
+                $('.edit_nilai_sub_skema').each(function() {
+                    var nilai = $(this).val();
+                    create_nilai_data.push(nilai);
+                });
+            }
+            
+            // looping for Create Associative Array
+            var nilaiSubSkemaArray = {};
+            for (var i = 0; i < create_sub_skemaID.length; i++) {
+                nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
+            }
+
+            // looping for Set null Data to 0
+            Object.keys(nilaiSubSkemaArray).forEach(key => {
+                if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
+                    nilaiSubSkemaArray[key] = null;
+                }
+            });
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: '/laporan/storeNilaiData',
+                type: 'POST',
+                data: {
+                    pesertaID: pesertaID,
+                    event_skemaID: event_skemaID,
+                    nilaiSubSkema: nilaiSubSkemaArray,
+                    createdBy: createdBy
+                },
+                dataType: "json",
+
+                success: function(response) {
+                    $('#createLaporanModal').modal('hide');
+                    $('#editNilaiModal').modal('hide');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Nilai berhasil ditambahkan.'
+                    });
+
+                    fetchDetailData(skemaID);
+                },
+                error: function(xhr) {
+                    var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi Error';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: errorMessage
+                    });
+
+                }
+                    
+            });
+        })
+        
+        // Delete function
+        $(document).on('click', '.delete_nilai_btn', function(e) {
+            e.preventDefault()
+            pesertaID = $(this).data('id')
+
+            confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/penilaian/destroyNilaiData/' + pesertaID,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            pesertaID: pesertaID
+                        },
+                        success: function(response) {
+                            console.log('Nilai peserta berhasil dihapus');
+                            fetchDetailData(skemaID)
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Terjadi kesalahan saat menghapus nilai peserta:', error);
+                        }
+                    });
+                }
+            });
+        });
+        
     });
+
 </script>
-@endsection
+@endpush
