@@ -114,15 +114,17 @@ class UploadPembayaranController extends Controller
                 ->delete();
 
             // Tambahkan Alert jika pembayaran ditolak
-            Alert::error('Pembayaran Ditolak', 'Pembayaran telah ditolak dan data menunggu dihapus.');
+            // Alert::error('Pembayaran Ditolak', 'Pembayaran telah ditolak dan data menunggu dihapus.');
         } elseif ($request->input('status') == 'Sudah Dibayar') {
             // Tambahkan Alert jika pembayaran diselesaikan
-            Alert::success('Pembayaran Diselesaikan', 'Pembayaran telah diselesaikan.');
+            // Alert::success('Pembayaran Diselesaikan', 'Pembayaran telah diselesaikan.');
         }
+        //hapus database dengan status_belum dibayar 
         DB::transaction(function () use ($upload, $id_upload_pembayaran) {
             DB::table('tb_upload_pembayaran')
                 ->where('user_id', $upload->user_id)
                 ->where('id_upload_pembayaran', $id_upload_pembayaran)
+                ->where('status_pembayaran', 'Belum Dibayar')
                 ->delete();
         });
         return redirect()->back();

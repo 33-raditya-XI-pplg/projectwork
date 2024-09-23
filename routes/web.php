@@ -45,7 +45,7 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TestimoniController;
 use App\Http\Controllers\LaporanPerkembanganController;
 
-    
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -60,21 +60,20 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
     Route::resource('sertifikat-user', SertifikatUsersController::class);
     Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
     Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
-    
+
     Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
     Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
     Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
-    
+
     Route::resource('uploadPembayaran-user', UploadPembayaranController::class);
     //profile
     Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names(['profile-user', 'profile-user.update']);
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
-    
+
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
-    //Laporan perkembangan
-    Route::resource('laporanperkembangan', LaporanPerkembanganController::class);
+
     //dashboard
     Route::get('dashboard', [DashboardController::class, 'admin_index']);
 
@@ -90,6 +89,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::put('/event/{event}/skema/{skema}', [EventSkemaController::class, 'update'])->name('event-skema.update');
     Route::post('/event/{event}/skema/{skema}/students', [EventSkemaController::class, 'storeStudents'])->name('event-skema.store-student');
     Route::delete('/event/skema/{skema}/students/{id}', [EventSkemaController::class, 'destroyStudents'])->name('event-skema.delete-student');
+
+    //Laporan perkembangan
+    Route::resource('/laporanperkembangan', LaporanPerkembanganController::class);
+
 
     //penilaian
     Route::resource('/penilaian', PenilaianController::class);
@@ -114,9 +117,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::resource('/tempat', TempatController::class);
         Route::resource('/rentang-nilai', RentangNilaiController::class);
     });
-    
+
     Route::group(['prefix' => 'management'], function () {
-        
+
         //galeri
         Route::resource('galeri', GaleriController::class);
         Route::get('/galeri', [GaleriController::class, 'index'])->name('index');
@@ -133,7 +136,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-        
+
         //video
         Route::get('/video/index', [VideoController::class, 'index'])->name('video.index');
         Route::post('/video/store', [VideoController::class, 'store'])->name('video.store');
@@ -144,7 +147,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/video/{id}/edit', [VideoController::class, 'edit'])->name('video.edit');
         Route::put('/video/{id}', [VideoController::class, 'update'])->name('video.update');
         Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('video.destroy');
-        
+
         //page
         Route::get('/page', [PageController::class, 'index'])->name('page.index');
         Route::post('/page', [PageController::class, 'store'])->name('page.store');
@@ -152,7 +155,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/admin/pages/{id}', [PageController::class, 'destroy'])->name('page.destroy');
         Route::put('/admin/page/{id}', [PageController::class, 'update'])->name('page.update');
         Route::get('/admin/page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
-        
+
         // blog 
         Route::resource('admin/blog', BlogController::class);
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.indek');
@@ -207,6 +210,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
 });
 
+// AJAX Request -- Menu Laporan 
+Route::get('/laporanperkembangan/fetchEventData/{id}', [LaporanPerkembanganController::class, 'fetchEventData']);
+Route::get('laporanperkembangan/fetchSkemaData/{id}', [LaporanperkembanganController::class, 'fetchSkemaData']);
+Route::get('laporanperkembangan/fetchPesertaData/{id}', [LaporanperkembanganController::class, 'fetchPesertaData']);
+Route::get('laporanperkembangan/fetchNilaiData/{id}', [LaporanperkembanganController::class, 'fetchNilaiData']);
+Route::get('laporanperkembangan/fetchInisialData', [LaporanperkembanganController::class, 'fetchInisialData']);
 // AJAX Request -- Menu Penilaian
 Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchEventData']);
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
