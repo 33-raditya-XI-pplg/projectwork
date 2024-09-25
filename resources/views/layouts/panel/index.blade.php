@@ -165,7 +165,7 @@
     rules: {
       nama: {
         required: true,
-        minlength: 255
+        maxlength: 255
       }
     },
 
@@ -185,7 +185,7 @@
     messages: {
       nama: {
         required: "Please enter an Image Caption",
-        minlength:("max. 255 charackter")
+        maxlength:("max. 255 charackter")
       },
       kategori: {
         required: "Please select category",
