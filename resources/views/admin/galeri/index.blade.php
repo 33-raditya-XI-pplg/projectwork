@@ -118,10 +118,12 @@
             {{-- <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a> --}}
 
             @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            <div class="alert alert-success alert-dismissible fade show mt-3 position-relative" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: absolute; top: -15px; right: 10px;"></button>
+</div>
+
+
             @endif
 
             @if ($errors->any())
@@ -213,7 +215,7 @@
                                                         <option value="video" {{ $item->kategori == 'video' ? 'selected' : '' }}>Video</option>
                                                     </select>
                                                 </div>
-                                                <div class="d-flex justify-content-end w-100">
+                                                <div class="d-flex justify-content-end w-100 mt-3">
                                                     <button type="button" class="btn btn-danger me-2" data-bs-dismiss="modal">Close</button>
                                                     <button type="submit" class="btn btn-success">Update</button>
                                                 </div>
@@ -378,26 +380,6 @@
             });
         });
     </script>
-
-
-    <script>
-        $(document).ready(function() {
-            // Handle file input change event to show preview
-            $('#path_file').on('change', function(event) {
-                var input = event.target;
-                var file = input.files[0];
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#preview_image').attr('src', e.target.result).show();
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    $('#preview_image').hide();
-                }
-            });
-        });
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var fileInput = document.getElementById('path_file');
@@ -417,7 +399,6 @@
 
                     reader.readAsDataURL(file);
                 } else {
-                    xx
                     // Hide the preview image if no file is selected
                     previewImage.style.display = 'none';
                 }
@@ -452,7 +433,7 @@
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
-                text: '{{ session('success') }}',
+                text: '{{ session("success") }}',
                 confirmButtonText: 'OK'
             });
         });
