@@ -1,5 +1,5 @@
 @extends('layouts.panel.index')
-@section('title', 'Sertifikat')
+@section('title', 'Upload Bukti pembayaran')
 @section('content')
     @push('style')
         <style>
@@ -57,7 +57,7 @@
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="dropdown-item" name="status" value="Belum Dibayar">
-                                                        <i class="fa fa-time"></i>Ditolak
+                                                        <i class="fa-solid fa-x"> </i>  Ditolak
                                                     </button>
                                                 </form>
                                             </li>

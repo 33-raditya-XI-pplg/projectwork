@@ -17,13 +17,13 @@
 @section('content')
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-            <div class="card mb-5">
+            <div class="card mb-2">
+                <h4 class="card-title ">{{ $data_skema->nama_skema }}</h4>
                 <div class="card-body">
-                    <h4 class="card-title mb-3">{{ $data_skema->nama_skema }}</h4>
 
                     <div class="row">
                         <div class="col">
-                            <h4 class="card-title">Daftar Penguji</h4>
+                            <h4 class="card-title mb-3">Daftar Penguji</h4>
                             <table class="table">
                                 <thead class="fw-normal">
                                     <th scope="col" width="5%">No</th>
@@ -46,7 +46,7 @@
                         
                         <div class="col">
                             <table class="table">
-                                <h4 class="card-title">Daftar Sub Skema</h4>
+                                <h4 class="card-title mb-3">Daftar Sub Skema</h4>
                                 <thead class="fw-normal">
                                     <th scope="col" width="5%">No</th>
                                     <th scope="col" width="20%">Nama Sub-Skema</th>

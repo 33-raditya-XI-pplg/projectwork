@@ -14,7 +14,9 @@ class SliderController extends Controller
     {
         $slider = Slider::all();
         $page = Page::all();
-        return view('admin.slider.index', compact('slider', 'page'));
+        $Title = 'Management';
+        $subtitle = 'Slider';
+        return view('admin.slider.index', compact('slider', 'page', 'Title', 'subtitle'));
     }
 
     public function store(Request $request)

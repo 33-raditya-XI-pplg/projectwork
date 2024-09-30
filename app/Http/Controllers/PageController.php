@@ -12,7 +12,9 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::all();
-        return view('admin.page.index', compact('pages'));
+        $Title = 'Management';
+        $subtitle = 'Page';
+        return view('admin.page.index', compact('pages', 'Title', 'subtitle'));
     }
 
 
@@ -72,90 +74,90 @@ class PageController extends Controller
 
 
 
-public function edit($id)
-{
-    $page = Page::findOrFail($id);
-    return view('admin.page.edit', compact('page'));
-}
-
-
-
-
-public function destroy($id)
-{
-    $page = Page::findOrFail($id);
-
-
-    $messages = [];
-
-
-    if ($page->partners()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Partner.';
-    }
-    if ($page->pageGaleri()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Galeri.';
-    }
-    if ($page->pageProfil()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Profil.';
-    }
-    if ($page->pageFaq()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman FAQ.';
-    }
-    if ($page->pageBlog()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Blog.';
-    }
-    if ($page->profilPerusahaan()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Profil Perusahaan.';
-    }
-
-    if ($page->sliders()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Slider.';
-    }
-
-    if ($page->testimoni()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman Testimoni.';
-    }
-
-    if ($page->faqs()->exists()) {
-        $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+    public function edit($id)
+    {
+        $page = Page::findOrFail($id);
+        return view('admin.page.edit', compact('page'));
     }
 
 
-    if (!empty($messages)) {
-        $errorMessage = implode(' ', $messages);
-        return redirect()->back()->with('error', $errorMessage);
+
+
+    public function destroy($id)
+    {
+        $page = Page::findOrFail($id);
+
+
+        $messages = [];
+
+
+        if ($page->partners()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Partner.';
+        }
+        if ($page->pageGaleri()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Galeri.';
+        }
+        if ($page->pageProfil()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Profil.';
+        }
+        if ($page->pageFaq()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+        }
+        if ($page->pageBlog()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Blog.';
+        }
+        if ($page->profilPerusahaan()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Profil Perusahaan.';
+        }
+
+        if ($page->sliders()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Slider.';
+        }
+
+        if ($page->testimoni()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman Testimoni.';
+        }
+
+        if ($page->faqs()->exists()) {
+            $messages[] = 'Page ini masih digunakan di halaman FAQ.';
+        }
+
+
+        if (!empty($messages)) {
+            $errorMessage = implode(' ', $messages);
+            return redirect()->back()->with('error', $errorMessage);
+        }
+
+
+        if ($page->pageGaleri()->exists()) {
+
+            $page->pageGaleri()->delete();
+        }
+
+
+        if ($page->profilPerusahaan()->exists()) {
+
+            $page->profilPerusahaan()->delete();
+        }
+
+        if ($page->sliders()->exists()) {
+
+            $page->sliders()->delete();
+        }
+
+        if ($page->testimoni()->exists()) {
+
+            $page->testimoni()->delete();
+        }
+
+        if ($page->faqs()->exists()) {
+            $page->faqs()->delete();
+        }
+
+
+        $page->delete();
+
+        return redirect()->back()->with('success', 'Page berhasil dihapus.');
     }
-
-
-    if ($page->pageGaleri()->exists()) {
-
-        $page->pageGaleri()->delete();
-    }
-
-
-    if ($page->profilPerusahaan()->exists()) {
-
-        $page->profilPerusahaan()->delete();
-    }
-
-    if ($page->sliders()->exists()) {
-
-        $page->sliders()->delete();
-    }
-
-    if ($page->testimoni()->exists()) {
-
-        $page->testimoni()->delete();
-    }
-
-    if ($page->faqs()->exists()) {
-        $page->faqs()->delete();
-    }
-
-
-    $page->delete();
-
-    return redirect()->back()->with('success', 'Page berhasil dihapus.');
-}
 
 }

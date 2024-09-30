@@ -34,9 +34,11 @@ class AuthenticatedSessionController extends Controller
         if ($user->level == 'Admin') {
             return redirect('/admin/dashboard');
         } elseif ($user->level == 'Pengguna') {
-            return redirect('/user/dashboard'); // Ganti dengan rute yang sesuai untuk pengguna
+            return redirect('/user/dashboard');
+        } elseif ($user->level == 'Penguji') {
+            return redirect('/user/dashboard');
         } else {
-            return redirect('/'); // Default redirect if level does not match
+            return redirect('/');
         }
 
         // return redirect()->intended(RouteServiceProvider::HOME);

@@ -1,7 +1,14 @@
 @extends('layouts.panel.index')
 @section('title', 'Tempat')
 @section('content')
-
+<style>
+    .select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3091 !important;
+    }
+</style>
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
@@ -21,7 +28,9 @@
                             <td>{{ $row->nama_tempat }}</td>
                             <td>{{ $row->no_telp }}</td>
                             <td>{{ $row->alamat }}</td>
-                            <td>{{ $row->alamat_kota }}</td>
+                            {{-- @forEach($regencies as $id=>$name)
+                            @endforeach --}}
+                            <td>{{ $row->alamat_kota ?? '-'  }}</td>
                             <td><a class="btn btn-outline-success btn-sm rounded" href="{{ $row->link_maps }}" target="blank">
                                 Link <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>
@@ -82,12 +91,20 @@
                                 {{-- kiri --}}
                                 <div class="mb-3">
                                         <label for="no_telp" class="form-label">No. telp</label>
-                                        <input type="text" class="form-control" name="no_telp" id="no_telp" required>
+                                        <input type="number" class="form-control" name="no_telp" id="no_telp" required>
                                     </div>
-                                <div class="mb-3">
-                                    <label for="alamat_kota" class="form-label">Kota</label>
-                                    <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required></textarea>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="alamat_kota_{{ $row->id_tempat }}" class="form-label">Kota</label>
+                                        <select class="form-select js-single" name="alamat_kota" id="alamat_kota_{{ $row->id_tempat }}" data-placeholder="Pilih Kota" required>
+                                            <option value="" disabled selected></option> 
+                                            @foreach ($regencies as $id => $name)
+                                                <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('alamat_kota')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                             </div>
                             <div class="form-group mb-5">
                                 <label for="link_maps">Link Maps</label>
@@ -150,13 +167,21 @@
                                     {{-- kiri --}}
                                     <div class="mb-3">
                                             <label for="no_telp" class="form-label">No. telp</label>
-                                            <input type="text" class="form-control" name="no_telp" id="no_telp" required
+                                            <input type="number" class="form-control" name="no_telp" id="no_telp" required
                                             value="{{ $row->no_telp }}">
                                         </div>
-                                    <div class="mb-3">
-                                        <label for="alamat_kota" class="form-label">Kota</label>
-                                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ $row->alamat_kota }}</textarea>
-                                    </div>
+                                        <div class="mb-3">
+                                            <label for="alamat_kota_{{ $row->id_tempat }}" class="form-label">Kota</label>
+                                            <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_tempat }}" data-placeholder="Pilih Kota" required>
+                                                <option value="" disabled selected></option> 
+                                                @foreach ($regencies as $id => $name)
+                                                    <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('alamat_kota')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                 </div>
                                 <div class="form-group mb-5">
                                     <label for="link_maps">Link Maps</label>
@@ -183,6 +208,25 @@
             </div>
         </div>
         @endforeach
+    <!-- Include CSS Select2 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
+    <!-- Include JS Select2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+$(document).ready(function() {
+    $('.js-single').select2({
+        
+        allowClear: true
+    });
+    
+    @foreach($tempat as $row)
+        $('#alamat_kota_{{ $row->id_tempat }}').select2({
+            allowClear: true
+        });
+    @endforeach
+});
+    </script>
 @endsection
 

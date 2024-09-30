@@ -1994,6 +1994,7 @@ progress {
   border-radius:  10px;
   font-family: sans-serif;
   text-align: left;
+  
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;

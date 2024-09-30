@@ -16,8 +16,10 @@ class GaleriController extends Controller
     {
         $pages = Page::all();
         $galeri = Galeri::all();
+        $Title = 'Management';
+        $subtitle = 'Galeri';
 
-        return view('admin.galeri.index', compact('galeri', 'pages'));
+        return view('admin.galeri.index', compact('galeri', 'pages', 'Title', 'subtitle'));
     }
 
 
@@ -40,7 +42,7 @@ class GaleriController extends Controller
         $validatedData = $request->validate([
             'page_id' => 'required|integer',
             'nama' => 'required|string|max:255',
-           'path_file' => 'required|file|mimes:jpg,jpeg,png,bmp|max:2048',
+            'path_file' => 'required|file|mimes:jpg,jpeg,png,bmp|max:2048',
             'kategori' => 'required|in:partner,klien,gambar,video',
             'deskripsi' => 'nullable|string',
             'created_by' => 'nullable|integer',
@@ -90,63 +92,63 @@ class GaleriController extends Controller
 
 
     public function update(Request $request, $id)
-{
+    {
 
-    $request->validate([
+        $request->validate([
 
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,bmp,svg,webp|max:10240',
-        'description' => 'required|string|max:255',
-        'kategori' => 'required|string|max:100',
-    ]);
-
-
-    $galeri = Galeri::findOrFail($id);
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,bmp,svg,webp|max:10240',
+            'description' => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+        ]);
 
 
-    $galeri->deskripsi = $request->input('description');
-    $galeri->kategori = $request->input('kategori');
+        $galeri = Galeri::findOrFail($id);
 
 
-    if ($request->hasFile('image')) {
+        $galeri->deskripsi = $request->input('description');
+        $galeri->kategori = $request->input('kategori');
+
+
+        if ($request->hasFile('image')) {
+
+            if (file_exists(public_path($galeri->path_file))) {
+                unlink(public_path($galeri->path_file));
+            }
+
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
+
+
+            $galeri->path_file = '/images/' . $imageName;
+        }
+
+
+        $galeri->save();
+
+
+        return redirect()->route('galeri.index')->with('success', 'Gambar berhasil diperbarui.');
+    }
+
+
+
+    public function destroy($id)
+    {
+
+        $galeri = Galeri::findOrFail($id);
+
 
         if (file_exists(public_path($galeri->path_file))) {
             unlink(public_path($galeri->path_file));
         }
 
 
-        $image = $request->file('image');
-        $imageName = time() . '_' . $image->getClientOriginalName();
-        $image->move(public_path('images'), $imageName);
+        $galeri->delete();
 
 
-        $galeri->path_file = '/images/' . $imageName;
+        return redirect()->route('galeri.index')->with('success', 'Gambar berhasil dihapus.');
     }
-
-
-    $galeri->save();
-
-
-    return redirect()->route('galeri.index')->with('success', 'Gambar berhasil diperbarui.');
-}
-
-
-
-    public function destroy($id)
-{
-
-    $galeri = Galeri::findOrFail($id);
-
-
-    if (file_exists(public_path($galeri->path_file))) {
-        unlink(public_path($galeri->path_file));
-    }
-
-
-    $galeri->delete();
-
-
-    return redirect()->route('galeri.index')->with('success', 'Gambar berhasil dihapus.');
-}
 
 
 

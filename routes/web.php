@@ -72,6 +72,11 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
 
 });
 
+Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
+    Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+});
+
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     //dashboard
@@ -80,6 +85,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     //event
     Route::resource('/event', EventController::class);
     Route::get('/event/{event}/rincian/', [EventController::class, 'show'])->name('event.rincian');
+    Route::get('/event/{event}/skema/index/', [EventSkemaController::class, 'index'])->name('event-skema.index');
     Route::get('/event/{event}/skema/create/', [EventSkemaController::class, 'create'])->name('event-skema.create');
     Route::get('/event/{event}/skema/{skema}/edit/', [EventSkemaController::class, 'edit'])->name('event-skema.edit');
     Route::get('/event/{event}/skema/{skema}/rincian', [EventSkemaController::class, 'show'])->name('event-skema.show');
@@ -119,7 +125,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'management'], function () {
-
         //galeri
         Route::resource('galeri', GaleriController::class);
         Route::get('/galeri', [GaleriController::class, 'index'])->name('index');
@@ -138,7 +143,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
         //video
-        Route::get('/video/index', [VideoController::class, 'index'])->name('video.index');
+        Route::get('/video', [VideoController::class, 'index'])->name('video.index');
         Route::post('/video/store', [VideoController::class, 'store'])->name('video.store');
         Route::get('/video/create', [VideoController::class, 'create'])->name('video.create');
         Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.show');

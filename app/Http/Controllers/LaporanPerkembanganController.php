@@ -15,8 +15,9 @@ class LaporanPerkembanganController extends Controller
     public function index()
     {
         $events = Event::all(); // Ganti nama variabel ke $events
+        $Title = 'Laporan Perkembangan';
         confirmDelete('Hapus Laporan Perkembangan', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.laporanperkembangan.index', compact('events')); // Kirim $events ke view
+        return view('admin.laporanperkembangan.index', compact('events', 'Title')); // Kirim $events ke view
     }
 
 
@@ -74,31 +75,40 @@ class LaporanPerkembanganController extends Controller
             ->where('tb_event_skema.skema_id', $id)
             ->get();
 
+        // $data_peserta = DB::table('tb_peserta')
+        //     ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+        //     ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+        //     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+        //     ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
+        //     ->select('tb_peserta.id_peserta', 'tb_user.nama_lengkap', 'tb_event.tgl_berakhir')
+        //     ->get();
+
         $data_peserta = DB::table('tb_peserta')
             ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
             ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
             ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
-            ->select('tb_peserta.id_peserta', 'tb_user.nama_lengkap', 'tb_event.tgl_berakhir')
-            ->get();
-
-
-
-        // Ambil data laporan perkembangan
-        $data_laporan_perkembangan = DB::table('tb_laporan_perkembangan')
-            ->leftJoin('tb_peserta', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
-            ->leftJoin('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-            ->where('tb_laporan_perkembangan.event_skema_id', $data_skema->id_event_skema)
+            ->leftJoin('tb_laporan_perkembangan', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
             ->select(
-                'tb_laporan_perkembangan.id',
-                'tb_laporan_perkembangan.catatan',
+                'tb_peserta.id_peserta',
                 'tb_user.nama_lengkap',
+                'tb_event.tgl_berakhir',
+                'tb_laporan_perkembangan.catatan',
             )
+            ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
             ->get();
 
+        // // Ambil data laporan perkembangan
+        // $data_laporan_perkembangan = DB::table('tb_laporan_perkembangan')
+        //     ->leftJoin('tb_peserta', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
+        //     ->leftJoin('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+        //     ->where('tb_laporan_perkembangan.event_skema_id', $data_skema->id_event_skema)
+        //     ->select(
+        //         'tb_laporan_perkembangan.id',
+        //         'tb_laporan_perkembangan.catatan',
+        //         'tb_user.nama_lengkap',
+        //     )
+        //     ->get();
 
-        // Debugging
-        // dd($data_laporan_perkembangan);
 
 
         // Ambil jumlah sub skema per event
@@ -118,13 +128,25 @@ class LaporanPerkembanganController extends Controller
             'data_skema' => $data_skema,
             'data_penguji' => $data_penguji,
             'data_sub_skema' => $data_sub_skema,
-            'data_laporan_perkembangan' => $data_laporan_perkembangan,
+            // 'data_laporan_perkembangan' => $data_laporan_perkembangan,
             'data_peserta' => $data_peserta,
             'jumlahSubSkemaPerEvent' => $jumlahSubSkemaPerEvent
         ]);
     }
 
 
+    public function fetchPesertaData($id)
+    {
+        $data_peserta = DB::table('tb_peserta')
+            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+            ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap')
+            ->where('tb_peserta.id_peserta', $id)
+            ->first();
+
+        return response()->json([
+            'data_peserta' => $data_peserta
+        ]);
+    }
 
     public function fetchLaporanData($id)
     {

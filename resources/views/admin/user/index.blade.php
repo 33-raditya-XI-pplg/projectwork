@@ -15,7 +15,7 @@
     </div>
 
 
-    <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+    <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg ">
         <table id="example" class="table">
             <thead class="fw-normal">
                 <th>No</th>

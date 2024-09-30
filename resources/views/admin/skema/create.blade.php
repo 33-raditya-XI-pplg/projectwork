@@ -1,5 +1,36 @@
 @extends('layouts.panel.index')
 @section('content')
+
+<style>
+.dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 130px; 
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer;
+}
+#image_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; 
+    height: auto; 
+    max-width: 100px; 
+    max-height: 100px; 
+    overflow: hidden;
+    margin: 0 auto; 
+}
+#preview_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
+}
+</style>
     <div class="container mt-4">
         <div class="card">
             <div class="card-header">
@@ -16,8 +47,19 @@
 								<input type="text" class="form-control" id="nama_skema" name="nama_skema" required>
 							</div>
 							<div class="col">
-								<label for="icon" class="mb-2">Icon Skema</label>
-								<input class="form-control" name="icon" type="file" id="formFile" accept=".png" required>
+								<label for="icon" class="mb-2">Upload Icon Skema</label>
+								<div class="dropzone-wrapper">
+									<div class="dropzone-desc">
+										<i class="glyphicon glyphicon-download-alt"></i>
+										<p>Pilih gambar atau seret ke sini .</p>
+									</div>
+									<input type="file" name="path_icon" class="dropzone" id="path_icon" accept="image/*"
+										{{ isset($data) && $data->path_icon ? '' : ' required' }}>
+									<div id="image_preview" class="mt-3">
+										<img id="preview_image" src="{{ isset($data) ? asset($data->path_icon) : '' }}" alt="Image preview"
+											style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ isset($data) ? 'block' : 'none' }};">
+									</div>
+								</div>
 							</div>						
 						</div>
 						<div class="form-group sub-skema-wrapper mb-5">
@@ -78,7 +120,34 @@
 					$('#empty-input-message').hide(); 
 				}
 			}
+
+			document.getElementById('path_icon').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview_image');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block'; // Show the image preview
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+		Dropzone.options.path_file = {
+            maxFilesize: 2,
+            acceptedFiles: "image/*",
+            init: function() {
+                this.on("success", function(file, response) {                    
+                });
+                this.on("error", function(file, response) {                    
+                    document.getElementById('image_error').innerHTML = response.message;
+                });
+            }
+        }; 
 		});
+
     </script>
 
 	<script>

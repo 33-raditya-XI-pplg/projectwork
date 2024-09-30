@@ -25,9 +25,10 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
     <link href="{{ asset('') }}vendor/DataTables/datatables.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.css') }}" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
     <link rel="stylesheet" href="{{ asset('vendor/simditor/styles/simditor.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/panel.css?v=1.1') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/chosen.css') }}">
@@ -39,12 +40,13 @@
         <link rel="stylesheet" href="{{asset('assets/css/testimoni.css')}}">
         <link rel="stylesheet" href="{{asset('assets/css/partner.css')}}">
         <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     @stack('style')
 
     {{-- @include('layouts.env') --}}
 </head>
 
-<body>
+<body style="align-items: flex-start">
 
     <div id="app">
         <div class="content-wrapper" id="panel-content">
@@ -54,29 +56,41 @@
                 <div class="d-flex justify-content-between  align-items-center  mb-3 ">
                     <div id="breadcrumb " style="--bs-breadcrumb-divider: ''">
                         <ol class="breadcrumb d-inline">
+                            <!-- Tampilkan Title -->
                             <li class="breadcrumb-item text-body-emphasis text-capitalize h3 fw-semibold d-inline ms-3">
-                                {{ Request::segment(2) }}</li>
-                            <span
-                                class="h4 fw-normal text-body-emphasis">{{ count(Request::segments()) > 2 ? '>' : '' }}</span>
+                                {{ $Title }}
+                            </li>
+                        
+                            @if (!empty($subtitle) && count(Request::segments()) >= 3)
+                            <span class="h4 fw-normal text-body-emphasis"> > </span>
                             <li class="breadcrumb-item text-capitalize h4 d-inline">
-                                {{ Str::replace('-', ' ', Request::segment(3)) }}</li>
-                            <span class="h5">{{ count(Request::segments()) > 3 ? '-' : '' }}</span>
+                                {{ $subtitle }}  <!-- Diambil dari controller -->
+                            </li>
+                            @endif
+                            
+                            @if (!empty($subTitle) && count(Request::segments()) >= 4)
+                            <span class="h5"> - </span>
                             <li class="breadcrumb-item h5 d-inline">
-                                {{ Str::replace('-', ' ', Request::segment(4)) }}</li>
+                                {{ $subTitle }}  <!-- Diambil dari controller -->
+                            </li>
+                        @endif
                         </ol>
+                        
                     </div>
                     <div>
                         @php
                             $menu = request()->segment(count(request()->segments()));
                         @endphp
-                        @if (in_array($menu,
+
+                        @if($menu === 'skema')
+                            <button class="btn btn-primary rounded" id="add">+ Tambah</button>
+                        @elseif (in_array($menu,
                                     [
                                         'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat',
                                         'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user','uploadPembayaran-user','uploadPembayaran','laporanperkembangan','add-student'
                                     ]
                                 )
-                            )
-                            {{-- <button class="btn btn-primary rounded" id="add">+ Tambah</button> --}}
+                            )                            
                         @else
                             <button class="btn btn-primary rounded" id="tambahBtn" data-bs-toggle="modal" data-bs-target="#add">+
                                 Tambah</button>
@@ -94,15 +108,16 @@
         <a href="{{ route('blogkategori.index') }}" class="sub-menu-link"><i class="fas fa-blog"></i>
             <span> Blog Kategori</span></a>
     </li> --}}
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js">
+    <script src="{{ asset('assets/js/select2.js') }}"></script>
+    <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
+    <script src="{{ asset('assets/js/swithbutton.js') }}">
     </script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
     <script src="{{ asset('') }}vendor/DataTables/datatables.js"></script>
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/module.js"></script>
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/hotkeys.js"></script>

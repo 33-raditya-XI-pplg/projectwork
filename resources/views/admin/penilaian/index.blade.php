@@ -9,7 +9,7 @@
 
         <div class="d-flex flex-row mx-2">
             <div class="card-header me-2 w-100 mx-1">
-                <select id="event_select" name="event_select" class="chosen-select form-control">
+                <select id="event_select" name="event_select" class="chosen-select form-control"" data-placeholder="Pilih Event" >              
                     <option hidden disabled selected>Pilih Event</option>
                     @foreach ($event as $row)
                         <option value="{{ $row->id_event }}">{{ $row->nama_event }}</option>
@@ -196,7 +196,16 @@
 @endsection
 
 @push('script')
+
+    {{-- <script>
+$(document).ready(function() {
+    $('.js-basic').select2({        
+        allowClear: true
+    });
+});
+    </script> --}}
 <script>
+    
     $(".chosen-select").chosen()
 
     $(document).ready(function() {

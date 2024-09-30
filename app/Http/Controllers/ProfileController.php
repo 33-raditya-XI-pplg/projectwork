@@ -21,10 +21,11 @@ class ProfileController extends Controller
     {
         // Ambil data yang diperlukan, misalnya data pengguna
         $data = auth()->user(); // Ambil data pengguna yang login, misalnya
-
+        $Title = 'Profile';
         // Periksa level pengguna
         if ($data->level == 'Pengguna' || $data->level == 'Admin') {
-            return view('profile.index', compact('data')); // Kirim data ke view
+
+            return view('profile.index', compact('data', 'Title')); // Kirim data ke view
         } else {
             abort(403, 'Unauthorized action.');
         }
@@ -35,7 +36,8 @@ class ProfileController extends Controller
         $id = Auth::user()->id_user;
         $instansi = Instansi::get();
         $user = User::findOrFail($id);
-        return view('profile.edit', compact('user', 'instansi'));
+        $Title = 'Edit Profile';
+        return view('profile.edit', compact('user', 'instansi', 'Title'));
     }
 
     public function update(Request $request, $id)

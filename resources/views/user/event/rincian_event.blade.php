@@ -16,8 +16,7 @@
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12">
             <div class="card mb-5">
-                <div class="card-body">
-                    <h4 class="card-title">Rincian Event</h4>
+                <div class="card-body">                 
                     <img id="img-rincian" src="{{ $banner }}" class="img-fluid mx-auto d-block" alt="Banner Event">
                     <hr>
                     <br>
@@ -52,9 +51,9 @@
                 </div>
             </div>
 
+            <h4 class="card-title mb-3">Daftar Skema</h4>
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Daftar Skema</h4>
                     <table id="example" class="table">
                         <thead class="fw-normal">
                             <th scope="col" width="5%">No</th>

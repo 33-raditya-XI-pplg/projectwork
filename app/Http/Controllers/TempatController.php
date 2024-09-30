@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Tempat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -13,18 +14,20 @@ class TempatController extends Controller
    public function index()
    {
       $tempat = Tempat::get();
-
+      $regencies = DB::table('regencies')->pluck('name', 'id');
+      $Title = 'Master Data';
+      $subtitle = 'Tempat';
       confirmDelete('Hapus Tempat', 'Apakah kamu yakin untuk mengapus tempat?');
-      return view('admin.tempat.index', compact('tempat'));
+      return view('admin.tempat.index', compact('tempat', 'regencies', 'Title', 'subtitle'));
    }
 
    public function store(Request $request)
    {
-    //   if (!$request->has('status')) {
-    //      $request->merge([
-    //         'status' => 'Nonaktif'
-    //      ]);
-    //   }
+      //   if (!$request->has('status')) {
+      //      $request->merge([
+      //         'status' => 'Nonaktif'
+      //      ]);
+      //   }
 
       Tempat::create($request->all());
       Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan');
@@ -34,11 +37,11 @@ class TempatController extends Controller
 
    public function update(Request $request, $id)
    {
-    //   if (!$request->has('status')) {
-    //      $request->merge([
-    //         'status' => 'Nonaktif'
-    //      ]);
-    //   }
+      //   if (!$request->has('status')) {
+      //      $request->merge([
+      //         'status' => 'Nonaktif'
+      //      ]);
+      //   }
 
       $tempat = Tempat::find($id);
       $tempat->update($request->all());
@@ -52,10 +55,10 @@ class TempatController extends Controller
       $checkChildID = Event::where('tempat_id', $id)->count();
 
       if ($checkChildID > 0) {
-          Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
-          return redirect()->back();
+         Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
+         return redirect()->back();
       }
-      
+
       Tempat::destroy($id);
       toast('Tempat berhasil dihapus.', 'success');
 

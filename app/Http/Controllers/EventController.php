@@ -38,8 +38,9 @@ class EventController extends Controller
         $evt_pub = Event::where('status', 'Publish')->get();
         $evt_live = Event::where('status', 'Berlangsung')->get();
         $evt_end = Event::where('status', 'Selesai')->get();
+        $Title = 'Event';
         confirmDelete('Hapus Event', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end'));
+        return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end', 'Title'));
     }
 
     public function show($id)
@@ -47,10 +48,13 @@ class EventController extends Controller
         $evt = Event::find($id);
 
         $skema = Event_Skema::where('event_id', $evt->id_event)->get();
+        $Title = 'Rincian';
+        $subtitle = 'Event';
 
         confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-evt', compact('evt', 'skema', 'id'));
+
+        return view('admin.event.rincian-evt', compact('evt', 'skema', 'id', 'Title', 'subtitle'));
     }
 
 

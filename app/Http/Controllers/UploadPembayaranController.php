@@ -33,7 +33,8 @@ class UploadPembayaranController extends Controller
                 ->where('tb_upload_pembayaran.status_pembayaran', 'Menunggu', )
                 ->get();
             // dd($upload);
-            return view('admin.upload.index', compact('upload'));
+            $Title = 'Upload Pembayaran';
+            return view('admin.upload.index', compact('upload', 'Title'));
         } elseif (auth()->user()->level === 'Pengguna') {
             $userId = auth()->user()->id_user;
             // Query khusus user, misal event yang sudah dibayar
@@ -56,7 +57,9 @@ class UploadPembayaranController extends Controller
                 )
                 // ->whereNotNull('tb_upload_pembayaran.bukti_pembayaran')
                 ->get();
-            return view('user.upload.index', compact('upload'));
+
+            $Title = 'Upload Pembayaran';
+            return view('user.upload.index', compact('upload', 'Title'));
         }
         // dd($upload);
 

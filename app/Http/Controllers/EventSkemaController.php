@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Auth;
 
 class EventSkemaController extends Controller
 {
+
+    // public function index()
+    // {
+    //     $Title = 'Skema';
+    //     return view('admin.event.rincian-skema', compact('Title'));
+    // }
     public function create($id)
     {
         $skema = Skema::get();
@@ -114,12 +120,15 @@ class EventSkemaController extends Controller
         $ttd = $evtSkema->event_skemaPenandatangan()->pluck('nama_ttd');
         $penguji = $evtSkema->event_skemaMenguji()->pluck('nama_lengkap');
         $peserta = $evtSkema->event_skemaDaftar_Peserta()->get();
+        $Title = 'Rincian';
+        $subtitle = 'Event';
+        $subTitle = 'Skema';
         // dd($peserta);
         $rn = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
             ->pluck('nama_konversi_nilai');
         confirmDelete('Hapus Peserta', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'rn', 'penguji', 'evt', 'peserta'));
+        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'rn', 'penguji', 'evt', 'peserta', 'Title', 'subtitle', 'subTitle'));
     }
 
     // Peserta
@@ -129,7 +138,11 @@ class EventSkemaController extends Controller
         $instansi = Instansi::get();
         $evtSkema = Event_Skema::find($skema);
 
-        return view('admin.event.add-student', compact('evt', 'skema', 'instansi'));
+        $Title = 'Event';
+        $subtitle = "Skema";
+        $subTitle = 'Tambah Student';
+
+        return view('admin.event.add-student', compact('evt', 'skema', 'instansi', 'Title', 'subtitle', 'subTitle'));
     }
 
     public function search($instansi, $skema)

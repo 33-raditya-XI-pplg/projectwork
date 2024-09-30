@@ -9,33 +9,39 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class RentangNilaiController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         $rentang = Rentang::get();
+        $Title = 'Master Data';
+        $subtitle = 'Rentang Nilai';
         confirmDelete('Hapus', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.rentang-nilai.index', compact('rentang'));
+        return view('admin.rentang-nilai.index', compact('rentang', 'Title', 'subtitle'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         Rentang::create($request->all());
-        
+
         Alert::success('Berhasil', 'Data berhasil ditambahkan.');
         return redirect()->back();
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
         $rentang = Rentang::find($id);
         $rentang->update($request->all());
-        
+
         Alert::success('Berhasil', 'Data berhasil diubah.');
         return redirect()->back();
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $checkChildID = DB::table('tb_event_skema_rentang_nilai')
-                        ->where('rentang_nilai_id', $id)->count();
+            ->where('rentang_nilai_id', $id)->count();
 
         if ($checkChildID > 0) {
             Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
