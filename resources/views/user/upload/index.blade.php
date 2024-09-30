@@ -5,6 +5,34 @@
         <style>
             .ck-editor__editable {
                 min-height: 200px;
+            }       
+            .dropzone-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 200px; 
+                border: 2px dashed #ddd;
+                background-color: #f9f9f9;
+                position: relative;
+                cursor: pointer;
+            }
+            #image_preview {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%; 
+                height: auto; 
+                max-width: 180px; 
+                max-height: 180px; 
+                overflow: hidden;
+                margin: 0 auto; 
+            }
+            #preview_image {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain; 
+                display: block; 
             }
         </style>
     @endpush
@@ -63,9 +91,26 @@
                     @csrf
                     <input type="hidden" name="event_id" id="event_id" value="">
                     
-                    <div class="mb-3">
-                        <label for="upload_file" class="form-label">Upload Bukti Pembayaran</label>
-                        <input type="file" class="form-control" id="upload_file" name="upload_file" required>
+                    <div class="form-group mb-6">
+                        <label class="control-label mb-2">Upload Foto Pengguna <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih gambar atau seret ke sini .</p>
+                            </div>
+                            <input type="file" name="upload_file" class="dropzone" id="upload_file" accept="image/*"
+                                {{ isset($pengguna) && $pengguna->path_foto ? '' : ' required' }}>
+                            <div id="image_preview" class="mt-3">
+                                <img id="preview_image" src="{{ isset($pengguna) ? asset($pengguna->path_foto) : '' }}" alt="Image preview"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ isset($pengguna) ? 'block' : 'none' }};">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                        </div>
+                        @error('path_foto')
+                        <div class="text-danger">{{ $message }}</div>
+                       @enderror
                     </div>
 
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -102,9 +147,37 @@ document.addEventListener('DOMContentLoaded', function () {
             // uploadSection.style.display = 'block';
             // viewSection.style.display = 'none';
         }
-    });
+        document.getElementById('upload_file').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('preview_image');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the image preview
+        }
+        reader.readAsDataURL(file);
+    }
+        });
+    });  
 });
+
     </script>
+      {{-- upload gambar  --}}
+    <script>
+      Dropzone.options.path_file = {
+          maxFilesize: 2,
+          acceptedFiles: "image/*",
+          init: function() {
+              this.on("success", function(file, response) {                    
+              });
+              this.on("error", function(file, response) {                    
+                  document.getElementById('image_error').innerHTML = response.message;
+              });
+          }
+      };
+  </script>
     
 @endsection
 

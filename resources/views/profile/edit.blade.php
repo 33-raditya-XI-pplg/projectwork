@@ -3,9 +3,9 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header bg-primary text-white">
+    {{-- <div class="card-header bg-primary text-white">
         <h4 class="mt-2">Edit Profile</h4>
-    </div>
+    </div> --}}
     <div class="card-body">
         @if(Auth::user()->level == 'Admin')
         <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">

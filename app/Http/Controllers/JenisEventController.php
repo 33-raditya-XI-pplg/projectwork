@@ -10,13 +10,17 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class JenisEventController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $jenis_event = Jenis_Event::get();
+        $Title = 'Master Data';
+        $subtitle = 'Jenis Event';
         confirmDelete('Hapus Jenis Event', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.jenis-evt.index', compact('jenis_event'));
+        return view('admin.jenis-evt.index', compact('jenis_event', 'Title', 'subtitle'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         if (!$request->has('status')) {
             $request->merge([
                 'status' => 'Nonaktif'
@@ -25,11 +29,12 @@ class JenisEventController extends Controller
 
         Jenis_Event::create($request->all());
         Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
-        
+
         return redirect()->back();
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         if (!$request->has('status')) {
             $request->merge([
                 'status' => 'Nonaktif'
@@ -39,11 +44,12 @@ class JenisEventController extends Controller
         $jenis_event = Jenis_Event::find($id);
         $jenis_event->update($request->all());
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
-        
+
         return redirect()->back();
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $checkChildID = Event::where('jenis_event_id', $id)->count();
 
         if ($checkChildID > 0) {

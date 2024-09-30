@@ -15,62 +15,64 @@ class TestimoniController extends Controller
         $testimoni = Testimoni::all();
         $page = Page::all();
         $testimonials = Testimoni::where('status', 1)->orderBy('tanggal', 'desc')->get();
-        return view('admin.testimoni.index', compact('testimoni', 'page', 'testimonials'));
+        $Title = 'Management';
+        $subtitle = 'Testimoni';
+        return view('admin.testimoni.index', compact('testimoni', 'page', 'testimonials', 'Title', 'subtitle'));
     }
 
 
 
     public function store(Request $request)
-{
+    {
 
-    $request->validate([
-        'page_id' => 'required|integer',
-        'nama' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'tanggal' => 'required|date',
-        'rating' => 'required|integer|min:1|max:5',
-        'isi_testimoni' => 'required|string',
-        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        'status' => 'nullable|boolean',
-        'created_by' => 'required|integer',
-    ]);
-
-
-    $photoPath = null;
-    if ($request->hasFile('photo')) {
-
-        $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
-    }
-
-
-    $cleanIsiTestimoni = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->isi_testimoni);
-
-    try {
-        // Buat entri Testimoni baru
-        Testimoni::create([
-            'page_id' => $request->page_id,
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'tanggal' => $request->tanggal,
-            'rating' => $request->rating,
-            'isi_testimoni' => $cleanIsiTestimoni,
-            'photo' => $photoPath,
-            'status' => $request->has('status') ? true : false,
-            'created_by' => $request->created_by,
+        $request->validate([
+            'page_id' => 'required|integer',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'tanggal' => 'required|date',
+            'rating' => 'required|integer|min:1|max:5',
+            'isi_testimoni' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'status' => 'nullable|boolean',
+            'created_by' => 'required|integer',
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Testimoni berhasil dibuat.'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Gagal membuat testimoni.',
-            'error' => $e->getMessage()
-        ], 500);
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+
+            $photoPath = $request->file('photo')->store('testimoni_photos', 'public');
+        }
+
+
+        $cleanIsiTestimoni = preg_replace('/<p[^>]*>(.*?)<\/p>/i', '$1', $request->isi_testimoni);
+
+        try {
+            // Buat entri Testimoni baru
+            Testimoni::create([
+                'page_id' => $request->page_id,
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'tanggal' => $request->tanggal,
+                'rating' => $request->rating,
+                'isi_testimoni' => $cleanIsiTestimoni,
+                'photo' => $photoPath,
+                'status' => $request->has('status') ? true : false,
+                'created_by' => $request->created_by,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Testimoni berhasil dibuat.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membuat testimoni.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
-}
 
 
 
@@ -139,11 +141,11 @@ class TestimoniController extends Controller
     }
     */
     public function fetchTestimonials()
-{
-    $testimonials = Testimoni::where('status_publikasi', 1)->orderBy('tanggal', 'desc')->get();
-    return response()->json([
-        'testimonials' => $testimonials
-    ]);
-}
+    {
+        $testimonials = Testimoni::where('status_publikasi', 1)->orderBy('tanggal', 'desc')->get();
+        return response()->json([
+            'testimonials' => $testimonials
+        ]);
+    }
 
 }

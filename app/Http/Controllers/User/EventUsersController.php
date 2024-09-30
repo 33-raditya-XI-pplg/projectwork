@@ -45,9 +45,9 @@ class EventUsersController extends Controller
             ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
             ->paginate(9);
 
-
+        $Title = 'Event';
         // dd($query->toSql(), $query->getBindings());
-        return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat'));
+        return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title'));
     }
 
     public function show($eventID)
@@ -90,7 +90,10 @@ class EventUsersController extends Controller
 
         $banner = asset($data_event->path_banner);
 
-        return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner'));
+        $Title = 'Rincian';
+        $subtitle = 'Event';
+
+        return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner', 'Title', 'subtitle'));
     }
 
     public function mendaftar(Request $request)

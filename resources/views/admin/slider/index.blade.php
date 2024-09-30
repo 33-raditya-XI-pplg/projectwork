@@ -2,7 +2,6 @@
 @section('title', 'Slider')
 @section('content')
 
-<h1>Slider</h1>
 
 <style>
     .carousel-control-prev-icon,

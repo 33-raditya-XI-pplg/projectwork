@@ -12,12 +12,15 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ProfilPerusahaanController extends Controller
 {
-    public function index() {
+    public function index()
+    {
 
         $page = Page::get();
         $profil = Profil_Perusahaan::get();
+        $Title = 'Management';
+        $subtitle = 'Profile Perusahaan';
         confirmDelete('Hapus Profil', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.profile_perusahaan.index', compact('page', 'profil',));
+        return view('admin.profile_perusahaan.index', compact('page', 'profil', 'Title', 'subtitle'));
     }
 
 

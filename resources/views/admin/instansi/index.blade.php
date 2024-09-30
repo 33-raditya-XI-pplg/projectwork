@@ -1,6 +1,43 @@
 @extends('layouts.panel.index')
 @section('title', 'Instansi')
 @section('content')
+<style>
+    .select2-close-mask{
+    z-index: 2099 !important;
+}
+.select2-dropdown{
+    z-index: 3051 !important;
+}
+
+   .dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
+}
+   #image_preview_ {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%; 
+       height: auto; 
+       max-width: 200px; 
+       max-height: 200px; 
+       overflow: hidden;
+       margin: 0 auto; 
+   }
+   #preview_image_create, #preview_image_edit_ {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
+}
+   </style>
 
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -76,21 +113,36 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="nomor_instansi" class="form-label">Nomor Instansi</label>
-                                        <input type="text" class="form-control" name="nomor_instansi" id="nomor_instansi"
+                                        <input type="number" class="form-control" name="nomor_instansi" id="nomor_instansi"
                                             required>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label for="alamat" class="form-label">Alamat</label>
                                         <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="no_telp" class="form-label">No. telp</label>
-                                        <input type="text" class="form-control" name="no_telp" id="no_telp" required>
+                                        <input type="number" class="form-control" name="no_telp" id="no_telp" required>
                                     </div>
-                                    <div>
-                                        <label for="logo" class="form-label">Logo Instansi</label>
-                                        <input class="form-control" name="logo" type="file" id="formFile" accept=".png" required>
-                                      </div>
+                                    <div class="form-group mb-6">
+                                        <label class="control-label mb-2">Upload Logo Instansi <span class="text-danger">*</span></label>
+                                        <div class="dropzone-wrapper">
+                                            <div class="dropzone-desc">
+                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                                <p>Pilih gambar atau seret ke sini .</p>
+                                            </div>
+                                            <input type="file" name="path_logo" class="dropzone" id="path_logo" accept="image/*" required>
+                                            <div id="image_preview_" class="mt-3">
+                                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                        </div>
+                                        @error('foto')
+                                        <div class="text-danger">{{ $message }}</div>
+                                       @enderror
+                                    </div>
 
                             </div>
                             <div class="col">
@@ -105,13 +157,24 @@
                                     <input type="text" class="form-control" name="jabatan_kepala" id="jabatan_kepala"
                                         required>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="alamat_kota" class="form-label">Alamat Kota</label>
-                                    <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required></textarea>
-                                </div>
                                 <div class="mb-5">
+                                    <label for="alamat_kota_{{ $row->id_instansi }}" class="form-label">Kota</label>
+                                    <select class="form-select js-single" name="alamat_kota" id="alamat_kota_{{ $row->id_instansi }}" data-placeholder="Pilih Kota" required>
+                                        <option value="" disabled selected></option> 
+                                        @foreach ($regencies as $id => $name)
+                                            <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('alamat_kota')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3 mt-4">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" name="email" id="email" required>
+                                    <input type="email" class="form-control" name="email" id="email" required>
+                                    @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                   @enderror
                                 </div>
 
                             </div>
@@ -166,21 +229,40 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="nomor_instansi" class="form-label">Nomor Instansi</label>
-                                            <input type="text" class="form-control" name="nomor_instansi"
+                                            <input type="number" class="form-control" name="nomor_instansi"
                                                 id="nomor_instansi" value="{{ $row->nomor_instansi }}" required>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-1">
                                             <label for="alamat" class="form-label">Alamat</label>
                                             <textarea class="form-control" id="alamat" name="alamat" rows="2" required>{{ $row->alamat }}</textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="no" class="form-label">No. telp</label>
-                                            <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
+                                            <input type="number" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
+                                        </div>                            
+                                        <div class="form-group mb-6">
+                                            <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                                            <div class="dropzone-wrapper">
+                                                <div class="dropzone-desc">
+                                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                                    <p>Pilih gambar atau seret ke sini .</p>
+                                                </div>
+                                                <input type="file" name="path_logo" class="dropzone" id="path_logo_{{ $row->id_instansi }}" accept="image/*">
+                                                <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                                                    @if($row->path_logo)
+                                                        <img id="preview_image_edit_{{ $row->id_instansi }}" src="{{ asset($row->path_logo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                    @else
+                                                        <img id="preview_image_edit_{{ $row->id_instansi }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="mt-4">
+                                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                            </div>
+                                            @error('path_foto')
+                                            <div class="text-danger">{{ $message }}</div>
+                                           @enderror
                                         </div>
-                                        <div>
-                                            <label for="logo" class="form-label">Logo Instansi</label>
-                                            <input class="form-control" name="logo" type="file" id="formFile" accept=".png">
-                                          </div>
 
                                 </div>
                                 <div class="col">
@@ -195,13 +277,21 @@
                                         <input type="text" class="form-control" name="jabatan_kepala"
                                             id="jabatan_kepala" value="{{ $row->jabatan_kepala }}" required>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="alamat_kota" class="form-label">Alamat Kota</label>
-                                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ $row->alamat_kota }}</textarea>
+                                    <div class="mb-5">
+                                        <label for="alamat_kota_{{ $row->id_instansi }}" class="form-label">Kota</label>
+                                        <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_instansi }}" data-placeholder="Pilih Kota" required>
+                                            <option value="" disabled selected></option> 
+                                            @foreach ($regencies as $id => $name)
+                                                <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('alamat_kota')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    <div>
+                                    <div class="mb-3 mt-4">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
+                                        <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
                                     </div>
 
                                 </div>
@@ -226,7 +316,79 @@
             </div>
         </div>
         @endforeach
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.js-single').select2({
+        
+        allowClear: true
+    });
+    
+    @foreach($instansi as $row)
+        $('#instansi_id_{{ $row->id_instansi }}').select2({
+            allowClear: true
+        });
+    @endforeach
+});
+</script>
 
+<script>    
+        document.getElementById('path_logo').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview_image_create');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the image preview
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none'; // Hide the image if no file selected
+        }
+    });
+
+            Dropzone.options.path_file = {
+            maxFilesize: 2, 
+            acceptedFiles: "image/*", 
+            init: function() {
+                this.on("success", function(file, response) {                    
+                });
+                this.on("error", function(file, response) {
+                    document.getElementById('image_error').innerHTML = response.message;
+                });
+              }
+            };       
+</script> 
+<script>
+    document.querySelectorAll('[id^="path_logo_"]').forEach(input => {
+        input.addEventListener('change', function(event) {
+            const id = this.id.split('_')[2]; // Extract ID from the input's ID
+            const preview = document.getElementById(`preview_image_edit_${id}`);
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Show the image preview
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none'; // Hide the image if no file selected
+            }
+        });
+    });
+</script>
 
 @endsection

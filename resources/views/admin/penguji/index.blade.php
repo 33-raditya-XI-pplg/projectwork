@@ -1,7 +1,43 @@
 @extends('layouts.panel.index')
 @section('title', 'Penguji')
 @section('content')
+<style>
+    .select2-close-mask{
+    z-index: 2099 !important;
+}
+.select2-dropdown{
+    z-index: 3051 !important;
+}
 
+   .dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
+}
+   #image_preview_ {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%; 
+       height: auto; 
+       max-width: 200px; 
+       max-height: 200px; 
+       overflow: hidden;
+       margin: 0 auto; 
+   }
+   #preview_image_create, #preview_image_edit_ {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
+}
+   </style>
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
@@ -74,28 +110,44 @@
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Penguji</label>
                                         <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
-                                            required>
+                                        value="{{old('nama_lengkap', isset($pengguji) ? $pengguji->nama_lengkap : '') }}" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="instansi" class="form-label">Instansi</label>
-                                        <select name="instansi_id" id="instansi_id" class="form-select">
-                                            <option selected disabled>Pilih...</option>
-                                            @foreach($instansi as $row)
-                                                <option value="{{ $row->id_instansi }}">{{ $row->nama_instansi }}</option>
+                                        <label for="instansi_id" class="form-label">Instansi</label>
+                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi" required>
+                                            <option value="" disabled selected></option> 
+                                            @foreach ($institutions as $id_instansi => $name)
+                                                <option value="{{ $id_instansi }}" {{ old('instansi_id') == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                         
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat" class="form-label">Alamat</label>
-                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
+                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required>{{ old('alamat',isset($pengguji) ? $pengguji->alamat : '') }}</textarea>
                                     </div>
                                     <div class="mb-3">
                                         <label for="no_telp" class="form-label">No. telp</label>
-                                        <input type="text" class="form-control" name="no_telp" id="no_telp" required>
+                                        <input type="number" class="form-control" name="no_telp" id="no_telp"
+                                        value="{{old('no_telp', isset($pengguji) ? $pengguji->no_telp : '') }}"  required>
                                     </div>
-                                    <div>
-                                        <label for="foto" class="form-label">Foto Penguji</label>
-                                        <input class="form-control" name="foto" type="file" id="formFile" accept=".png" required>
+                                    <div class="form-group mb-6">
+                                        <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                                        <div class="dropzone-wrapper">
+                                            <div class="dropzone-desc">
+                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                                <p>Pilih gambar atau seret ke sini .</p>
+                                            </div>
+                                            <input type="file" name="path_foto" class="dropzone" id="path_foto" accept="image/*" required>
+                                            <div id="image_preview_" class="mt-3">
+                                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                        </div>
+                                        @error('foto')
+                                        <div class="text-danger">{{ $message }}</div>
+                                       @enderror
                                     </div>
 
                             </div>
@@ -103,20 +155,32 @@
                                 {{-- kiri --}}
                                 <div class="mb-3">
                                     <label for="nomor_induk" class="form-label">NIK</label>
-                                    <input type="text" class="form-control" name="nomor_induk"
-                                        id="nomor_induk" required>
+                                    <input type="number" class="form-control" name="nomor_induk"
+                                        id="nomor_induk" value="{{old('nomor_induk', isset($pengguji) ? $pengguji->nomor_induk : '') }}"  required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="jabatan_penguji" class="form-label">Jabatan</label>
-                                    <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji" required>
+                                    <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji" 
+                                    value="{{old('jabatan_penguji', isset($pengguji) ? $pengguji->jabatan_penguji : '') }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="alamat_kota" class="form-label">Kota</label>
-                                    <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required></textarea>
+                                    <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota" data-placeholder="Pilih Kota" required>                                   
+                                        @foreach ($regencies as $id => $name)
+                                        <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('alamat_kota')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="mb-5">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" name="email" id="email" required>
+                                    <input type="email" class="form-control" name="email" id="email" 
+                                    value="{{old('email', isset($pengguji) ? $pengguji->email : '') }}"  required>
+                                    @error('email')
+                                    <div class="text-danger">{{ $message }}</div>
+                                   @enderror
                                 </div>
 
                             </div>
@@ -142,9 +206,9 @@
     </div>
 
     @foreach ($penguji as $row)
+            {{-- {{ dd($penguji) }} --}}
         <!-- edit -->
-        <div class="modal modal-lg fade" id="edit{{ $row->id_user }}" tabindex="-1" aria-labelledby="add"
-            aria-hidden="true">
+        <div class="modal modal-lg fade" id="edit{{ $row->id_user }}">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary-gradient text-white">
@@ -153,7 +217,7 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
+                        {{-- {{ dd($row) }} --}}
                         {{-- form --}}
                         <div class="container">
                             <div class="row">
@@ -169,13 +233,11 @@
                                                 id="nama_lengkap" value="{{ $row->nama_lengkap }}" required>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="instansi" class="form-label">Instansi</label>
-                                            <select class="form-select" id="instansi_id" name="instansi_id">
-                                                <option selected disabled>Pilih...</option>
-                                                    @foreach($instansi as $a)
-                                                    <option value="{{ $a->id_instansi }}" {{ $row->instansi_id == $a->id_instansi ? 'selected' : '' }}>
-                                                    {{ $a->nama_instansi }}
-                                                    </option>
+                                            <label for="instansi_id_{{ $row->id_user }}" class="form-label">Instansi</label>
+                                            <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id_{{ $row->id_user }}" data-placeholder="Pilih Instansi" required>
+                                                <option value="" disabled selected></option> 
+                                                @foreach ($institutions as $id_instansi => $name)
+                                                    <option value="{{ $id_instansi }}" {{ old('instansi_id', $row->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                        
                                                 @endforeach
                                             </select>
                                         </div>
@@ -187,9 +249,28 @@
                                             <label for="no" class="form-label">No. telp</label>
                                             <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
-                                        <div>
-                                            <label for="foto" class="form-label">Foto Penguji</label>
-                                            <input class="form-control" name="foto" type="file" id="formFile" accept=".png">
+                                        <div class="form-group mb-6">
+                                            <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                                            <div class="dropzone-wrapper">
+                                                <div class="dropzone-desc">
+                                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                                    <p>Pilih gambar atau seret ke sini .</p>
+                                                </div>
+                                                <input type="file" name="path_foto" class="dropzone" id="path_foto_{{ $row->id_user }}" accept="image/*">
+                                                <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                                                    @if($row->path_foto)
+                                                        <img id="preview_image_edit_{{ $row->id_user }}" src="{{ asset($row->path_foto) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                    @else
+                                                        <img id="preview_image_edit_{{ $row->id_user }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="mt-4">
+                                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                            </div>
+                                            @error('path_foto')
+                                            <div class="text-danger">{{ $message }}</div>
+                                           @enderror
                                         </div>
 
                                 </div>
@@ -206,12 +287,20 @@
                                             id="jabatan_penguji" value="{{ $row->jabatan_penguji }}" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="alamat_kota" class="form-label">Kota</label>
-                                        <textarea class="form-control" id="alamat_kota" name="alamat_kota" rows="2" required>{{ $row->alamat_kota }}</textarea>
+                                        <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota</label>
+                                        <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_user }}" data-placeholder="Pilih Kota" required>
+                                            <option value="" disabled selected></option> 
+                                            @foreach ($regencies as $id => $name)
+                                                <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('alamat_kota')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div>
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
+                                        <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
                                     </div>
 
                                 </div>
@@ -235,6 +324,71 @@
                 </div>
             </div>
         </div>
-        @endforeach
+    @endforeach
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+$(document).ready(function() {
+    $('.js-example-basic-single').select2({        
+        allowClear: true
+    });
+});
+    </script>
+    <script>    
+        document.getElementById('path_foto').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview_image_create');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the image preview
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none'; // Hide the image if no file selected
+        }
+    });
+
+            Dropzone.options.path_file = {
+            maxFilesize: 2, 
+            acceptedFiles: "image/*", 
+            init: function() {
+                this.on("success", function(file, response) {                    
+                });
+                this.on("error", function(file, response) {
+                    document.getElementById('image_error').innerHTML = response.message;
+                });
+              }
+            };   
+</script> 
+<script>
+  document.querySelectorAll('[id^="path_foto"]').forEach(input => {
+    input.addEventListener('change', function(event) {
+        const id = this.id.split('_')[2]; // Mengambil ID dari input
+        const preview = document.getElementById(`preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Tampilkan preview gambar
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none'; // Sembunyikan gambar jika tidak ada file
+        }
+    });
+  });
+</script>
 @endsection

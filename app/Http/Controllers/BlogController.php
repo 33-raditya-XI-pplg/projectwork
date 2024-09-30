@@ -15,11 +15,14 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class BlogController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $page = Page::all();
         $blog = Blog::all();
         $kategori = Kategori::all();
-        return view('admin.blog.index', compact('page', 'blog', 'kategori'));
+        $Title = 'Management';
+        $subtitle = 'Blog';
+        return view('admin.blog.index', compact('page', 'blog', 'kategori', 'Title', 'subtitle'));
     }
 
     // $data = Blog::query();
@@ -35,7 +38,8 @@ class BlogController extends Controller
 
 
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
@@ -76,7 +80,8 @@ class BlogController extends Controller
 
 
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
@@ -123,7 +128,8 @@ class BlogController extends Controller
 
 
 
-    public function adminUpdate(Request $request, $id) {
+    public function adminUpdate(Request $request, $id)
+    {
 
         return $this->update($request, $id);
     }
@@ -148,7 +154,8 @@ class BlogController extends Controller
         return redirect()->back();
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $blog = Blog::find($id);
 
         if (!$blog) {

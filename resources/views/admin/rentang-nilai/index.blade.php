@@ -162,24 +162,24 @@
                         </div>
 
                         <div class="row">
+                            <div class="mb-3">
+                                <label for="inisial_rentang_nilai" class="form-label">Inisial</label>
+                                <input type="text" class="form-control" name="inisial_rentang_nilai" id="inisial_rentang_nilai"
+                                required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="keterangan_rentang_nilai" class="form-label">Keterangan</label>
+                                <textarea class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai" rows="2"></textarea>
+                                {{-- <input type="text" class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai"
+                                required> --}}
+                            </div>
                             <div class="col">
-                                <div class="mb-3">
-                                    <label for="inisial_rentang_nilai" class="form-label">Inisial</label>
-                                    <input type="text" class="form-control" name="inisial_rentang_nilai" id="inisial_rentang_nilai"
-                                        required>
-                                </div>
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
                                     <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" required>
                                 </div>
-                            </div>
-
+                            </div>                         
                             <div class="col">
-                                <div class="mb-3">
-                                    <label for="keterangan_rentang_nilai" class="form-label">Keterangan</label>
-                                    <input type="text" class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai"
-                                        required>
-                                </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Bawah</label>
                                     <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required>
@@ -231,24 +231,26 @@
                         </div>
 
                         <div class="row">
-                            <div class="col">
+                         
                                 <div class="mb-3">
                                     <label for="inisial_rentang_nilai" class="form-label">Inisial</label>
                                     <input type="text" class="form-control" name="inisial_rentang_nilai" id="inisial_rentang_nilai"
                                         required value="{{ $row->inisial_rentang_nilai}}">
+                                </div>                            
+                                <div class="mb-3">
+                                    <label for="keterangan_rentang_nilai" class="form-label">Keterangan</label>
+                                    <textarea class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai" rows="2">{{ $row->keterangan_rentang_nilai }}</textarea>
+                                    {{-- <input type="text" class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai"
+                                        required value="{{ $row->keterangan_rentang_nilai}}"> --}}
                                 </div>
+
+                            <div class="col">                                                    
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
                                     <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas}}" required>
                                 </div>
                             </div>
-
                             <div class="col">
-                                <div class="mb-3">
-                                    <label for="keterangan_rentang_nilai" class="form-label">Keterangan</label>
-                                    <input type="text" class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai"
-                                        required value="{{ $row->keterangan_rentang_nilai}}">
-                                </div>
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Bawah</label>
                                     <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required value="{{ $row->rentang_bawah}}">

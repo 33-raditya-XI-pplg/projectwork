@@ -18,79 +18,92 @@ class SertifikatController extends Controller
     public function index()
     {
         $event = Event::all();
+        $Title = 'Sertifikat';
         confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.sertifikat.index', compact('event'));
+        return view('admin.sertifikat.index', compact('event', 'Title'));
     }
 
     public function fetchPesertaData($id)
     {
         $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                    ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                    ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-                    ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-                    ->select('tb_event_skema.id_event_skema', 'tb_event.id_event', 'tb_event.nama_event',
-                             'tb_event.tgl_mulai', 'tb_event.tgl_berakhir', 'tb_event.status', 
-                             'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema', 'tb_tempat.nama_tempat')
-                    ->where('tb_event_skema.skema_id', $id)
-                    ->first();
+            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+            ->select(
+                'tb_event_skema.id_event_skema',
+                'tb_event.id_event',
+                'tb_event.nama_event',
+                'tb_event.tgl_mulai',
+                'tb_event.tgl_berakhir',
+                'tb_event.status',
+                'tb_jenis_event.nama_jenis_event',
+                'tb_skema.nama_skema',
+                'tb_tempat.nama_tempat'
+            )
+            ->where('tb_event_skema.skema_id', $id)
+            ->first();
 
         $eventSkemaID = $data_skema->id_event_skema;
         $data_peserta = DB::table('tb_peserta')
-                    ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
-                    ->leftJoinSub(function ($query) {
-                        $query->from('tb_nilai_peserta')
-                            ->select('peserta_id',
-                                DB::raw('COUNT(nilai) as banyak_nilai'),
-                                DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
-                            )
-                            ->groupBy('peserta_id');
-                    }, 'nilai_stats', function ($join) {
-                        $join->on('tb_peserta.id_peserta', '=', 'nilai_stats.peserta_id');
-                    })
-                    ->leftJoin('tb_sertifikat', function ($join) use ($eventSkemaID) {
-                        $join->on('tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                                ->where('tb_sertifikat.event_skema_id', '=', $eventSkemaID);
-                    })
-                    ->whereNot('nilai_stats.banyak_nilai', 0)
-                    ->where('tb_peserta.event_skema_id', $eventSkemaID)
-                    ->whereNull('tb_sertifikat.id_sertifikat')
-                    ->select('tb_peserta.id_peserta', 'tb_user.nama_lengkap')
-                    ->get();
+            ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
+            ->leftJoinSub(function ($query) {
+                $query->from('tb_nilai_peserta')
+                    ->select(
+                        'peserta_id',
+                        DB::raw('COUNT(nilai) as banyak_nilai'),
+                        DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
+                    )
+                    ->groupBy('peserta_id');
+            }, 'nilai_stats', function ($join) {
+                $join->on('tb_peserta.id_peserta', '=', 'nilai_stats.peserta_id');
+            })
+            ->leftJoin('tb_sertifikat', function ($join) use ($eventSkemaID) {
+                $join->on('tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+                    ->where('tb_sertifikat.event_skema_id', '=', $eventSkemaID);
+            })
+            ->whereNot('nilai_stats.banyak_nilai', 0)
+            ->where('tb_peserta.event_skema_id', $eventSkemaID)
+            ->whereNull('tb_sertifikat.id_sertifikat')
+            ->select('tb_peserta.id_peserta', 'tb_user.nama_lengkap')
+            ->get();
 
         $data_sertifikat = DB::table('tb_sertifikat')
-                    ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                    ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                    ->select('tb_peserta.id_peserta',
-                             'tb_user.nama_lengkap',
-                             'tb_sertifikat.nomor_sertifikat', 'tb_sertifikat.masa_berlaku',
-                             'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir'
-                    )
-                    ->where('tb_sertifikat.event_skema_id', $eventSkemaID)
-                    ->get();
+            ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+            ->select(
+                'tb_peserta.id_peserta',
+                'tb_user.nama_lengkap',
+                'tb_sertifikat.nomor_sertifikat',
+                'tb_sertifikat.masa_berlaku',
+                'tb_sertifikat.tgl_terbit',
+                'tb_sertifikat.tgl_berakhir'
+            )
+            ->where('tb_sertifikat.event_skema_id', $eventSkemaID)
+            ->get();
 
         $total_peserta = DB::table('tb_peserta')
-                    ->where('event_skema_id', $eventSkemaID)
-                    ->count();
+            ->where('event_skema_id', $eventSkemaID)
+            ->count();
 
         $data_peserta_tanpa_nilai = DB::table('tb_peserta')
-                    ->leftJoin('tb_nilai_peserta', 'tb_nilai_peserta.peserta_id', '=', 'tb_peserta.id_peserta')
-                    ->where('tb_peserta.event_skema_id', $eventSkemaID)
-                    ->whereNull('tb_nilai_peserta.nilai') 
-                    ->select('tb_peserta.id_peserta')
-                    ->get();
+            ->leftJoin('tb_nilai_peserta', 'tb_nilai_peserta.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->where('tb_peserta.event_skema_id', $eventSkemaID)
+            ->whereNull('tb_nilai_peserta.nilai')
+            ->select('tb_peserta.id_peserta')
+            ->get();
 
         $data_peserta_tanpa_sertifikat = DB::table('tb_peserta')
-                    ->join('tb_nilai_peserta', 'tb_nilai_peserta.peserta_id', '=', 'tb_peserta.id_peserta')
-                    ->leftJoin('tb_sertifikat', function($join) use ($eventSkemaID) {
-                        $join->on('tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                            ->where('tb_sertifikat.event_skema_id', '=', $eventSkemaID);
-                    })
-                    ->where('tb_peserta.event_skema_id', $eventSkemaID)
-                    ->whereNotNull('tb_nilai_peserta.nilai') 
-                    ->whereNull('tb_sertifikat.id_sertifikat') 
-                    ->groupBy('tb_peserta.id_peserta')
-                    ->select('tb_peserta.id_peserta')
-                    ->get();
+            ->join('tb_nilai_peserta', 'tb_nilai_peserta.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->leftJoin('tb_sertifikat', function ($join) use ($eventSkemaID) {
+                $join->on('tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+                    ->where('tb_sertifikat.event_skema_id', '=', $eventSkemaID);
+            })
+            ->where('tb_peserta.event_skema_id', $eventSkemaID)
+            ->whereNotNull('tb_nilai_peserta.nilai')
+            ->whereNull('tb_sertifikat.id_sertifikat')
+            ->groupBy('tb_peserta.id_peserta')
+            ->select('tb_peserta.id_peserta')
+            ->get();
 
         return response()->json([
             'data_skema' => $data_skema,
@@ -100,7 +113,7 @@ class SertifikatController extends Controller
             'data_peserta_tanpa_nilai' => $data_peserta_tanpa_nilai,
             'data_peserta_tanpa_sertifikat' => $data_peserta_tanpa_sertifikat
         ]);
-    }    
+    }
 
     public function generateNomorSertifikat($tglTerbitInput)
     {
@@ -109,8 +122,8 @@ class SertifikatController extends Controller
         $tahun = $tglTerbit->format('Y');
 
         $count = Sertifikat::whereYear('tgl_terbit', $tahun)
-                            ->whereMonth('tgl_terbit', $bulan)
-                            ->count();
+            ->whereMonth('tgl_terbit', $bulan)
+            ->count();
 
         $autoIncrement = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
         $bulanRomawi = $this->convertToRoman($bulan);
@@ -150,7 +163,7 @@ class SertifikatController extends Controller
 
 
         // dd($request);
-        
+
         // dd($request);
         try {
             DB::beginTransaction();
@@ -158,47 +171,47 @@ class SertifikatController extends Controller
             if (!empty($request->option)) {
                 if ($option == 'all') {
                     $pesertas = db::table('tb_peserta')
-                            ->where('event_skema_id', $event_skemaID)
-                            ->select('id_peserta')
-                            ->get();
+                        ->where('event_skema_id', $event_skemaID)
+                        ->select('id_peserta')
+                        ->get();
 
                     foreach ($pesertas as $row) {
                         $pesertaID = $row->id_peserta;
                         $exist = Sertifikat::where('peserta_id', $pesertaID)->exists();
 
                         // Buat sertifikat baru
-                        if (!$exist) { 
+                        if (!$exist) {
                             // Generate nomor sertifikat
-                            $nomorSertifikat = $this->generateNomorSertifikat($tgl_terbit);                            
-            
+                            $nomorSertifikat = $this->generateNomorSertifikat($tgl_terbit);
+
                             $nilai_peserta = DB::table('tb_nilai_peserta')
-                                            ->select(
-                                                DB::raw('COUNT(nilai) as banyak_nilai'),
-                                                DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
-                                                DB::raw('SUM(nilai) as total_nilai'),
-                                                DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
-                                            )
-                                            ->where('peserta_id', $pesertaID)
-                                            ->where('event_skema_id', $event_skemaID)
-                                            ->first();
-            
+                                ->select(
+                                    DB::raw('COUNT(nilai) as banyak_nilai'),
+                                    DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
+                                    DB::raw('SUM(nilai) as total_nilai'),
+                                    DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
+                                )
+                                ->where('peserta_id', $pesertaID)
+                                ->where('event_skema_id', $event_skemaID)
+                                ->first();
+
                             $keterangan_nilai_peserta = DB::table('tb_event_skema_rentang_nilai as tb_es_rn')
-                                            ->join('tb_rentang_nilai', 'tb_es_rn.rentang_nilai_id', '=', 'tb_rentang_nilai.id_rentang_nilai')
-                                            ->join('tb_event_skema', 'tb_es_rn.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                                            ->select('tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai', 'tb_rentang_nilai.keterangan_rentang_nilai')
-                                            ->where('tb_es_rn.event_skema_id', $event_skemaID)
-                                            ->where('rentang_bawah', '<=', $nilai_peserta->avg_nilai)
-                                            ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
-                                            ->first();
-            
+                                ->join('tb_rentang_nilai', 'tb_es_rn.rentang_nilai_id', '=', 'tb_rentang_nilai.id_rentang_nilai')
+                                ->join('tb_event_skema', 'tb_es_rn.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                                ->select('tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai', 'tb_rentang_nilai.keterangan_rentang_nilai')
+                                ->where('tb_es_rn.event_skema_id', $event_skemaID)
+                                ->where('rentang_bawah', '<=', $nilai_peserta->avg_nilai)
+                                ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
+                                ->first();
+
                             $a = Carbon::parse($tgl_terbit);
                             $b = Carbon::parse($tgl_berakhir);
-            
+
                             // Hitung masa berlaku dalam tahun
                             $masa_berlaku_diff = $a->diffInYears($b);
                             if ($masa_berlaku_diff == 0) {
                                 $masa_berlaku_diff = $a->diffInMonths($b);
-                                if($masa_berlaku_diff == 0) {
+                                if ($masa_berlaku_diff == 0) {
                                     $masa_berlaku_diff = $a->diffInDays($b);
                                     $masa_berlaku = $masa_berlaku_diff . ' Hari';
                                 } else {
@@ -207,7 +220,7 @@ class SertifikatController extends Controller
                             } else {
                                 $masa_berlaku = $masa_berlaku_diff . ' Tahun';
                             }
-            
+
                             Sertifikat::create([
                                 'peserta_id' => $pesertaID,
                                 'event_skema_id' => $event_skemaID,
@@ -222,7 +235,7 @@ class SertifikatController extends Controller
                                 'created_at' => now(),
                             ]);
                         }
-                    } 
+                    }
 
                 }
             }
@@ -252,19 +265,19 @@ class SertifikatController extends Controller
 
             // Cek jika sudah ada sertifikat untuk peserta dan event tersebut
             $sertifikat = DB::table('tb_sertifikat')
-                    ->where('peserta_id', $pesertaID)
-                    ->where('event_skema_id', $event_skemaID)
-                    ->first();
-            
+                ->where('peserta_id', $pesertaID)
+                ->where('event_skema_id', $event_skemaID)
+                ->first();
+
             if ($sertifikat) {
                 $a = Carbon::parse($tgl_terbit);
                 $b = Carbon::parse($tgl_berakhir);
-                
+
                 // Hitung masa berlaku dalam tahun
                 $masa_berlaku_diff = $a->diffInYears($b);
                 if ($masa_berlaku_diff == 0) {
                     $masa_berlaku_diff = $a->diffInMonths($b);
-                    if($masa_berlaku_diff == 0) {
+                    if ($masa_berlaku_diff == 0) {
                         $masa_berlaku_diff = $a->diffInDays($b);
                         $masa_berlaku = $masa_berlaku_diff . ' Hari';
                     } else {
@@ -276,44 +289,44 @@ class SertifikatController extends Controller
 
                 // Update sertifikat yang sudah ada
                 DB::table('tb_sertifikat')
-                  ->where('id_sertifikat', $sertifikat->id_sertifikat)
-                  ->update([
-                      'nomor_sertifikat' => $nomorSertifikat,
-                      'masa_berlaku' => $masa_berlaku,
-                      'tgl_terbit' => $tgl_terbit,
-                      'tgl_berakhir' => $tgl_berakhir,
-                      'updated_by' => $created_by,
-                      'updated_at' => now(),
-                  ]);
+                    ->where('id_sertifikat', $sertifikat->id_sertifikat)
+                    ->update([
+                        'nomor_sertifikat' => $nomorSertifikat,
+                        'masa_berlaku' => $masa_berlaku,
+                        'tgl_terbit' => $tgl_terbit,
+                        'tgl_berakhir' => $tgl_berakhir,
+                        'updated_by' => $created_by,
+                        'updated_at' => now(),
+                    ]);
             } else {
                 $nilai_peserta = DB::table('tb_nilai_peserta')
-                                ->select(
-                                    DB::raw('COUNT(nilai) as banyak_nilai'),
-                                    DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
-                                    DB::raw('SUM(nilai) as total_nilai'),
-                                    DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
-                                )
-                                ->where('peserta_id', $pesertaID)
-                                ->where('event_skema_id', $event_skemaID)
-                                ->first();
+                    ->select(
+                        DB::raw('COUNT(nilai) as banyak_nilai'),
+                        DB::raw('SUM(CASE WHEN nilai = 0 THEN 1 ELSE 0 END) as banyak_nilai_nol'),
+                        DB::raw('SUM(nilai) as total_nilai'),
+                        DB::raw('SUM(CASE WHEN nilai != 0 THEN nilai ELSE 0 END) / SUM(CASE WHEN nilai != 0 THEN 1 ELSE 0 END) as avg_nilai')
+                    )
+                    ->where('peserta_id', $pesertaID)
+                    ->where('event_skema_id', $event_skemaID)
+                    ->first();
 
                 $keterangan_nilai_peserta = DB::table('tb_event_skema_rentang_nilai as tb_es_rn')
-                                ->join('tb_rentang_nilai', 'tb_es_rn.rentang_nilai_id', '=', 'tb_rentang_nilai.id_rentang_nilai')
-                                ->join('tb_event_skema', 'tb_es_rn.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                                ->select('tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai', 'tb_rentang_nilai.keterangan_rentang_nilai')
-                                ->where('tb_es_rn.event_skema_id', $event_skemaID)
-                                ->where('rentang_bawah', '<=', $nilai_peserta->avg_nilai)
-                                ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
-                                ->first();
+                    ->join('tb_rentang_nilai', 'tb_es_rn.rentang_nilai_id', '=', 'tb_rentang_nilai.id_rentang_nilai')
+                    ->join('tb_event_skema', 'tb_es_rn.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                    ->select('tb_rentang_nilai.nama_konversi_nilai', 'tb_rentang_nilai.inisial_rentang_nilai', 'tb_rentang_nilai.keterangan_rentang_nilai')
+                    ->where('tb_es_rn.event_skema_id', $event_skemaID)
+                    ->where('rentang_bawah', '<=', $nilai_peserta->avg_nilai)
+                    ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
+                    ->first();
 
                 $a = Carbon::parse($tgl_terbit);
                 $b = Carbon::parse($tgl_berakhir);
-                
+
                 // Hitung masa berlaku dalam tahun
                 $masa_berlaku_diff = $a->diffInYears($b);
                 if ($masa_berlaku_diff == 0) {
                     $masa_berlaku_diff = $a->diffInMonths($b);
-                    if($masa_berlaku_diff == 0) {
+                    if ($masa_berlaku_diff == 0) {
                         $masa_berlaku_diff = $a->diffInDays($b);
                         $masa_berlaku = $masa_berlaku_diff . ' Hari';
                     } else {
@@ -350,16 +363,18 @@ class SertifikatController extends Controller
     public function fetchSertifikatData($id)
     {
         $data_sertifikat_peserta = DB::table('tb_sertifikat')
-                ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                ->select('tb_user.nama_lengkap',
-                         'tb_skema.nama_skema',
-                         'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir'
-                )
-                ->where('tb_sertifikat.peserta_id', $id)
-                ->first();
+            ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+            ->select(
+                'tb_user.nama_lengkap',
+                'tb_skema.nama_skema',
+                'tb_sertifikat.tgl_terbit',
+                'tb_sertifikat.tgl_berakhir'
+            )
+            ->where('tb_sertifikat.peserta_id', $id)
+            ->first();
 
         return response()->json([
             'data_sertifikat_peserta' => $data_sertifikat_peserta
@@ -379,37 +394,46 @@ class SertifikatController extends Controller
         }
     }
 
-    public function exportToPDF(Request $request) { 
+    public function exportToPDF(Request $request)
+    {
         $ids = $request->input('selected_ids');
         $event_skemaID = $request->input('event_skema_id');
 
         $data_sertifikat_peserta = DB::table('tb_sertifikat')
-                        ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                        ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
-                        ->select('tb_user.nama_lengkap',
-                                 'tb_event.nama_event', 'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema',
-                                 'tb_background.nama_bg', 'tb_background.orientasi_bg', 'tb_background.path_bg',
-                                 'tb_sertifikat.nomor_sertifikat', 
-                                 'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
-                                 'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
-                        )
-                        ->whereIn('tb_sertifikat.peserta_id', $ids)
-                        ->get();
+            ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+            ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
+            ->select(
+                'tb_user.nama_lengkap',
+                'tb_event.nama_event',
+                'tb_jenis_event.nama_jenis_event',
+                'tb_skema.nama_skema',
+                'tb_background.nama_bg',
+                'tb_background.orientasi_bg',
+                'tb_background.path_bg',
+                'tb_sertifikat.nomor_sertifikat',
+                'tb_sertifikat.tgl_terbit',
+                'tb_sertifikat.tgl_berakhir',
+                'tb_sertifikat.masa_berlaku',
+                'tb_sertifikat.nilai',
+                'tb_sertifikat.keterangan'
+            )
+            ->whereIn('tb_sertifikat.peserta_id', $ids)
+            ->get();
 
         $data_penadatangan = DB::table('tb_event_skema')
-                        ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
-                        ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
-                        ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
-                        ->where('tb_penandatangan.event_skema_id', $event_skemaID)
-                        ->get();
+            ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
+            ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
+            ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
+            ->where('tb_penandatangan.event_skema_id', $event_skemaID)
+            ->get();
 
         $templateBg = public_path($data_sertifikat_peserta[0]->path_bg);
-        
+
         $fileName = "";
         count($ids) != 1 ?
             $fileName = 'Sertif-' . count($ids) . '-Orang-Peserta.pdf' :
@@ -417,11 +441,13 @@ class SertifikatController extends Controller
 
         $pdf = "";
         if ($data_sertifikat_peserta[0]->orientasi_bg != 'landscape') {
-            $pdf = PDF::loadView('template_sertifikat.cetak.cetak_sertifikat_potrait', 
+            $pdf = PDF::loadView(
+                'template_sertifikat.cetak.cetak_sertifikat_potrait',
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'potrait');
         } else {
-            $pdf = PDF::loadView('template_sertifikat.cetak.cetak_sertifikat_landscape', 
+            $pdf = PDF::loadView(
+                'template_sertifikat.cetak.cetak_sertifikat_landscape',
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'landscape');
         }
@@ -436,44 +462,52 @@ class SertifikatController extends Controller
 
         if ($exist) {
             $data_sertifikat_peserta = DB::table('tb_sertifikat')
-                        ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                        ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
-                        ->select('tb_user.nama_lengkap',
-                                'tb_event_skema.id_event_skema',
-                                'tb_event.nama_event', 'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema',
-                                'tb_background.nama_bg', 'tb_background.orientasi_bg', 'tb_background.path_bg',
-                                'tb_sertifikat.nomor_sertifikat', 
-                                'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
-                                'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
-                        )
-                        ->where('tb_sertifikat.nomor_sertifikat', $nomor_sertifikat)
-                        ->first();
+                ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+                ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+                ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+                ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
+                ->select(
+                    'tb_user.nama_lengkap',
+                    'tb_event_skema.id_event_skema',
+                    'tb_event.nama_event',
+                    'tb_jenis_event.nama_jenis_event',
+                    'tb_skema.nama_skema',
+                    'tb_background.nama_bg',
+                    'tb_background.orientasi_bg',
+                    'tb_background.path_bg',
+                    'tb_sertifikat.nomor_sertifikat',
+                    'tb_sertifikat.tgl_terbit',
+                    'tb_sertifikat.tgl_berakhir',
+                    'tb_sertifikat.masa_berlaku',
+                    'tb_sertifikat.nilai',
+                    'tb_sertifikat.keterangan'
+                )
+                ->where('tb_sertifikat.nomor_sertifikat', $nomor_sertifikat)
+                ->first();
 
-            $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat; 
+            $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat;
             $qrCode = QrCode::format('svg')->size(80)->errorCorrection('H')
-                    ->generate($qrCodeData);
+                ->generate($qrCodeData);
 
             if ($data_sertifikat_peserta->orientasi_bg === 'landscape') {
-                return view('template_sertifikat.check.check_sertifikat_landscape', 
+                return view(
+                    'template_sertifikat.check.check_sertifikat_landscape',
                     compact('data_sertifikat_peserta', 'qrCode')
                 );
-            }
-            else {
-                return view('template_sertifikat.check.check_sertifikat_potrait', 
+            } else {
+                return view(
+                    'template_sertifikat.check.check_sertifikat_potrait',
                     compact('data_sertifikat_peserta', 'qrCode')
                 );
             }
 
-        }
-        else {
+        } else {
             return view('template_sertifikat.check.check_sertifikat_error');
         }
-        
+
     }
 
     public function showSertifikat($request_id)
@@ -481,41 +515,51 @@ class SertifikatController extends Controller
         $id = intval($request_id);
 
         $data_sertifikat_peserta = DB::table('tb_sertifikat')
-                        ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-                        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-                        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-                        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                        ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
-                        ->select('tb_user.nama_lengkap',
-                                 'tb_event.nama_event', 'tb_jenis_event.nama_jenis_event', 'tb_skema.nama_skema',
-                                 'tb_event_skema.id_event_skema',
-                                 'tb_background.nama_bg', 'tb_background.orientasi_bg', 'tb_background.path_bg',
-                                 'tb_sertifikat.nomor_sertifikat', 
-                                 'tb_sertifikat.tgl_terbit', 'tb_sertifikat.tgl_berakhir', 'tb_sertifikat.masa_berlaku',
-                                 'tb_sertifikat.nilai', 'tb_sertifikat.keterangan' 
-                        )
-                        ->where('tb_sertifikat.peserta_id', $id)
-                        ->first();
+            ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+            ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
+            ->select(
+                'tb_user.nama_lengkap',
+                'tb_event.nama_event',
+                'tb_jenis_event.nama_jenis_event',
+                'tb_skema.nama_skema',
+                'tb_event_skema.id_event_skema',
+                'tb_background.nama_bg',
+                'tb_background.orientasi_bg',
+                'tb_background.path_bg',
+                'tb_sertifikat.nomor_sertifikat',
+                'tb_sertifikat.tgl_terbit',
+                'tb_sertifikat.tgl_berakhir',
+                'tb_sertifikat.masa_berlaku',
+                'tb_sertifikat.nilai',
+                'tb_sertifikat.keterangan'
+            )
+            ->where('tb_sertifikat.peserta_id', $id)
+            ->first();
 
         $data_penadatangan = DB::table('tb_event_skema')
-                        ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
-                        ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
-                        ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
-                        ->where('tb_penandatangan.event_skema_id', $data_sertifikat_peserta->id_event_skema)
-                        ->get();
+            ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
+            ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
+            ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
+            ->where('tb_penandatangan.event_skema_id', $data_sertifikat_peserta->id_event_skema)
+            ->get();
 
         $templateBg = (php_uname('s') === 'Linux') ? public_path(str_replace('\\', '/', $data_sertifikat_peserta->path_bg)) : public_path($data_sertifikat_peserta->path_bg);
         $fileName = 'Sertif-' . $data_sertifikat_peserta->nomor_sertifikat . '.pdf';
 
         $pdf = "";
         if ($data_sertifikat_peserta->orientasi_bg != 'landscape') {
-            $pdf = PDF::loadView('template_sertifikat.show.show_sertifikat_potrait', 
+            $pdf = PDF::loadView(
+                'template_sertifikat.show.show_sertifikat_potrait',
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'potrait');
         } else {
-            $pdf = PDF::loadView('template_sertifikat.show.show_sertifikat_landscape', 
+            $pdf = PDF::loadView(
+                'template_sertifikat.show.show_sertifikat_landscape',
                 compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
             )->setPaper('a4', 'landscape');
         }

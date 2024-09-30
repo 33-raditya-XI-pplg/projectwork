@@ -1,6 +1,43 @@
 @extends('layouts.panel.index')
 @section('title', 'Tanda Tangan')
 @section('content')
+<style>
+    
+.select2-close-mask{
+    z-index: 2099 !important;
+}
+.select2-dropdown{
+    z-index: 3051 !important;
+}
+.dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer;
+}
+#image_preview_ {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; 
+    height: auto; 
+    max-width: 200px; 
+    max-height: 200px; 
+    overflow: hidden;
+    margin: 0 auto; 
+}
+#preview_image_create, #preview_image_edit_ {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
+}
+</style>
 
 
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -79,21 +116,36 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="nomor_induk" class="form-label">NIK</label>
-                                        <input type="text" class="form-control" name="nomor_induk" id="nomor_induk"
+                                        <input type="number" class="form-control" name="nomor_induk" id="nomor_induk"
                                             required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="instansi" class="form-label">Instansi</label>
-                                        <select name="instansi_id" id="instansi_id" class="form-select" required>
-                                            <option selected disabled>Pilih...</option>
-                                            @foreach($instansi as $row)
-                                                <option value="{{ $row->id_instansi }}">{{ $row->nama_instansi }}</option>
+                                        <select class="form-select js-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi"   required>                                                  
+                                            <option value="" disabled selected></option> 
+                                            @foreach ($institutions as $id_instansi => $name)
+                                            <option value="{{ $id_instansi }}" {{old('instansi_id', (isset($pengguji) ? $pengguji->instansi_id : '') == $id_instansi) ? 'selected' : '' }}>{{ $name }}</option>                         
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
-                                        <label for="tanda_tangan">Tanda Tangan</label>
-                                        <input class="form-control mt-2" name="foto_ttd" type="file" id="formFile" accept=".png" required>
+                                    <div class="form-group mb-6">
+                                        <label class="control-label mb-2">Upload Tanda Tangan <span class="text-danger">*</span></label>
+                                        <div class="dropzone-wrapper">
+                                            <div class="dropzone-desc">
+                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                                <p>Pilih gambar atau seret ke sini.</p>
+                                            </div>
+                                            <input type="file" name="path_ttd" class="dropzone" id="path_ttd" accept="image/*" required>
+                                            <div id="image_preview_" class="mt-3">
+                                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2MB</small>
+                                        </div>
+                                        @error('path_ttd')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                             </div>
                         </div>
@@ -128,7 +180,8 @@
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body">                    
+            
 
                         {{-- form --}}
                         <div class="container">
@@ -156,18 +209,36 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="instansi" class="form-label">Instansi</label>
-                                        <select name="instansi_id" id="instansi_id" class="form-select" required>
-                                            <option selected disabled>Pilih...</option>
-                                            @foreach($instansi as $a)
-                                                    <option value="{{ $a->id_instansi }}" {{ $row->instansi_id == $a->id_instansi ? 'selected' : '' }}>
-                                                    {{ $a->nama_instansi }}
-                                                    </option>
+                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id_{{ $row->id_ttd }}" data-placeholder="Pilih Instansi" required>                             
+                                            <option value="" disabled selected></option> 
+                                            @foreach ($institutions as $id_instansi => $name)
+                                            <option value="{{ $id_instansi }}" {{ old('instansi_id', $row->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                        
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div>
-                                        <label for="tanda_tangan">Tanda Tangan</label>
-                                        <input class="form-control" name="gambar_tanda_tangan" type="file" id="formFile" accept=".png">
+                                    <div class="form-group mb-6">
+                                        <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                                        <div class="dropzone-wrapper">
+                                            <div class="dropzone-desc">
+                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                                <p>Pilih gambar atau seret ke sini .</p>
+                                            </div>
+                                            <input type="file" name="path_ttd" class="dropzone" id="path_ttd_{{ $row->id_ttd }}" accept="image/*">
+                                            <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                                                @if($row->path_ttd)
+                                                    <img id="preview_image_edit_{{ $row->id_ttd }}" src="{{ asset($row->path_ttd) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                @else
+                                                    <img id="preview_image_edit_{{ $row->id_ttd }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                @endif
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="mt-4">
+                                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                        </div>
+                                        @error('path_foto')
+                                        <div class="text-danger">{{ $message }}</div>
+                                       @enderror
                                     </div>
                                 </div>
 
@@ -193,4 +264,79 @@
             </div>
         </div>
     @endforeach
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.js-single').select2({
+        
+        allowClear: true
+    });
+    
+    @foreach($tanda_tangan as $row)
+        $('#instansi_id_{{ $row->id_ttd }}').select2({
+            allowClear: true
+        });
+    @endforeach
+});
+</script>
+
+<script>    
+        document.getElementById('path_ttd').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview_image_create');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the image preview
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none'; // Hide the image if no file selected
+        }
+    });
+
+            Dropzone.options.path_file = {
+            maxFilesize: 2, 
+            acceptedFiles: "image/*", 
+            init: function() {
+                this.on("success", function(file, response) {                    
+                });
+                this.on("error", function(file, response) {
+                    document.getElementById('image_error').innerHTML = response.message;
+                });
+              }
+            };       
+</script> 
+<script>
+    document.querySelectorAll('[id^="path_ttd_"]').forEach(input => {
+        input.addEventListener('change', function(event) {
+            const id = this.id.split('_')[2]; // Extract ID from the input's ID
+            const preview = document.getElementById(`preview_image_edit_${id}`);
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Show the image preview
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none'; // Hide the image if no file selected
+            }
+        });
+    });
+</script>
+
 @endsection

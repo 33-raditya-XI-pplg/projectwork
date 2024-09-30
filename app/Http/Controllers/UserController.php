@@ -20,32 +20,49 @@ class UserController extends Controller
         $pengguna = User::where('level', 'Pengguna')->get();
 
         confirmDelete('Hapus Pengguna', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.user.index', compact('pengguna'));
+
+        $Title = 'Master Data';
+        $subtitle = 'Pengguna';
+        return view('admin.user.index', compact('pengguna', 'Title', 'subtitle'));
     }
 
     public function create(User $user)
     {
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
-        return view('admin.user.create', compact('user', 'institutions'));
+        $regencies = DB::table('regencies')->pluck('name', 'id');
+        $Title = 'Master Data';
+        $subtitle = 'Pengguna create';
+        return view('admin.user.create', compact('user', 'institutions', 'regencies', 'Title', 'subtitle'));
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|unique:tb_user,email|regex:/^.+@gmail\.com$/',
+        ], [
+            'email.required' => 'Email harus diisi.',
+            'email.email' => 'Silakan masukan alamat email yang valid.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'email.regex' => 'Hanya alamat gmail yang diperboleh kan .',
+        ]);
+
+
         if (!$request->has('status')) {
             $request->merge([
                 'status' => 'Belum Verified'
             ]);
         }
-
-        $foto = $request->file('foto');
-        $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-        $stored = $foto->storeAs('public/foto_pengguna', $filename);
-
-        $request->merge([
-            'path_foto' => Storage::url($stored)
-        ]);
-
-        User::create($request->all());
+        $data = $request->all();
+        if ($request->hasFile('path_foto')) {
+            $foto = $request->file('path_foto');
+            $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/foto_pengguna', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_foto']);
+            $data['path_foto'] = "/storage/foto_pengguna/$filename";
+        }
+        // dd($data);
+        User::create($data);
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan.');
         return redirect()->route('user.index');
@@ -55,37 +72,40 @@ class UserController extends Controller
     {
         $pengguna = User::findOrFail($id);
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
-        return view('admin.user.create', compact('pengguna', 'institutions'));
+        $regencies = DB::table('regencies')->where('name', 'Like', '%KOTA%')->pluck('name', 'id');
+
+        $Title = 'Master Data';
+        $subtitle = 'Pengguna edit';
+        return view('admin.user.create', compact('pengguna', 'institutions', 'regencies', 'Title', 'subtitle'));
     }
 
     public function update(Request $request, $id)
     {
+
         $user = User::find($id);
 
         if (!$request->has('status')) {
-            $request->merge([
-                'status' => 'Belum Verified'
-            ]);
+            $request->merge(['status' => 'Belum Verified']);
         }
 
-        if ($request->has('foto')) {
-            if (!empty($id->path_foto)) {
-                $foto = $request->file('foto');
-                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                $foto->storeAs('public/foto_pengguna', $filename);
-            } else {
-                $foto = $request->file('foto');
-                $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                $stored = $foto->storeAs('public/foto_pengguna', $filename);
+        $data = $request->all();
 
-                $request->merge([
-                    'path_foto' => Storage::url($stored)
-                ]);
+        if ($request->hasFile('path_foto')) {
+            if ($user->path_foto) {
+                $oldPhotoPath = str_replace('/storage', 'public', $user->path_foto);
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
             }
-
+            $foto = $request->file('path_foto');
+            $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/foto_pengguna', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_foto']);
+            $data['path_foto'] = "/storage/foto_pengguna/$filename";
         }
 
-        $user->update($request->all());
+        $user->update($data);
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
         return redirect()->route('user.index');

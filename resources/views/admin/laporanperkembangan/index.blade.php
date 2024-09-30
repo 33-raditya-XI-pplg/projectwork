@@ -325,52 +325,54 @@
                         $('tbody').html("");
                         $('#dropdown-menu').html("");
 
-                        $.each(data_peserta, function(index, row) {
-    var num = index + 1;
-    var buttonAction;
+                     $.each(data_peserta, function(index, row) {
+                        var num = index + 1;
+                        var buttonAction;
 
-    if (row.catatan != null) {
-        buttonAction = 
-        '<li>\
-            <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
-                <i class="fa-regular fa-pen-to-square"></i>\
-             Edit</a>\
-        </li>\
-        <li>\
-            <a href="#" class="dropdown-item text-danger delete_nilai_btn" data-id="' + row.id_peserta + '">\
-                <i class="fa-regular fa-trash-can pe-none"></i>\
-             Delete</a>\
-        </li>';
-    } else {
-        buttonAction = 
-        '<li>\
-            <a href="#" class="dropdown-item text-primary create_nilai_btn" data-id="' + row.id_peserta + '">\
-                <i class="fa-regular fa-pen-to-square"></i>\
-             Tambah</a>\
-        </li>';
-    }
+                        // Jika ada catatan, tampilkan tombol edit dan delete
+                        if (row.catatan != null) {
+                            buttonAction = 
+                            '<li>\
+                                <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
+                                    <i class="fa-regular fa-pen-to-square"></i> Edit</a>\
+                            </li>\
+                            <li>\
+                                <a href="#" class="dropdown-item text-danger delete_nilai_btn" data-id="' + row.id_peserta + '">\
+                                    <i class="fa-regular fa-trash-can"></i> Delete</a>\
+                            </li>';
+                        } 
+                        // Jika tidak ada catatan, tampilkan tombol tambah
+                        else {
+                            buttonAction = 
+                            '<li>\
+                                <a href="#" class="dropdown-item text-primary create_laporan_btn" data-id="' + row.id_peserta + '">\
+                                    <i class="fa-regular fa-pen-to-square"></i> Tambah</a>\
+                            </li>';
+                        }
 
-    $('tbody').append(
-        '<tr>\
-            <td>' + num + '</td>\
-            <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
-            <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
-            <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) : 'Tanggal tidak tersedia') + '</td>\
-            <td>\
-                <div class="dropdown px-3">\
-                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
-                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
-                        <i class="fa-solid fa-bars"></i>\
-                    </a>\
-                    <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
-                        ' + buttonAction + '\
-                    </ul>\
-                </div>\
-            </td>\
-        </tr>'
-    );
-});
-                        $("#example").DataTable();
+                        // Tampilkan data ke dalam tabel
+                        $('tbody').append(
+                            '<tr>\
+                                <td>' + num + '</td>\
+                                <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
+                                <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
+                                <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) : 'Tanggal tidak tersedia') + '</td>\
+                                <td>\
+                                    <div class="dropdown px-3">\
+                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
+                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
+                                            <i class="fa-solid fa-bars"></i>\
+                                        </a>\
+                                        <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                                            ' + buttonAction + '\
+                                        </ul>\
+                                    </div>\
+                                </td>\
+                            </tr>'
+                        );
+                    });
+
+                    $("#example").DataTable();
 
                     }
                 },
@@ -445,45 +447,55 @@
         });
 
         // Create Modal Trigger
-        $(document).on('click', '.create_laporan_btn', function (e){
-            e.preventDefault()
-            pesertaID = $(this).data('id')
+ $(document).on('click', '.create_laporan_btn', function (e) {
+    e.preventDefault();
 
-            $.ajax({
-                url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
-                type: "get",
-                dataType: "json",
+    var pesertaID = $(this).data('id');
 
-                success: function(response) {
-                    var data_peserta_create = response.data_peserta;
-                    
-                    $('#createLaporanModal').modal('show');
-                    $('#create_nama_peserta').val(data_peserta_create.nama_lengkap);
-                    $('#create_nama_skema').val(data_skema.nama_skema);
+    $.ajax({
+        url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            var data_peserta_create = response.data_peserta;
+            var data_sub_skema = response.data_sub_skema;  // Pastikan data_sub_skema ini juga ada dalam response
 
-                    $('#nilai-sub-skema-wrapper').html("")
-                    $('.nilai_sub_skema').val('')
+            // Tampilkan modal
+            $('#createLaporanModal').modal('show');
 
-                    $.each(data_sub_skema, function(index, row) {
-                        $('#nilai-sub-skema-wrapper').append(
-                            '<div class="px-1 mb-3 row">\
-                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
-                                <div class="col-sm-4 d-flex justify-content-end">\
-                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
-                                        style="height: 35px;">Nilai</label>\
-                                    <input type="hidden" class="create_id_sub_skema" value="' + row.id_sub_skema + '">\
-                                    <input type="number" class="form-control rounded-0 rounded-end create_nilai_sub_skema"\
-                                        style="width: 100px; height: 35px;">\
-                                </div>\
-                            </div>'
-                        );
-                        
-                    });
-                    
-                }
-                
+            // Isi form dengan data yang diterima
+            $('#create_nama_peserta').val(data_peserta_create.nama_lengkap);
+            // $('#create_nama_skema').val(response.data_skema.nama_skema);  // Pastikan nama skema tersedia di response
+
+            // Kosongkan nilai sub skema sebelumnya
+            $('#create-nilai-sub-skema-wrapper').html('');
+
+            // Isi sub-skema
+            $.each(data_sub_skema, function(index, row) {
+                $('#create-nilai-sub-skema-wrapper').append(
+                    '<div class="px-1 mb-3 row">\
+                        <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
+                        <div class="col-sm-4 d-flex justify-content-end">\
+                            <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                style="height: 35px;">Nilai</label>\
+                            <input type="hidden" class="create_id_sub_skema" value="' + row.id_sub_skema + '">\
+                            <input type="number" class="form-control rounded-0 rounded-end create_nilai_sub_skema"\
+                                style="width: 100px; height: 35px;">\
+                        </div>\
+                    </div>'
+                );
             });
-        });
+        },
+        error: function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Memuat Data',
+                text: 'Tidak dapat mengambil data dari server!'
+            });
+        }
+    });
+});
+
 
         // Edit Modal Trigger
         $(document).on('click', '.edit_laporan_btn', function (e){

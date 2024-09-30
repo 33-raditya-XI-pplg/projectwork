@@ -33,13 +33,15 @@ class DashboardController extends Controller
             && !empty($user->tahun_lulus) && !empty($user->nama_perusahaan) && !empty($user->alamat_perusahaan)
             && !empty($user->alamat_kota_perusahaan) && !empty($user->jabatan_pekerjaan) && !empty($user->no_telp_perusahaan);
 
+        $Title = 'Dashboard';
         return view('user.dashboard', compact(
             'banyak_pengguna',
             'banyak_penguji',
             'banyak_skema',
             'banyak_event',
             'data_event',
-            'isProfileComplete'
+            'isProfileComplete',
+            'Title'
         ));
     }
 
@@ -74,6 +76,7 @@ class DashboardController extends Controller
             ->where('status', 'Belum Verified')
             ->get();
 
+        $Title = 'Dashboard';
         return view('admin.dashboard', compact(
             'banyak_pengguna',
             'banyak_penguji',
@@ -81,6 +84,7 @@ class DashboardController extends Controller
             'banyak_event',
             'data_event',
             'usersToVerify',
+            'Title'
         ));
     }
 }

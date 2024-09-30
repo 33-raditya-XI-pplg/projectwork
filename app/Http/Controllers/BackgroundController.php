@@ -16,9 +16,10 @@ class BackgroundController extends Controller
     public function index()
     {
         $bg = Background::get();
-
+        $Title = 'Master Data';
+        $subtitle = "Background";
         confirmDelete('Hapus Background', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.background.index', compact('bg'));
+        return view('admin.background.index', compact('bg', 'Title', 'subtitle'));
     }
 
     /**
@@ -34,15 +35,17 @@ class BackgroundController extends Controller
      */
     public function store(Request $request)
     {
-        $bg = $request->file('bg');
-        $filename = 'bg_' .$request->nama_bg . '.' .$bg->getClientOriginalExtension();
-        $stored = $bg->storeAs('public/background', $filename);
+        $data = $request->all();
+        if ($request->hasFile('path_bg')) {
+            $foto = $request->file('path_bg');
+            $filename = 'bg' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/background', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_ng']);
+            $data['path_bg'] = "/storage/background/$filename";
+        }
 
-        $request->merge([
-            'path_bg' => Storage::url($stored)
-        ]);
-
-        Background::create($request->all());
+        Background::create($data);
         Alert::success('Berhasil Tersimpan!', 'Background berhasil ditambahkan');
 
         return redirect()->back();
@@ -69,21 +72,27 @@ class BackgroundController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $background = Background::find($id);
 
-        if ($request->has('bg')) {
-            $bg = $request->file('bg');
-            $filename = 'bg_' .$request->nama_bg . '.' .$bg->getClientOriginalExtension();
-            unlink(public_path(Background::find($id)->path_bg));
+        $data = $request->all();
 
-            $stored = $bg->storeAs('public/background', $filename);
-
-            $request->merge([
-                'path_bg' => Storage::url($stored)
-            ]);
+        if ($request->hasfile('path_bg')) {
+            if ($background->path_bg) {
+                $oldPhotoPath = str_replace('/storage', 'public', $background->path_bg);
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
+            }
+            $bg = $request->file('path_bg');
+            $filename = 'bg_' . $request->nama_bg . '.' . $bg->getClientOriginalExtension();
+            $storedPath = $bg->storeAs('public/background', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_ttd']);
+            $data['path_bg'] = "/storage/background/$filename";
 
         }
 
-        Background::find($id)->update($request->all());
+        $background->update($data);
         Alert::success('Berhasil Tersimpan!', 'Background berhasil diedit.');
 
         return redirect()->back();
@@ -104,7 +113,7 @@ class BackgroundController extends Controller
         }
 
         if (!empty($bg)) {
-            if( file_exists(public_path($bg)) ) {
+            if (file_exists(public_path($bg))) {
                 unlink(public_path($bg));
                 Background::destroy($id);
             } else {
@@ -114,7 +123,7 @@ class BackgroundController extends Controller
             Background::destroy($id);
         }
 
-        toast('Background terhapus!','success');
+        toast('Background terhapus!', 'success');
         return redirect()->back();
     }
 }

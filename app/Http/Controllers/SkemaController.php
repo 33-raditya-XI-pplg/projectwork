@@ -15,34 +15,49 @@ use App\Models\Sub_Skema;
 
 class SkemaController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $data = Skema::get();
+        $Title = 'Master Data';
+        $subtitle = 'Skema';
 
         confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.skema.index', compact('data'));
+        return view('admin.skema.index', compact('data', 'Title', 'subtitle'));
     }
 
-    public function create() {
-        return view('admin.skema.create');
+    public function create()
+    {
+
+        $Title = 'Master Data';
+        $subtitle = 'Skema-create';
+        return view('admin.skema.create', compact('Title', 'subtitle'));
     }
 
     public function store(Request $request)
     {
         DB::beginTransaction();
-        
-        try {
-            $icon = $request->file('icon');
-            $filename = 'icon_' . $request->nama_skema . '.' . $icon->getClientOriginalExtension();
-            $stored = $icon->storeAs('public/icon_skema', $filename);
 
+        try {
+            if ($request->has('path_icon')) {
+                $icon = $request->file('path_icon');
+                $filename = 'icon_' . $request->nama_skema . '.' . $icon->getClientOriginalExtension();
+                $stored = $icon->storeAs('storage/icon_skema', $filename);
+
+                $request->merge([
+                    'path_icon' => Storage::url($stored)
+                ]);
+            }
+
+            // dd($request->files);
             $skema = Skema::create([
                 'nama_skema' => $request->nama_skema,
                 'has_sub_skema' => $request->has('sub_skema') ? true : false,
                 'status' => $request->has('status') ? $request->status : 'Nonaktif',
-                'path_icon' => Storage::url($stored),
+                'path_icon' => $stored,
                 'created_by' => Auth::user()->id_user,
             ]);
-            
+
+
             if (!empty($request->sub_skema)) {
                 foreach ($request->sub_skema as $nama_sub_skema) {
                     Sub_Skema::create([
@@ -68,19 +83,27 @@ class SkemaController extends Controller
     public function edit(Skema $skema)
     {
         $sub_skema = Sub_Skema::where('skema_id', $skema->id_skema)->get();
+        $Title = 'Master Data';
+        $subtitle = 'Skema-edit';
 
-        return view('admin.skema.edit', compact('skema', 'sub_skema'));
+        return view('admin.skema.edit', compact('skema', 'sub_skema', 'Title', 'subtitle'));
     }
 
     public function update(Request $request, $id)
     {
         DB::beginTransaction();
         try {
-            if ($request->has('icon')) {
-                $icon = $request->file('icon');
-                $filename = 'icon_' . $request->nama_skema . '.' . $icon->getClientOriginalExtension();
 
-                $icon->storeAs('public/icon_skema', $filename);
+            $skema = Skema::findOrFail($id);
+
+            if ($request->hasFile('path_icon')) {
+                $icon = $request->file('path_icon');
+                $filename = 'icon_' . $request->nama_skema . '.' . $icon->getClientOriginalExtension();
+                $stored = $icon->storeAs('public/icon_skema', $filename);
+
+                $path_icon = Storage::url($stored); // Mendapatkan URL untuk penyimpanan
+            } else {
+                $path_icon = $skema->path_icon; // Gunakan path ikon yang sudah ada
             }
 
             // Update Skema
@@ -89,25 +112,27 @@ class SkemaController extends Controller
                 'nama_skema' => $request->nama_skema,
                 'has_sub_skema' => $request->has('sub_skema') ? true : false,
                 'status' => $request->has('status') ? $request->status : 'Nonaktif',
+                'path_icon' => $path_icon,
                 'updated_by' => Auth::user()->id_user,
             ];
             $skema->update($skemaData);
-            
+
+
             $existingSubSkemaIds = $request->input('sub_skema_ids', []);
 
             $checkChildID1 = Event_Skema::where('skema_id', $skema->id_skema)->count();
-            
+
             $checkChildID2 = DB::table('tb_nilai_peserta')
-                            ->join('tb_event_skema', 'tb_nilai_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                            ->where('skema_id', $skema->id_skema)
-                            ->whereNotNull('sub_skema_id')
-                            ->exists();
+                ->join('tb_event_skema', 'tb_nilai_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                ->where('skema_id', $skema->id_skema)
+                ->whereNotNull('sub_skema_id')
+                ->exists();
 
             if ($checkChildID1 > 0 || $checkChildID2 > 0) {
                 Alert::error('Gagal mengubah!', 'Tidak dapat mengubah karena data masih digunakan.');
                 return redirect()->back();
-            } 
+            }
             if ($checkChildID2 == 1) {
                 Alert::error('Gagal mengubah!', 'Tidak dapat mengubah karena data masih digunakan.');
                 return redirect()->back();
@@ -115,21 +140,24 @@ class SkemaController extends Controller
 
             Sub_Skema::where('skema_id', $skema->id_skema)
                 ->whereNotIn('id_sub_skema', $existingSubSkemaIds)
-                ->delete();            
-            
+                ->delete();
+
             if (!empty($request->sub_skema)) {
-                foreach ($request->sub_skema as $subSkemaId => $subSkemaValue) {    
-                    if (!empty($subSkemaValue) && !Sub_Skema::where('id_sub_skema', $subSkemaId)
-                        ->whereIn('skema_id', [$skema->id_skema])->exists()) {
-                    
+                foreach ($request->sub_skema as $subSkemaId => $subSkemaValue) {
+                    if (
+                        !empty($subSkemaValue) && !Sub_Skema::where('id_sub_skema', $subSkemaId)
+                            ->whereIn('skema_id', [$skema->id_skema])->exists()
+                    ) {
+
                         Sub_Skema::create([
                             'skema_id' => $skema->id_skema,
                             'judul_sub' => $subSkemaValue,
                             'created_by' => Auth::user()->id_user,
                         ]);
-                    } 
-                    elseif (!empty($request->sub_skema) && Sub_Skema::where('id_sub_skema', $subSkemaId)
-                        ->whereIn('skema_id', [$skema->id_skema])) {
+                    } elseif (
+                        !empty($request->sub_skema) && Sub_Skema::where('id_sub_skema', $subSkemaId)
+                            ->whereIn('skema_id', [$skema->id_skema])
+                    ) {
 
                         $subSkema = Sub_Skema::findOrFail($subSkemaId);
                         $subSkema->update([
@@ -140,11 +168,10 @@ class SkemaController extends Controller
                     }
 
                 } // End Foreach
+            } elseif (empty($request->sub_skema)) {
+                Sub_Skema::where('skema_id', $skema->id_skema)->delete();
             }
-            elseif (empty($request->sub_skema)) {
-                Sub_Skema::where('skema_id', $skema->id_skema)->delete(); 
-            }
-            
+
 
             DB::commit();
             Alert::success('Berhasil Diperbarui!', 'Data berhasil diperbarui.');
@@ -165,9 +192,9 @@ class SkemaController extends Controller
             Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
             return redirect()->back();
         }
-        
+
         if (!empty($skema->path_foto)) {
-            if( file_exists(public_path($skema->path_foto)) ) {
+            if (file_exists(public_path($skema->path_foto))) {
                 unlink(public_path($skema->path_foto));
                 $skema->delete();
             } else {
@@ -183,9 +210,10 @@ class SkemaController extends Controller
     }
 
     // ==== API ====
-    public function indexApi() {
+    public function indexApi()
+    {
         $data = Skema::get();
-    
+
         return response()->json([
             'success' => true,
             'message' => 'Data skema berhasil diambil.',

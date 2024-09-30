@@ -1,6 +1,37 @@
 @extends('layouts.panel.index')
 @section('content')
+<style>
+    .dropzone-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 130px; 
+        border: 2px dashed #ddd;
+        background-color: #f9f9f9;
+        position: relative;
+        cursor: pointer;
+    }
+    #image_preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%; 
+        height: auto; 
+        max-width: 100px; 
+        max-height: 100px; 
+        overflow: hidden;
+        margin: 0 auto; 
+    }
+    #preview_image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; 
+        display: block; 
+    }
+    </style>
     <div class="container mt-4">
+        {{-- {{ dd($skema->path_icon) }} --}}
         <div class="card">
             <div class="card-header">
                 <h5 class="mt-2">Edit Skema</h5>
@@ -10,16 +41,29 @@
                     <form action="{{ route('skema.update', $skema->id_skema) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-
+                        {{-- @dd($skema) --}}
                         <div class="row mb-3">
                             <div class="col">
                                 <label for="nama_skema" class="form-label">Nama Skema</label>
                                 <input type="text" class="form-control" id="nama_skema" name="nama_skema" value="{{ $skema->nama_skema }}" required>
                             </div>
                             <div class="col">
-                                <label for="icon" class="mb-2">Icon Skema</label>
-                                <input class="form-control" name="icon" type="file" id="formFile" accept=".png">
-                            </div>						
+								<label for="icon" class="mb-2">Upload Icon Skema</label>
+                                <div class="dropzone-wrapper">
+                                    <div class="dropzone-desc">
+                                        <i class="glyphicon glyphicon-download-alt"></i>
+                                        <p>Pilih gambar atau seret ke sini.</p>
+                                    </div>
+                                    <input type="file" name="path_icon" class="dropzone" id="path_icon" accept="image/*">
+                                    <div id="image_preview" class="mt-3">
+                                        @if($skema->path_icon) <!-- Cek apakah ada gambar yang sudah ada -->
+                                            <img id="preview_image" src="{{ asset($skema->path_icon) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        @else
+                                            <img id="preview_image" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        @endif
+                                    </div>
+                                </div>
+							</div>						
                         </div>
 
                         <div class="form-group sub-skema-wrapper mb-5">
@@ -85,12 +129,41 @@
             function checkEmptyInput() {
 				var inputs = $('input[name="sub_skema[]"]');
 				if (inputs.length == 0) {
-					$('#empty-input-message').show(); // Tampilkan pesan input kosong
+					$('#empty-input-message').show();
 				} else {
-					$('#empty-input-message').hide(); // Sembunyikan pesan input kosong
+					$('#empty-input-message').hide(); 
 				}
 			}
+            $('input[type="file"]').on('change', function(event) {
+                const fileInput = event.target;
+                const preview = $('#preview_image'); // Pastikan ID ini sesuai
 
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.attr('src', e.target.result);
+                        preview.show();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Jika tidak ada file yang dipilih, tampilkan gambar yang sudah ada
+                    const existingSrc = preview.attr('data-existing-src'); // Setel ini di HTML
+                    preview.attr('src', existingSrc);
+                }
+            });
+
+            Dropzone.options.path_file = {
+            maxFilesize: 2, 
+            acceptedFiles: "image/*", 
+            init: function() {
+                this.on("success", function(file, response) {                    
+                });
+                this.on("error", function(file, response) {
+                    document.getElementById('image_error').innerHTML = response.message;
+                });
+              }
+            };
         });
     </script>
 

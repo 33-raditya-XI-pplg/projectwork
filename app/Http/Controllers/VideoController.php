@@ -26,7 +26,9 @@ class VideoController extends Controller
 
         $videos = Galeri::where('kategori', 'video')->get();
 
-        return view('admin.galeri.indexvideo', compact('videos', 'pages'));
+        $Title = 'Management';
+        $subtitle = 'Video';
+        return view('admin.galeri.indexvideo', compact('videos', 'pages', 'Title', 'subtitle'));
     }
 
 
@@ -134,17 +136,17 @@ class VideoController extends Controller
         return redirect()->route('video.index')->with('success', 'Video updated successfully!');
     }
 
-public function destroy($id)
-{
+    public function destroy($id)
+    {
 
-    $video = Galeri::findOrFail($id);
-
-
-    $video->delete();
+        $video = Galeri::findOrFail($id);
 
 
-    return redirect()->route('video.index')->with('success', 'Video berhasil dihapus.');
-}
+        $video->delete();
+
+
+        return redirect()->route('video.index')->with('success', 'Video berhasil dihapus.');
+    }
 
 
 }
