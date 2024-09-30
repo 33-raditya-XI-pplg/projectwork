@@ -95,7 +95,15 @@ class ProfilPerusahaanController extends Controller
 
 
 
-
+    public function rincian($id)
+    {
+        // Mengambil data berdasarkan id
+        $profil = Profil_Perusahaan::findOrFail($id);
+    
+        // Kirim data profil ke view 'rincian'
+        return view('admin.profile_perusahaan.rincian', compact('profil'));
+    }
+    
 
 
 
