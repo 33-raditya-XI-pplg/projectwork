@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
         } elseif ($user->level == 'Pengguna') {
             return redirect('/user/dashboard');
         } elseif ($user->level == 'Penguji') {
-            return redirect('/user/dashboard');
+            return redirect('/penguji/dashboard');
         } else {
             return redirect('/');
         }

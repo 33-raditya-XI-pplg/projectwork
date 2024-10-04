@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,12 +13,12 @@ return new class extends Migration
         Schema::create('tb_event_skema', function (Blueprint $table) {
             $table->id('id_event_skema');
             // Foreign Key
-            $table->foreignId('event_id')->constrained('tb_event', 'id_event');
-            $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema');
-            $table->foreignId('background_id')->constrained('tb_background', 'id_background');
+            $table->foreignId('event_id')->constrained('tb_event', 'id_event')->cascadeOnDelete();
+            $table->foreignId('skema_id')->constrained('tb_skema', 'id_skema')->cascadeOnDelete();
+            $table->foreignId('background_id')->constrained('tb_background', 'id_background')->cascadeOnDelete();
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
 

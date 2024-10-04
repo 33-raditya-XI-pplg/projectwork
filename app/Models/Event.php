@@ -29,6 +29,10 @@ class Event extends Model
     {
         return $this->belongsTo(Jenis_Event::class, 'jenis_event_id', 'id_jenis_event');
     }
+    public function eventPage()
+    {
+        return $this->belongsTo(Page::class, 'page_id');
+    }
 
     public function skema()
     {

@@ -6,6 +6,40 @@
             .ck-editor__editable {
                 min-height: 200px;
             }
+            .select2-close-mask{
+                z-index: 2099 !important;
+            }
+            .select2-dropdown{
+                z-index: 3051 !important;
+            }
+            .dropzone-wrapper{
+                display:flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 240px;
+                border: 2px dashed #ddd;
+                background-color: #f9f9f9;
+                position: relative;
+                cursor: pointer;
+            }
+            #image_preview_{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: auto;
+                max-width: 200px;
+                max-height: 200px;
+                overflow: hidden;
+                margin: 0 auto;
+            }
+            #preview_image_create,#preview_image_edit_{
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                display: block;
+            }
         </style>
     @endpush
 
@@ -322,9 +356,9 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="jenis_event_id" class="form-label">Jenis Event</label>
-                                        <select class="form-select" name="jenis_event_id" aria-label="Default select example"
+                                        <select class="form-select js-example-basic-single" name="jenis_event_id" aria-label="Default select example" data-placeholder="Pilih Jenis event"
                                             required>
-                                            <option selected>Pilih ...</option>
+                                            <option selected></option>
                                             @foreach ($jenisEvt as $row)
                                             <option value="{{ $row->id_jenis_event }}">{{ $row->nama_jenis_event }}</option>
                                             @endforeach
@@ -332,22 +366,22 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="tempat_id" class="form-label">Tempat</label>
-                                        <select class="form-select" name="tempat_id" aria-label="Default select example"
+                                        <select class="form-select js-example-basic-single" name="tempat_id" aria-label="Default select example" data-placeholder="Pilih Kota"
                                                 required>
-                                                <option selected>Pilih ...</option>
+                                                <option selected></option>
                                                 @foreach ($tempat as $row)
                                                 <option value="{{ $row->id_tempat }}" >{{ $row->nama_tempat }}</option>
                                                 @endforeach
                                             </select>
-                                    </div>
+                                    </div>                                
                             </div>
                             <div class="col">
                                 {{-- kiri --}}
                                 <div class="mb-3">
                                     <label for="instansi_id" class="form-label">Nama Instansi</label>
-                                    <select class="form-select" name="instansi_id" aria-label="Default select example"
+                                    <select class="form-select js-example-basic-single" name="instansi_id" aria-label="Default select example" data-placeholder="Pilih Instansi"
                                             required>
-                                            <option disabled selected>Pilih ...</option>
+                                            <option disabled selected></option>
                                             @foreach ($instansi as $row)
                                             <option value="{{ $row->id_instansi }}" >{{ $row->nama_instansi }}</option>
                                             @endforeach
@@ -365,7 +399,7 @@
                                   </div>
                                   <div class="mb-3">
                                     <label for="visibilitas" class="form-label">Visibilitas</label>
-                                    <select class="form-select text-capitalize" name="visibilitas" aria-label="Default select example"
+                                    <select class="form-select text-capitalize js-example-basic-single" name="visibilitas" aria-label="Default select example" data-placeholder="Pilih Visibilitas"
                                             required>
                                             <option class="text-capitalize" selected>publik</option>
                                             <option class="text-capitalize">privat</option>
@@ -373,9 +407,38 @@
                                 </div>
                             </div>
                             <div class="mb-3">
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                        required>
+                                        <option selected></option>
+                                        @foreach ($page as $row)
+                                        <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="control-label mb-2">Upload Banner <span class="text-danger">*</span></label>
+                                <div class="dropzone-wrapper">
+                                    <div class="dropzone-desc">
+                                        <i class="glyphicon glyphicon-download-alt"></i>
+                                        <p>Pilih gambar atau seret ke sini .</p>
+                                    </div>
+                                    <input type="file" name="path_banner" class="dropzone" id="path_banner" accept="image/*" required>
+                                    <div id="image_preview_" class="mt-3">
+                                        <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                </div>
+                                @error('foto')
+                                <div class="text-danger">{{ $message }}</div>
+                               @enderror
+                            </div>
+                            {{-- <div class="mb-3">
                                 <label for="logo" class="form-label">Upload Banner</label>
                                 <input class="form-control" name="logo" type="file" id="formFile" accept=".png, .jpg, .jpeg" required>
-                              </div>
+                              </div> --}}
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control ck-editor" id="deskripsi" name="deskripsi" rows="4"></textarea>
@@ -404,7 +467,6 @@
 
     {{-- edit --}}
     @foreach ($evt as $row)
-
     <div class="modal modal-lg fade" id="edit{{ $row->id_event }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -436,7 +498,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="jenis_event_id" class="form-label">Jenis Event</label>
-                                        <select class="form-select" name="jenis_event_id" aria-label="Default select example"
+                                        <select class="form-select js-example-basic-single" name="jenis_event_id" aria-label="Default select example" data-placeholder="Pilih jenis event"
                                             required>
                                             @foreach ($jenisEvt as $element)
                                             <option value="{{ $element->id_jenis_event }}" {{ $element->id_jenis_event == $row->jenis_event_id ? 'selected' : '' }}>{{ $element->nama_jenis_event }}</option>
@@ -445,19 +507,19 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="tempat_id" class="form-label">Tempat</label>
-                                        <select class="form-select" name="tempat_id" aria-label="Default select example"
+                                        <select class="form-select js-example-basic-single" name="tempat_id" aria-label="Default select example" data-placeholder="Pilih Kota"
                                                 required>
                                                 @foreach ($tempat as $set)
                                                 <option value="{{ $set->id_tempat }}" {{ $set->id_tempat == $row->tempat_id ? 'selected' : '' }}>{{ $set->nama_tempat }}</option>
                                                 @endforeach
                                             </select>
-                                    </div>
+                                    </div>                            
                             </div>
                             <div class="col">
                                 {{-- kiri --}}
                                 <div class="mb-3">
                                     <label for="instansi_id" class="form-label">Nama Instansi</label>
-                                    <select class="form-select" name="instansi_id" aria-label="Default select example"
+                                    <select class="form-select js-example-basic-single" name="instansi_id" aria-label="Default select example" data-placeholder=""
                                             required>
                                             @foreach ($instansi as $list)
                                             <option value="{{ $list->id_instansi }}" {{ $list->id_instansi == $row->instansi_id ? 'selected' : '' }}>{{ $list->nama_instansi }}</option>
@@ -476,7 +538,7 @@
                                   </div>
                                   <div class="mb-3">
                                     <label for="visibilitas" class="form-label">Visibilitas</label>
-                                    <select class="form-select text-capitalize" name="visibilitas" aria-label="Default select example"
+                                    <select class="form-select text-capitalize js-example-basic-single" name="visibilitas" aria-label="Default select example" data-placeholder="Pilih Visibilitas"
                                             required>
                                             <option class="text-capitalize"  {{ $row->visibilitas == 'publish' ? 'selected' : '' }}>publik</option>
                                             <option class="text-capitalize"  {{ $row->visibilitas == 'privat' ? 'selected' : '' }}>privat</option>
@@ -484,9 +546,41 @@
                                 </div>
                             </div>
                             <div class="mb-3">
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                        required>
+                                        @foreach ($page as $set)
+                                        <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                            <div class="mb-3">
+                                <label  class="control-label mb-2">Upload Banner <span class="text-danger">*</span></label>
+                                <div class="dropzone-wrapper">
+                                    <div class="dropzone-desc">
+                                        <i class="glyphicon glyphicon-download-alt"></i>
+                                        <p>Pilih gambar atau seret ke sini</p>
+                                    </div>
+                                    <input type="file" class="dropzone" name="path_banner" id="path_banner_{{ $row->id_event }}" accept="image/*">
+                                    <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                                        @if ($row->path_banner)
+                                            <img id="preview_image_edit_{{$row->id_event}}" src="{{ asset($row->path_banner) }}" alt="image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        @else
+                                            <img id="preview_image_edit_{{ $row->id_event }}" src="" alt="no image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                                </div>
+                                @error('path_foto')
+                                <div class="text-danger">{{ $message }}</div>
+                               @enderror
+                            </div>
+                            {{-- <div class="mb-3">
                                 <label for="logo" class="form-label">Upload Banner</label>
                                 <input class="form-control" name="logo" type="file" id="formFile" accept=".png, .jpg, .jpeg">
-                              </div>
+                              </div> --}}
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control ck-editor" id="deskripsi-edit" name="deskripsi" rows="4">@php
@@ -514,9 +608,81 @@
             </div>
         </div>
     </div>
-
     @endforeach
+    <!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+  $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    </script>
+    {{-- dropzone create --}}
+    <script>    
+        document.getElementById('path_banner').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview_image_create');
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Show the image preview
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none'; // Hide the image if no file selected
+        }
+    });
+
+            Dropzone.options.path_file = {
+            maxFilesize: 2, 
+            acceptedFiles: "image/*", 
+            init: function() {
+                this.on("success", function(file, response) {                    
+                });
+                this.on("error", function(file, response) {
+                    document.getElementById('image_error').innerHTML = response.message;
+                });
+              }
+            };   
+</script> 
+{{-- dropzone edit --}}
+<script>
+  document.querySelectorAll('[id^="path_banner"]').forEach(input => {
+    input.addEventListener('change', function(event) {
+        const id = this.id.split('_')[2]; // Mengambil ID dari input
+        const preview = document.getElementById(`preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block'; // Tampilkan preview gambar
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none'; // Sembunyikan gambar jika tidak ada file
+        }
+    });
+  });
+</script>
 
 @endsection
 

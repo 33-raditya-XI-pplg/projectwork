@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Tempat;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -14,11 +15,12 @@ class TempatController extends Controller
    public function index()
    {
       $tempat = Tempat::get();
+      $page = Page::all();
       $regencies = DB::table('regencies')->pluck('name', 'id');
       $Title = 'Master Data';
       $subtitle = 'Tempat';
       confirmDelete('Hapus Tempat', 'Apakah kamu yakin untuk mengapus tempat?');
-      return view('admin.tempat.index', compact('tempat', 'regencies', 'Title', 'subtitle'));
+      return view('admin.tempat.index', compact('tempat', 'page', 'regencies', 'Title', 'subtitle'));
    }
 
    public function store(Request $request)
@@ -29,9 +31,22 @@ class TempatController extends Controller
       //      ]);
       //   }
 
-      Tempat::create($request->all());
-      Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan');
+      $request->validate([
+         'page_id' => 'required|exists:tb_page,id_page',
+      ]);
 
+
+      Tempat::create([
+         'page_id' => $request->page_id,
+         'nama_tempat' => $request->nama_tempat,
+         'alamat' => $request->alamat,
+         'no_telp' => $request->no_telp,
+         'alamat_kota' => $request->alamat_kota,
+         'link_maps' => $request->link_maps,
+         'created_by' => $request->created_by
+      ]);
+      Alert::success('Berhasil Tersimpan!', 'Data berhasil ditambahkan');
+      // dd($request->all());
       return redirect()->back();
    }
 

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,17 +13,19 @@ return new class extends Migration
         Schema::create('tb_ttd', function (Blueprint $table) {
             $table->id('id_ttd');
             // Foreign Key
-            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
-            
+            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi')->cascadeOnDelete();
+            $table->foreignId('page_id')->nullable()->constrained('tb_page', 'id_page')->cascadeOnDelete();
+
+
             $table->string('nama_ttd');
             $table->string('jabatan');
-            $table->integer('nomor_induk'); 
+            $table->integer('nomor_induk');
 
             $table->string('path_ttd');
             $table->string('status');
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

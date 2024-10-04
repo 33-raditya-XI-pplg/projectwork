@@ -3,10 +3,29 @@
 @section('content')
 <style>
     .select2-close-mask{
-    z-index: 2099 !important;
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }
+
+.btn-kembali{
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius:5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease,transform 0.3s ease;
 }
-.select2-dropdown{
-    z-index: 3051 !important;
+.btn-kembali:hover{
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+.btn-kembali:active{
+    transform: scale(0.95);
+    background-color: #1f5e83;
 }
 
    .dropzone-wrapper {
@@ -43,6 +62,7 @@
             <table id="example" class="table">
                 <thead class="fw-normal">
                     <th>No</th>
+                    <th>Page Id</th>
                     <th scope="col">Nama Penguji</th>
                     <th scope="col">Instansi</th>
                     <th scope="col">NIK</th>
@@ -54,6 +74,7 @@
                     @foreach ($penguji as $row)
                         <tr>
                             <th scope="row">{{ $loop->index + 1 }}</th>
+                            <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '- '}}</td>
                             <td>{{ $row->nama_lengkap }}</td>
                             <td>{{ $row->userInstansi->nama_instansi }}</td>
                             <td>{{ $row->nomor_induk }}</td>
@@ -74,6 +95,10 @@
                                         <li><a href="{{ route('penguji.destroy', $row->id_user) }}" class="dropdown-item text-danger"
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>
+                                        </li>
+                                        <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#rincian{{ $row->id_user }}"><i class="fa-solid fa-code pe-none"></i>
+                                            Rincian</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -96,17 +121,27 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <form action="{{ route('penguji.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+                        <input type="hidden" name="password" value="Penguji">
+                        <input type="hidden" name="level" value="Penguji">
 
                     {{-- form --}}
                     <div class="container">
                         <div class="row">
+                            <div class="mb-3">
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page"
+                                        required>
+                                        <option disabled selected></option>
+                                        @foreach ($page as $row)
+                                        <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                        @endforeach
+                                </select>
+                            </div>
                             <div class="col">
-                                {{-- kanan --}}
-                                <form action="{{ route('penguji.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
-                                    <input type="hidden" name="password" value="Penguji">
-                                    <input type="hidden" name="level" value="Penguji">
+                                {{-- kanan --}}                        
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Penguji</label>
                                         <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
@@ -130,7 +165,7 @@
                                         <input type="number" class="form-control" name="no_telp" id="no_telp"
                                         value="{{old('no_telp', isset($pengguji) ? $pengguji->no_telp : '') }}"  required>
                                     </div>
-                                    <div class="form-group mb-6">
+                                    <div class="form-group mb-3">
                                         <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
                                         <div class="dropzone-wrapper">
                                             <div class="dropzone-desc">
@@ -158,14 +193,15 @@
                                     <input type="number" class="form-control" name="nomor_induk"
                                         id="nomor_induk" value="{{old('nomor_induk', isset($pengguji) ? $pengguji->nomor_induk : '') }}"  required>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-2">
                                     <label for="jabatan_penguji" class="form-label">Jabatan</label>
                                     <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji" 
                                     value="{{old('jabatan_penguji', isset($pengguji) ? $pengguji->jabatan_penguji : '') }}" required>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-5">
                                     <label for="alamat_kota" class="form-label">Kota</label>
                                     <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota" data-placeholder="Pilih Kota" required>                                   
+                                        <option value="" disabled selected></option> 
                                         @foreach ($regencies as $id => $name)
                                         <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
                                         @endforeach
@@ -174,15 +210,14 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="mb-5">
+                                <div class="mb-4 mt-5">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" name="email" id="email" 
                                     value="{{old('email', isset($pengguji) ? $pengguji->email : '') }}"  required>
                                     @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                    @enderror
-                                </div>
-
+                                </div>                             
                             </div>
                         </div>
                     </div>
@@ -216,19 +251,29 @@
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
+                <form action="{{ route('penguji.update', $row->id_user) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">   
+
                     <div class="modal-body">
                         {{-- {{ dd($row) }} --}}
                         {{-- form --}}
                         <div class="container">
                             <div class="row">
+                                <div class="mb-3">
+                                    <label for="page_id" class="form-label">Page Id</label>
+                                    <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                            required>
+                                            @foreach ($page as $set)
+                                            <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                            @endforeach
+                                        </select>
+                                </div>
                                 <div class="col">
-                                    {{-- kanan --}}
-                                    <form action="{{ route('penguji.update', $row->id_user) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+                                    {{-- kanan --}}                                                                    
                                         <div class="mb-3">
-                                            <label for="nama_lengkap" class="form-label">Nama instansi</label>
+                                            <label for="nama_lengkap" class="form-label">Nama Penguji</label>
                                             <input type="text" class="form-control" name="nama_lengkap"
                                                 id="nama_lengkap" value="{{ $row->nama_lengkap }}" required>
                                         </div>
@@ -247,9 +292,9 @@
                                         </div>
                                         <div class="mb-4">
                                             <label for="no" class="form-label">No. telp</label>
-                                            <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
+                                            <input type="number" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
-                                        <div class="form-group mb-6">
+                                        <div class="form-group mb-3">
                                             <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
                                             <div class="dropzone-wrapper">
                                                 <div class="dropzone-desc">
@@ -273,42 +318,43 @@
                                            @enderror
                                         </div>
 
-                                </div>
-                                <div class="col">
-                                    {{-- kiri --}}
-                                    <div class="mb-3">
-                                        <label for="nomor_induk" class="form-label">NIK</label>
-                                        <input type="text" class="form-control" name="nomor_induk"
-                                            id="nomor_induk" value="{{ $row->nomor_induk }}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="jabatan_penguji" class="form-label">Jabatan</label>
-                                        <input type="text" class="form-control" name="jabatan_penguji"
-                                            id="jabatan_penguji" value="{{ $row->jabatan_penguji }}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota</label>
-                                        <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_user }}" data-placeholder="Pilih Kota" required>
-                                            <option value="" disabled selected></option> 
-                                            @foreach ($regencies as $id => $name)
-                                                <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('alamat_kota')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div>
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
-                                    </div>
+                                            </div>
+                                            <div class="col">
+                                                {{-- kiri --}}
+                                                <div class="mb-3">
+                                                    <label for="nomor_induk" class="form-label">NIK</label>
+                                                    <input type="number" class="form-control" name="nomor_induk"
+                                                        id="nomor_induk" value="{{ $row->nomor_induk }}" required>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="jabatan_penguji" class="form-label">Jabatan</label>
+                                                    <input type="text" class="form-control" name="jabatan_penguji"
+                                                        id="jabatan_penguji" value="{{ $row->jabatan_penguji }}" required>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota</label>
+                                                    <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_user }}" data-placeholder="Pilih Kota" required>
+                                                        <option value="" disabled selected></option> 
+                                                        @foreach ($regencies as $id => $name)
+                                                            <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('alamat_kota')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="mb-3 mt-5">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
+                                                </div>                              
 
-                                </div>
-                            </div>
-                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
                         {{-- end form --}}
 
                     </div>
+
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
                             <label for="status" class="me-3">Status</label>
@@ -320,11 +366,85 @@
                             <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                         </div>
                     </div>
-                    </form>
+                </form>
                 </div>
             </div>
         </div>
     @endforeach
+
+    {{-- Rincian --}}
+    @foreach ($penguji as $row)
+        <div class="modal modal-lg fade" id="rincian{{ $row->id_user }}">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary-gradient text-white">
+                        <h5 class="modal-title" id="exampleModalLabel">Rincian Penguji</h5>
+                        <button type="button" class="btn-kembali rounded-3" data-bs-dismiss="modal">Kembali</button> 
+                    </div>
+                     <div class="modal-body">                
+                        <div class="container">
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="page" class="form-label">Page Id</label>
+                                    <input type="text" class="form-control" name="page" id="page" value="{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+                                </div>
+                                <div class="col">
+                                        <div class="mb-3">
+                                            <label for="nama_lengkap" class="form-label">Nama Penguji</label>
+                                            <input type="text" class="form-control" name="nama_lengkap"
+                                                id="nama_lengkap" value="{{ $row->nama_lengkap }}" disabled readonly >
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="instansi_id_{{ $row->id_user }}" class="form-label">Instansi</label>
+                                            <input type="text" class="form-control" name="instansi" id="instansi_{{ $row->id_user }}" value="{{ $institutions[$row->instansi_id] ?? ''}}" disabled readonly>                                         
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="alamat" class="form-label">Alamat</label>
+                                            <textarea class="form-control" id="alamat" name="alamat" rows="2"  disabled readonly >{{ $row->alamat }}</textarea>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="no" class="form-label">No. telp</label>
+                                            <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}"disabled readonly >
+                                        </div>                                     
+                                </div>
+                                <div class="col">
+                                    {{-- kiri --}}
+                                    <div class="mb-3">
+                                        <label for="nomor_induk" class="form-label">NIK</label>
+                                        <input type="text" class="form-control" name="nomor_induk"
+                                            id="nomor_induk" value="{{ $row->nomor_induk }}" disabled readonly >
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="jabatan_penguji" class="form-label">Jabatan</label>
+                                        <input type="text" class="form-control" name="jabatan_penguji"
+                                            id="jabatan_penguji" value="{{ $row->jabatan_penguji }}" disabled readonly >
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota Perusahaan</label>                                      
+                                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" disabled readonly>                               
+                                    </div>
+                                    <div class="mb-3 mt-2">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" disabled readonly>
+                                    </div>                                
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="control-label mb-2"> Foto Pengguji <span class="text-danger">*</span></label>
+                                    <div class="dropzone-wrapper">                                       
+                                        <div id="image_preview_" class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
+                                                <img  src="{{ asset($row->path_foto) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                             
+                                        </div>
+                                    </div>                                       
+                                </div>
+                            </div>
+                        </div>                  
+                     </div>                                                         
+                    </div>                
+                </div>
+            </div>
+        </div>
+    @endforeach
+
 <!-- Include CSS Select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
@@ -332,11 +452,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
-$(document).ready(function() {
-    $('.js-example-basic-single').select2({        
-        allowClear: true
+  $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
     });
-});
     </script>
     <script>    
         document.getElementById('path_foto').addEventListener('change', function(event) {

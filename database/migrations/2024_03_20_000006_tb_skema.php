@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,13 +12,15 @@ return new class extends Migration
     {
         Schema::create('tb_skema', function (Blueprint $table) {
             $table->id('id_skema');
+            $table->foreignId('page_id')->nullable()->constrained('tb_page', 'id_page')->cascadeOnDelete();
             $table->string('nama_skema');
             $table->boolean('has_sub_skema')->default(false);
             $table->string('path_icon');
             $table->string('status');
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

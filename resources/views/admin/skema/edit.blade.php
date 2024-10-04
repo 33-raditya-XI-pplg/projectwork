@@ -41,6 +41,15 @@
                     <form action="{{ route('skema.update', $skema->id_skema) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+                        <div class="mb-3">
+                            <label for="page_id" class="form-label">Page Id</label>
+                            <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                    required>
+                                    @foreach ($page as $set)
+                                    <option value="{{ $set->id_page }}" {{ $set->id_page == $skema->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
                         {{-- @dd($skema) --}}
                         <div class="row mb-3">
                             <div class="col">
@@ -110,6 +119,25 @@
 @endsection
 
 @push('script')
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+  $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    </script>
     <script>
         $(document).ready(function() {
             $('#addSubSkema').click(function() {

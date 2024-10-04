@@ -7,8 +7,21 @@
             font-weight: 300;
         }
         #img-rincian{
-            width: 400px;
-            height: 300px;
+            width: 380px;
+            height: 320px;
+        }
+        .dropdown-toggle i.fa-bars {
+            font-size: 0.75rem; 
+        }        
+        .dropdown-menu .small-icon {
+            font-size: 0.95rem; /* Ubah sesuai kebutuhan */
+        }
+        .custom-btn{
+            font-size: 0.9rem;
+            padding: 4px 4px;
+        }
+        .custom-btn i{
+            font-size: 0.8rem;
         }
     </style>
 @endpush
@@ -74,7 +87,7 @@
 
                                     @if ($row->telah_terdaftar == 1)
                                         <td class="text-center">
-                                            <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded">
+                                            <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded custom-btn">
                                                     <i class="fa fa-info"></i> Rincian</a>
                                         </td>
                                     @else
@@ -82,19 +95,19 @@
                                             <div class="dropdown">
                                                 <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
                                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
+                                                    <i class="fa-solid fa-bars fa-sm"></i>
                                                 </a>
 
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                     <li><a href="#" class="dropdown-item text-success" id="registerButton">
-                                                            <i class="fa-regular fa-pen-to-square"></i> Daftar</a>
+                                                            <i class="fa-regular fa-pen-to-square small-icon"></i> Daftar</a>
                                                             <form id="mendaftarForm" action="{{ route('mendaftar.event') }}" method="POST">
                                                                 @csrf
                                                                 <input type="hidden" name="event_skema_id" required value="{{ $row->id_event_skema }}">
                                                             </form>
                                                     </li>
                                                     <li><a href="{{ route('event.rincian-skema', $row->id_event_skema) }}" class="dropdown-item text-danger">
-                                                            <i class="fa fa-info"></i> Rincian</a>
+                                                            <i class="fa fa-info small-icon"></i> Rincian</a>
                                                     </li>
                                                 </ul>
                                             </div>                                               

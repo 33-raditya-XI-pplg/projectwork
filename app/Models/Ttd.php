@@ -22,4 +22,12 @@ class Ttd extends Model
     {
         return $this->belongsToMany(Event_Skema::class, 'tb_penandatangan', 'ttd_id', 'event_skema_id');
     }
+    public function ttdPage() // PK Many-to-Many dengan tb_event_skema
+    {
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    }
+    public function pagettd()
+    {
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    }
 }

@@ -13,7 +13,8 @@ return new class extends Migration {
         Schema::create('tb_user', function (Blueprint $table) {
             $table->id('id_user');
             // Foreign Key
-            $table->foreignId('instansi_id')->nullable()->constrained('tb_instansi', 'id_instansi');
+            $table->foreignId('instansi_id')->nullable()->constrained('tb_instansi', 'id_instansi')->cascadeOnDelete();
+            $table->foreignId('page_id')->nullable()->constrained('tb_page', 'id_page')->cascadeOnDelete();
             $table->string('nama_lengkap');
             $table->string('email')->unique();
             $table->string('password');
@@ -25,7 +26,7 @@ return new class extends Migration {
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
-            $table->string('no_telp', 20)->nullable();
+            $table->integer('no_telp', 20)->nullable();
 
             $table->string('nama_sekolah')->nullable();
             $table->string('jurusan')->nullable();
@@ -36,7 +37,7 @@ return new class extends Migration {
             $table->text('alamat_perusahaan')->nullable();
             $table->string('alamat_kota_perusahaan')->nullable();
             $table->string('jabatan_pekerjaan')->nullable();
-            $table->string('no_telp_perusahaan', 20)->nullable();
+            $table->integer('no_telp_perusahaan', 20)->nullable();
 
             $table->string('status')->nullable();
             $table->string('level')->nullable();

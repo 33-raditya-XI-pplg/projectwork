@@ -16,7 +16,7 @@ class Sub_Skema extends Model
     {
         return $this->hasMany(Nilai_Peserta::class, 'nilai_peserta_id', 'id_nilai_peserta');
     }
-    public function sub_skemaSkema() // FK Many-to-One dengan tb_skema
+    public function skema() // FK Many-to-One dengan tb_skema
     {
         return $this->belongsTo(Skema::class, 'skema_id', 'id_skema');
     }

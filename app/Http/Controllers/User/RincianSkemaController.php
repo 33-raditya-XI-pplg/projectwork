@@ -44,8 +44,8 @@ class RincianSkemaController extends Controller
             ->get();
 
         $Title = 'Event';
-        $subtitle = 'Skema';
-        $subTitle = 'Rincian';
-        return view('user.skema.rincian_skema', compact('data_sub_skema', 'data_skema', 'data_penguji', 'previousUrl', 'Title', 'subtitle', 'subTitle'));
+        $subtitle = 'Rincian Skema';
+
+        return view('user.skema.rincian_skema', compact('data_sub_skema', 'data_skema', 'data_penguji', 'previousUrl', 'Title', 'subtitle', ));
     }
 }

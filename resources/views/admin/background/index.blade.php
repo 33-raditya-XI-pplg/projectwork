@@ -1,7 +1,7 @@
 @extends('layouts.panel.index')
 @section('content')
 <style>
-     .dropzone-wrapperr {
+     .dropzone-wrapper-rincian {
     width: 300px;
     height: 170px;
     border: 2px dashed #ddd;
@@ -78,15 +78,22 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                    <form action="{{ route('background.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
                     {{-- form --}}
                     <div class="container">
                         <div class="row">
+                            <div class="mb-3">
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                        required>
+                                        @foreach ($page as $set)
+                                        <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
                             <div class="col-md-6">
-                                <!-- kiri -->
-                                <form action="{{ route('background.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-
+                                <!-- kiri -->                               
                                     <div class="mb-1">
                                         <label for="formFileSm" class="form-label d-block">Upload Background</label>
                                         <div class="dropzone-wrapper">
@@ -152,14 +159,21 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
+                        <form action="{{ route('background.update',  $row->id_background) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
                         {{-- form --}}
-                        <div class="container">
-                            <form action="{{ route('background.update',  $row->id_background) }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
+                        <div class="container">                           
                             <div class="row">
-                                
+                                <div class="mb-3">
+                                    <label for="page_id" class="form-label">Page Id</label>
+                                    <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                            required>
+                                            @foreach ($page as $set)
+                                            <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                            @endforeach
+                                        </select>
+                                </div>
                                 <div class="col-md-6">
 
                                     <div class="form-group mb-2">
@@ -249,16 +263,21 @@
                                                 </div>                                                                      
                                              </div>                                                                                                                                                                             
                                     </div>
+                                    
                                 <div class="col-md-10 mx-auto">
                                     <!-- kanan -->
-                                    <div class="mb-1">
+                                    <div class="mb-">
+                                        <label for="page" class="form-label">Page Id</label>
+                                        <input type="text" class="form-control" name="page" id="page" value="{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+                                    </div>
+                                    <div class="mb-2">
                                         <label for="nama_bg" class="form-label ">Nama Background</label>
                                         <input class="form-control form-control-sm " id="nama_bg" name="nama_bg"
                                             type="text" value="{{ $row->nama_bg }}" readonly disabled>
                                     </div>
                                     <div class="mb-2">
                                         <label for="rincian_bg" class="form-label">Rincian</label>
-                                        <textarea class="form-control form-control-sm" id="rincian_bg" name="rincian_bg" rows="2" required >{{ $row->rincian_bg }}</textarea>
+                                        <textarea class="form-control form-control-sm" id="rincian_bg" name="rincian_bg" rows="2" required disabled readonly  >{{ $row->rincian_bg }}</textarea>
                                         {{-- <input class="form-control form-control-sm" id="rincian_bg" name="rincian_bg"
                                             type="text" value="{{ $row->rincian_bg }}" readonly disabled> --}}
                                     </div>

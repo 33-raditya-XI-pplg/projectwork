@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Page;
 use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 
@@ -18,12 +19,12 @@ class UserController extends Controller
     public function index()
     {
         $pengguna = User::where('level', 'Pengguna')->get();
-
+        $page = Page::all();
         confirmDelete('Hapus Pengguna', 'Apakah kamu yakin untuk menghapus?');
 
         $Title = 'Master Data';
         $subtitle = 'Pengguna';
-        return view('admin.user.index', compact('pengguna', 'Title', 'subtitle'));
+        return view('admin.user.index', compact('pengguna', 'page', 'Title', 'subtitle'));
     }
 
     public function create(User $user)

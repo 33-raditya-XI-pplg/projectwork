@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')
                 ->onDelete('cascade');
 
-            $table->foreignId('upload_pembayaran_id')->constrained('tb_upload_pembayaran', 'id_upload_pembayaran')->onDelete(('cascade'));
+            $table->foreignId('upload_pembayaran_id')->nullable()->constrained('tb_upload_pembayaran', 'id_upload_pembayaran')->onDelete(('cascade'));
             // $table->string('status');
 
             $table->integer('created_by')->nullable();

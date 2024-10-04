@@ -8,6 +8,7 @@ use App\Models\Instansi;
 use App\Models\Tempat;
 use App\Models\Jenis_Event as JenisEvt;
 use App\Models\Event;
+use App\Models\Page;
 use App\Models\Event_Skema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
@@ -20,6 +21,7 @@ class EventController extends Controller
         $instansi = Instansi::get();
         $tempat = Tempat::get();
         $jenisEvt = JenisEvt::get();
+        $page = Page::get();
 
         $evt = Event::get();
         $today = Carbon::today();
@@ -40,7 +42,7 @@ class EventController extends Controller
         $evt_end = Event::where('status', 'Selesai')->get();
         $Title = 'Event';
         confirmDelete('Hapus Event', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.event.index', compact('instansi', 'tempat', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end', 'Title'));
+        return view('admin.event.index', compact('instansi', 'tempat', 'page', 'jenisEvt', 'evt', 'evt_draft', 'evt_pub', 'evt_live', 'evt_end', 'Title'));
     }
 
     public function show($id)
@@ -66,14 +68,6 @@ class EventController extends Controller
         //     ]);
         // }
 
-        $banner = $request->file('logo');
-        $name = 'banner_' . $request->nama_event . '.' . $banner->getClientOriginalExtension();
-        $stored = $banner->storeAs('public/banner-evt', $name);
-
-        $request->merge([
-            'path_banner' => Storage::url($stored)
-        ]);
-
         $status = $request->has('status') ? 'Publish' : 'Draft';
 
         if ($status === 'Publish') {
@@ -95,7 +89,17 @@ class EventController extends Controller
             'status' => $status
         ]);
 
-        Event::create($request->all());
+        $data = $request->all();
+        if ($request->hasFile('path_banner')) {
+            $banner = $request->file('path_banner');
+            $filename = 'banner_' . $request->nama_event . '.' . $banner->getClientOriginalExtension();
+            $storedPath = $banner->storeAs('public/banner-evt', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_banner']);
+            $data['path_banner'] = "/storage/banner-evt/$filename";
+        }
+
+        Event::create($data);
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
 
@@ -144,7 +148,24 @@ class EventController extends Controller
             'status' => $status
         ]);
 
-        $evt->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('path_banner')) {
+            if ($evt->path_banner) {
+                $oldPhotoPath = str_replace('/storage', 'public', $evt->path_foto);
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
+            }
+            $banner = $request->file('path_banner');
+            $filename = 'foto_' . $request->nama_event . '.' . $banner->getClientOriginalExtension();
+            $storedPath = $banner->storeAs('public/banner-evt', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_banner']);
+            $data['path_banner'] = "/storage/banner-evt/$filename";
+        }
+
+        $evt->update($data);
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diubah.');
 
         return redirect()->back();

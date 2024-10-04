@@ -3,36 +3,44 @@
 @section('content')
     @push('style')
         <style>
-            .ck-editor__editable {
-                min-height: 200px;
-            }
+    .ck-editor__editable {
+    min-height: 200px;
+    }
 
-            #shadow {
-                box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
-            }
+    #shadow {
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1);
+    }
 
-            .img-container {
-                position: relative;
-                padding-top: 56.25%;
-                /* This sets the aspect ratio to 16:9 */
-            }
+    .img-container {
+    position: relative;
+    padding-top: 10%; 
+    padding-bottom: 10%;
+    }
 
-            .img-container img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .deskripsi {
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+    .img-container img {
+        width: 200px; 
+        height: 200px; 
+        border-radius: 50%; 
+        object-fit: cover; 
+        display: block;
+        margin: 0 auto;
+    }
+    .deskripsi {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .rincian-btn{
+        padding: 2px 1px 1px 1px;
+        font-size: 14px;
+        border-radius:5px; 
+    }
+    .rincian-btn i{
+        font-size: 17px;
+        margin-right: 5px;
+    }
 
         </style>
     @endpush
@@ -104,8 +112,8 @@
                         </div>
                         <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
                             <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
-                            <a href="{{ route('event-user.show', $row->id_event) }}" class="btn btn-sm btn-warning rounded">
-                                <i class="fas fa-tasks"></i> Rincian</a>
+                            <a href="{{ route('event-user.show', $row->id_event) }}" class="btn btn-warning rincian-btn">
+                                <i class="fa-solid fa-code "></i> Rincian</a>
                         </div>
                     </div>
                 </div>

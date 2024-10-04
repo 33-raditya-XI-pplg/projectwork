@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Page;
 use App\Models\Rentang_Nilai as Rentang;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -13,10 +14,11 @@ class RentangNilaiController extends Controller
     {
 
         $rentang = Rentang::get();
+        $page = Page::all();
         $Title = 'Master Data';
         $subtitle = 'Rentang Nilai';
         confirmDelete('Hapus', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.rentang-nilai.index', compact('rentang', 'Title', 'subtitle'));
+        return view('admin.rentang-nilai.index', compact('rentang', 'page', 'Title', 'subtitle'));
     }
 
     public function store(Request $request)

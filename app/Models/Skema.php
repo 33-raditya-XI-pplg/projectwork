@@ -20,4 +20,12 @@ class Skema extends Model
     {
         return $this->hasMany(Sub_Skema::class, 'skema_id');
     }
+    public function skemaPage() // PK One-to-Many dengan tb_sub_skema
+    {
+        return $this->hasMany(Page::class, 'page_id', 'id_page');
+    }
+    public function pageskema()
+    {
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    }
 }

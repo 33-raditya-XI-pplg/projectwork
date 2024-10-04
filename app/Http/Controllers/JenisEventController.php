@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Jenis_Event;
+use App\Models\Page;
 
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -13,10 +14,11 @@ class JenisEventController extends Controller
     public function index()
     {
         $jenis_event = Jenis_Event::get();
+        $page = Page::all();
         $Title = 'Master Data';
         $subtitle = 'Jenis Event';
         confirmDelete('Hapus Jenis Event', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.jenis-evt.index', compact('jenis_event', 'Title', 'subtitle'));
+        return view('admin.jenis-evt.index', compact('jenis_event', 'page', 'Title', 'subtitle'));
     }
 
     public function store(Request $request)

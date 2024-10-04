@@ -135,7 +135,7 @@
                             <div class="text-danger">{{ $message }}</div>
                            @enderror
                     </div>
-                    <div class="form-group mb-6">
+                    <div class="form-group mb-3">
                         <label class="control-label mb-2">Upload Foto Pengguna <span class="text-danger">*</span></label>
                         <div class="dropzone-wrapper">
                             <div class="dropzone-desc">
@@ -245,22 +245,10 @@
                              @error('no_telp_perusahaan')
                              <div class="text-danger">{{ $message }}</div>
                             @enderror
-                    </div>
-
-                    <div class="modal-footer justify-content-between mt-3">
-                        <div class="form-check form-switch mb-3">
-                            {{-- <label for="status" class="me-3">Status</label>
-                            @if (isset($pengguna))
-                                <input class="form-check-input" type="checkbox" role="switch" id="status"
-                                    name="status" value="Verified" {{ $pengguna->status == 'Verified' ? 'checked' : '' }}>
-                            @elseif (!isset($pengguna))
-                                <input class="form-check-input" type="checkbox" role="switch" id="status"
-                                    name="status" value="Verified" {{ $user->status == 'Verified' ? 'checked' : '' }}>
-                            @endif --}}
-                        </div>
-                        <div class="d-flex justify-content-end mb-2 ">
+                    </div>          
+                    <div class="modal-footer justify-content-left mt-10">                 
                             <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
-                        </div>	
+                        
                     </div>
                 </div>
                 
@@ -285,12 +273,12 @@
     <script>
        $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder'); // Get the placeholder from the data attribute
+            var placeholder = $(this).data('placeholder'); 
             
             $(this).select2({
-                placeholder: placeholder, // Set the placeholder text from the data attribute
+                placeholder: placeholder, 
                 allowClear: true,
-                minimumResultsForSearch: Infinity // Hide the search input
+                minimumResultsForSearch: Infinity 
             });
         });
         // menampilkan gambar 

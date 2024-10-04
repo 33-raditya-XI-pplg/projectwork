@@ -26,4 +26,12 @@ class Instansi extends Model
     {
         return $this->hasMany(Ttd::class, 'ttd_id', 'id_ttd');
     }
+    public function InstansiPage() // PK One-to-Many dengan tb_sub_skema
+    {
+        return $this->hasMany(Page::class, 'page_id', 'id_page');
+    }
+    public function pageInstansi()
+    {
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    }
 }

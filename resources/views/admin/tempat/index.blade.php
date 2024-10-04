@@ -14,6 +14,7 @@
             <table id="example" class="table">
                 <thead class="fw-normal">
                     <th>No</th>
+                    <th>Page Id</th>
                     <th scope="col">Nama Tempat</th>
                     <th scope="col">No. Telp</th>
                     <th scope="col">Alamat</th>
@@ -25,6 +26,7 @@
                     @foreach ($tempat as $row)
                         <tr>
                             <th scope="row">{{ $loop->index + 1 }}</th>
+                            <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '- '}}</td>
                             <td>{{ $row->nama_tempat }}</td>
                             <td>{{ $row->no_telp }}</td>
                             <td>{{ $row->alamat }}</td>
@@ -68,15 +70,23 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                    <form action="{{ route('tempat.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="created_by" value="{{ Auth::user()->id_tempat }}">
                     {{-- form --}}
                     <div class="container">
                         <div class="row">
+                            <div class="mb-3">
+                                <label name="page_id" for="form-label">Page Id</label>
+                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                                <option disabled selected></option>
+                                @foreach ($page as $row)
+                                <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                @endforeach
+                                 </select>
+                            </div>
                             <div class="col">
-                                {{-- kanan --}}
-                                <form action="{{ route('tempat.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_tempat }}">
+                                {{-- kanan --}}                                                                
                                     <div class="mb-3">
                                         <label for="nama_tempat" class="form-label">Nama tempat</label>
                                         <input type="text" class="form-control" name="nama_tempat" id="nama_tempat"
@@ -131,7 +141,7 @@
         </div>
     </div>
 
-    @foreach ($tempat as $row)
+ @foreach ($tempat as $row)
         <!-- edit -->
         <div class="modal modal-lg fade" id="edit{{ $row->id_tempat }}" tabindex="-1" aria-labelledby="add"
             aria-hidden="true">
@@ -143,16 +153,24 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
+                        <form action="{{ route('tempat.update', $row->id_tempat) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="updated_by" value="{{ Auth::user()->id_tempat }}">
                         {{-- form --}}
                         <div class="container">
                             <div class="row">
+                                <div class="mb-3">
+                                    <label for="page_id" class="form-label">Page Id</label>
+                                    <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                            required>
+                                            @foreach ($page as $set)
+                                            <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                            @endforeach
+                                        </select>
+                                </div>
                                 <div class="col">
-                                    {{-- kanan --}}
-                                    <form action="{{ route('tempat.update', $row->id_tempat) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_tempat }}">
+                                    {{-- kanan --}}             
                                         <div class="mb-3">
                                             <label for="nama_tempat" class="form-label">Nama tempat</label>
                                             <input type="text" class="form-control" name="nama_tempat" id="nama_tempat"
@@ -215,11 +233,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
-$(document).ready(function() {
-    $('.js-single').select2({
-        
-        allowClear: true
-    });
+  $(document).ready(function() {
+        $('.js-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });    
     
     @foreach($tempat as $row)
         $('#alamat_kota_{{ $row->id_tempat }}').select2({

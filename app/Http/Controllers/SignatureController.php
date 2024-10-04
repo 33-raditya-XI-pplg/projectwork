@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ttd;
 use App\Models\Instansi;
+use App\Models\Page;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -16,11 +17,17 @@ class SignatureController extends Controller
     {
         $tanda_tangan = Ttd::with('ttdInstansi')->get();
         // $instansi = Instansi::all();
+        $page = Page::all();
+        $row = DB::table('tb_ttd')
+            ->leftJoin('tb_instansi', 'tb_ttd.instansi_id', '=', 'tb_instansi.id_instansi')
+            ->select('tb_ttd.*', 'tb_instansi.nama_instansi as instansi_name') // Get the institution name as instansi_name
+            ->where('tb_ttd.id_ttd', )
+            ->first();
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $Title = 'Master Data';
         $subtitle = 'Penandatangan';
         confirmDelete('Hapus Tanda Tangan', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.tandatangan.index', compact('tanda_tangan', 'institutions', 'Title', 'subtitle'));
+        return view('admin.tandatangan.index', compact('tanda_tangan', 'page', 'row', 'institutions', 'Title', 'subtitle'));
     }
 
     public function store(Request $request)

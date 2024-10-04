@@ -42,7 +42,7 @@
 
 
 @section('content')
-<div class="container-fluid mt-6">
+<div class="container-fluid mt-3">
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <div class="row">
@@ -68,7 +68,9 @@
                             @if(Auth::user()->level == 'Admin')
                                 <a href="{{ route('profile.edit') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
                             @elseif(Auth::user()->level == 'Pengguna')
-                                <a href="{{ route('profile.edit-user') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="{{ route('profile.edit-user') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>                        
+                            @elseif(Auth::user()->level == 'Penguji')
+                                <a href="{{ route('profile.edit-penguji') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
                             @endif
                         </div>
                     </div>
@@ -112,6 +114,17 @@
                             <p>{{ $data->alamat }} - {{ $data->alamat_kota }}</p>
                             <p>{{ $data->no_telp }}</p>
                             <p>{{ $data->email }}</p>
+                        </div>
+                    </div>
+                    <h2 class="card-title">Data Penguji</h2>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <p>Jabatan Penguji</p>
+                            <p>Tipe Penguji</p>                  
+                        </div>
+                        <div class="col-sm-8 text-end">
+                            <p>{{ $data->jabatan_penguji }}</p>
+                            <p>{{ $data->type_penguji }}</p>                      
                         </div>
                     </div>
                     <hr>

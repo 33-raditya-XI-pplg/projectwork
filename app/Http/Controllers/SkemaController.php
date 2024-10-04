@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event_Skema;
 use App\Models\Nilai_Peserta;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -18,11 +19,12 @@ class SkemaController extends Controller
     public function index()
     {
         $data = Skema::get();
+        $page = Page::all();
         $Title = 'Master Data';
         $subtitle = 'Skema';
 
         confirmDelete('Hapus Skema', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.skema.index', compact('data', 'Title', 'subtitle'));
+        return view('admin.skema.index', compact('data', 'page', 'Title', 'subtitle'));
     }
 
     public function create()
@@ -30,7 +32,8 @@ class SkemaController extends Controller
 
         $Title = 'Master Data';
         $subtitle = 'Skema-create';
-        return view('admin.skema.create', compact('Title', 'subtitle'));
+        $page = Page::all();
+        return view('admin.skema.create', compact('Title', 'page', 'subtitle'));
     }
 
     public function store(Request $request)
@@ -50,6 +53,7 @@ class SkemaController extends Controller
 
             // dd($request->files);
             $skema = Skema::create([
+                'page_id' => $request->page_id,
                 'nama_skema' => $request->nama_skema,
                 'has_sub_skema' => $request->has('sub_skema') ? true : false,
                 'status' => $request->has('status') ? $request->status : 'Nonaktif',
@@ -83,10 +87,11 @@ class SkemaController extends Controller
     public function edit(Skema $skema)
     {
         $sub_skema = Sub_Skema::where('skema_id', $skema->id_skema)->get();
+        $page = Page::all();
         $Title = 'Master Data';
         $subtitle = 'Skema-edit';
 
-        return view('admin.skema.edit', compact('skema', 'sub_skema', 'Title', 'subtitle'));
+        return view('admin.skema.edit', compact('skema', 'page', 'sub_skema', 'Title', 'subtitle'));
     }
 
     public function update(Request $request, $id)
@@ -109,6 +114,7 @@ class SkemaController extends Controller
             // Update Skema
             $skema = Skema::findOrFail($id);
             $skemaData = [
+                'page_id' => $request->page_id,
                 'nama_skema' => $request->nama_skema,
                 'has_sub_skema' => $request->has('sub_skema') ? true : false,
                 'status' => $request->has('status') ? $request->status : 'Nonaktif',

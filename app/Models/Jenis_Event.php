@@ -15,4 +15,13 @@ class Jenis_Event extends Model
     public function jenis_eventEvent_Skema() // PK One-to-Many dengan tb_event_skema
     {
         return $this->hasMany(Event_Skema::class, 'event_skema_id', 'id_event_skema');
-    }}
+    }
+    public function jenisEvt_page() // PK One-to-Many dengan tb_event_skema
+    {
+        return $this->hasMany(Page::class, 'page_id', 'id_page');
+    }
+    public function pageJenisEvt()
+    {
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    }
+}

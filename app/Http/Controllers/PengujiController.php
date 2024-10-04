@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Instansi;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,12 +17,13 @@ class PengujiController extends Controller
         $penguji = User::where('level', 'Penguji')
             ->with('userInstansi')->get();
         // $instansi = Instansi::all();
+        $page = Page::all();
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $regencies = DB::table('regencies')->pluck('name', 'id');
         $Title = 'Master Data';
         $subtitle = 'Penguji';
         confirmDelete('Hapus Penguji', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.penguji.index', compact('penguji', 'institutions', 'regencies', 'Title', 'subtitle'));
+        return view('admin.penguji.index', compact('penguji', 'page', 'institutions', 'regencies', 'Title', 'subtitle'));
     }
 
     public function store(Request $request)

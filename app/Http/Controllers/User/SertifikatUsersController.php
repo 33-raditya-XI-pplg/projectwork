@@ -198,12 +198,16 @@ class SertifikatUsersController extends Controller
         });
 
         $banner = asset($data_event->path_banner);
+        $Title = 'Rincian';
+        $subtitle = 'Sertifikat';
 
         return view('user.sertifikat.rincian_sertifikat', compact(
             'data_event',
             'data_gabungan',
             'banner',
-            'previousUrl'
+            'previousUrl',
+            'Title',
+            'subtitle'
         ));
     }
 

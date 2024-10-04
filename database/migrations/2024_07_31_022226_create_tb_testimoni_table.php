@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,7 +13,7 @@ return new class extends Migration
         Schema::create('tb_testimoni', function (Blueprint $table) {
             $table->bigIncrements('id_testimoni');
             // foreign key
-            $table->foreignId('page_id')->constrained('tb_page', 'id_page');
+            $table->foreignId('page_id')->constrained('tb_page', 'id_page')->cascadeOnDelete();
             $table->string('nama', 100);
             $table->string('email', 100);
             $table->date('tanggal');

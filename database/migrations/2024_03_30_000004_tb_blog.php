@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,8 +13,8 @@ return new class extends Migration
         Schema::create("tb_blog", function (Blueprint $table) {
             $table->id('id_blog');
             // Foreign Key
-            $table->foreignId('page_id')->constrained('tb_page', 'id_page');
-            $table->foreignId('kategori_id')->constrained('tb_kategori', 'id_kategori');
+            $table->foreignId('page_id')->constrained('tb_page', 'id_page')->cascadeOnDelete();
+            $table->foreignId('kategori_id')->constrained('tb_kategori', 'id_kategori')->cascadeOnDelete();
             $table->string('judul');
             $table->string('slug')->unique();
             // $table->text('ringkasan');

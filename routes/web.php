@@ -71,6 +71,22 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
 
 });
+Route::group(['prefix' => 'penguji', 'middleware' => 'auth'], function () {
+    Route::get('dashboard', [DashboardController::class, 'user_index']);
+    Route::resource('event-user', EventUsersController::class);
+    Route::resource('sertifikat-user', SertifikatUsersController::class);
+    Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
+    Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
+
+    Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
+    Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
+    Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
+
+    //profile
+    Route::resource('profile-penguji', ProfileController::class)->except(['edit', 'show'])->names(['profile-penguji', 'profile-penguji.update']);
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-penguji');
+
+});
 
 Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
     Route::resource('profile', ProfileController::class)->except(['edit', 'show']);

@@ -16,4 +16,12 @@ class Background extends Model
     {
         return $this->hasMany(Event_Skema::class, 'event_skema_id', 'id_event_skema');
     }
+    public function backgroundPage() // PK One-to-Many dengan tb_event_skema
+    {
+        return $this->hasMany(Page::class, 'page_id', 'id_page');
+    }
+    public function pageBackground()
+    {
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    }
 }

@@ -9,8 +9,21 @@
             font-weight: 300;
         }
         #img-rincian{
-            width: 400px;
-            height: 300px;
+            width: 380px;
+            height: 320px;
+        }
+        .dropdown-toogle i.fa-bars{
+            font-size: 0.8rem;
+        }
+        .dropdown-menu i{
+            font-size:1rem;
+        }
+        .btn-custom{
+            padding: 4px 4px;
+            font-size: 0.9rem;
+        }
+        .btn-custom i{
+            font-size: 0.8rem;
         }
     </style>
 @endpush
@@ -19,7 +32,6 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-12">
             <div class="card mb-5">
                 <div class="card-body">
-                    <h4 class="card-title">Rincian Event</h4>
                     <img id="img-rincian" src="{{ $banner }}" class="img-fluid mx-auto d-block" alt="Banner Event">
                     <hr>
                     <br>
@@ -100,11 +112,11 @@
 
                                     @else
                                         <td><button type="button" class="btn rounded-3 btn-outline-danger fw-bold" disabled>Belum Siap</button></td>
-                                        <td>-</td>
+                                        <td>-</td>  
                                         <td>-</td>
                                         <td class="text-center">
-                                            <a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded">
-                                                <i class="fa fa-info"></i> Rincian</a>
+                                            <a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded btn-custom">
+                                                <i class="fa fa-info fa-sm"></i> Rincian</a>
                                         </td>
                                     @endif
                                     

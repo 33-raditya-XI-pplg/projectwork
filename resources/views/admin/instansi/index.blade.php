@@ -8,7 +8,34 @@
 .select2-dropdown{
     z-index: 3051 !important;
 }
+.btn-kembali {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
+.btn-kembali:hover {
+    background-color: #2980b9;
+    transform: scale(1.05); 
+}
+
+.btn-kembali:active {
+    transform: scale(0.95); 
+    background-color: #1f5e83;
+}
+   .dropzone-wrapper_rincian {
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
+}
    .dropzone-wrapper {
     display: flex;
     align-items: center;
@@ -30,7 +57,7 @@
        max-height: 200px; 
        overflow: hidden;
        margin: 0 auto; 
-   }
+   } 
    #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
@@ -39,11 +66,11 @@
 }
    </style>
 
-
         <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
             <table id="example" class="table">
                 <thead class="fw-normal">
                     <th>No</th>
+                    <th>Page Id</th>
                     <th scope="col ">Nama Instansi</th>
                     <th scope="col">Nomor Instansi</th>
                     <th scope="col">Kepala Instansi</th>
@@ -56,6 +83,7 @@
                         
                         <tr>
                             <th scope="row">{{ $loop->index + 1 }}</th>
+                            <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '- '}}</td>
                             <td>{{ $row->nama_instansi }}</td>
                             <td>{{ $row->nomor_instansi }}</td>
                             <td>{{ $row->nama_kepala_instansi }}</td>
@@ -76,6 +104,10 @@
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>
                                         </li>
+                                        <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#rincian{{ $row->id_instansi }}"><i class="fa-solid fa-code pe-none"></i>
+                                            Rincian</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -84,7 +116,6 @@
                 </tbody>
             </table>
         </div>
-
 
 
     <!-- insert -->
@@ -97,15 +128,23 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                    <form action="{{ route('instansi.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
                     {{-- form --}}
                     <div class="container">
                         <div class="row">
+                            <div class="mb-3">
+                                <label name="page_id" for="form-label">Page Id</label>
+                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                                <option disabled selected></option>
+                                @foreach ($page as $row)
+                                <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                @endforeach
+                                 </select>
+                            </div>
                             <div class="col">
-                                {{-- kanan --}}
-                                <form action="{{ route('instansi.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+                                {{-- kanan --}}                           
                                     <div class="mb-3">
                                         <label for="nama_instansi" class="form-label">Nama Instansi</label>
                                         <input type="text" class="form-control" name="nama_instansi" id="nama_instansi"
@@ -212,16 +251,24 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
+                        <form action="{{ route('instansi.update', $row->id_instansi) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                         {{-- form --}}
                         <div class="container">
                             <div class="row">
+                                <div class="mb-3">
+                                    <label for="page_id" class="form-label">Page Id</label>
+                                    <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                            required>
+                                            @foreach ($page as $set)
+                                            <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                            @endforeach
+                                        </select>
+                                </div>
                                 <div class="col">
-                                    {{-- kanan --}}
-                                    <form action="{{ route('instansi.update', $row->id_instansi) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+                                    {{-- kanan --}}                                                                        
                                         <div class="mb-3">
                                             <label for="nama_instansi" class="form-label">Nama Instansi</label>
                                             <input type="text" class="form-control" name="nama_instansi"
@@ -315,7 +362,84 @@
                 </div>
             </div>
         </div>
-        @endforeach
+    @endforeach
+                 
+        {{-- Rincian --}}
+    @foreach ($instansi as $row)
+    <div class="modal modal-lg fade" id="rincian{{ $row->id_instansi }}" tabindex="-1" aria-labelledby="add"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-gradient text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Rincian Instansi</h5>  
+                    <div class="">
+                        <button type="button" class="btn-kembali rounded-3" data-bs-dismiss="modal">Kembali</button>                                                                
+                    </div>           
+                </div>
+                <div class="modal-body">                   
+                    <div class="container">
+                        <div class="row">
+                            <div class="mb-3">
+                                <label for="page" class="form-label">Page Id</label>
+                                <input type="text" class="form-control" name="page" id="page" value="{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+                            </div>
+                            <div class="col">
+                                    <div class="mb-3">
+                                        <label for="nama_instansi" class="form-label">Nama Instansi</label>
+                                        <input type="text" class="form-control" name="nama_instansi"
+                                            id="nama_instansi" value="{{ $row->nama_instansi }}" readonly disabled >
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nomor_instansi" class="form-label">Nomor Instansi</label>
+                                        <input type="number" class="form-control" name="nomor_instansi"
+                                            id="nomor_instansi" value="{{ $row->nomor_instansi }}" readonly disabled>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="alamat" class="form-label">Alamat</label>
+                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" readonly disabled >{{ $row->alamat }} </textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="no" class="form-label">No. telp</label>
+                                        <input type="number" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" readonly disabled >
+                                 </div>                            
+                            </div>
+                            <div class="col">
+                                {{-- kiri --}}
+                                <div class="mb-3">
+                                    <label for="nama_kepala_instansi" class="form-label">Kepala Instansi</label>
+                                    <input type="text" class="form-control" name="nama_kepala_instansi" id="nama_kepala_instansi" value="{{ $row->nama_kepala_instansi }}" readonly disabled >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jabatan_kepala" class="form-label">Jabatan</label>
+                                    <input type="text" class="form-control" name="jabatan_kepala" id="jabatan_kepala" value="{{ $row->jabatan_kepala }}" readonly disabled >
+                                </div>
+                                <div class="mb-5">
+                                    <label for="alamat_kota" class="form-label">Kota</label>
+                                    <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" readonly disabled>                                 
+                                </div>
+                                <div class="mb-3 mt-4">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" readonly disabled >
+                                </div>
+                            </div>
+                            {{-- foto gambar --}}
+                            <div class="col-md-12 mb-2">    
+                                <label class="control-label mb-2">Foto Pengguji <span class="text-danger">*</span></label>
+                                <div class="dropzone-wrapper_rincian">
+                                    <div id="image_preview_" class="mt-3 d-flex justify-content-center">                    
+                                            <img src="{{ asset($row->path_logo) }}" alt="Image preview" class="img-fluid" style="max-width: auto; max-height: auto; object-fit: contain;">                               
+                                    </div>
+                                </div>                                                              
+                            </div>                                                
+                        </div>
+                    </div>            
+                </div>             
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+
 <!-- Include CSS Select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
@@ -323,11 +447,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('.js-single').select2({
-        
-        allowClear: true
-    });
+  $(document).ready(function() {
+        $('.js-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });    
     
     @foreach($instansi as $row)
         $('#instansi_id_{{ $row->id_instansi }}').select2({

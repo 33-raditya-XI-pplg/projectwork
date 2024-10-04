@@ -2,6 +2,37 @@
 @section('title', 'Edit Profile')
 
 @section('content')
+<style>
+    
+   .dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 140px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
+}
+   #image_preview_ {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%; 
+       height: auto; 
+       max-width: 200px; 
+       max-height: 200px; 
+       overflow: hidden;
+       margin: 0 auto; 
+   }
+  #preview_image_edit_ {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
+}
+</style>
 <div class="card">
     {{-- <div class="card-header bg-primary text-white">
         <h4 class="mt-2">Edit Profile</h4>
@@ -10,7 +41,9 @@
         @if(Auth::user()->level == 'Admin')
         <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
         @elseif(Auth::user()->level == 'Pengguna')
-        <form action="{{ route('profile-user.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile-user.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">       
+        @elseif(Auth::user()->level == 'Penguji')
+        <form action="{{ route('profile-penguji.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
         @endif
             @csrf
             @method('PUT')
@@ -55,7 +88,7 @@
 
             @if (Auth::user()->isLevel('Pengguna'))
                 <div class="mb-3 row">
-                    <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal</label>
+                    <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir</label>
                     <div class="col-sm-10">
                         <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" value="{{ $user->tgl_lahir }}">
                     </div>
@@ -83,22 +116,23 @@
             <div class="mb-3 row">
                 <label for="alamat_kota" class="col-sm-2 col-form-label">Pilih Kota</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="alamat_kota" name="alamat_kota" value="{{ $user->alamat_kota }}">
-                </div>
-                <!-- <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example" id="alamat_kota" name="alamat_kota">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $user->id_user }}" data-placeholder="Pilih Kota" required>
+                        <option value="" disabled selected></option> 
+                        @foreach ($regencies as $id => $name)
+                            <option value="{{ $name }}" {{ old('alamat_kota', $user->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                        @endforeach
                     </select>
-                </div> -->
+                    @error('alamat_kota')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+               
             </div>
             <div class="mb-3 row">
                 <label for="jenis_kelamin" class="col-sm-2 col-form-label">Jenis Kelamin</label>
                 <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example" id="jenis_kelamin" name="jenis_kelamin">
-                        <option selected disabled>Open this select menu</option>
+                    <select class="form-select js-example-basic-single" aria-label="Default select example" id="jenis_kelamin" name="jenis_kelamin" data-placeholder="Pilih Kelamin">
+                        <option selected disabled></option>
                         <option value="laki-laki" {{ $user->jenis_kelamin == 'laki-laki' ? 'selected' : '' }}>Laki-Laki</option>
                         <option value="perempuan" {{ $user->jenis_kelamin == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
                     </select>
@@ -107,13 +141,33 @@
             <div class="mb-3 row">
                 <label for="no_telp" class="col-sm-2 col-form-label">Nomor Telpon</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="no_telp" name="no_telp" value="{{ $user->no_telp }}">
+                    <input type="number" class="form-control" id="no_telp" name="no_telp" value="{{ $user->no_telp }}">
                 </div>
             </div>
             <div class="mb-3 row">
                 <label for="foto_pengguna" class="col-sm-2 col-form-label">Foto Pengguna</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="foto_pengguna" type="file" id="formFile" accept=".png">
+                    <div class="dropzone-wrapper">
+                        <div class="dropzone-desc">
+                            <i class="glyphicon glyphicon-download-alt"></i>
+                            <p>Pilih gambar atau seret ke sini .</p>
+                        </div>
+                        <input type="file" name="path_foto" class="dropzone" id="path_foto_{{ $user->id_user }}" accept="image/*">
+                        <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                            @if($user->path_foto)
+                                <img id="preview_image_edit_{{ $user->id_user }}" src="{{ asset($user->path_foto) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            @else
+                                <img id="preview_image_edit_{{ $user->id_user }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                    </div>
+                    @error('path_foto')
+                    <div class="text-danger">{{ $message }}</div>
+                   @enderror
+                    {{-- <input class="form-control" name="foto_pengguna" type="file" id="formFile" accept=".png"> --}}
                 </div>
             </div>
             <hr>
@@ -162,16 +216,17 @@
             <div class="mb-3 row">
                 <label for="alamat_kota_perusahaan" class="col-sm-2 col-form-label">Pilih Kota</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" value="{{ $user->alamat_kota_perusahaan }}">
-                </div>
-                <!-- <div class="col-sm-10">
-                    <select class="form-select" aria-label="Default select example" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select class="form-select js-example-basic-single" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan_{{ $user->id_user }}" data-placeholder="Pilih Kota Perusahaan" required>
+                        <option value="" disabled selected></option> 
+                        @foreach ($regencies as $id => $name)
+                            <option value="{{ $name }}" {{ old('alamat_kota_perusahaan', $user->alamat_kota_perusahaan) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                        @endforeach
                     </select>
-                </div> -->
+                    @error('alamat_kota')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    {{-- <input type="text" class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" value="{{ $user->alamat_kota_perusahaan }}"> --}}
+                </div>              
             </div>
             <div class="mb-3 row">
                 <label for="jabatan_pekerjaan" class="col-sm-2 col-form-label">Jabatan Pekerjaan</label>
@@ -265,6 +320,48 @@
 @endsection
 
 @push('script')
+
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+  $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    </script>
+    <script>
+        document.querySelectorAll('[id^="path_foto"]').forEach(input => {
+          input.addEventListener('change', function(event) {
+              const id = this.id.split('_')[2]; // Mengambil ID dari input
+              const preview = document.getElementById(`preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
+              const file = event.target.files[0];
+              const reader = new FileReader();
+      
+              reader.onload = function(e) {
+                  preview.src = e.target.result;
+                  preview.style.display = 'block'; // Tampilkan preview gambar
+              }
+      
+              if (file) {
+                  reader.readAsDataURL(file);
+              } else {
+                  preview.src = '';
+                  preview.style.display = 'none'; // Sembunyikan gambar jika tidak ada file
+              }
+          });
+        });
+      </script>
     <script>
         var button = document.getElementById('add')
 

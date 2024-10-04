@@ -7,6 +7,12 @@
             .ck-editor__editable {
                 min-height: 200px;
             }
+            .select2-close-mask{
+                z-index: 2099 !important;
+            }
+            .select2-dropdown{
+                z-index: 3051 !important;
+            }
         </style>
     @endpush
 
@@ -15,6 +21,7 @@
         <table id="example" class="table">
             <thead class="fw-normal">
                 <th>No</th>
+                <th scope="col ">Page Id</th>
                 <th scope="col ">Jenis Event</th>
                 <th scope="col" style="width: 60%;">Deskripsi</th>
                 <th scope="col">Status</th>
@@ -24,6 +31,7 @@
                 @foreach ($jenis_event as $row)
                     <tr>
                         <th scope="row">{{ $loop->index + 1 }}</th>
+                        <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '-'}}</td>
                         <td>{{ $row->nama_jenis_event }}</td>
                         <td>@php 
                             echo $row->deskripsi
@@ -66,15 +74,24 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                    <form action="{{ route('jenis-event.store') }}" method="POST">
+                        @csrf
                     {{-- form --}}
                     <div class="container">
                         <div class="mb-3">
-                            <form action="{{ route('jenis-event.store') }}" method="POST">
-                                @csrf
+                            <label for="page_id" class="form-label">Page Id</label>
+                            <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page"
+                                    required>
+                                    <option disabled selected></option>
+                                    @foreach ($page as $row)
+                                    <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                    @endforeach
+                                </select>
+                        </div>
+                        <div class="mb-3">                         
                                 <label for="nama_jenis_event" class="form-label">Nama Jenis Event</label>
                                 <input type="text" class="form-control" name="nama_jenis_event" id="nama_jenis_event" required>
-                        </div>
+                        </div>                    
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label h-100">Deskripsi</label>
                             <textarea class="form-control ck-editor" id="deskripsi" name="deskripsi"></textarea>
@@ -115,17 +132,25 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-
+                        <form action="{{ route('jenis-event.update', $row->id_jenis_event) }}" method="POST">
+                            @csrf
+                            @method('PUT')
                         {{-- form --}}
                         <div class="container">
                             <div class="mb-3">
-                                <form action="{{ route('jenis-event.update', $row->id_jenis_event) }}" method="POST">
-                                @csrf
-                                @method('PUT')
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                        required>
+                                        @foreach ($page as $set)
+                                        <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                            <div class="mb-3">                           
                                 <label for="nama_jenis_event" class="form-label">Nama Jenis Event</label>
                                 <input type="text" class="form-control" name="nama_jenis_event" id="nama_jenis_event"
                                     required value="{{ $row->nama_jenis_event }}">
-                            </div>
+                            </div>                         
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control ck-editor" id="deskripsi-edit" name="deskripsi" rows="10">{{ $row->deskripsi }}</textarea>
@@ -156,6 +181,24 @@
         </div>
         @endforeach
 
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    </script>
 
 @endsection

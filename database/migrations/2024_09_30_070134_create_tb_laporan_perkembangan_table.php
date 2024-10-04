@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,9 +16,9 @@ return new class extends Migration
             $table->string('nama_peserta');
             $table->date('tanggal_penilaian');
             // Foreign Keys
-            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
-            $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema');
-            $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')->cascadeOnDelete();
+            $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema')->cascadeOnDelete();
+            $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta')->cascadeOnDelete();
 
             // Metadata
             $table->integer('created_by')->nullable();

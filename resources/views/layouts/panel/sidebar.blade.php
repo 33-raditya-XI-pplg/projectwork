@@ -12,6 +12,11 @@
                     <i class="fa fa-home link-icon"></i>
                     <span>Dashboard</span>
                 </a>
+                @elseif(Auth::user()->level == 'Penguji')
+                <a href="{{ url('penguji/dashboard') }}" class="item-link">
+                    <i class="fa fa-home link-icon"></i>
+                    <span>Dashboard</span>
+                </a>             
                 @else
                 <a href="{{ url('admin/dashboard') }}" class="item-link">
                     <i class="fa fa-home link-icon"></i>
@@ -69,15 +74,13 @@
                     <i class="fas fa-file-arrow-up"></i>
                     <span>Upload Bukti Pembayaran </span>
                 </a>
-            </li>
-            @if(Auth::user()->level == 'Pengguna')
+            </li>         
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile-user' ? 'active' : '' }}">
                 <a href="{{ route('profile-user.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>
                     <span>Profile</span>
                 </a>
-            </li>
-            @endif
+            </li>        
             @endif
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
@@ -191,20 +194,26 @@
     </div>
     </div>
     </li>
-    @if(Auth::user()->level == 'Admin')
     <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
         <a href="{{ route('profile.index') }}" class="item-link">
             <i class="fa fa-user link-icon"></i>
             <span>Profile</span>
         </a>
     </li>
-    @endif
     {{-- <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile' ? 'active' : '' }}">
     <a href="{{ route('profile.index') }}" class="item-link">
         <i class="fa fa-user link-icon"></i>
         <span>Profile</span>
     </a>
     </li> --}}
+@endif
+    @if(Auth::user()->level == 'Penguji')
+    <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile-penguji' ? 'active' : '' }}">
+        <a href="{{ route('profile-penguji.index') }}" class="item-link">
+            <i class="fa fa-user link-icon"></i>
+            <span>Profile</span>
+        </a>
+    </li>
     @endif
 
     </ul>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event_Skema;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Background;
@@ -16,10 +17,11 @@ class BackgroundController extends Controller
     public function index()
     {
         $bg = Background::get();
+        $page = Page::all();
         $Title = 'Master Data';
         $subtitle = "Background";
         confirmDelete('Hapus Background', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.background.index', compact('bg', 'Title', 'subtitle'));
+        return view('admin.background.index', compact('bg', 'page', 'Title', 'subtitle'));
     }
 
     /**

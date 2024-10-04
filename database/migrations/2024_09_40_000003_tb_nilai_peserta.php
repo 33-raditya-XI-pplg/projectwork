@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,15 +13,15 @@ return new class extends Migration
         Schema::create('tb_nilai_peserta', function (Blueprint $table) {
             $table->id('id_nilai_peserta');
             // Foreign Key
-            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema');
-            $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema');
-            $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')->cascadeOnDelete();
+            $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema')->cascadeOnDelete();
+            $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta')->cascadeOnDelete();
 
             $table->integer('nilai');
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
-            $table->timestamps(); 
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->timestamps();
         });
     }
 

@@ -63,6 +63,9 @@ class BlogController extends Controller
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/photos', $filename);
             $data['photo'] = $filename;
+            // Storage::url($file);
+            // $data = $request->except(['photo']);
+            // $data['photo'] = "/storage/blog/$filename";
         }
 
 
@@ -157,13 +160,15 @@ class BlogController extends Controller
     public function show($id)
     {
         $blog = Blog::find($id);
+        $Title = 'Management';
+        $subtitle = 'Blog';
 
         if (!$blog) {
 
             return redirect()->route('blog.index')->with('error', 'Blog not found.');
         }
 
-        return view('admin.blog.show', compact('blog'));
+        return view('admin.blog.show', compact('blog', 'Title', 'subtitle'));
     }
 
 

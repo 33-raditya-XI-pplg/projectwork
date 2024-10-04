@@ -4,27 +4,26 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up()
-{
-    Schema::create('tb_faq', function (Blueprint $table) {
-        $table->id('id_faq');
-        // Foreign Key
-        $table->foreignId('page_id')->constrained('tb_page', 'id_page');
+    {
+        Schema::create('tb_faq', function (Blueprint $table) {
+            $table->id('id_faq');
+            // Foreign Key
+            $table->foreignId('page_id')->constrained('tb_page', 'id_page')->cascadeOnDelete();
 
-        $table->string('pertanyaan');
-        $table->string('jawaban');
+            $table->string('pertanyaan');
+            $table->string('jawaban');
 
-        $table->integer('created_by')->nullable();
-        $table->integer('updated_by')->nullable();
-        $table->string('status')->nullable(); // Add this line
-        $table->timestamps();
-    });
-}
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->string('status')->nullable(); // Add this line
+            $table->timestamps();
+        });
+    }
 
 
     /**

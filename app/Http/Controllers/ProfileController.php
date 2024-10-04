@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\ProfileUpdateRequest;
@@ -23,7 +23,7 @@ class ProfileController extends Controller
         $data = auth()->user(); // Ambil data pengguna yang login, misalnya
         $Title = 'Profile';
         // Periksa level pengguna
-        if ($data->level == 'Pengguna' || $data->level == 'Admin') {
+        if ($data->level == 'Pengguna' || $data->level == 'Admin' || $data->level == 'Penguji') {
 
             return view('profile.index', compact('data', 'Title')); // Kirim data ke view
         } else {
@@ -36,61 +36,119 @@ class ProfileController extends Controller
         $id = Auth::user()->id_user;
         $instansi = Instansi::get();
         $user = User::findOrFail($id);
+        $regencies = DB::table('regencies')->pluck('name', 'id');
         $Title = 'Edit Profile';
-        return view('profile.edit', compact('user', 'instansi', 'Title'));
+        return view('profile.edit', compact('user', 'regencies', 'instansi', 'Title'));
     }
 
     public function update(Request $request, $id)
     {
+        $user = User::find($id);
+        $data = $request->all();
 
-        if ($request->has('foto_pengguna')) {
+        if ($request->has('path_foto')) {
 
             // Check if user has path_foto
             if (!empty(Auth::user()->path_foto)) {
                 if (Auth::user()->isLevel('Admin')) {
-                    $foto = $request->file('foto_pengguna');
+                    $foto = $request->file('path_foto');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                    $foto->storeAs('public/foto_admin', $filename);
+                    $storedPath = $foto->storeAs('public/foto_admin', $filename);
+                    Storage::url($storedPath);
+                    $data = $request->except(['path_foto']);
+                    $data['path_foto'] = "/storage/foto_admin/$filename";
+                    // $foto = $request->file('foto_pengguna');
+                    // $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    // $foto->storeAs('public/foto_admin', $filename);
                 } elseif (Auth::user()->isLevel('Penguji')) {
-                    $foto = $request->file('foto_pengguna');
+                    $foto = $request->file('path_foto');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                    $foto->storeAs('public/foto_penguji', $filename);
+                    $storedPath = $foto->storeAs('public/foto_penguji', $filename);
+                    Storage::url($storedPath);
+                    $data = $request->except(['path_foto']);
+                    $data['path_foto'] = "/storage/foto_penguji/$filename";
+                    // $foto = $request->file('foto_pengguna');
+                    // $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    // $foto->storeAs('public/foto_penguji', $filename);
                 } elseif (Auth::user()->isLevel('Pengguna')) {
-                    $foto = $request->file('foto_pengguna');
+                    $foto = $request->file('path_foto');
                     $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                    $foto->storeAs('public/foto_pengguna', $filename);
+                    $storedPath = $foto->storeAs('public/foto_pengguna', $filename);
+                    Storage::url($storedPath);
+                    $data = $request->except(['path_foto']);
+                    $data['path_foto'] = "/storage/foto_pengguna/$filename";
+                    // $foto = $request->file('foto_pengguna');
+                    // $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    // $foto->storeAs('public/foto_pengguna', $filename);
                 }
             } else {
                 if (Auth::user()->isLevel('Admin')) {
-                    $foto = $request->file('foto_pengguna');
-                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                    $stored = $foto->storeAs('public/foto_admin', $filename);
 
-                    $request->merge([
-                        'path_foto' => Storage::url($stored)
-                    ]);
+                    if ($user->path_foto) {
+                        $oldPhotoPath = str_replace('/storage', 'public', $user->path_foto);
+                        if (Storage::exists($oldPhotoPath)) {
+                            Storage::delete($oldPhotoPath);
+                        }
+                    }
+                    $foto = $request->file('path_foto');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $storedPath = $foto->storeAs('public/foto_admin', $filename);
+                    Storage::url($storedPath);
+                    $data = $request->except(['path_foto']);
+                    $data['path_foto'] = "/storage/foto_admin/$filename";
+                    // $foto = $request->file('foto_pengguna');
+                    // $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    // $stored = $foto->storeAs('public/foto_admin', $filename);
+
+                    // $request->merge([
+                    //     'path_foto' => Storage::url($stored)
+                    // ]);
                 } elseif (Auth::user()->isLevel('Penguji')) {
-                    $foto = $request->file('foto_pengguna');
-                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                    $stored = $foto->storeAs('public/foto_penguji', $filename);
 
-                    $request->merge([
-                        'path_foto' => Storage::url($stored)
-                    ]);
+                    if ($user->path_foto) {
+                        $oldPhotoPath = str_replace('/storage', 'public', $user->path_foto);
+                        if (Storage::exists($oldPhotoPath)) {
+                            Storage::delete($oldPhotoPath);
+                        }
+                    }
+                    $foto = $request->file('path_foto');
+                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    $storedPath = $foto->storeAs('public/foto_penguji', $filename);
+                    Storage::url($storedPath);
+                    $data = $request->except(['path_foto']);
+                    $data['path_foto'] = "/storage/foto_penguji/$filename";
+                    // $foto = $request->file('foto_pengguna');
+                    // $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    // $stored = $foto->storeAs('public/foto_penguji', $filename);
+
+                    // $request->merge([
+                    //     'path_foto' => Storage::url($stored)
+                    // ]);
                 } elseif (Auth::user()->isLevel('Pengguna')) {
-                    $foto = $request->file('foto_pengguna');
-                    $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
-                    $stored = $foto->storeAs('public/foto_pengguna', $filename);
 
-                    $request->merge([
-                        'path_foto' => Storage::url($stored)
-                    ]);
+                    if ($user->path_foto) {
+                        $oldPhotoPath = str_replace('/storage', 'public', $user->path_foto);
+                        if (Storage::exists($oldPhotoPath)) {
+                            Storage::delete($oldPhotoPath);
+                        }
+                    }
+                    $foto = $request->file('path_foto');
+                    $filename = 'foto_' . $request->nama_lengkap . '.' . $foto->getClientOriginalExtension();
+                    $storedPath = $foto->storeAs('public/foto_pengguna', $filename);
+                    Storage::url($storedPath);
+                    $data = $request->except(['path_foto']);
+                    $data['path_foto'] = "/storage/foto_pengguna/$filename";
+                    // $foto = $request->file('foto_pengguna');
+                    // $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
+                    // $stored = $foto->storeAs('public/foto_pengguna', $filename);
+
+                    // $request->merge([
+                    //     'path_foto' => Storage::url($stored)
+                    // ]);
                 }
             }
             // END Check path_foto
         }
-
-        $user = User::find($id);
 
         if ($request->has('password_lama') && $request->has('password_baru') && $request->has('konfirmasi_password_baru')) {
             if (!Hash::check($request->password_lama, $user->password)) {
@@ -111,17 +169,18 @@ class ProfileController extends Controller
         }
 
 
-        $user->alamat = $request->input('alamat');
-        $user->save();
+        // $user->alamat = $request->input('alamat');
+        // $user->save();
 
-        $user->update($request->except('alamat'));
+        $user->update($data);
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
         if (Auth::user()->level == 'Admin') {
-            return redirect()->route('profile.index'); // or another route
-
-        } else {
-            return redirect()->route('profile-user.index'); // or another route
+            return redirect()->route('profile.index');
+        } elseif (Auth::user()->level == 'Pengguna') {
+            return redirect()->route('profile-user.index');
+        } elseif (Auth::user()->level == 'Penguji') {
+            return redirect()->route('profile-penguji.index');
         }
     }
 

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,9 +13,11 @@ return new class extends Migration
         Schema::create('tb_event', function (Blueprint $table) {
             $table->id('id_event');
             // Foreign Key
-            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi');
-            $table->foreignId('tempat_id')->constrained('tb_tempat', 'id_tempat');
-            $table->foreignId('jenis_event_id')->constrained('tb_jenis_event', 'id_jenis_event');
+            $table->foreignId('instansi_id')->constrained('tb_instansi', 'id_instansi')->cascadeOnDelete();
+            $table->foreignId('tempat_id')->constrained('tb_tempat', 'id_tempat')->cascadeOnDelete();
+            $table->foreignId('jenis_event_id')->constrained('tb_jenis_event', 'id_jenis_event')->cascadeOnDelete();
+            $table->foreignId('page_id')->nullable()->constrained('tb_page', 'id_page')->cascadeOnDelete();
+
 
             $table->string('nama_event');
             $table->date('tgl_mulai');
@@ -29,8 +30,8 @@ return new class extends Migration
             $table->string('status');
             $table->enum('visibilitas', ['privat', 'publik']);
 
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

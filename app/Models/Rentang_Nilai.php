@@ -17,4 +17,13 @@ class Rentang_Nilai extends Model
     {
         return $this->belongsToMany(Event_Skema::class, 'tb_event_skema_rentang_nilai', 'rentang_nilai_id', 'event_skema_id');
     }
+
+    public function rentangPage() // PK One-to-Many dengan tb_sub_skema
+    {
+        return $this->hasMany(Page::class, 'page_id', 'id_page');
+    }
+    // public function page()
+    // {
+    //     return $this->belongsTo(Page::class, 'page_id', 'id_page');
+    // }
 }

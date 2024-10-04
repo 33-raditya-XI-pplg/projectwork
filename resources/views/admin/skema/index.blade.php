@@ -7,6 +7,7 @@
             <table id="example" class="table">
                 <thead class="fw-normal">
                     <th>No</th>
+                    <th>Page Id</th>
                     <th scope="col" class="w-75">Nama Skema</th>
                     <th scope="col">Status</th>
                     <th scope="col">Aksi</th>
@@ -15,6 +16,7 @@
                     @foreach ($data as $row)
                         <tr>
                             <th scope="row">{{ $loop->index + 1 }}</th>
+                            <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '- '}}</td>
                             <td>{{ $row->nama_skema }}</td>
                             <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
                             </td>

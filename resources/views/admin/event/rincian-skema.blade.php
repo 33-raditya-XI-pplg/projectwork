@@ -6,27 +6,27 @@
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Skema</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ \App\Models\Skema::find($evtSkema->skema_id)->nama_skema }}" readonly>
+                value="{{ \App\Models\Skema::find($evtSkema->skema_id)->nama_skema }}" disabled readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Background</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ \App\Models\Background::find($evtSkema->background_id)->nama_bg }}" readonly>
+                value="{{ \App\Models\Background::find($evtSkema->background_id)->nama_bg }}" disabled readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Tanda Tangan</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ $ttd->implode(', ') }}" readonly>
+                value="{{ $ttd->implode(', ') }}" disabled readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Penguji</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ $penguji->implode(', ') }}" readonly>
+                value="{{ $penguji->implode(', ') }}" disabled readonly>
             </div>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
-                value="{{ $rn->implode(', ') }}" readonly>
+                value="{{ $rn->implode(', ') }}" disabled readonly>
             </div>
             
     </div>

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,14 +12,16 @@ return new class extends Migration
     {
         Schema::create("tb_tempat", function (Blueprint $table) {
             $table->id('id_tempat');
+            $table->foreignId('page_id')->nullable()->constrained('tb_page', 'id_page')->cascadeOnDelete();
             $table->string('nama_tempat');
-            $table->string('no_telp', 20)->nullable(); 
+            $table->integer('no_telp', 20)->nullable();
             $table->text('alamat');
-            $table->string('alamat_kota'); 
-            $table->string('link_maps'); 
-            
-            $table->integer('created_by')->nullable(); 
-            $table->integer('updated_by')->nullable(); 
+            $table->string('alamat_kota');
+            $table->string('link_maps');
+
+
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

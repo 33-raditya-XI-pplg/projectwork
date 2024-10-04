@@ -1,6 +1,49 @@
 @extends('layouts.panel.index')
 @section('title', 'Pengguna')
 @section('content')
+<style>
+    .btn-kembali{
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius:5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease,transform 0.3s ease;
+}
+.btn-kembali:hover{
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+.btn-kembali:active{
+    transform: scale(0.95);
+    background-color: #1f5e83;
+}
+
+   .dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
+}
+   #image_preview_ {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%; 
+       height: auto; 
+       max-width: 200px; 
+       max-height: 200px; 
+       overflow: hidden;
+       margin: 0 auto; 
+   }    
+</style>
 
     <div class="d-flex justify-content-between mb-3">
         <nav aria-label="breadcrumb">
@@ -51,12 +94,14 @@
                                             data-bs-target="#edit{{ $row->id_user }}"><i
                                                 class="fa-regular fa-pen-to-square"></i> Edit</a>
                                     </li>
-
-
                                     <li><a href="{{ route('user.destroy', $row->id_user) }}"
                                             class="dropdown-item text-danger" data-confirm-delete="true"><i
                                                 class="fa-regular fa-trash-can pe-none"></i>
                                             Delete</a>
+                                    </li>
+                                    <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#rincian{{ $row->id_user }}"><i class="fa-solid fa-code pe-none"></i>
+                                        Rincian</a>
                                     </li>
                                 </ul>
                             </div>
@@ -91,6 +136,120 @@
             </div>
         </div>
     </div>
+
+    {{-- Rincian --}}
+    @foreach ($pengguna as $row)
+    <div class="modal modal-lg fade" id="rincian{{ $row->id_user }}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary-gradient text-white">
+                    <h5 class="modal-title" id="exampleModalLabel">Rincian Pengguna</h5>
+                    <button type="button" class="btn-kembali rounded-3" data-bs-dismiss="modal">Kembali</button> 
+                </div>
+                 <div class="modal-body">                
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="text-center">--Data Diri--</h5>
+                                    <div class="mb-3 mt-4">
+                                        <label for="nama_lengkap" class="form-label">Nama Pengguna</label>
+                                        <input type="text" class="form-control" name="nama_lengkap"
+                                            id="nama_lengkap" value="{{ $row->nama_lengkap ?? '   -   ' }}" disabled readonly >
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                                        <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" value="{{$row->tempat_lahir ?? '   -   ' }}" disabled readonly>                                         
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
+                                        <input type="text" class="form-control" name="tgl_lahir" id="tgl_lahir" value="{{ $row->tgl_lahir ?? '   -   ' }}" disabled readonly>
+                                    </div>                                                                
+                                    <div class="mb-3">
+                                        <label for="jenis_kelamin" class="form-label">Jenis-Kelamin</label>    
+                                        <input type="text" class="form-control" name="jenis_kelamin" id="jenis_kelamin" value="{{ $row->jenis_kelamin ?? '   -   ' }}" disabled readonly>
+                                    </div>  
+                                    <div class="mb-3">
+                                        <label for="nomor_induk" class="form-label">NIK</label>
+                                        <input type="number" class="form-control" name="nomor_induk" id="nomor_induk" value="{{ $row->nomor_induk  ?? '   -   ' }}" disabled readonly >
+                                    </div>  
+                                    <div class="mb-3">
+                                        <label for="alamat" class="form-label">Alamat</label>
+                                        <textarea class="form-control" id="alamat" name="alamat" rows="2"  disabled readonly >{{ $row->alamat ?? '   -   ' }}</textarea>
+                                    </div>   
+                                    <div class="mb-3">
+                                        <label for="alamat_kota" class="form-label">Kota</label>    
+                                        <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota ?? '   -   ' }}" disabled readonly>
+                                    </div>                           
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>    
+                                        <input type="text" class="form-control" name="email" id="email" value="{{ $row->email ?? '   -   ' }}" disabled readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="no" class="form-label">No. telp</label>
+                                        <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp ?? '   -   ' }}"disabled readonly >
+                                    </div>                             
+                            </div>
+                            <div class="col">
+                                <h5 class="text-center">--Data Pendidikan Terakhir--</h5>                                
+                                <div class="mb-3 mt-4">
+                                    <label for="nama_sekolah" class="form-label">Nama Sekolah/Instansi</label>
+                                    <input type="text" class="form-control" name="nama_sekolah" id="nama_sekolah" value="{{ $row->nama_sekolah ?? '   -   ' }}" disabled readonly >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jurusan" class="form-label">Jurusan</label>
+                                    <input type="text" class="form-control" name="jurusan" id="jurusan" value="{{ $row->jurusan ?? '   -   ' }}" disabled readonly >
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jenjang" class="form-label">Jenjang</label>
+                                    <input type="text" class="form-control" name="jenjang" id="jenjang" value="{{ $row->jenjang ?? '   -   ' }}" disabled readonly>                               
+                                </div>
+                                <div class="mb-4">
+                                    <label for="tahun_lulus" class="form-label">Tahun Lulus</label>
+                                    <input type="email" class="form-control" name="tahun_lulus" id="tahun_lulus" value="{{ $row->tahun_lulus ?? '   -   ' }}" disabled readonly>
+                                </div>
+                                @if(!empty($row->nama_perusahaan)|| !empty($row->alamat_perusahaan) || !empty($row->alamat_kota_perusahaan) || !empty($row->jabatan_pekerjaan) || !empty($row->no_telp_perusahaan))
+                                <div class="data-pekerjaan">
+                                <h5 class="text-center">--Data Pekerjaan Sekarang--</h5>
+                                <div class="mb-3 mt-2 ">
+                                    <label for="nama_perusahaan" class="form-label">Nama Perusahaan</label>
+                                    <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan" value="{{ $row->nama_perusahaan ?? '   -   ' }}" disabled readonly>
+                                </div>                       
+                                <div class="mb-3 ">
+                                    <label for="alamat_perusahaan" class="form-label">Alamat</label>
+                                    <input type="text" class="form-control" name="alamat_perusahaan" id="alamat_perusahaan" value="{{ $row->alamat_perusahaan ?? '   -   ' }}" disabled readonly>
+                                </div>                        
+                                <div class="mb-3">
+                                    <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
+                                    <input type="text" class="form-control" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan" value="{{ $row->alamat_kota_perusahaan ?? '   -   ' }}" disabled readonly>
+                                </div>                            
+                                <div class="mb-3">
+                                    <label for="jabatan_pekerjaan" class="form-label">Jabatan</label>
+                                    <input type="text" class="form-control" name="jabatan_pekerjaan" id="jabatan_pekerjaan" value="{{ $row->jabatan_pekerjaan ?? '   -   ' }} " disabled readonly>
+                                </div>                            
+                                <div class="mb-3">
+                                    <label for="no_telp_perusahaan" class="form-label">Telepon Perusahaan</label>                                    
+                                    <input type="text" class="form-control" name="no_telp_perusahaan" id="no_telp_perusahaan" value="{{ $row->no_telp_perusahaan ?? '   -   ' }}" disabled readonly>
+                                </div>   
+                                </div>                     
+                                @endif
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="control-label mb-2"> Foto Pengguji <span class="text-danger">*</span></label>
+                                <div class="dropzone-wrapper">                                       
+                                    <div id="image_preview_" class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
+                                            <img  src="{{ asset($row->path_foto) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                             
+                                    </div>
+                                </div>                                       
+                            </div>
+                        </div>
+                    </div>                  
+                 </div>                                                         
+                </div>                
+            </div>
+        </div>
+    </div>
+@endforeach
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script>
