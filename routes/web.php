@@ -185,12 +185,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
         Route::put('/admin/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
 
-        // Profile perusahaan
-        Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
-        Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
-        Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
-        Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->name('profil.destroy');
-
+       // Profile perusahaan
+Route::get('/profil/rincian/{id}', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
+Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
+Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
+Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
+Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->name('profil.destroy');
+ 
         // Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
         // Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
         // // Correct route for updating blogkategori
@@ -202,6 +203,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('/partner', [PartnerController::class, 'store'])->name('partner.store');
         Route::put('/admin/partner/{id}', [PartnerController::class, 'update'])->name('partner.update');
         Route::delete('admin/partner/{partner}', [PartnerController::class, 'destroy'])->name('partner.destroy');
+        Route::get('/partner/{partner}', [PartnerController::class, 'show'])->name('partner.show');
 
         //testimoni
         Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni.indek');

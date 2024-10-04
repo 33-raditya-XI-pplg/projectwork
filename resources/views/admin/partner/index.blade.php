@@ -8,166 +8,87 @@
 <!-- Include SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-{{-- @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif --}}
-
-{{-- <h1>Daftar Partner</h1> --}}
-
-<!-- Button to open modal -->
-{{-- <div class="d-flex justify-content-end mb-3">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPartnerModal">
-        Tambah Partner
-    </button>
-</div> --}}
-
-
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="mt-4">
                 <div class="table-responsive">
-                <table id="example" class="table">
-                    <thead class="fw-normal">
-                        <tr>
-                            <th>No</th>
-                            <th>Page Id</th>
-                            <th>Nama Partner</th>
-                            <th>Email Partner</th>
-                            <th>Nomor Telepon Partner</th>
-                            <th>Alamat Partner</th>
-                            <th>Jenis Partner</th>
-                            <th>Tanggal Bergabung</th>
-                            <th>Website</th>
-                            <th>Status Partner</th>
-                            {{-- <th>Logo</th> --}}
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody style="vertical-align: middle">
-                        @foreach ($partners as $partner)
+                    <table id="example" class="table">
+                        <thead class="fw-normal">
                             <tr>
-                                <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $partner->page->nama_page ?? 'N/A' }}</td>
-                                <td>{{ $partner->nama_partner }}</td>
-                                <td>{{ $partner->email_partner }}</td>
-                                <td>{{ $partner->telepon_partner ?? '-' }}</td>
-                                <td>{{ $partner->alamat_partner ?? '-' }}</td>
-                                <td>{{ $partner->jenis_partner ?? '-' }}</td>
-                                <td>{{ $partner->tanggal_bergabung ? $partner->tanggal_bergabung->format('d-m-Y') : '-' }}</td>
-                                <td>
-                                    @if ($partner->website_partner)
-                                        <a href="{{ $partner->website_partner }}" target="_blank" rel="noopener noreferrer">Link Website</a>
-                                    @else
-                                        <span>-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <button type="button" class="btn rounded-3
-                                        {{ $partner->status_partner == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}"
-                                        disabled>
-                                        {{ $partner->status_partner == 'Aktif' ? 'Aktif' : 'Nonaktif' }}
-                                    </button>
-                                </td>
-                                {{-- <td>
-                                    @if ($partner->logo)
-                                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="Logo" width="50">
-                                    @else
-                                        <span>-</span>
-                                    @endif
-                                </td> --}}
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                            id="dropdownMenuButton{{ $partner->id_partner }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $partner->id_partner }}">
-                                            <li>
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id_partner }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <form id="deleteForm{{ $partner->id_partner }}" action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $partner->id_partner }}')">
-                                                        <i class="fa-regular fa-trash-can"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <script>
-                                        function confirmDelete(partnerId) {
-                                            Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!',
-                                                cancelButtonText: 'Cancel'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    document.getElementById('deleteForm' + partnerId).submit();
-                                                }
-                                            });
-                                        }
-                                    </script>
-
-                                </td>
+                                <th>No</th>
+                                <th>Page Id</th>
+                                <th>Nama Partner</th>
+                                <th>Jenis Partner</th>
+                                <th>Tanggal Bergabung</th>
+                                <th>Aksi</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody style="vertical-align: middle">
+                            @foreach ($partners as $partner)
+                                <tr>
+                                    <th scope="row">{{ $loop->iteration }}</th>
+                                    <td>{{ $partner->page->nama_page ?? 'N/A' }}</td>
+                                    <td>{{ $partner->nama_partner }}</td>
+                                    <td>{{ $partner->jenis_partner ?? '-' }}</td>
+                                    <td>{{ $partner->tanggal_bergabung ? $partner->tanggal_bergabung->format('d-m-Y') : '-' }}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                                id="dropdownMenuButton{{ $partner->id_partner }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-bars"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $partner->id_partner }}">
+                                                <li>
+                                                    <a class="dropdown-item text-info" href="{{ route('partner.show', $partner->id_partner) }}">
+                                                        <i class="fa-regular fa-eye"></i> Rincian
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id_partner }}">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <form id="deleteForm{{ $partner->id_partner }}" action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $partner->id_partner }}')">
+                                                            <i class="fa-regular fa-trash-can"></i> Delete
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <script>
+                                            function confirmDelete(partnerId) {
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "You won't be able to revert this!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, delete it!',
+                                                    cancelButtonText: 'Cancel'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('deleteForm' + partnerId).submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </div>
+    </div>
 </div>
-
-
-{{-- logo Partner  --}}
-
-<h2>Logo Partner</h2>
-<div class="row">
-    @foreach ($partners as $partner)
-        <div class="col-md-4 text-center mb-4">
-            @if($partner->logo)
-                @if($partner->website_partner)
-                    <a href="{{ $partner->website_partner }}" target="_blank" rel="noopener noreferrer">
-                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama_partner }} Logo" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
-                    </a>
-                @else
-                    <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama_partner }} Logo" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
-                @endif
-            @else
-                <p class="text-muted">No logo available</p>
-            @endif
-        </div>
-    @endforeach
-</div>
-
-
-
-
 
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
@@ -208,7 +129,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="telepon_partner" class="form-label">Nomor Telepon Partner <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('telepon_partner') is-invalid @enderror" name="telepon_partner" id="telepon_partner" required>
+                        <input type="number" class="form-control @error('telepon_partner') is-invalid @enderror" name="telepon_partner" id="telepon_partner" required>
                         @error('telepon_partner')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

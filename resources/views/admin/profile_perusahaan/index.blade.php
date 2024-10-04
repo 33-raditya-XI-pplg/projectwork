@@ -113,7 +113,12 @@
                                                         class="dropdown-item text-danger" data-confirm-delete="true"><i
                                                             class="fa-regular fa-trash-can pe-none"></i>
                                                         Delete</a>
-                                                </li>
+                                                        <li>
+    <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-primary">
+        <i class="fa-solid fa-eye"></i> Lihat Rincian
+    </a>
+</li>
+
                                             </ul>
                                         </div>
                                     </td>
@@ -124,28 +129,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Profile Section -->
-<div class="section__container mt-5">
-    <div class="header">
-        <p>PROFIL PERUSAHAAN</p>
-        <h1>STRUKTUR ORGANISASI</h1>
-    </div>
-    <div class="profile__grid">
-        @foreach ($profil as $profile)
-            <div class="profile-item">
-                @if ($profile->path_struktur_organisasi)
-                    <img src="{{ asset('storage/' . $profile->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="profile-image">
-                @endif
-                <div class="profile-details">
-                    <p><strong>Tentang Kami:</strong> {!! preg_replace('/<p>|<\/p>/', '', $profile->tentang_kami) !!}</p>
-                    <p><strong>Visi:</strong> {!! preg_replace('/<p>|<\/p>/', '', $profile->visi) !!}</p>
-                    <p><strong>Misi:</strong> {!! preg_replace('/<p>|<\/p>/', '', $profile->misi) !!}</p>
-                </div>
-            </div>
-        @endforeach
     </div>
 </div>
 

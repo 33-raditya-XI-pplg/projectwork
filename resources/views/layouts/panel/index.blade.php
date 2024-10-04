@@ -87,7 +87,7 @@
                         @elseif (in_array($menu,
                                     [
                                         'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat',
-                                        'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user','uploadPembayaran-user','uploadPembayaran','laporanperkembangan','add-student'
+                                        'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user','uploadPembayaran-user','uploadPembayaran','laporanperkembangan','add-student','detail partner'
                                     ]
                                 )
                             )                            

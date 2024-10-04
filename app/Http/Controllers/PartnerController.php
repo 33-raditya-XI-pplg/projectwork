@@ -55,7 +55,7 @@ class PartnerController extends Controller
             'page_id' => 'required|exists:tb_page,id_page',
             'nama_partner' => 'required|string|max:255',
             'email_partner' => 'required|email|max:255|unique:tb_partner,email_partner',
-            'telepon_partner' => 'required|string|max:20',
+            'telepon_partner' => 'required|digits:12',
             'alamat_partner' => 'required|string|max:255',
             'jenis_partner' => 'required|string|max:50',
             'tanggal_bergabung' => 'required|date',
@@ -107,8 +107,7 @@ class PartnerController extends Controller
     public function show($id)
     {
         $partner = Partner::findOrFail($id);
-
-        return view('partners.show', compact('partner'));
+        return view('admin.partner.show', compact('partner'));
     }
 
     /**
@@ -128,18 +127,18 @@ class PartnerController extends Controller
     public function update(Request $request, $id)
     {
 
-        $validatedData = $request->validate([
-            'page_id' => 'required|exists:tb_page,id_page',
-            'nama_partner' => 'required|string|max:100',
-            'email_partner' => 'required|email|max:100|unique:tb_partner,email_partner,' . $id . ',id_partner',
-            'telepon_partner' => 'nullable|string|max:20',
-            'alamat_partner' => 'nullable|string|max:255',
-            'jenis_partner' => 'nullable|string|max:50',
-            'tanggal_bergabung' => 'nullable|date',
-            'website_partner' => 'nullable|url|max:255',
-            'status_partner' => 'nullable',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
+    $validatedData = $request->validate([
+        'page_id' => 'required|exists:tb_page,id_page',
+        'nama_partner' => 'required|string|max:100',
+        'email_partner' => 'required|email|max:100|unique:tb_partner,email_partner,' . $id . ',id_partner',
+        'telepon_partner' => 'nullable|string|max:20',
+        'alamat_partner' => 'nullable|string|max:255',
+        'jenis_partner' => 'nullable|string|max:50',
+        'tanggal_bergabung' => 'nullable|date',
+        'website_partner' => 'nullable|url|max:255',
+        'status_partner' => 'nullable',
+        'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
 
 
         $statusPartner = $request->has('status_partner') && $request->input('status_partner') === 'on';
@@ -193,5 +192,5 @@ class PartnerController extends Controller
 
         return redirect()->route('partner.index');
     }
-
 }
+
