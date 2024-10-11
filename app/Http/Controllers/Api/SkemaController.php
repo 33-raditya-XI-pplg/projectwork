@@ -31,7 +31,7 @@ class SkemaController extends Controller
             'path_icon' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:2048', // Ensure the file is an image
             'daftar_sub_skema' => 'nullable|array', // Array of sub-skema titles
             'daftar_sub_skema.*' => 'string', // Validate each sub-skema as a string
-            'page_id' => 'nullable|integer|exists:pages,id_page', // Foreign key check if page exists
+            'page_id' => 'required|integer|exists:tb_page,id_page', // Foreign key check if page exists
         ]);
         $path_icon = null;
         if ($request->hasFile('path_icon')) {
@@ -86,7 +86,7 @@ class SkemaController extends Controller
             'path_icon' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:2048',
             'daftar_sub_skema' => 'nullable|array',
             'daftar_sub_skema.*' => 'string',
-            'page_id' => 'nullable|integer|exists:pages,id_page',
+            'page_id' => 'required|integer|exists:tb_page,id_page',
         ]);
 
 
