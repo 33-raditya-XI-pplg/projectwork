@@ -12,9 +12,26 @@ class InstansiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $instansi = Instansi::with('pageInstansi')->get();
+        $pageId = $request->input('page_id');
+
+        $instansi = Instansi::with('pageInstansi')
+            ->when($pageId, function ($query, $pageId) {
+                return $query->whereHas('pageInstansi', function ($query) use ($pageId) {
+                    $query->where('page_id', $pageId);
+                });
+            })
+            ->get();
+
+        // $instansi = Instansi::with('pageInstansi')->get();
+
+        if ($instansi->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan untuk page_id yang dimasukan.'
+            ], 404);
+        }
 
         return response()->json([
             'status' => true,

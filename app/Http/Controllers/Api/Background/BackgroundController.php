@@ -12,9 +12,25 @@ class BackgroundController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $background = Background::with('pageBackground')->get();
+        $pageId = $request->input('page_id');
+
+        $background = Background::with('pageBackground')
+            ->when($pageId, function ($query, $pageId) {
+                return $query->whereHas('pageBackground', function ($query) use ($pageId) {
+                    $query->where('page_id', $pageId);
+                });
+            })
+            ->get();
+        // $background = Background::with('pageBackground')->get();
+
+        if ($background->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan untuk page_id yang dimasukan.'
+            ], 404);
+        }
 
         return response()->json([
             'status' => true,

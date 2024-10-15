@@ -24,7 +24,7 @@ class SkemaController extends Controller
 
         return response()->json(['skema' => $data], 200, [], JSON_PRETTY_PRINT);
     }
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'nama_skema' => 'required|string|max:255',
@@ -82,11 +82,11 @@ class SkemaController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'nama_skema' => 'required|string|max:255',
+            'nama_skema' => 'sometimes|string|max:255',
             'path_icon' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:2048',
             'daftar_sub_skema' => 'nullable|array',
             'daftar_sub_skema.*' => 'string',
-            'page_id' => 'required|integer|exists:tb_page,id_page',
+            'page_id' => 'nullable|integer|exists:tb_page,id_page',
         ]);
 
 
@@ -104,11 +104,16 @@ class SkemaController extends Controller
         }
 
 
-        $skema->update([
-            'nama_skema' => $validatedData['nama_skema'],
+        $updateData = [
             'path_icon' => $skema->path_icon,
             'page_id' => $request->page_id,
-        ]);
+        ];
+
+        if ($request->has('nama_skema')) {
+            $updateData['nama_skema'] = $validatedData['nama_skema'];
+        }
+
+        $skema->update($updateData);
 
         if (isset($validatedData['daftar_sub_skema'])) {
             $skema->skemaSub_Skema()->delete();
@@ -119,6 +124,7 @@ class SkemaController extends Controller
                 ]);
             }
         }
+
 
         return response()->json([
             'status' => true,

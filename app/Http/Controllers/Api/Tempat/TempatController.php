@@ -17,12 +17,14 @@ class TempatController extends Controller
         $pageId = $request->input('page_id');
 
         $tempat = Tempat::with('pageTempat')
-            ->whereHas('pageTempat', function ($query) use ($pageId) {
-                if ($pageId) {
+            ->when($pageId, function ($query, $pageId) {
+                return $query->whereHas('pageTempat', function ($query) use ($pageId) {
                     $query->where('page_id', $pageId);
-                }
+                });
             })
             ->get();
+
+        // $tempat = Tempat::with('pageTempat')->get();
 
         return response()->json([
             'status' => true,

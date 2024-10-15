@@ -11,9 +11,25 @@ class JenisEventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jenisevt = Jenis_Event::with('pageJenisEvt')->get();
+        $pageId = $request->input('page_id');
+
+        $jenisevt = Jenis_Event::with('pageJenisEvt')
+            ->when($pageId, function ($query, $pageId) {
+                return $query->whereHas('pageJenisEvt', function ($query) use ($pageId) {
+                    $query->where('page_id', $pageId);
+                });
+            })
+            ->get();
+        // $jenisevt = Jenis_Event::with('pageJenisEvt')->get();
+
+        if ($jenisevt->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan untuk page_id yang dimasukan.'
+            ], 404);
+        }
 
         return response()->json([
             'status' => true,

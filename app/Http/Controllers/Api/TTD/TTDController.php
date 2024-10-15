@@ -12,9 +12,25 @@ class TTDController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $ttd = Ttd::with('pagettd', 'ttdInstansi')->get();
+        $pageId = $request->input('page_id');
+
+        $ttd = Ttd::with('pagettd', 'ttdInstansi')
+            ->when($pageId, function ($query, $pageId) {
+                return $query->whereHas('pagettd', function ($query) use ($pageId) {
+                    $query->where('page_id', $pageId);
+                });
+            })
+            ->get();
+
+        // $ttd = Ttd::with('pagettd', 'ttdInstansi')->get();
+        if ($ttd->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan untuk page_id yang dimasukan.'
+            ], 404);
+        }
 
         return response()->json([
             'status' => true,

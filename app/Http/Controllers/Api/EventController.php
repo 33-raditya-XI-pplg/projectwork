@@ -136,12 +136,13 @@ class EventController extends Controller
             ], 404);
         }
 
+
         // Define validation rules
         $rules = [
-            'instansi_id' => 'required|integer|exists:tb_instansi,id_instansi',
-            'tempat_id' => 'required|integer|exists:tb_tempat,id_tempat',
-            'jenis_event_id' => 'required|integer|exists:tb_jenis_event,id_jenis_event',
-            'page_id' => 'required|integer|exists:tb_page,id_page',
+            'instansi_id' => 'nullable|integer|exists:tb_instansi,id_instansi',
+            'tempat_id' => 'nullable|integer|exists:tb_tempat,id_tempat',
+            'jenis_event_id' => 'nullable|integer|exists:tb_jenis_event,id_jenis_event',
+            'page_id' => 'nullable|integer|exists:tb_page,id_page',
             'nama_event' => 'nullable|string|max:255',
             'tgl_mulai' => 'nullable|date',
             'tgl_berakhir' => 'nullable|date|after_or_equal:tgl_mulai',
@@ -164,9 +165,11 @@ class EventController extends Controller
             ], 422);
         }
 
+        // dd($request->all());
         // Update the event record
         $event->update($request->all());
 
+        // dd($event);
         return response()->json([
             'status' => true,
             'message' => 'Event updated successfully',

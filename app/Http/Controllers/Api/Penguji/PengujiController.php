@@ -11,9 +11,26 @@ class PengujiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $penguji = User::where('level', 'penguji')->with('pageuser')->get();
+        $pageId = $request->input('page_id');
+
+        $penguji = User::where('level', 'penguji')->with('pageuser')
+            ->when($pageId, function ($query, $pageId) {
+                return $query->whereHas('pageuser', function ($query) use ($pageId) {
+                    $query->where('page_id', $pageId);
+                });
+            })
+            ->get();
+
+        // $penguji = User::where('level', 'penguji')->with('pageuser')->get();
+
+        if ($penguji->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Data tidak ditemukan untuk page_id yang dimasukan.'
+            ], 404);
+        }
 
         return response()->json([
             'status' => true,
