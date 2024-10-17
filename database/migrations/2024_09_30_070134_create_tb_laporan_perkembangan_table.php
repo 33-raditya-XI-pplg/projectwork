@@ -12,13 +12,15 @@ return new class extends Migration {
     {
         Schema::create('tb_laporan_perkembangan', function (Blueprint $table) {
             $table->id('id_laporan_perkembangan');
-            // Fields
-            $table->string('nama_peserta');
-            $table->date('tanggal_penilaian');
+
             // Foreign Keys
             $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')->cascadeOnDelete();
-            $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema')->cascadeOnDelete();
+            // $table->foreignId('sub_skema_id')->constrained('tb_sub_skema', 'id_sub_skema')->cascadeOnDelete();
             $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta')->cascadeOnDelete();
+
+            // Fields
+            $table->date('tanggal_penilaian');
+            $table->text('catatan');
 
             // Metadata
             $table->integer('created_by')->nullable();
