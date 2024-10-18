@@ -66,6 +66,9 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
     Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 
     Route::resource('uploadPembayaran-user', UploadPembayaranController::class);
+
+
+
     //profile
     Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names(['profile-user', 'profile-user.update']);
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
@@ -185,13 +188,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
         Route::put('/admin/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
 
-       // Profile perusahaan
-Route::get('/profil/rincian/{id}', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
-Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
-Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
-Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
-Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->name('profil.destroy');
- 
+        // Profile perusahaan
+        Route::get('/profil/rincian/{id}', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
+        Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
+        Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
+        Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
+        Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->name('profil.destroy');
+
         // Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
         // Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
         // // Correct route for updating blogkategori
@@ -232,13 +235,16 @@ Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->n
     Route::get('/peserta/instansi/{instansi}/event-skema/{skema}', [EventSkemaController::class, 'search'])->name('getPeserta');
 
 });
+Route::get('/getSkema/{id_event}', [UploadPembayaranController::class, 'getSkema']);
 
 // AJAX Request -- Menu Laporan 
 Route::get('/laporanperkembangan/fetchEventData/{id}', [LaporanPerkembanganController::class, 'fetchEventData']);
 Route::get('laporanperkembangan/fetchSkemaData/{id}', [LaporanperkembanganController::class, 'fetchSkemaData']);
 Route::get('laporanperkembangan/fetchPesertaData/{id}', [LaporanperkembanganController::class, 'fetchPesertaData']);
-Route::get('laporanperkembangan/fetchNilaiData/{id}', [LaporanperkembanganController::class, 'fetchNilaiData']);
-Route::get('laporanperkembangan/fetchInisialData', [LaporanperkembanganController::class, 'fetchInisialData']);
+Route::post('laporanperkembangan/storeNilaiData/{id}', [LaporanperkembanganController::class, 'storeNilaiData']);
+Route::get('laporanperkembangan/fetchLaporanData/{id}', [LaporanperkembanganController::class, 'fetchLaporanData']);
+Route::post('/laporanperkembangan/updateLaporan/{id}', [LaporanPerkembanganController::class, 'update']);
+Route::delete('/laporanperkembangan/destroyLaporanData/{id}', [LaporanPerkembanganController::class, 'destroyLaporanData']);
 // AJAX Request -- Menu Penilaian
 Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchEventData']);
 Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);

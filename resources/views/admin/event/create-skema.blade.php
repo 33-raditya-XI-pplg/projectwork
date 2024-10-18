@@ -13,8 +13,8 @@
           <input type="hidden" name="event_id" value="{{ request()->route('event') }}">
           <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
           <label for="exampleInputEmail1" class="form-label">Skema</label>
-          <select class="form-select chosen-select" name="skema_id" required>
-            <option value="0" selected>Open this select menu</option>
+          <select class="form-select js-example-basic-single" name="skema_id" data-placeholder="Open this select menu" required>
+            <option value="" selected></option>
             @foreach ($skema as $list)
             <option value="{{ $list->id_skema }}">{{ $list->nama_skema }}</option>
             @endforeach
@@ -22,8 +22,8 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Background</label>
-          <select class="form-select chosen-select" name="background_id" required>
-            <option value="0" selected>Open this select menu</option>
+          <select class="form-select js-example-basic-single" name="background_id" required data-placeholder="Open this select menu">
+            <option value="" selected></option>
             @foreach ($bg as $list)
             <option value="{{ $list->id_background }}">{{ $list->nama_bg }}</option>
             @endforeach
@@ -47,12 +47,12 @@
         </div>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label">Rentang Nilai</label>
-          <select class="form-select chosen-select" name="nama_konversi_nilai">
-            <option value="0" selected>Open this select menu</option>
+          <select class="form-select js-example-basic-single" name="nama_konversi_nilai" data-placeholder="Open this select menu" required>
+            <option value="" selected></option>
             @foreach ($rn as $list)
-            <option >{{ $list }}</option>
+                <option value="{{ $list }}">{{ $list }}</option>
             @endforeach
-          </select>
+        </select>
         </div>
         <div class="mb-3 d-flex justify-content-between">
           <a class="btn btn-danger rounded" href="{{ route('event.rincian', $id) }}">Kembali</a>
@@ -63,6 +63,18 @@
 
 @push('script')
   <script>
+      $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    
     $(".chosen-select").chosen()
   </script>
 @endpush

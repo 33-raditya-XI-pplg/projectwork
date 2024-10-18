@@ -58,19 +58,19 @@
                 <div class="col-sm-8">
                         <div class="row">
                             <div class="col-10 pt-2">
-                                <h3 class="mb-3 profile-text">{{ $data->nama_lengkap   }}</h3>
-                                <h5><i class="fa-solid fa-id-badge"></i>&emsp;&nbsp;{{ $data->level   }}</h5>
-                                <h5><i class="fa-regular fa-envelope"></i>&emsp;{{ $data->email  }}</h5>
-                                <h5><i class="fa-solid fa-location-dot"></i>&emsp;&nbsp;{{ $data->alamat ?? 'Tidak tersedia' }} - {{ $data->alamat_kota ?? 'Tidak tersedia' }}</h5>
-                                <h5><i class="fa-solid fa-phone"></i>&emsp;{{ $data->no_telp ?? 'Tidak tersedia' }}</h5>
+                                <h3 class="mb-3 profile-text" style="font-size:1.5rem;">{{ $data->nama_lengkap   }}</h3>
+                                <h5><i class="fa-solid fa-id-badge" style="font-size:1.5rem;"></i>&emsp;&nbsp;{{ $data->level   }}</h5>
+                                <h5><i class="fa-regular fa-envelope" style="font-size:1.5rem;"></i>&emsp;{{ $data->email  }}</h5>
+                                <h5><i class="fa-solid fa-location-dot" style="font-size:1.5rem;"></i>&emsp;&nbsp;{{ $data->alamat ?? 'Tidak tersedia' }} - {{ $data->alamat_kota ?? 'Tidak tersedia' }}</h5>
+                                <h5><i class="fa-solid fa-phone" style="font-size:1.5rem;"></i>&emsp;{{ $data->no_telp ?? 'Tidak tersedia' }}</h5>
                             </div>
                         <div class="col-2 text-end">
                             @if(Auth::user()->level == 'Admin')
-                                <a href="{{ route('profile.edit') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="{{ route('profile.edit') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i></a>
                             @elseif(Auth::user()->level == 'Pengguna')
-                                <a href="{{ route('profile.edit-user') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>                        
+                                <a href="{{ route('profile.edit-user') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i></a>                        
                             @elseif(Auth::user()->level == 'Penguji')
-                                <a href="{{ route('profile.edit-penguji') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="{{ route('profile.edit-penguji') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i></a>
                             @endif
                         </div>
                     </div>

@@ -35,16 +35,23 @@ class ProfileController extends Controller
     {
         $id = Auth::user()->id_user;
         $instansi = Instansi::get();
+        $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $user = User::findOrFail($id);
         $regencies = DB::table('regencies')->pluck('name', 'id');
         $Title = 'Edit Profile';
-        return view('profile.edit', compact('user', 'regencies', 'instansi', 'Title'));
+        return view('profile.edit', compact('user', 'regencies', 'institutions', 'instansi', 'Title'));
     }
 
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+
+        $nama_sekolah = DB::table('tb_instansi')
+            ->where('id_instansi', $request->instansi_id)
+            ->value('nama_instansi');
+
         $data = $request->all();
+        $data['nama_sekolah'] = $nama_sekolah;
 
         if ($request->has('path_foto')) {
 

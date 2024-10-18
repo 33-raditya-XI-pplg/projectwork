@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\kemampuan_dasar;
 use App\Models\LaporanPerkembangan;
 use App\Models\Event_Skema;
 use App\Models\Sub_Skema;
 use App\Models\User;
+use Carbon\Carbon;
+use Log;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,9 +18,11 @@ class LaporanPerkembanganController extends Controller
     public function index()
     {
         $events = Event::all(); // Ganti nama variabel ke $events
+        // $laporan = LaporanPerkembangan::all();
+        $kemampuan = kemampuan_dasar::all();
         $Title = 'Laporan Perkembangan';
         confirmDelete('Hapus Laporan Perkembangan', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.laporanperkembangan.index', compact('events', 'Title')); // Kirim $events ke view
+        return view('admin.laporanperkembangan.index', compact('events', 'Title', 'kemampuan', )); // Kirim $events ke view
     }
 
 
@@ -35,6 +40,10 @@ class LaporanPerkembanganController extends Controller
 
     public function fetchSkemaData($id)
     {
+
+        if (!$id) {
+            return response()->json(['message' => 'ID tidak ditemukan'], 400);
+        }
         // Ambil data skema
         $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
             ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
@@ -75,41 +84,20 @@ class LaporanPerkembanganController extends Controller
             ->where('tb_event_skema.skema_id', $id)
             ->get();
 
-        // $data_peserta = DB::table('tb_peserta')
-        //     ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-        //     ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-        //     ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-        //     ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
-        //     ->select('tb_peserta.id_peserta', 'tb_user.nama_lengkap', 'tb_event.tgl_berakhir')
-        //     ->get();
-
+        // Ambil hanya id_event_skema dan id_peserta
         $data_peserta = DB::table('tb_peserta')
             ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
             ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->leftJoin('tb_laporan_perkembangan', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->leftJoin('tb_laporan_perkembangan', 'tb_peserta.id_peserta', '=', 'tb_laporan_perkembangan.peserta_id')
             ->select(
-                'tb_peserta.id_peserta',
+                'tb_peserta.id_peserta',  // id_peserta
                 'tb_user.nama_lengkap',
-                'tb_event.tgl_berakhir',
+                'tb_event_skema.id_event_skema', // id_event_skema
                 'tb_laporan_perkembangan.catatan',
+                'tb_laporan_perkembangan.tanggal_penilaian',
             )
             ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
             ->get();
-
-        // // Ambil data laporan perkembangan
-        // $data_laporan_perkembangan = DB::table('tb_laporan_perkembangan')
-        //     ->leftJoin('tb_peserta', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
-        //     ->leftJoin('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-        //     ->where('tb_laporan_perkembangan.event_skema_id', $data_skema->id_event_skema)
-        //     ->select(
-        //         'tb_laporan_perkembangan.id',
-        //         'tb_laporan_perkembangan.catatan',
-        //         'tb_user.nama_lengkap',
-        //     )
-        //     ->get();
-
-
 
         // Ambil jumlah sub skema per event
         $jumlahSubSkemaPerEvent = DB::table('tb_event_skema')
@@ -128,35 +116,63 @@ class LaporanPerkembanganController extends Controller
             'data_skema' => $data_skema,
             'data_penguji' => $data_penguji,
             'data_sub_skema' => $data_sub_skema,
-            // 'data_laporan_perkembangan' => $data_laporan_perkembangan,
             'data_peserta' => $data_peserta,
             'jumlahSubSkemaPerEvent' => $jumlahSubSkemaPerEvent
         ]);
     }
 
 
+
     public function fetchPesertaData($id)
     {
         $data_peserta = DB::table('tb_peserta')
             ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-            ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap')
+            ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap', 'tb_peserta.event_skema_id')
             ->where('tb_peserta.id_peserta', $id)
             ->first();
 
         return response()->json([
-            'data_peserta' => $data_peserta
+            'data_peserta' => $data_peserta,
+
         ]);
     }
 
-    public function fetchLaporanData($id)
+    public function fetchLaporanData($pesertaID)
     {
-        $data_laporan = LaporanPerkembangan::with(['user', 'subSkema', 'eventSkema'])
-            ->where('id', $id)
+        $laporan = DB::table('tb_laporan_perkembangan')
+            ->join('tb_peserta', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
+            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+            ->select(
+                'tb_laporan_perkembangan.id_laporan_perkembangan',
+                'tb_laporan_perkembangan.event_skema_id',
+                'tb_laporan_perkembangan.sub_skema_id',
+                'tb_laporan_perkembangan.peserta_id',
+                'tb_laporan_perkembangan.tanggal_penilaian',
+                'tb_laporan_perkembangan.catatan',
+                'tb_laporan_perkembangan.pengalaman_anak',
+                // 'tb_laporan_perkembangan.kemampuan_dasar',
+                'tb_laporan_perkembangan.peralatan_penunjang',
+                'tb_laporan_perkembangan.saran',
+                'tb_user.nama_lengkap'
+            )
+            ->where('tb_laporan_perkembangan.peserta_id', $pesertaID)
             ->first();
 
-        return response()->json([
-            'data_laporan' => $data_laporan
-        ]);
+        $kemampuan = DB::table('tb_kemampuan_dasar')
+            ->where('laporan_perkembangan_id', $laporan->id_laporan_perkembangan)
+            ->get();
+
+
+        if ($laporan) {
+            return response()->json([
+                'data_laporan' => $laporan,
+                'data_kemampuan_dasar' => $kemampuan,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Laporan tidak ditemukan'
+            ], 404);
+        }
 
     }
 
@@ -165,28 +181,52 @@ class LaporanPerkembanganController extends Controller
         return view('admin.laporanperkembangan.create');
     }
 
-    public function store(Request $request)
+    public function storeNilaiData(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'event_skema_id' => 'required|exists:tb_event_skema,id_event_skema',
-            'sub_skema_id' => 'required|exists:tb_sub_skema,id_sub_skema',
-            'catatan' => 'required|string',
-            'tanggal' => 'required|date',
+            'event_skema_id' => 'required|integer',
+            'pesertaID' => 'required|integer',
+            'pengalaman_anak' => 'required|string',
+            // 'kemampuan_dasar' => 'nullable|array',
+            'peralatan_penunjang' => 'required|string',
+            'saran' => 'required|string',
+            // 'keterangan' => 'nullable|array',
+            // 'keterangan.*' => 'in:kurang,cukup,baik,sangat baik',
+            // 'catatan' => 'required|string',    
         ]);
 
         DB::beginTransaction();
 
         try {
-            LaporanPerkembangan::create([
+            $laporan = LaporanPerkembangan::create([
                 'event_skema_id' => $validatedData['event_skema_id'],
-                'sub_skema_id' => $validatedData['sub_skema_id'],
-                'catatan' => $validatedData['catatan'],
-                'tanggal' => $validatedData['tanggal'],
+                'peserta_id' => $validatedData['pesertaID'],
+                'pengalaman_anak' => $validatedData['pengalaman_anak'],
+                // 'kemampuan_dasar' => $validatedData['kemampuan_dasar'],
+                'peralatan_penunjang' => $validatedData['peralatan_penunjang'],
+                'saran' => $validatedData['saran'],
+                'tanggal_penilaian' => Carbon::now(),
                 'created_by' => auth()->user()->id,
                 'updated_by' => auth()->user()->id,
             ]);
 
+            if ($request->has('kemampuan_dasar') && $request->has('keterangan')) {
+                foreach ($request->kemampuan_dasar as $index => $kemampuan) {
+                    kemampuan_dasar::create([
+                        'laporan_perkembangan_id' => $laporan->id_laporan_perkembangan,
+                        'kemampuan_dasar' => $kemampuan,
+                        'keterangan' => $request->keterangan[$index],
+                    ]);
+                }
+
+                $counts = array_count_values($request->keterangan);
+                $mostFrequentKeterangan = array_search(max($counts), $counts);
+
+                $laporan->update(['catatan' => $mostFrequentKeterangan]);
+            }
+
             DB::commit();
+            // dd($request->all());
             return response()->json(['success' => true, 'message' => 'Laporan perkembangan berhasil disimpan']);
         } catch (\Exception $e) {
             DB::rollback();
@@ -194,16 +234,89 @@ class LaporanPerkembanganController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function update(Request $request, $pesertaID)
     {
-        $id = $request->id;
-
         try {
-            LaporanPerkembangan::where('id', $id)->delete();
+            $request->validate([
+                'pengalaman_anak' => 'required',
+                'kemampuan_dasar' => 'nullable|array',
+                'kemampuan_dasar.*.kemampuan_dasar' => 'required|string',
+                'kemampuan_dasar.*.id' => 'required|exists:tb_kemampuan_dasar,id_kemampuan_dasar', // Validate IDs
+                'peralatan_penunjang' => 'required',
+                'saran' => 'required',
+            ]);
 
-            return response()->json(['message' => 'Laporan perkembangan berhasil dihapus'], 200);
+            $laporan = LaporanPerkembangan::where('peserta_id', $pesertaID)->first();
+
+            if (!$laporan) {
+                return response()->json(['status' => 'error', 'message' => 'Data tidak ditemukan.'], 404);
+            }
+
+            $laporan->update([
+                'pengalaman_anak' => $request->pengalaman_anak,
+                'peralatan_penunjang' => $request->peralatan_penunjang,
+                'saran' => $request->saran,
+            ]);
+
+            if (is_array($request->kemampuan_dasar)) {
+                $count = [];
+                foreach ($request->kemampuan_dasar as $item) {
+                    // Assuming you want to update existing entries
+                    $kemampuan = Kemampuan_dasar::find($item['id']);
+                    if ($kemampuan) {
+                        $kemampuan->update([
+                            'kemampuan_dasar' => $item['kemampuan_dasar'],
+                            'keterangan' => $item['keterangan'],
+                        ]);
+
+                        if (isset($item['keterangan'])) {
+                            $counts[] = $item['keterangan'];
+                        }
+                    }
+                }
+                if (!empty($counts)) {
+                    $mostFrequentKeterangan = array_count_values($counts);
+                    $mostFrequentKeterangan = array_search(max($mostFrequentKeterangan), $mostFrequentKeterangan);
+
+                    $laporan->update(['catatan' => $mostFrequentKeterangan]);
+                }
+            }
+
+            Log::info($request->all());
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Laporan berhasil diupdate'
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat menghapus laporan perkembangan'], 500);
+            Log::error('Kesalahan saat mengupdate laporan: ' . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
+
+
+    public function destroyLaporanData(Request $request, $pesertaID)
+    {
+        Log::info('Menghapus data dengan pesertaID: ' . $pesertaID);
+
+        try {
+            // Memeriksa data sebelum menghapus
+            $laporan = LaporanPerkembangan::where('peserta_id', $pesertaID)->first();
+            if (!$laporan) {
+                return response()->json(['message' => 'Data tidak ditemukan'], 404);
+            }
+
+            $deletedRows = $laporan->delete(); // Memanggil metode delete pada model
+
+            if ($deletedRows) {
+                return response()->json(['message' => 'Laporan perkembangan berhasil dihapus'], 200);
+            } else {
+                return response()->json(['message' => 'Gagal menghapus data'], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('Kesalahan saat menghapus laporan: ' . $e->getMessage());
+            return response()->json(['message' => 'Terjadi kesalahan saat menghapus laporan perkembangan: ' . $e->getMessage()], 500);
+        }
+    }
+
 }

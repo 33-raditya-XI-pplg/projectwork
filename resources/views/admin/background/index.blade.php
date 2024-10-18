@@ -101,7 +101,7 @@
                                                 <i class="glyphicon glyphicon-download-alt"></i>
                                                 <p>Pilih gambar atau seret ke sini .</p>
                                             </div>
-                                            <input type="file" name="path_bg" class="dropzone" id="path_bg" accept="image/*" required>
+                                            <input type="file" name="path_bg" class="dropzone"  accept="image/*" required>
                                             <div id="image_preview_" class="mt-3">
                                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                             </div>
@@ -300,35 +300,62 @@
     @endforeach
     
     <script>    
-        document.getElementById('path_bg').addEventListener('change', function(event) {
+        document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi preview image
+        const inputFile = document.querySelector('input[name="path_bg"]');
         const preview = document.getElementById('preview_image_create');
-        const file = event.target.files[0];
-        const reader = new FileReader();
 
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block'; // Show the image preview
-        }
 
-        if (file) {
-            reader.readAsDataURL(file);
+        if (preview) {
+        preview.style.display = 'none';
+
+        inputFile.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                if (preview) { // Cek apakah preview tidak null
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                } else {
+                    console.error('Preview element not found');
+                }
+            }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    if (preview) {
+                        preview.src = '';
+                        preview.style.display = 'none';
+                    }
+                }
+            });
         } else {
-            preview.src = '';
-            preview.style.display = 'none'; // Hide the image if no file selected
+            console.error('Preview image element not found');
         }
-    });
+    
 
-            Dropzone.options.path_file = {
+        // Inisialisasi Dropzone
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone-wrapper", {
+            url: "/background", // URL server untuk unggahan
             maxFilesize: 2, 
-            acceptedFiles: "image/*", 
+            acceptedFiles: "image/*",
             init: function() {
                 this.on("success", function(file, response) {                    
+                    // Tangani response sukses
+                    console.log("Upload successful");
                 });
                 this.on("error", function(file, response) {
-                    document.getElementById('image_error').innerHTML = response.message;
+                    const errorElement = document.getElementById('image_error');
+                    if (errorElement) {
+                        errorElement.innerHTML = response.message || 'Upload failed';
+                    }
                 });
-              }
-            };   
+            }
+        });   
+    });   
 </script> 
 <script>
   document.querySelectorAll('[id^="path_bg"]').forEach(input => {

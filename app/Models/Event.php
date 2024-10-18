@@ -12,6 +12,22 @@ class Event extends Model
     protected $primaryKey = 'id_event';
     protected $guarded = ['id_event'];
 
+    protected $fillable = [
+        'instansi_id',
+        'tempat_id',
+        'jenis_event_id',
+        'page_id', // Make sure this is included
+        'nama_event',
+        'tgl_mulai',
+        'tgl_berakhir',
+        'biaya_regis',
+        'path_banner',
+        'deskripsi',
+        'status',
+        'visibilitas',
+        'updated_by'
+    ];
+
     public function eventEvent_Skema() // PK One-to-Many dengan tb_event_skema
     {
         // return $this->hasMany(Event_Skema::class, 'event_skema_id', 'id_event_skema');
@@ -31,7 +47,7 @@ class Event extends Model
     }
     public function eventPage()
     {
-        return $this->belongsTo(Page::class, 'page_id');
+        return $this->belongsTo(Page::class, 'page_id', 'id_page');
     }
 
     public function skema()

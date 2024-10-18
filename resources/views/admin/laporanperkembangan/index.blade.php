@@ -8,16 +8,16 @@
 
         <div class="d-flex flex-row mx-2">
             <div class="card-header me-2 w-100 mx-1">
-                <select id="event_select" name="event_select" class="chosen-select form-control">
-                    <option hidden disabled selected>Pilih Event</option>
+                <select id="event_select" name="event_select" class=" form-control js-example-basic-single" data-placeholder="Pilih Event">
+                    <option hidden disabled selected> </option>
                     @foreach ($events as $event)
                         <option value="{{ $event->id_event }}">{{ $event->nama_event }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="card-header me-2 w-100 mx-1">
-                <select id="skema_select" name="skema_select" class="chosen-select form-control">
-                    <option hidden disabled selected>Pilih Event Dahulu</option>
+                <select id="skema_select" name="skema_select" class="form-control js-example-basic-single" data-placeholder="Pilih Event Dahulu">
+                    <option hidden disabled selected></option>
                 </select>
             </div>
             <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1" disabled>Submit</button>
@@ -111,37 +111,65 @@
 </div>
 
 <!-- Create -- Laporan Modal -->
-<div class="modal fade" id="createLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Modal Large -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Laporan Perkembangan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="created_by" value="{{ Auth::user()->id }}">
-                <div class="mb-3">
-                    <label for="create_nama_peserta" class="form-label">Nama Peserta</label>
-                    <input type="text" class="form-control" id="create_nama_peserta">
+    <div class="modal fade" id="createLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- Modal Large -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Laporan Perkembangan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mb-3">
-                    <label for="create_nama_skema" class="form-label">Skema</label>
-                    <input type="text" class="form-control mb-4" id="create_nama_skema">
-                </div>
-                <label for="create_nama_sub_skema" class="form-label">Sub-Skema</label>
-                <div class="form-group" id="create-nilai-sub-skema-wrapper">
-                    <div class="input-group mb-3 nilai-sub-skema">
-                        <!-- Input dinamis -- Ajax Request -->
+                <div class="modal-body">
+                    <input type="hidden" id="created_by" value="{{ Auth::user()->id }}">
+                    <div class="mb-3">
+                        <label for="create_nama_peserta" class="form-label">Nama Peserta</label>
+                        <input type="text" class="form-control" id="create_nama_peserta" readonly disabled>
+                        <input type="hidden" id="peserta_id" value="">
+                        <input type="hidden" id="event_skema_id" name="event_skema_id" value="">
                     </div>
+                    <div>
+                        <label class="form-label" for="pengalaman_anak">Pengalaman anak di dunia komputer</label>
+                        <textarea class="form-control " name="pengalaman_anak" id="pengalaman_anak" rows="2"></textarea>
+                    </div>
+                    <div class="form-group kemampuan-wrapper-create mb-3 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <label class="form-label">Kemampuan Dasar</label>
+                            <button type="button" class="btn btn-primary btn-sm rounded mb-2" id="addKemampuanCreate">Tambah kemampuan Dasar</button>
+                        </div>
+
+                        <div id="empty-input-message" class="alert alert-info" role="alert" style="display: show;">
+                            <h6 class="mx-3 mt-2">Tambah Kemampuan Dasar</h6>
+                        </div>
+
+                        <div class="input-group mb-3 kemampuan_dasar-input-create">
+                            <!-- Input Dinamis -->
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label" for="">Peralatan penunjang</label>
+                        <textarea class="form-control " name="peralatan_penunjang" id="peralatan_penunjang" rows="2"></textarea>
+                    </div>
+                    <div>
+                        <label class="form-label" for="">Saran</label>
+                        <textarea class="form-control " name="saran" id="saran" rows="2"></textarea>
+                    </div>
+                    {{-- <div class="mb-3">
+                        <label for="create_nama_skema" class="form-label">Skema</label>
+                        <input type="text" class="form-control mb-4" id="create_nama_skema">
+                    </div>
+                    <label for="create_nama_sub_skema" class="form-label">Sub-Skema</label>
+                    <div class="form-group" id="create-nilai-sub-skema-wrapper">
+                        <div class="input-group mb-3 nilai-sub-skema">
+                            <!-- Input dinamis -- Ajax Request -->
+                        </div>
+                    </div> --}}
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white" id="store_laporan_btn" value="1">Tambah</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success rounded-3 text-white" id="store_laporan_btn" value="1">Tambah</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <!-- Edit -- Laporan Modal -->
 <div class="modal fade" id="editLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -152,12 +180,54 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="edit_id">
+                <input type="hidden" id="edite_id" value="">
                 <div class="mb-3">
                     <label for="edit_nama_peserta" class="form-label">Nama Peserta</label>
-                    <input type="text" class="form-control" id="edit_nama_peserta">
+                    <input type="text" class="form-control" id="edit_nama_peserta" readonly disabled>
                 </div>
-                <div class="mb-3">
+                <div>
+                    <label class="form-label" for="pengalaman_anak">Pengalaman anak di dunia komputer</label>
+                    <textarea class="form-control " name="pengalaman_anak" id="edit_pengalaman_anak" rows="2" hidden></textarea>
+                </div>
+                <div class="form-group kemampuan-wrapper-edit mb-3 mt-3">
+                    <div class="d-flex justify-content-between">
+                        <label class="form-label">Kemampuan Dasar</label>
+                            <button type="button" class="btn btn-primary btn-sm rounded mb-2" id="addKemampuanEdit">Tambah Kemampuan Dasar</button>
+                    </div>                                     
+                    @if(isset($kemampuan) && !$kemampuan->isEmpty())
+                        @foreach ($kemampuan as $row)
+                        <div class="input-group mb-3 kemampuan_dasar-input-edit">
+                            <input type="hidden" name="kemampuan_dasar_ids[]" value="{{ $row->id_kemampuan_dasar }}">
+                            <input type="text" class="form-control" name="edit_kemampuan_dasar[{{ $row->id_kemampuan_dasar }}]" value="{{ $row->kemampuan_dasar }}" 
+                                placeholder="Kemampuan Dasar" required>
+                                <select class="form-control" name="edit_keterangan[{{ $row->id_kemampuan_dasar }}]" required style="max-width: 120px; background-color: #d1ecf1;">
+                                    <option value="" disabled>Pilih Keterangan</option>
+                                    <option value="kurang" {{ $row->keterangan == 'kurang' ? 'selected' : '' }}>Kurang</option>
+                                    <option value="cukup" {{ $row->keterangan == 'cukup' ? 'selected' : '' }}>Cukup</option>
+                                    <option value="baik" {{ $row->keterangan == 'baik' ? 'selected' : '' }}>Baik</option>
+                                    <option value="sangat baik" {{ $row->keterangan == 'sangat baik' ? 'selected' : '' }}>Sangat Baik</option>
+                                </select>
+
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-danger rounded removekemampuan" type="button">Remove</button>
+                            </div>
+                        </div>
+                        @endforeach
+                        @else
+                        <div id="empty-input-message" class="alert alert-info" role="alert" style="display: show;">
+                            <h6 class="mx-3 mt-2">Tidak Memiliki Kemampuan Dasar</h6>
+                        </div>
+                        @endif
+                </div>
+                <div>
+                    <label class="form-label" for="">Peralatan penunjang</label>
+                    <textarea class="form-control " name="peralatan_penunjang" id="edit_peralatan_penunjang" rows="2" hidden></textarea>
+                </div>
+                <div>
+                    <label class="form-label" for="">Saran</label>
+                    <textarea class="form-control " name="saran" id="edit_saran" rows="2" hidden></textarea>
+                </div>
+                {{-- <div class="mb-3">
                     <label for="edit_nama_skema" class="form-label">Skema</label>
                     <input type="text" class="form-control mb-4" id="edit_nama_skema">
                 </div>
@@ -166,7 +236,7 @@
                     <div class="input-group mb-3 nilai-sub-skema">
                         <!-- Input dinamis -- Ajax Request -->
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -179,8 +249,21 @@
 @endsection
 
 @push('script')
+
 <script>
-    $(".chosen-select").chosen()
+    $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    </script>
+<script>
 
     $(document).ready(function() {
         var skemaID;
@@ -225,6 +308,15 @@
                         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
             return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
+        }
+
+        function checkEmptyInput(context) {
+            var inputs = $(context).find('.kemampuan_dasar-input-create .kemampuan_dasar-input-edit');
+            if (inputs.length === 0) {
+            $(context).find('#empty-input-message').show(); // Tampilkan pesan jika tidak ada input tersisa
+            } else {
+            $(context).find('#empty-input-message').hide(); // Sembunyikan pesan jika masih ada input
+            }
         }
 
         // format Timestamps function
@@ -333,11 +425,11 @@
                         if (row.catatan != null) {
                             buttonAction = 
                             '<li>\
-                                <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
+                                <a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">\
                                     <i class="fa-regular fa-pen-to-square"></i> Edit</a>\
                             </li>\
                             <li>\
-                                <a href="#" class="dropdown-item text-danger delete_nilai_btn" data-id="' + row.id_peserta + '">\
+                                <a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row.id_peserta + '">\
                                     <i class="fa-regular fa-trash-can"></i> Delete</a>\
                             </li>';
                         } 
@@ -386,6 +478,7 @@
                 
             });
         }
+       
 
         ///////
 
@@ -446,197 +539,462 @@
         
         });
 
+
+        //muncul create kemampuan
+        $('#addKemampuanCreate').click(function() {
+            $('.kemampuan-wrapper-create').append('<div class="input-group mb-3 kemampuan_dasar-input-create d-flex align-items-center">' +
+            '<input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>' +
+            '<select class="form-control" name="create_keterangan[]" required style="max-width: 120px; background-color: #d1ecf1;">' +
+                '<option value="" disabled selected>Pilih Keterangan</option>' +
+                '<option value="kurang">Kurang</option>' +
+                '<option value="cukup">Cukup</option>' +
+                '<option value="baik">Baik</option>' +
+                '<option value="sangat baik">Sangat Baik</option>' +
+            '</select>' +
+            '<button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>' +
+            '</div>');
+            $('#empty-input-message').hide(); // Sembunyikan pesan jika input tidak kosong
+            });
+
+            // Fungsi untuk menghapus input Sub-Skema
+            $(document).on('click', '.removeKemampuan', function() {
+            $(this).closest('.kemampuan_dasar-input-create').remove(); // Hapus elemen input yang terkait
+
+            // Check if there are no more inputs left
+            if ($('.kemampuan_dasar-input-create').length === 0) {
+                $('#empty-input-message').show(); // Show the message if no inputs are left
+            }
+        });      
+
+        //muncul edit kemampuan
+        $('#addKemampuanEdit').click(function() {
+            $('.kemampuan-wrapper-edit').append('<div class="input-group mb-3 kemampuan_dasar-input-edit d-flex align-items-center">' +
+            '<input type="text" class="form-control" name="edit_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>' +
+            '<select class="form-control" name="edit_keterangan[]" required style="max-width: 120px; background-color: #d1ecf1;">' +
+                '<option value="" disabled selected>Pilih Keterangan</option>' +
+                '<option value="kurang">Kurang</option>' +
+                '<option value="cukup">Cukup</option>' +
+                '<option value="baik">Baik</option>' +
+                '<option value="sangat baik">Sangat Baik</option>' +
+            '</select>' +
+            '<button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>' +
+            '</div>');
+            checkEmptyInput('#empty-input-message'); // Sembunyikan pesan jika input tidak kosong
+            });
+
+            // Fungsi untuk menghapus input Sub-Skema
+            $(document).on('click', '.removeKemampuan', function() {
+            $(this).closest('.kemampuan_dasar-input-edit').remove(); // Hapus elemen input yang terkait
+
+            // Check if there are no more inputs left
+            if ($('.kemampuan_dasar-input-edit').length === 0) {
+                $('#empty-input-message').show(); // Show the message if no inputs are left
+            }
+        });
+        
         // Create Modal Trigger
- $(document).on('click', '.create_laporan_btn', function (e) {
-    e.preventDefault();
+        $(document).on('click', '.create_laporan_btn', function (e) {
+            e.preventDefault();
 
-    var pesertaID = $(this).data('id');
+            var pesertaID = $(this).data('id'); // Mengambil ID peserta dari tombol yang diklik
+            console.log(pesertaID); 
 
-    $.ajax({
-        url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
-        type: "GET",
-        dataType: "json",
-        success: function(response) {
-            var data_peserta_create = response.data_peserta;
-            var data_sub_skema = response.data_sub_skema;  // Pastikan data_sub_skema ini juga ada dalam response
+            $('#create_name_peserta').val('');
+            $('#peserta_id').val('');
+            $('#event_skema_id').val('');
+            $('#pengalaman_anak').val('');
+            $('#peralatan_penunjang').val('');
+            $('#saran').val('');
 
-            // Tampilkan modal
-            $('#createLaporanModal').modal('show');
-
-            // Isi form dengan data yang diterima
-            $('#create_nama_peserta').val(data_peserta_create.nama_lengkap);
-            // $('#create_nama_skema').val(response.data_skema.nama_skema);  // Pastikan nama skema tersedia di response
-
-            // Kosongkan nilai sub skema sebelumnya
-            $('#create-nilai-sub-skema-wrapper').html('');
-
-            // Isi sub-skema
-            $.each(data_sub_skema, function(index, row) {
-                $('#create-nilai-sub-skema-wrapper').append(
-                    '<div class="px-1 mb-3 row">\
-                        <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
-                        <div class="col-sm-4 d-flex justify-content-end">\
-                            <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
-                                style="height: 35px;">Nilai</label>\
-                            <input type="hidden" class="create_id_sub_skema" value="' + row.id_sub_skema + '">\
-                            <input type="number" class="form-control rounded-0 rounded-end create_nilai_sub_skema"\
-                                style="width: 100px; height: 35px;">\
-                        </div>\
-                    </div>'
-                );
+            $('input[name="create_kemampuan_dasar[]"]').each(function(){
+                $(this).val('');
             });
-        },
-        error: function() {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal Memuat Data',
-                text: 'Tidak dapat mengambil data dari server!'
+
+            $('select[name="create_keterangan[]"]').each(function(){
+                $(this).val('');
             });
-        }
-    });
-});
 
 
-        // Edit Modal Trigger
-        $(document).on('click', '.edit_laporan_btn', function (e){
-            e.preventDefault()
-            pesertaID = $(this).data('id')
+            $('.kemampuan_dasar-input-create').remove(); // Clear only the inputs
+            $('#empty-input-message').show();
 
-            $.ajax({
-                url: '/laporanerkembangan/fetchNilaiData/' + pesertaID,
-                type: "get",
-                dataType: "json",
-
-                success: function(response) {
-                    var data_peserta_edit = response.data_nilai;
-                    
-                    $('#editLaporanModal').modal('show');
-                    $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
-                    $('#edit_nama_skema').val(data_skema.nama_skema);
-
-                    $('#edit-nilai-sub-skema-wrapper').html("")
-                    $('.nilai_sub_skema').val('')
-                    $.each(data_peserta_edit, function(index, row) {
-                        $('#edit-nilai-sub-skema-wrapper').append(
-                            '<div class="px-1 mb-3 row">\
-                                <label class="col-sm-8 col-form-label" style="font-size: 18px;">'+row.judul_sub+'</label>\
-                                <div class="col-sm-4 d-flex justify-content-end">\
-                                    <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
-                                        style="height: 35px;">Nilai</label>\
-                                    <input type="hidden" class="edit_id_sub_skema" value="' + row.sub_skema_id + '">\
-                                    <input type="number" class="form-control rounded-0 rounded-end edit_nilai_sub_skema"\
-                                        style="width: 100px; height: 35px;" value="' + row.nilai + '">\
-                                </div>\
-                            </div>'
-                        );
-
-                    });
-                    
+            ['pengalaman_anak', 'peralatan_penunjang', 'saran'].forEach(function(field) {
+                if (editors[field]) {
+                    editors[field].destroy()
+                        .then(() => {
+                            delete editors[field]; // Hapus dari daftar editors
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
                 }
-                
+            });
+           
+
+            // Mengambil data peserta berdasarkan ID
+            $.ajax({
+                url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    console.log(response); 
+                    var data_peserta = response.data_peserta;     
+
+                    // Tampilkan modal
+                    $('#createLaporanModal').modal('show');                                  
+                    $('#create_nama_peserta').val(data_peserta.nama_lengkap); // Mengisi nama peserta ke input
+                    $('#peserta_id').val(data_peserta.id_peserta);
+                    $('#event_skema_id').val(data_peserta.event_skema_id); 
+                   
+                    ['pengalaman_anak', 'peralatan_penunjang', 'saran'].forEach(function(field) {
+                        if (!editors[field]) {
+                            ClassicEditor
+                                .create(document.querySelector('#' + field))
+                                .then(editor => {
+                                    editors[field] = editor; // Simpan instance editor baru
+                                })
+                                .catch(error => {
+                                    console.error(error);
+                                });
+                        }
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Memuat Data',
+                        text: 'Tidak dapat mengambil data dari server!'
+                    });
+                }
             });
         });
 
+
         // Store function -- to store and update
         $(document).on('click', '#store_laporan_btn', function () {
-            var btnIdentifier = $(this).val();
+            // Mengambil nilai dari input
             var createdBy = $('#created_by').val();
+            var pesertaID = $('#peserta_id').val(); 
+            var eventSkemaID = $('#event_skema_id').val();
+            var pengalamanAnak = editors['pengalaman_anak'] ? editors['pengalaman_anak'].getData() : ''; 
+            var peralatanPenunjang = editors['peralatan_penunjang'] ? editors['peralatan_penunjang'].getData() : ''; 
+            var saran = editors['saran'] ? editors['saran'].getData() : '';
+            // var pengalamanAnak = $('#pengalaman_anak').val();
+            // var kemampuanDasar = $('#kemampuan_dasar').val();
+            // var peralatanPenunjang = $('#peralatan_penunjang').val();
+            // var saran = $('#saran').val();
 
-            var create_nilai_data = [];
-            var create_sub_skemaID = [];
-
-            if (btnIdentifier != 0) {
-                $('.create_id_sub_skema').each(function() {
-                    var sub_skemaID = $(this).val();
-                    create_sub_skemaID.push(sub_skemaID);
-                });
-
-                $('.create_nilai_sub_skema').each(function() {
-                    var nilai = $(this).val();
-                    create_nilai_data.push(nilai);
-                });
-            } else {
-                $('.edit_id_sub_skema').each(function() {
-                    var sub_skemaID = $(this).val();
-                    create_sub_skemaID.push(sub_skemaID);
-                });
-
-                $('.edit_nilai_sub_skema').each(function() {
-                    var nilai = $(this).val();
-                    create_nilai_data.push(nilai);
-                });
-            }
-            
-            // looping for Create Associative Array
-            var nilaiSubSkemaArray = {};
-            for (var i = 0; i < create_sub_skemaID.length; i++) {
-                nilaiSubSkemaArray[create_sub_skemaID[i]] = create_nilai_data[i];
-            }
-
-            // looping for Set null Data to 0
-            Object.keys(nilaiSubSkemaArray).forEach(key => {
-                if (nilaiSubSkemaArray[key] === "" || nilaiSubSkemaArray[key] == null) {
-                    nilaiSubSkemaArray[key] = null;
+            var kemampuanDasar = [];
+            $('input[name="create_kemampuan_dasar[]"]').each(function(){
+                var value = $(this).val();
+                if (value) { 
+                    kemampuanDasar.push(value);
                 }
             });
 
+            var keterangan = [];
+            $('select[name="create_keterangan[]"]').each(function(){
+                var value = $(this).val();
+                if(['kurang','cukup','baik','sangat baik'].includes(value)){
+                    keterangan.push(value);
+                }
+            });
+
+            if (kemampuanDasar.length === 0 || kemampuanDasar.includes('')) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Semua bidang kemampuan dasar harus diisi!'
+                });
+                return; 
+            }
+
+            // Memastikan pesertaID tidak undefined
+            if (typeof pesertaID === 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Peserta ID tidak ditemukan!'
+                });
+                return; 
+            }
+            console.log('Pengalaman Anak:', pengalamanAnak);
+            console.log('Peralatan Penunjang:', peralatanPenunjang);
+            console.log('Saran:', saran);
+
+            // Siapkan data untuk dikirim
+            var data = {
+                event_skema_id: eventSkemaID,
+                pesertaID: pesertaID,
+                pengalaman_anak: pengalamanAnak,
+                kemampuan_dasar: kemampuanDasar,
+                keterangan: keterangan,
+                peralatan_penunjang: peralatanPenunjang,
+                saran: saran,
+                created_by: createdBy,
+            };
+
+            console.log('Peserta ID:', pesertaID);
+            console.log('Data yang dikirim:', data);
+
+            // Setup untuk CSRF token
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+          
             $.ajax({
-                url: '/laporan/storeNilaiData',
+                url: '/laporanperkembangan/storeNilaiData/' + pesertaID,
                 type: 'POST',
-                data: {
-                    pesertaID: pesertaID,
-                    event_skemaID: event_skemaID,
-                    nilaiSubSkema: nilaiSubSkemaArray,
-                    createdBy: createdBy
-                },
+                data: data,
                 dataType: "json",
-
                 success: function(response) {
-                    $('#createLaporanModal').modal('hide');
-                    $('#editNilaiModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: 'Nilai berhasil ditambahkan.'
-                    });
+                    console.log('Response:', response); 
+                    if (response.success === true) {
+                        $('#createLaporanModal').modal('hide'); 
+                         // Clear the form inputs
+                            $('#create_nama_peserta').val('');
+                            $('#peserta_id').val('');
+                            $('#event_skema_id').val('');
+                            $('#pengalaman_anak').val('');
+                            $('#peralatan_penunjang').val('');
+                            $('#saran').val('');
 
-                    fetchDetailData(skemaID);
+                            $('input[name="create_kemampuan_dasar[]"]').each(function(){
+                                $(this).val('');
+                            });
+
+                            $('select[name="create_keterangan[]"]').each(function(){
+                                $(this).val('');
+                            });
+
+                            // Clear the editor instances if they exist
+                            ['pengalaman_anak', 'peralatan_penunjang', 'saran'].forEach(function(field) {
+                                if (editors[field]) {
+                                    editors[field].setData(''); // Clear the editor's content
+                                }
+                            });                        
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sukses!',
+                            text: response.message, 
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops!',
+                            text: response.message || 'Terjadi kesalahan saat membuat data.',
+                        });
+                    }
+                    fetchDetailData(eventSkemaID); 
                 },
                 error: function(xhr) {
                     var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi Error';
+                    console.log('AJAX Error:', errorMessage); 
                     Swal.fire({
                         icon: 'error',
                         title: 'Gagal',
                         text: errorMessage
                     });
-
                 }
+            });
+        });
+
+            // Edit Modal Trigger
+            const fieldsToInitialize = ['edit_pengalaman_anak', 'edit_peralatan_penunjang', 'edit_saran'];                                
+            let editors = {};
+
+            $(document).on('click', '.edit_laporan_btn', function (e){
+                e.preventDefault()
+
+                console.log('Edit button clicked');  // Tambahkan ini untuk debugging
+                pesertaID = $(this).data('id');
+                console.log('Peserta ID: ', pesertaID);
+
+                $('.kemampuan_dasar-input-edit').remove(); // Clear only the inputs
+                $('#empty-input-message').show();
+
+                $.ajax({
+                    url: '/laporanperkembangan/fetchLaporanData/' + pesertaID,
+                    type: "get",
+                    dataType: "json",
+
+                    success: function(response) {
+                        console.log(response);
+                        // var data_peserta_edit = response.data_nilai;
+                        
+                        $('#editLaporanModal').modal('show');
                     
+
+                        $('#edite_id').val(response.data_laporan.peserta_id);
+
+                        $('#edit_nama_peserta').val(response.data_laporan.nama_lengkap);
+                        // $('#edit_pengalaman_anak').val(response.data_laporan.pengalaman_anak);
+                        // // $('#edit_kemampuan_dasar').val(response.data_laporan.kemampuan_dasar);
+                        // $('#edit_peralatan_penunjang').val(response.data_laporan.peralatan_penunjang);
+                        // $('#edit_saran').val(response.data_laporan.saran);                    
+                        
+                        $('.kemampuan_dasar-input-edit').empty();
+
+                            // Check if data_kemampuan_dasar exists and populate
+                            if (response.data_kemampuan_dasar && response.data_kemampuan_dasar.length > 0) {
+                                response.data_kemampuan_dasar.forEach(function(item) {
+                                    $('.kemampuan-wrapper-edit').append('<div class="input-group mb-3 kemampuan_dasar-input-edit">' +
+                                        '<input type="hidden" name="kemampuan_dasar_ids[]" value="' + item.id_kemampuan_dasar + '">' +
+                                        '<input type="text" class="form-control" name="edit_kemampuan_dasar[' + item.id_kemampuan_dasar + ']" value="' + item.kemampuan_dasar + '" placeholder="Kemampuan Dasar" required>' +
+                                        '<select class="form-control" name="edit_keterangan[' + item.id_kemampuan_dasar + ']" required style="max-width: 120px; background-color: #d1ecf1;">' +
+                                            '<option value="" disabled>Pilih Keterangan</option>' +
+                                            '<option value="kurang" ' + (item.keterangan === 'kurang' ? 'selected' : '') + '>Kurang</option>' +
+                                            '<option value="cukup" ' + (item.keterangan === 'cukup' ? 'selected' : '') + '>Cukup</option>' +
+                                            '<option value="baik" ' + (item.keterangan === 'baik' ? 'selected' : '') + '>Baik</option>' +
+                                            '<option value="sangat baik" ' + (item.keterangan === 'sangat baik' ? 'selected' : '') + '>Sangat Baik</option>' +
+                                        '</select>' +
+                                        '<button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>' +
+                                    '</div>');
+                                });
+                                $('#empty-input-message').hide(); // Hide message if data exists
+                            } else {
+                                $('#empty-input-message').show(); // Show message if no data
+                            }                        
+                             fieldsToInitialize.forEach(field => {
+                                const fieldElement = document.querySelector('#' + field);
+                                if (fieldElement) {
+                                    if (!editors[field]) {
+                                        ClassicEditor
+                                            .create(fieldElement)
+                                            .then(editor => {
+                                                editors[field] = editor;
+                                                editor.setData(response.data_laporan[field.replace('edit_', '')] || '');
+                                            })
+                                            .catch(error => {
+                                                console.error('CKEditor initialization error:', error);
+                                            });
+                                    } else {
+                                        editors[field].setData(response.data_laporan[field.replace('edit_', '')] || '');
+                                    }
+                                }
+                            });                           
+                        console.log('ID peserta dari respons:', response.data_laporan.peserta_id);
+                        },
+                        error: function(xhr,status,error) {
+                            console.error('AJAX error:' ,error);
+                        }
+                            
+                    });
+            });        
+
+
+        //update function
+        $(document).on('click','#update_laporan_btn',function(e){
+            e.preventDefault();  
+
+            let pesertaID = $('#edite_id').val(); 
+            console.log('Peserta ID before AJAX call:', pesertaID);
+
+            if (!pesertaID) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: 'ID peserta tidak ditemukan.',
+                });
+                return;
+            }
+            fieldsToInitialize.forEach(field => {
+                if (editors[field]) {
+                    // Transfer CKEditor data to the corresponding textarea
+                    $('#' + field).val(editors[field].getData());
+                }
+            });
+
+            let pengalamanAnak = $('#edit_pengalaman_anak').val() || ''; // Default ke string kosong jika tidak ada
+            let peralatanPenunjang = $('#edit_peralatan_penunjang').val() || '';
+            let saran = $('#edit_saran').val() || '';
+
+
+            let kemampuanDasar = [];
+            // let isValid = true; // Tambahkan flag untuk validasi          
+
+            $('.kemampuan_dasar-input-edit').each(function() {
+                let id = $(this).find('input[name="kemampuan_dasar_ids[]"]').val();
+                let kemampuan = $(this).find('input[name="edit_kemampuan_dasar['+id+']"]').val();
+                let keterangan = $(this).find('select[name="edit_keterangan['+id+']"]').val();
+                
+                if (id && kemampuan && keterangan) {
+                    kemampuanDasar.push({
+                        id: id,
+                        kemampuan_dasar: kemampuan,
+                        keterangan: keterangan
+                    });
+                }
+            });
+
+            console.log('Data sebelum kirim update:', {
+            pesertaID,
+            pengalaman_anak: pengalamanAnak,
+            kemampuan_dasar: kemampuanDasar,
+            peralatan_penunjang: peralatanPenunjang,
+            saran: saran,
+            });
+    
+
+            $.ajax({
+                url:'/laporanperkembangan/updateLaporan/' + pesertaID,
+                type:"POST",
+                data:{
+                    "_token": $('meta[name="csrf-token"]').attr('content'), 
+                    "pengalaman_anak": pengalamanAnak,
+                    "kemampuan_dasar": kemampuanDasar,
+                    "peralatan_penunjang": peralatanPenunjang,
+                    "saran": saran,
+                },
+                success: function(response) {
+                    if(response.status === 'success') {              
+                    $('#editLaporanModal').modal('hide');                              
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses!',
+                        text: 'Laporan berhasil diupdate!',
+                        });               
+                    }  else {
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: 'Terjadi kesalahan saat mengupdate data.',
+                        });
+                    }    
+                    fetchDetailData(skemaID);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', xhr.responseText);
+                    // Tampilkan pesan error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text:  'Terjadi kesalahan saat memproses permintaan.',
+                    });
+                }
             });
         })
+
         
         // Delete function
-        $(document).on('click', '.delete_nilai_btn', function(e) {
+        $(document).on('click', '.delete_laporan_btn', function(e) {
             e.preventDefault()
             pesertaID = $(this).data('id')
+            console.log('Peserta ID untuk hapus:', pesertaID);
 
-            confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
+            confirmDelete('Hapus Laporan Perkembangan Peserta', 'Apakah kamu yakin untuk menghapus?').then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/penilaian/destroyNilaiData/' + pesertaID,
+                        url: '/laporanperkembangan/destroyLaporanData/' + pesertaID,
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}',
                             pesertaID: pesertaID
                         },
                         success: function(response) {
-                            console.log('Nilai peserta berhasil dihapus');
+                            console.log('Laporan perkembangan peserta berhasil dihapus');
                             fetchDetailData(skemaID)
                         },
                         error: function(xhr, status, error) {

@@ -95,6 +95,10 @@
                                                     <i class="fa-solid fa-bars"></i>
                                                 </a>
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a href="{{ route('event.rincian', $row->id_event) }}"
+                                                        class="dropdown-item text-dark"><i class="fa-solid fa-code pe-none"></i>
+                                                        Rincian</a>
+                                                </li>
                                                     <li><a class="dropdown-item text-info" href="#"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#edit{{ $row->id_event }}"><i
@@ -103,11 +107,7 @@
                                                             class="dropdown-item text-danger" data-confirm-delete="true"><i
                                                                 class="fa-regular fa-trash-can pe-none"></i>
                                                             Delete</a>
-                                                    </li>
-                                                    <li><a href="{{ route('event.rincian', $row->id_event) }}"
-                                                            class="dropdown-item text-warning"><i class="fa-solid fa-code pe-none"></i>
-                                                            Rincian</a>
-                                                    </li>
+                                                    </li>                                                   
                                                 </ul>
                                             </div>
                                         </td>
@@ -335,15 +335,24 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
+                    <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
                     {{-- form --}}
                     <div class="container">
                         <div class="row">
+                            <div class="mb-3">
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                        required>
+                                        <option selected></option>
+                                        @foreach ($page as $row)
+                                        <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
                             <div class="col">
-                                {{-- kanan --}}
-                                <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+                                {{-- kanan --}}                             
                                     <div class="mb-3">
                                         <label for="nama_event" class="form-label">Nama Event</label>
                                         <input type="text" class="form-control" name="nama_event" id="nama_event"
@@ -405,17 +414,7 @@
                                             <option class="text-capitalize">privat</option>
                                         </select>
                                 </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="page_id" class="form-label">Page Id</label>
-                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
-                                        required>
-                                        <option selected></option>
-                                        @foreach ($page as $row)
-                                        <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
-                                        @endforeach
-                                    </select>
-                            </div>
+                            </div>                          
                             <div class="form-group mb-3">
                                 <label class="control-label mb-2">Upload Banner <span class="text-danger">*</span></label>
                                 <div class="dropzone-wrapper">
@@ -423,7 +422,7 @@
                                         <i class="glyphicon glyphicon-download-alt"></i>
                                         <p>Pilih gambar atau seret ke sini .</p>
                                     </div>
-                                    <input type="file" name="path_banner" class="dropzone" id="path_banner" accept="image/*" required>
+                                    <input type="file" name="path_banner" class="dropzone" accept="image/*" required>
                                     <div id="image_preview_" class="mt-3">
                                         <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                     </div>
@@ -452,7 +451,7 @@
                     <div class="form-check form-switch">
                         <label for="status" class="me-3">Status </label>
                         <input class="form-check-input" type="checkbox" role="switch" id="status"
-                            name="status" value="Publish" checked>
+                            name="status" value="Publish" >
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3"
@@ -478,14 +477,23 @@
                 <div class="modal-body">
 
                     {{-- form --}}
+                    <form action="{{ route('event.update', $row->id_event) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                     <div class="container">
                         <div class="row">
+                            <div class="mb-3">
+                                <label for="page_id" class="form-label">Page Id</label>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                        required>
+                                        @foreach ($page as $set)
+                                        <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
                             <div class="col">
-                                {{-- kanan --}}
-                                <form action="{{ route('event.update', $row->id_event) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+                                {{-- kanan --}}                              
                                     <div class="mb-3">
                                         <label for="nama_event" class="form-label">Nama Event</label>
                                         <input type="text" class="form-control" name="nama_event" id="nama_event" value="{{ $row->nama_event }}"
@@ -544,16 +552,7 @@
                                             <option class="text-capitalize"  {{ $row->visibilitas == 'privat' ? 'selected' : '' }}>privat</option>
                                         </select>
                                 </div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="page_id" class="form-label">Page Id</label>
-                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
-                                        required>
-                                        @foreach ($page as $set)
-                                        <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
-                                        @endforeach
-                                    </select>
-                            </div>
+                            </div>                       
                             <div class="mb-3">
                                 <label  class="control-label mb-2">Upload Banner <span class="text-danger">*</span></label>
                                 <div class="dropzone-wrapper">
@@ -596,7 +595,8 @@
                     <div class="form-check form-switch">
                         <label for="status" class="me-3">Status </label>
                         <input class="form-check-input" type="checkbox" role="switch" id="status"
-                            name="status"  {{ $row->status == 'Selesai' || $row->status == 'Berlangsung' || $row->status == 'Publish' ? 'checked' : '' }}>
+                               name="status_checkbox" {{ in_array($row->status, ['Selesai', 'Berlangsung', 'Publish']) ? 'checked' : '' }}>
+                        <input type="hidden" name="status" value="Draft"> 
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3"
@@ -609,12 +609,9 @@
         </div>
     </div>
     @endforeach
-    <!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
@@ -628,37 +625,76 @@
         });
     });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusCheckbox = document.getElementById('status');
+            const hiddenInput = document.querySelector('input[name="status"]');
+
+                hiddenInput.value = statusCheckbox.checked ? 'Publish' : 'Draft';
+
+                statusCheckbox.addEventListener('change', function() {
+                    hiddenInput.value = this.checked ? 'Publish' : 'Draft'; 
+            });
+        });
+        </script>
     {{-- dropzone create --}}
     <script>    
-        document.getElementById('path_banner').addEventListener('change', function(event) {
+     document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi preview image
+        const inputFile = document.querySelector('input[name="path_banner"]');
         const preview = document.getElementById('preview_image_create');
-        const file = event.target.files[0];
-        const reader = new FileReader();
 
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block'; // Show the image preview
-        }
 
-        if (file) {
-            reader.readAsDataURL(file);
+        if (preview) {
+        preview.style.display = 'none';
+
+        inputFile.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                if (preview) { // Cek apakah preview tidak null
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                } else {
+                    console.error('Preview element not found');
+                }
+            }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    if (preview) {
+                        preview.src = '';
+                        preview.style.display = 'none';
+                    }
+                }
+            });
         } else {
-            preview.src = '';
-            preview.style.display = 'none'; // Hide the image if no file selected
+            console.error('Preview image element not found');
         }
-    });
+    
 
-            Dropzone.options.path_file = {
+        // Inisialisasi Dropzone
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone-wrapper", {
+            url: "/event", // URL server untuk unggahan
             maxFilesize: 2, 
-            acceptedFiles: "image/*", 
+            acceptedFiles: "image/*",
             init: function() {
                 this.on("success", function(file, response) {                    
+                    // Tangani response sukses
+                    console.log("Upload successful");
                 });
                 this.on("error", function(file, response) {
-                    document.getElementById('image_error').innerHTML = response.message;
+                    const errorElement = document.getElementById('image_error');
+                    if (errorElement) {
+                        errorElement.innerHTML = response.message || 'Upload failed';
+                    }
                 });
-              }
-            };   
+            }
+        });
+    });
 </script> 
 {{-- dropzone edit --}}
 <script>

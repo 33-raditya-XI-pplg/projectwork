@@ -74,10 +74,6 @@ class TestimoniController extends Controller
         }
     }
 
-
-
-
-
     public function update(Request $request, Testimoni $testimoni)
     {
 

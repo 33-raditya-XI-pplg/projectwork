@@ -18,19 +18,21 @@ use Illuminate\Support\Facades\Auth;
 class EventSkemaController extends Controller
 {
 
-    // public function index()
-    // {
-    //     $Title = 'Skema';
-    //     return view('admin.event.rincian-skema', compact('Title'));
-    // }
+    public function index()
+    {
+        $Title = 'Skema';
+        return view('admin.event.rincian-skema', compact('Title'));
+    }
     public function create($id)
     {
+        $Title = 'Create Skema';
         $skema = Skema::get();
         $bg = Background::get();
         $ttd = Ttd::get();
         $rn = Rentang_Nilai::distinct()->pluck('nama_konversi_nilai');
         $penguji = User::where('level', 'Penguji')->get();
-        return view('admin.event.create-skema', compact('skema', 'id', 'bg', 'ttd', 'rn', 'penguji'));
+        // dd($rn);
+        return view('admin.event.create-skema', compact('skema', 'Title', 'id', 'bg', 'ttd', 'rn', 'penguji'));
     }
 
     public function store(Request $request, $idEvt)
@@ -41,7 +43,7 @@ class EventSkemaController extends Controller
             'ttd_id' => 'required',
             'user_id' => 'required',
             'background_id' => 'required | not_in:0',
-            'nama_konversi_nilai' => 'required | not_in:0'
+            'nama_konversi_nilai' => 'required'
         ]);
 
         $createdBy = $request->input('created_by');
@@ -59,6 +61,9 @@ class EventSkemaController extends Controller
             ->pluck('id_rentang_nilai');
         // // // $tgl_event = Event::where('id_event', $request->event_id)->pluck('tgl_mulai')->first();
 
+
+
+        // dd($rn_id);
         $evtSkema->event_skemaPenandatangan()->attach($request->input('ttd_id'), ['created_by' => $createdBy]);
         $evtSkema->event_skemaMenguji()->attach($request->input('user_id'), ['created_by' => $createdBy]);
         $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->attach($rn_id, ['created_by' => $createdBy]);
@@ -72,16 +77,18 @@ class EventSkemaController extends Controller
         $evtSkema = Event_Skema::find($id);
         $ttd_id = $evtSkema->event_skemaPenandatangan()->pluck('ttd_id')->toArray(); //fix
         $penguji_id = $evtSkema->event_skemaMenguji()->pluck('user_id')->toArray();
-        $rn_id = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
-            ->pluck('nama_konversi_nilai');
-
+        // $rn_id = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
+        //     ->pluck('nama_konversi_nilai');
+        $rn_id = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->pluck('nama_konversi_nilai')->toArray();
+        $Title = 'Edit Skema';
         $skema = Skema::get();
         $bg = Background::get();
         $ttd = Ttd::get();
         $rn = Rentang_Nilai::distinct()->pluck('nama_konversi_nilai');
         $penguji = User::where('level', 'Penguji')->get();
+        // dd($rn_id);
 
-        return view('admin.event.edit-skema', compact('evt', 'evtSkema', 'skema', 'bg', 'ttd', 'rn', 'penguji', 'id', 'ttd_id', 'penguji_id', 'rn_id'));
+        return view('admin.event.edit-skema', compact('evt', 'Title', 'evtSkema', 'skema', 'bg', 'ttd', 'rn', 'penguji', 'id', 'ttd_id', 'penguji_id', 'rn_id'));
 
     }
 
@@ -96,12 +103,14 @@ class EventSkemaController extends Controller
             'updated_by' => $updatedBy
         ]);
 
-        $rn_id = Rentang_Nilai::where('nama_konversi_nilai', $request->input('nama_konversi_nilai'))
-            ->pluck('id_rentang_nilai');
+        $rn_id = Rentang_Nilai::whereIn('nama_konversi_nilai', (array) $request->input('nama_konversi_nilai'))
+            ->pluck('id_rentang_nilai')->toArray();
+
         $evtSkema->event_skemaPenandatangan()->syncWithPivotValues($request->input('ttd_id'), ['updated_by' => $updatedBy]);
         $evtSkema->event_skemaMenguji()->syncWithPivotValues($request->input('user_id'), ['updated_by' => $updatedBy]);
         $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->syncWithPivotValues($rn_id, ['updated_by' => $updatedBy]);
-
+        // dd($rn);
+        // dd($request->all()); 
         return redirect()->route('event.rincian', $evt);
     }
 
@@ -121,14 +130,14 @@ class EventSkemaController extends Controller
         $penguji = $evtSkema->event_skemaMenguji()->pluck('nama_lengkap');
         $peserta = $evtSkema->event_skemaDaftar_Peserta()->get();
         $Title = 'Rincian';
-        $subtitle = 'Event';
-        $subTitle = 'Skema';
+        $subtitle = 'Event Skema';
+        // $subTitle = 'Skema';
         // dd($peserta);
         $rn = $evtSkema->event_skemaEvent_Skema_Rentang_Nilai()->distinct()
             ->pluck('nama_konversi_nilai');
         confirmDelete('Hapus Peserta', 'Apakah kamu yakin untuk menghapus?');
 
-        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'rn', 'penguji', 'evt', 'peserta', 'Title', 'subtitle', 'subTitle'));
+        return view('admin.event.rincian-skema', compact('evtSkema', 'ttd', 'rn', 'penguji', 'evt', 'peserta', 'Title', 'subtitle'));
     }
 
     // Peserta
@@ -138,11 +147,11 @@ class EventSkemaController extends Controller
         $instansi = Instansi::get();
         $evtSkema = Event_Skema::find($skema);
 
-        $Title = 'Event';
-        $subtitle = "Skema";
-        $subTitle = 'Tambah Student';
+        $Title = 'Event Skema';
+        $subtitle = "Tambah Student";
+        // $subTitle = 'Tambah Student';
 
-        return view('admin.event.add-student', compact('evt', 'skema', 'instansi', 'Title', 'subtitle', 'subTitle'));
+        return view('admin.event.add-student', compact('evt', 'skema', 'instansi', 'Title', 'subtitle'));
     }
 
     public function search($instansi, $skema)

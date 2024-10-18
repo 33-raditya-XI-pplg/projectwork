@@ -19,8 +19,13 @@ return new class extends Migration {
             $table->foreignId('peserta_id')->constrained('tb_peserta', 'id_peserta')->cascadeOnDelete();
 
             // Fields
+            // $table->foreignId('kemampuan_dasar_id')->constrained('tb_kemampuan_dasar', 'id_kemampuan_dasar')->cascadeOnDelete();
             $table->date('tanggal_penilaian');
-            $table->text('catatan');
+            $table->string('catatan');
+            $table->text('pengalaman_anak');
+            $table->text('peralatan_penunjang');
+            $table->text('saran');
+
 
             // Metadata
             $table->integer('created_by')->nullable();

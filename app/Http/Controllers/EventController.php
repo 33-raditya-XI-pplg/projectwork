@@ -26,14 +26,17 @@ class EventController extends Controller
         $evt = Event::get();
         $today = Carbon::today();
         foreach ($evt as $event) {
-            if ($today->lt($event->tgl_mulai)) {
-                $event->status = 'Publish';
-            } elseif ($today->gte($event->tgl_berakhir)) {
-                $event->status = 'Selesai';
-            } else {
-                $event->status = 'Berlangsung';
+            if ($event->status !== 'Draft') {
+                if ($today->lt($event->tgl_mulai)) {
+                    $event->status = 'Publish';
+                } elseif ($today->gte($event->tgl_berakhir)) {
+                    $event->status = 'Selesai';
+                } else {
+                    $event->status = 'Berlangsung';
+                }
+                // Save the updated status back to the database
+                $event->save();
             }
-            $event->save();
         }
 
         $evt_draft = Event::where('status', 'Draft')->get();
@@ -68,7 +71,7 @@ class EventController extends Controller
         //     ]);
         // }
 
-        $status = $request->has('status') ? 'Publish' : 'Draft';
+        $status = $request->has('status') && $request->input('status') === 'Publish' ? 'Publish' : 'Draft';
 
         if ($status === 'Publish') {
 
@@ -127,7 +130,19 @@ class EventController extends Controller
             ]);
         }
 
-        $status = $request->has('status') ? 'Publish' : 'Draft';
+        // Ambil status dari input tersembunyi
+        $status = $request->input('status', 'Draft');
+
+        // Cek jika status_checkbox ada
+        if ($request->has('status_checkbox')) {
+            $status = 'Publish';
+        } else {
+            if (in_array($evt->status, ['Selesai', 'Berlangsung'])) {
+                Alert::error('Error!', 'Status tidak daoat diubah menjadi draft.');
+                return redirect()->back();
+            }
+            $status = 'Draft';
+        }
 
         if ($status === 'Publish') {
 
@@ -167,7 +182,8 @@ class EventController extends Controller
 
         $evt->update($data);
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diubah.');
-
+        // dd($status);
+        // dd($request->all());
         return redirect()->back();
     }
 
@@ -188,4 +204,6 @@ class EventController extends Controller
 
         return redirect()->back();
     }
+
+
 }

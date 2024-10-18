@@ -26,7 +26,7 @@
                     <tbody class="table-responsive" style="vertical-align: middle">
                         @php $num = 1 @endphp
                         @foreach ($upload as $row)
-                            <tr>
+                            <tr class="clickable-row event-row" data-id="{{ $row->id_upload_pembayaran }}">
                                 <td>{{ $num++ }}</td>
                                 <td>{{ $row->nama_lengkap }}</td>                          
                                 <td>{{ $row->nama_event }}</td>                          
@@ -35,19 +35,20 @@
                                 <td>{{ $row->status_pembayaran ?? 'Belum Dibayar' }}</td>
                                 <td class="text-center">                                                               
                                     <div class="dropdown" >
-                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton{{ $row->id_upload_pembayaran }}" data-bs-toggle="dropdown" aria-expanded="false">                                            
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton{{ $row->id_upload_pembayaran }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-bars"></i>                                            
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_upload_pembayaran }}">
                                             <li>
-                                                <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}" class="dropdown-item" target="_blank">
-                                                    <i class="fa fa-eye"></i> Lihat
+                                                <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}" target="_blank" class="dropdown-item">
+                                                    <i class="fa fa-eye"></i> Lihat Bukti Pembayaran
                                                 </a>
                                             </li>
                                             <li>
                                                 <form action="{{ route('upload.updateStatus', $row->id_upload_pembayaran) }}" method="POST" style="display:inline-block;">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button type="submit" class="dropdown-item" name="status" value="Sudah Dibayar">
+                                                    <button type="submit" class="dropdown-item text-success" name="status" value="Sudah Dibayar">
                                                         <i class="fa fa-check"></i> Selesaikan
                                                     </button>
                                                 </form>
@@ -56,7 +57,7 @@
                                                 <form action="{{ route('upload.updateStatus',$row->id_upload_pembayaran) }}" method="POST" style="display: inline-block;">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button type="submit" class="dropdown-item" name="status" value="Belum Dibayar">
+                                                    <button type="submit" class="dropdown-item text-danger" name="status" value="Belum Dibayar">
                                                         <i class="fa-solid fa-x"> </i>  Ditolak
                                                     </button>
                                                 </form>
@@ -72,6 +73,76 @@
             </div>
         </div>        
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var eventRows = document.querySelectorAll('.event-row');
+            
+            eventRows.forEach(function(row) {
+                row.addEventListener('click', function() {
+                    var eventId = this.getAttribute('data-id');
+                    var skemaRow = document.getElementById('skema-row-' + eventId);
+                 
+                    if (!skemaRow) {
+                        skemaRow = document.createElement('tr');
+                        skemaRow.id = 'skema-row-' + eventId;
+                        skemaRow.classList.add('skema-row');
+                        skemaRow.innerHTML = `
+                            <td colspan="7">
+                                <div id="skema-container-${eventId}" style="padding-left:150px;"></div>
+                            </td>
+                        `;
+                        this.parentNode.insertBefore(skemaRow, this.nextSibling);
+                    }
+        
+                    if (skemaRow.style.display === 'none' || skemaRow.style.display === '') {
+                        skemaRow.style.display = 'table-row';
+        
+                        var skemaContainer = document.getElementById('skema-container-' + eventId);
+                        if (!skemaContainer.innerHTML) {
+                            fetch(`/getSkema/${eventId}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        var table = document.createElement('table');
+                                        table.classList.add('table', 'table-sm', 'table-bordered');
+                                                       
+                                        var thead = document.createElement('thead');
+                                        thead.innerHTML = `
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Skema</th>                                      
+                                            </tr>
+                                        `;
+                                        table.appendChild(thead);
+                                      
+                                        var tbody = document.createElement('tbody');
+                                        data.forEach(function(skema, index) {
+                                            var row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td>${index + 1}</td>
+                                                <td>${skema.nama_skema}</td>
+                                            `;
+                                            tbody.appendChild(row);
+                                        });
+                                        table.appendChild(tbody);                        
+                                        skemaContainer.innerHTML = '';
+                                        skemaContainer.appendChild(table);
+                                    } else {
+                                        skemaContainer.innerHTML = '<p>Tidak ada skema untuk event ini.</p>';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching skema:', error);
+                                    skemaContainer.innerHTML = '<p>Terjadi kesalahan saat memuat skema.</p>';
+                                });
+                        }
+                    } else {                
+                        skemaRow.style.display = 'none';
+                    }
+                });
+            });
+        });
+        </script>
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     var uploadModal = document.getElementById('uploadModal');
