@@ -111,4 +111,11 @@ class KategoriController extends Controller
             return redirect()->route('kategori.index')->with('error', 'Terjadi kesalahan saat menghapus kategori.');
         }
     }
+    public function show($id)
+    {
+        $kategori = kategori::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Kategori';
+        return view('admin.kategori.show', compact('kategori','Title','subtitle'));
+    }
 }

@@ -25,7 +25,7 @@ class ProfilPerusahaanController extends Controller
 
 
     public function store(Request $request)
-    {
+    { 
         $data = $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'tentang_kami' => 'required|string',
@@ -102,9 +102,11 @@ class ProfilPerusahaanController extends Controller
     {
         // Mengambil data berdasarkan id
         $profil = Profil_Perusahaan::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail profil perusahaan';
     
         // Kirim data profil ke view 'rincian'
-        return view('admin.profile_perusahaan.rincian', compact('profil'));
+        return view('admin.profile_perusahaan.rincian', compact('profil','Title','subtitle'));
     }
     
 

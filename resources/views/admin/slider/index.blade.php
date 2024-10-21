@@ -4,11 +4,58 @@
 
 
 <style>
-    .carousel-control-prev-icon,
+ .select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }
+.carousel-control-prev-icon,
     .carousel-control-next-icon {
         background-color: blue;
         border-radius: 50%;
     }
+    .dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer;
+}
+
+.image_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    max-height: 200px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.preview_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.dropzone-desc {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+.dropzone-wrapper.dragging {
+    border-color: #000;
+}
+
 </style>
 
 <!-- Bootstrap CSS -->
@@ -19,6 +66,22 @@
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            placeholder: $(this).data('placeholder'),
+            allowClear: true,
+            minimumResultsForSearch: Infinity // Optional: hides the search bar
+        });
+    });
+</script>
 <!-- Slider Management Table -->
 {{-- <h3 class="mb-0">Slider</h3> --}}
 <div class="bg-white rounded-4 px-3 py-4 mb-5 shadow-lg">
@@ -36,7 +99,7 @@
                     <th>No</th>
                     <th>Page ID</th>
                     <th>Title</th>
-                    <th>Description</th>
+                    <!-- <th>Description</th> -->
                     {{-- <th>Image URL</th> --}}
                     <th>Position</th>
                     <th>Status</th>
@@ -49,7 +112,7 @@
                         <th scope="row">{{ $loop->iteration }}</th>
                         <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
                         <td>{{ $row->title }}</td>
-                        <td>{{ $row->description }}</td>
+                        <!-- <td>{{ $row->description }}</td> -->
                         {{-- <td><a href="{{ $row->image_url }}" target="_blank">{{ $row->image_url }}</a></td> --}}
                         <td>{{ $row->position }}</td>
                         <td>
@@ -66,11 +129,17 @@
                                     <i class="fa-solid fa-bars"></i>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_slider }}">
-                                    <li>
+                                   
                                         <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_slider }}">
                                             <i class="fa-regular fa-pen-to-square"></i> Edit
                                         </a>
                                     </li>
+                                    <li>
+                                                <a class="dropdown-item text-success" href="{{ route('slider.show', $row->id_slider) }}">
+                                                    <i class="fa-regular fa-eye"></i> Rincian
+                                                </a>
+                                            </li>
+                                    <li>
                                     <li>
                                         <form id="deleteForm{{ $row->id_slider }}" action="{{ route('slider.destroy', $row->id_slider) }}" method="POST" style="display: inline;">
                                             @csrf
@@ -110,7 +179,7 @@
     </div>
 </div>
 
-<!-- Slider Carousel with Swipe Support -->
+<!-- Slider Carousel with Swipe Support
 <div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
     <div class="carousel-inner">
         @foreach ($slider as $index => $slide)
@@ -135,7 +204,7 @@
     </button>
 </div>
 
-<!-- Add Swiper.js or Bootstrap Swipe Handling -->
+ Add Swiper.js or Bootstrap Swipe Handling -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var carousel = document.querySelector('#sliderCarousel');
@@ -161,7 +230,7 @@
         }
     });
 </script>
-
+ 
 
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
@@ -176,9 +245,9 @@
                     @csrf
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                        <select class="form-select" name="page_id" aria-label="Select Page" required>
-                            <option selected>Select Page... <span class="text-danger">*</span></option>
-                            @foreach ($page as $row)
+                        <select class="form-select  js-example-basic-single" name="page_id" aria-label="Select Page" data-placeholder="Pilih Page" required>
+                        <option value="">Select Page ID</option>
+                        @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                             @endforeach
                         </select>
@@ -192,26 +261,23 @@
                         <textarea class="form-control ck-editor" id="description" name="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
-                        <div class="dropzone-wrapper">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Choose an image file or drag it here.</p>
-                            </div>
-                            <input type="file" name="image_file" class="dropzone" id="image_file" accept="image/*" required>
+    <label for="image_file" class="form-label">Upload Image <span class="text-danger">*</span></label>
+    <div class="dropzone-wrapper">
+        <div class="dropzone-desc">
+            <i class="glyphicon glyphicon-download-alt"></i>
+            <p>Drag and drop an image file here or click to choose one.</p>
+        </div>
+        <input type="file" name="image_file" class="dropzone" id="image_file" accept=".jpg, .jpeg, .png" style="display: none;">
+        <div id="image_preview" style="display: none;">
+            <img id="image_preview_img" alt="Image Preview" class="preview_image" style="max-width: 200px; max-height: 200px;">
+        </div>
+    </div>
+    <small style="color: red;">Format must be: .jpg, .jpeg, .png and max size 2MB</small>
+    @error('image_file')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
-                            <div id="image_preview" class="mt-3"
-                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
-                                <img id="preview_image" src="" alt="Image preview"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
-                            </small>
-                        </div>
-                        <div id="image_error"></div>
-                    </div>
                     <div class="mb-3">
                         <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
                         <select class="form-select" name="position" id="position" required>
@@ -264,7 +330,7 @@
                     @method('PUT')
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID</label>
-                        <select class="form-select" name="page_id" aria-label="Select Page" required>
+                        <select class="form-select js-example-basic-single" name="page_id" aria-label="Select Page"  data-placeholder="Pilih Page" required>
                             @foreach ($page as $element)
                                 <option value="{{ $element->id_page }}" {{ $element->id_page == $row->page_id ? 'selected' : '' }}>
                                     {{ $element->nama_page }}
@@ -279,17 +345,56 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control ck-editor" id="description" name="description" rows="3">{{ old('description', $row->description) }}</textarea>
-                    </div>
+                    </div> 
+                    
+                    
+                    
                     <div class="mb-3">
-                        <label for="image_file_edit" class="form-label">Image</label>
-                        <input type="file" class="form-control" name="image_file_edit" id="image_file_edit_{{ $row->id_slider }}" accept="image/*">
+    <label for="edit_image_{{ $row->id_slider }}" class="form-label">Upload Image</label>
+    
+    <!-- Dropzone Container -->
+    <div class="dropzone-wrapper" style="height: 300px;">
+        <div class="dropzone-desc">
+            <i class="glyphicon glyphicon-download-alt"></i>
+            <p>Choose an image file or drag it here.</p>
+        </div>
+        <input type="file" name="image_file_edit" class="dropzone" id="edit_image_{{ $row->id_slider }}" accept=".png, .jpg, .jpeg" style="display:none;">
 
-                        <div id="image_preview_edit_{{ $row->id_slider }}" class="mt-3"
-                            style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
-                            <img id="preview_image_edit_{{ $row->id_slider }}" src="{{ $row->image_url }}" alt="Image preview"
-                                style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        </div>
-                    </div>
+        <!-- Image Preview Area -->
+        <div id="edit_logo_preview_{{ $row->id_slider }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 200px; max-height: 200px;">
+            @if($row->image_url) <!-- Use 'image_url' from the database -->
+                <img src="{{ asset($row->image_url) }}" id="edit_logo_image_preview_{{ $row->id_slider }}" alt="Logo Preview" style="max-width: 100%;">
+            @else
+                <img src="" id="edit_logo_image_preview_{{ $row->id_slider }}" alt="Logo Preview" style="max-width: 100%; display: none;">
+            @endif
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropzoneEdit = document.getElementById('edit_image_{{ $row->id_slider }}');
+        const previewImageEdit = document.getElementById('edit_logo_image_preview_{{ $row->id_slider }}');
+
+        // Click event to trigger file input when dropzone is clicked
+        dropzoneEdit.closest('.dropzone-wrapper').addEventListener('click', function() {
+            dropzoneEdit.click();
+        });
+
+        // Handle file input change event
+        dropzoneEdit.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImageEdit.src = e.target.result;
+                    previewImageEdit.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 
                     <div class="mb-3">
                         <label for="position" class="form-label">Position</label>
@@ -334,31 +439,56 @@
 
 @push('script')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('image_file').addEventListener('change', function(event) {
-                const input = event.target;
-                const preview = document.getElementById('preview_image');
-                const imagePreviewDiv = document.getElementById('image_preview');
+       document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('image_file');
+    const previewImage = document.getElementById('image_preview_img');
+    const imagePreviewContainer = document.getElementById('image_preview');
 
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
+    // Handle file input change event to show preview
+    fileInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                imagePreviewContainer.style.display = 'block'; // Show the preview image
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.src = '';
+            imagePreviewContainer.style.display = 'none'; // Hide the preview image if no file
+        }
+    });
 
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                        imagePreviewDiv.style.padding = '0';  // Remove padding when the image is displayed
-                        imagePreviewDiv.style.border = 'none'; // Remove border when the image is displayed
-                    };
+    // Optional: Handle drag and drop for the file input
+    const dropzone = document.querySelector('.dropzone-wrapper');
 
-                    reader.readAsDataURL(input.files[0]);
-                } else {
-                    preview.src = '';
-                    preview.style.display = 'none';
-                    imagePreviewDiv.style.padding = '65px'; // Restore padding if no image
-                    imagePreviewDiv.style.border = '1px solid #ddd'; // Restore border if no image
-                }
-            });
-        });
+    dropzone.addEventListener('dragover', function (event) {
+        event.preventDefault();
+        dropzone.classList.add('dragging');
+    });
+
+    dropzone.addEventListener('dragleave', function () {
+        dropzone.classList.remove('dragging');
+    });
+
+    dropzone.addEventListener('drop', function (event) {
+        event.preventDefault();
+        dropzone.classList.remove('dragging');
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            const changeEvent = new Event('change');
+            fileInput.dispatchEvent(changeEvent);
+        }
+    });
+
+    // Show the dropzone on clicking the desc
+    dropzone.addEventListener('click', function () {
+        fileInput.click();
+    });
+});
+
     </script>
 
     @if (session('success'))
@@ -386,32 +516,7 @@
         });
 
 
-        document.addEventListener('DOMContentLoaded', function () {
-    @foreach ($slider as $row)
-        document.getElementById('image_file_edit_{{ $row->id_slider }}').addEventListener('change', function(event) {
-            const input = event.target;
-            const preview = document.getElementById('preview_image_edit_{{ $row->id_slider }}');
-            const imagePreviewDiv = document.getElementById('image_preview_edit_{{ $row->id_slider }}');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    imagePreviewDiv.style.padding = '0';  // Remove padding when the image is displayed
-                    imagePreviewDiv.style.border = 'none'; // Remove border when the image is displayed
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.src = '{{ $row->image_url }}';
-                imagePreviewDiv.style.padding = '65px'; // Restore padding if no image
-                imagePreviewDiv.style.border = '1px solid #ddd'; // Restore border if no image
-            }
-        });
-    @endforeach
-});
-
+       
     </script>
 
     @endif

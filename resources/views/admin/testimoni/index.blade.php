@@ -12,7 +12,15 @@
 @push('style')
 
 
-<style>.card {
+<style>
+
+.select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }
+.card {
     text-align: center;
 }
 
@@ -156,10 +164,10 @@
                         @csrf
                         <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
-                        <div class="mb-3">
-                            <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                            <select class="form-select" name="page_id" aria-label="Default select example" required>
-                                <option value="" disabled selected>Pilih ...</option>
+                        <div class="form-group mb-3">
+        <label for="page_id">Page ID <span class="text-danger">*</span></label>
+        <select name="page_id" class="form-control js-example-basic-single" id="page_id" data-placeholder="Select Page ID" required>
+        <option value="">Select Page ID</option>
                                 @foreach ($page as $row)
                                     <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                                 @endforeach
@@ -186,7 +194,7 @@
 
                         <div class="mb-3">
                             <label for="rating" class="form-label">Rating <span class="text-danger">*</span></label>
-                            <select class="form-control" name="rating" id="rating" required>
+                            <select class="form-control js-example-basic-single" name="rating" id="rating" data-placeholder="Select Rating" required>
                                 <option value="" disabled selected>Pilih Rating</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -366,6 +374,26 @@
 
 @push('script')
 
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+      $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

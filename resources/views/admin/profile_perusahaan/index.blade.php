@@ -3,7 +3,51 @@
 @section('content')
 
 @push('style')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <style>
+.dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
+}
+
+.image_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; 
+    height: auto; 
+    max-width: 200px; 
+    max-height: 200px; 
+    overflow: hidden;
+    margin: 0 auto; 
+}
+
+.preview_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
+}
+
+.dropzone-desc {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+
+.dropzone-wrapper.dragging {
+    background-color: #e3f2fd;
+    border-color: #90caf9;
+}
+
     .section__container {
         padding: 30px;
     }
@@ -62,6 +106,12 @@
         line-height: 1.6;
         color: #555;
     }
+    .select2-close-mask{
+                z-index: 2099 !important;
+            }
+            .select2-dropdown{
+                z-index: 3051 !important;
+            }
 </style>
 @endpush
 
@@ -76,53 +126,53 @@
                                 <th>No</th>
                                 <th scope="col">Page Id</th>
                                 <th scope="col">Tentang Kami</th>
-                                <th scope="col">Visi</th>
+                                <!--<th scope="col">Visi</th>
                                 <th scope="col">Misi</th>
-                                <th scope="col">Sejarah</th>
+                                <th scope="col">Sejarah</th> -->
                                 <th scope="col">Status</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="" style="vertical-align: middle">
                             @foreach ($profil as $row)
-                                <tr>
-                                    <th scope="row">{{ $loop->iteration }}</th>
-                                    <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
-                                    <td>{!! strip_tags($row->tentang_kami, '<br><strong><em>') !!}</td>
-                                    <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
+                            <tr>
+                                <th scope="row">{{ $loop->iteration }}</th>
+                                <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
+                                <td>{!! strip_tags($row->tentang_kami, '<br><strong><em>') !!}</td>
+                                <!-- <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
                                     <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
-                                    <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td>
-                                        <td>
-                                            <button type="button" class="btn rounded-3
+                                    <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td> -->
+                                <td>
+                                    <button type="button" class="btn rounded-3
                                                 {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
-                                                disabled>
-                                                {{ $row->status ? 'Aktif' : 'Nonaktif' }}
-                                            </button>
-                                        </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                id="dropdownMenuButton{{ $row->id_profil_perusahaan }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa-solid fa-bars"></i>
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_profil_perusahaan }}">
-                                                <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#edit{{ $row->id_profil_perusahaan }}"><i
-                                                            class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                <li><a href="{{ route('profil.destroy', $row->id_profil_perusahaan) }}"
-                                                        class="dropdown-item text-danger" data-confirm-delete="true"><i
-                                                            class="fa-regular fa-trash-can pe-none"></i>
-                                                        Delete</a>
-                                                        <li>
-    <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-primary">
-        <i class="fa-solid fa-eye"></i> Lihat Rincian
-    </a>
-</li>
+                                        disabled>
+                                        {{ $row->status ? 'Aktif' : 'Nonaktif' }}
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
+                                            id="dropdownMenuButton{{ $row->id_profil_perusahaan }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-bars"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_profil_perusahaan }}">
+                                            <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit{{ $row->id_profil_perusahaan }}"><i
+                                                        class="fa-regular fa-pen-to-square"></i> Edit</a></li>
+                                            <li>
+                                                <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-success">
+                                                    <i class="fa-solid fa-eye"></i> Rincian </a>
+                                            </li>
+                                            <li><a href="{{ route('profil.destroy', $row->id_profil_perusahaan) }}"
+                                                    class="dropdown-item text-danger" data-confirm-delete="true"><i
+                                                        class="fa-regular fa-trash-can pe-none"></i>
+                                                    Delete</a>
 
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -147,10 +197,10 @@
 
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                        <select class="form-select" name="page_id" aria-label="Default select example" required>
-                            <option selected value="">Pilih ...</option>
+                        <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                            <option value=""></option>
                             @foreach ($page as $row)
-                                <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
+                            <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -160,28 +210,25 @@
                         <textarea class="form-control ck-editor" id="tentang_kami" name="tentang_kami" rows="3"></textarea>
                     </div>
 
-                    <div class="form-group mb-6">
-                        <label class="control-label">Upload Struktur Organisasi Image <span class="text-danger">*</span></label>
-                        <div class="dropzone-wrapper">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Choose an image file or drag it here.</p>
-                            </div>
-                            <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi"
-                                accept="image/*" onchange="previewImage(event)">
-                            <div id="image_preview" class="mt-3"
-                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
-                                <img id="preview_image" src="" alt="Image preview"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
-                            </small>
-                        </div>
-                        <div id="image_error"></div>
-                    </div>
+                    <div class="mb-3">
+    <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
+    <div class="dropzone-wrapper" id="dropzone_struktur_add">
+    <div class="dropzone-desc">
+        <i class="glyphicon glyphicon-download-alt"></i>
+        <p>Choose an image file or drag it here.</p>
+    </div>
+    <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
+    
+    <div id="image_preview_add" class="image_preview" style="display: none;">
+        <img id="preview_image_add" src="" alt="Image preview" class="preview_image">
+    </div>
+</div>
 
+            <div class="mt-2">
+                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+            </div>
+            <div id="image_error"></div>
+        </div>
                     <div class="mb-3">
                         <label for="visi" class="form-label">Visi</label>
                         <textarea class="form-control ck-editor" id="visi" name="visi" rows="3"></textarea>
@@ -201,7 +248,7 @@
                         <div class="form-check form-switch">
                             <label for="status" class="me-3">Status</label>
                             <input class="form-check-input" type="checkbox" id="status" name="status" value="1"
-                                   {{ isset($row) && $row->status ? 'checked' : '' }}>
+                                {{ isset($row) && $row->status ? 'checked' : '' }}>
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -216,257 +263,275 @@
 
 <!-- Modal HTML for Editing Profile -->
 @foreach ($profil as $row)
-    <div class="modal modal-lg fade" id="edit{{ $row->id_profil_perusahaan }}" tabindex="-1" aria-labelledby="editLabel{{ $row->id_profil_perusahaan }}" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="editLabel{{ $row->id_profil_perusahaan }}">Edit Profil</h5>
-                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('profil.update', $row->id_profil_perusahaan) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+<div class="modal modal-lg fade" id="edit{{ $row->id_profil_perusahaan }}" tabindex="-1" aria-labelledby="editLabel{{ $row->id_profil_perusahaan }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary-gradient text-white">
+                <h5 class="modal-title" id="editLabel{{ $row->id_profil_perusahaan }}">Edit Profil</h5>
+                <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('profil.update', $row->id_profil_perusahaan) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
 
-                        <div class="mb-3">
-                            <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                            <select class="form-select" name="page_id" aria-label="Default select example" required>
-                                <option value="">Pilih ...</option>
-                                @foreach ($page as $pageOption)
-                                    <option value="{{ $pageOption->id_page }}" {{ $row->page_id == $pageOption->id_page ? 'selected' : '' }}>
-                                        {{ $pageOption->nama_page }}
-                                    </option>
-                                @endforeach
-                            </select>
+                    <div class="mb-3">
+                        <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
+                        <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                            <option value=""></option>
+                            @foreach ($page as $pageOption)
+                            <option value="{{ $pageOption->id_page }}" {{ $row->page_id == $pageOption->id_page ? 'selected' : '' }}>
+                                {{ $pageOption->nama_page }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tentang_kami" class="form-label">Tentang Kami <span class="text-danger">*</span></label>
+                        <textarea class="form-control ck-editor" id="tentang_kami" name="tentang_kami" rows="3">{{ old('tentang_kami', $row->tentang_kami) }}</textarea>
+                    </div>
+
+
+                   <div class="mb-3">
+    <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
+    <div class="dropzone-wrapper" style="height: 300px;">
+        <div class="dropzone-desc">
+            <i class="glyphicon glyphicon-download-alt"></i>
+            <p>Choose an image file or drag it here.</p>
+        </div>
+        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style="height: 244px;">
+
+        <!-- Image preview area -->
+        <div id="edit_struktur_organisasi_preview_{{ $row->id_profil_perusahaan }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 300px;">
+            @if($row->path_struktur_organisasi)
+            <img src="{{ asset('storage/' . $row->path_struktur_organisasi) }}" id="edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}" alt="Struktur Organisasi Preview" style="max-width: 100%;">
+            @else
+            <img src="" id="edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}" alt="Struktur Organisasi Preview" style="max-width: 100%; display: none;">
+            @endif
+        </div>
+    </div>   
+        <script>
+            document.getElementById('path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewImage = document.getElementById('edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}');
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>    
+                    <div class="mb-3">
+                        <label for="visi" class="form-label">Visi</label>
+                        <textarea class="form-control ck-editor" id="visi" name="visi" rows="3">{{ old('visi', $row->visi) }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="misi" class="form-label">Misi</label>
+                        <textarea class="form-control ck-editor" id="misi" name="misi" rows="3">{{ old('misi', $row->misi) }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sejarah" class="form-label">Sejarah</label>
+                        <textarea class="form-control ck-editor" id="sejarah" name="sejarah" rows="3">{{ old('sejarah', $row->sejarah) }}</textarea>
+                    </div>
+
+                    <div class="modal-footer justify-content-between mx-3">
+                        <div class="form-check form-switch">
+                            <label for="edit_status_profil_{{ $row->id_profil_perusahaan }}" class="me-3">Status</label>
+                            <input class="form-check-input" type="checkbox" id="edit_status_profil_{{ $row->id_profil_perusahaan }}" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                            <!-- Hidden input field for unchecked status -->
+                            <input type="hidden" name="status_hidden" value="0">
                         </div>
-
-                        <div class="mb-3">
-                            <label for="tentang_kami" class="form-label">Tentang Kami <span class="text-danger">*</span></label>
-                            <textarea class="form-control ck-editor" id="tentang_kami" name="tentang_kami" rows="3">{{ old('tentang_kami', $row->tentang_kami) }}</textarea>
+                        <div>
+                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="path_struktur_organisasi" class="form-label">Upload Struktur Organisasi Image</label>
-                            <div class="dropzone-wrapper">
-                                <div class="dropzone-desc">
-                                    <i class="glyphicon glyphicon-download-alt"></i>
-                                    <p>Choose an image file or drag it here.</p>
-                                </div>
-                                <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi"
-                                    accept=".png, .jpg, .jpeg">
-
-                                <!-- Image preview area -->
-                                <div id="image_preview" class="mt-3"
-                                    style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
-                                    <img id="preview_image" src="{{ $row->path_struktur_organisasi ? asset('storage/' . $row->path_struktur_organisasi) : '' }}" alt="Image preview"
-                                        style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ $row->path_struktur_organisasi ? 'block' : 'none' }};">
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
-                            </div>
-                            <div id="image_error"></div>
-                        </div>
-
-                        <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            var fileInput = document.getElementById('path_struktur_organisasi');
-                            var previewImage = document.getElementById('preview_image');
-                            var imagePreviewContainer = document.getElementById('image_preview');
-
-                            fileInput.addEventListener('change', function(event) {
-                                var file = event.target.files[0];
-                                if (file) {
-                                    var reader = new FileReader();
-
-                                    reader.onload = function(e) {
-                                        // Set the src of the preview image
-                                        previewImage.src = e.target.result;
-                                        previewImage.style.display = 'block'; // Show the preview image
-                                    };
-
-                                    reader.readAsDataURL(file);
-                                } else {
-                                    // Hide the preview image if no file is selected
-                                    previewImage.style.display = 'none';
-                                }
-                            });
-                        });
-                        </script>
-
-
-
-                        <div class="mb-3">
-                            <label for="visi" class="form-label">Visi</label>
-                            <textarea class="form-control ck-editor" id="visi" name="visi" rows="3">{{ old('visi', $row->visi) }}</textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="misi" class="form-label">Misi</label>
-                            <textarea class="form-control ck-editor" id="misi" name="misi" rows="3">{{ old('misi', $row->misi) }}</textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="sejarah" class="form-label">Sejarah</label>
-                            <textarea class="form-control ck-editor" id="sejarah" name="sejarah" rows="3">{{ old('sejarah', $row->sejarah) }}</textarea>
-                        </div>
-
-                        <div class="modal-footer justify-content-between mx-3">
-                            <div class="form-check form-switch">
-                                <label for="edit_status_profil_{{ $row->id_profil_perusahaan }}" class="me-3">Status</label>
-                                <input class="form-check-input" type="checkbox" id="edit_status_profil_{{ $row->id_profil_perusahaan }}" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
-                                <!-- Hidden input field for unchecked status -->
-                                <input type="hidden" name="status_hidden" value="0">
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 @endforeach
 
-@push('scripts')
-<script src="{{ asset('js/ckeditor.js') }}"></script>
-<script>
-    function initializeCKEditor() {
-        const editors = document.querySelectorAll('.ck-editor');
-        editors.forEach(editor => {
-            if (!editor.dataset.ckeditorInitialized) {
-                ClassicEditor
-                    .create(editor)
-                    .then(editorInstance => {
-                        editor.dataset.ckeditorInitialized = true;
-                    })
-                    .catch(error => {
-                        console.error('Error initializing CKEditor:', error);
-                    });
+    <!-- Script untuk preview gambar -->
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+    const addFileInput = document.getElementById('path_struktur_organisasi');
+    
+    if (addFileInput) {
+        addFileInput.addEventListener('change', function(event) {
+            console.log("File selected: ", event.target.files[0]); // Debug
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log("Preview ready"); // Debug
+                    document.getElementById('preview_image_add').src = e.target.result;
+                    document.getElementById('image_preview_add').style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
             }
         });
-    }
+  
 
+                // Prevent duplicate listeners by setting a flag
+                fileInput.dataset.listenerAttached = true;
+            }
 
+            // Handle drag and drop
+            dropzone.addEventListener('dragover', function (event) {
+                event.preventDefault();
+                dropzone.classList.add('dragging');
+            });
 
+            dropzone.addEventListener('dragleave', function () {
+                dropzone.classList.remove('dragging');
+            });
 
+            dropzone.addEventListener('drop', function (event) {
+                event.preventDefault();
+                dropzone.classList.remove('dragging');
 
-    function previewImageEdit(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('preview_image_edit').src = e.target.result;
-            document.getElementById('image_preview_edit').style.display = 'flex';
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    }
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    const changeEvent = new Event('change');
+                    fileInput.dispatchEvent(changeEvent);
+                }
+            });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeCKEditor();
+            // Click on the dropzone to open file selector
+            dropzone.addEventListener('click', function () {
+                fileInput.click();
+            });
+        });
+    </script>
+
+    <!-- Include jQuery terlebih dahulu -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Include JS Select2 setelah jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>\
+
+    <!-- Script Select2 -->
+    <script>
+         $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
     });
+    </script>
+@endsection
+ 
+@push('scripts')
+    
 
-    document.querySelectorAll('.modal').forEach(modal => {
-        modal.addEventListener('show.bs.modal', () => {
+
+    <!-- Script untuk CKEditor -->
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+    <script>
+        function initializeCKEditor() {
+            const editors = document.querySelectorAll('.ck-editor');
+            editors.forEach(editor => {
+                if (!editor.dataset.ckeditorInitialized) {
+                    ClassicEditor
+                        .create(editor)
+                        .then(editorInstance => {
+                            editor.dataset.ckeditorInitialized = true;
+                        })
+                        .catch(error => {
+                            console.error('Error initializing CKEditor:', error);
+                        });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
             initializeCKEditor();
         });
 
-        modal.addEventListener('hidden.bs.modal', () => {
-            const editors = document.querySelectorAll('.ck-editor');
-            editors.forEach(editor => {
-                if (editor.dataset.ckeditorInitialized) {
-                    editor.dataset.ckeditorInitialized = false;
-                    editor.nextSibling.innerHTML = ''; // Clear editor instance
-                }
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('show.bs.modal', () => {
+                initializeCKEditor();
             });
-        });
-    });
 
-
-
-
-
-
-
-
-
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-@endpush
-
-
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Function to handle form submission
-        document.getElementById('profilForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            // Perform form submission with AJAX
-            let form = this;
-            let formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success alert
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Your work has been saved',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        // Redirect or reload page if needed
-                        window.location.reload();
-                    });
-                } else {
-                    // Show error alert
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!',
-                    });
-                }
-            })
-            .catch(error => {
-                // Show error alert
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong!',
+            modal.addEventListener('hidden.bs.modal', () => {
+                const editors = document.querySelectorAll('.ck-editor');
+                editors.forEach(editor => {
+                    if (editor.dataset.ckeditorInitialized) {
+                        editor.dataset.ckeditorInitialized = false;
+                        editor.nextSibling.innerHTML = ''; // Clear editor instance
+                    }
                 });
             });
         });
-    });
-</script>
+    </script>
+
+    <!-- SweetAlert2 untuk form submission -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to handle form submission
+            document.getElementById('profilForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Perform form submission with AJAX
+                let form = this;
+                let formData = new FormData(form);
+
+                fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success alert
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Your work has been saved',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                // Redirect or reload page if needed
+                                window.location.reload();
+                            });
+                        } else {
+                            // Show error alert
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong!',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        // Show error alert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        });
+                    });
+            });
+        });
+    </script>
+
 @endpush
-
-
-@endsection
-
-
-
-
-
-
-
-
-

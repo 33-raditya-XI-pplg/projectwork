@@ -2,6 +2,19 @@
 @section('title', 'Faq')
 @section('content')
 
+<style>  .select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }</style>
+    
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -107,8 +120,8 @@
                                     @method('PUT')
                                     <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
                                     <div class="mb-3">
-                                        <label for="page_id" class="form-label">Page Id</label>
-                                        <select class="form-select" id="page_id" name="page_id" required>
+                                        <label for="page_id" class="form-label ">Page Id</label>
+                                        <select class="form-select js-example-basic-single" id="page_id" name="page_id" required>
                                             @foreach($page as $a)
                                                 <option value="{{ $a->id_page }}" {{ $row->page_id == $a->id_page ? 'selected' : '' }}>
                                                     {{ $a->nama_page }}
@@ -147,6 +160,17 @@
 </div>
 </div>
 
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2({
+            placeholder: function(){
+                return $(this).data('placeholder');
+            },
+            allowClear: true,  // Adds the "clear" option to deselect
+            minimumResultsForSearch: Infinity  // Disables search box for dropdowns
+        });
+    });
+</script>
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -162,7 +186,7 @@
 
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                        <select class="form-select" name="page_id" id="page_id" required>
+                        <select class="form-select js-example-basic-single" name="page_id" id="Addpage_id" data-placeholder="Pilih Page" required>
                             <option value="" disabled selected>Select Page...</option>
                             @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>

@@ -15,7 +15,12 @@
 
 
 <style>
-
+.select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }
     .video-container {
         display: flex;
         flex-wrap: wrap;
@@ -287,7 +292,7 @@
                         </div>
                         <div class="form-group">
                             <label for="page_id">Page ID <span class="text-danger">*</span></label>
-                            <select name="page_id" class="form-control" id="page_id" required>
+                            <select name="page_id" class="form-control js-example-basic-single" id="page_id" data-placeholder="Pilih Page" required>
                                 <option value="">Select Page ID</option>
                                 @foreach ($pages as $page)
                                     <option value="{{ $page->id_page }}">{{ $page->id_page }} - {{ $page->nama_page }}</option>
@@ -333,6 +338,27 @@
     </div>
 
 @push('script')
+
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+  $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     @if (session('success'))
     <script>

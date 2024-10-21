@@ -6,28 +6,71 @@
 <!-- Include SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-  .blog-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden;
-}
+    
+    .select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }
+    .blog-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
 
-.blog-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+    .blog-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-.blog-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 0; /* Remove border-radius from the image */
-}
+    .dropzone-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 240px;
+        border: 2px dashed #ddd;
+        background-color: #f9f9f9;
+        position: relative;
+        cursor: pointer;
+    }
 
-.card-body {
-    display: flex;
-    flex-direction: column;
-}
+    .image_preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: auto;
+        max-width: 200px;
+        max-height: 200px;
+        overflow: hidden;
+        margin: 0 auto;
+    }
 
+    .preview_image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
+    }
 
+    .dropzone-desc {
+        text-align: center;
+        padding: 20px;
+        color: #888;
+    }
+
+    .blog-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        /* Remove border-radius from the image */
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
 </style>
 
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -35,28 +78,28 @@
         <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-home-tab">
             <div class="mt-4">
                 <div class="table-responsive">
-                <table id="example" class="table">
-                    <thead class="fw-normal">
-                        <tr>
-                            <th>No</th>
-                            <th scope="col">Page Name</th>
-                            <th scope="col">Judul</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Body</th>
-                            {{-- <th scope="col">Photo</th> --}}
-                            <th scope="col">Kategori</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody style="vertical-align: middle">
-                        @foreach ($blog as $row)
+                    <table id="example" class="table">
+                        <thead class="fw-normal">
+                            <tr>
+                                <th>No</th>
+                                <th scope="col">Page Name</th>
+                                <th scope="col">Judul</th>
+                                <th scope="col">Slug</th>
+                                <!-- <th scope="col">Body</th> -->
+                                {{-- <th scope="col">Photo</th> --}}
+                                <th scope="col">Kategori</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody style="vertical-align: middle">
+                            @foreach ($blog as $row)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $row->page->nama_page ?? 'N/A' }}</td> <!-- Use eager loaded page relationship -->
                                 <td>{{ $row->judul }}</td>
                                 <td>{{ $row->slug }}</td>
-                                <td>{{ Str::limit(strip_tags($row->body), 100) }}</td>
+                                <!-- <td>{{ Str::limit(strip_tags($row->body), 100) }}</td> -->
                                 {{-- <td>
                                     <!-- Display the photo or a default image if not set -->
                                     <img src="{{ $row->photo ? asset('storage/photos/' . $row->photo) : asset('images/default.jpg') }}" alt="{{ $row->judul }}" style="width: 100px; height: auto;">
@@ -80,6 +123,11 @@
                                             <li>
                                                 <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}">
                                                     <i class="fa-regular fa-pen-to-square"></i> Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-success" href="{{ route('blog.show', $row->id_blog) }}">
+                                                    <i class="fa-regular fa-eye"></i> Rincian
                                                 </a>
                                             </li>
                                             <li>
@@ -114,41 +162,16 @@
                                     </script>
                                 </td>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                            @endforeach
+                        </tbody>
+                    </table>
 
 
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-
-<div class="container my-5">
-    <div class="row">
-        @foreach ($blog as $post)
-            <div class="col-md-4 mb-4">
-                <div class="card blog-card h-100 shadow-sm">
-                    <!-- Fallback to default image if photo is not set -->
-                    <img src="{{ $post->photo ? asset('storage/photos/' . $post->photo) : asset('images/default.jpg') }}" class="card-img-top" alt="{{ $post->judul }}">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ $post->judul }}</h5>
-                        <p class="card-text">{{ Str::limit(strip_tags($post->body), 150) }}</p>
-
-                        <a href="{{ route('blog.show', $post->id_blog) }}" class="btn btn-primary mt-auto">Read More</a>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
-</div>
-
-
-
-
-
-
 
 <!-- Add Blog Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
@@ -165,23 +188,23 @@
 
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                        <select class="form-select" name="page_id" id="page_id" aria-label="Default select example" required>
+                        <select class="form-select js-example-basic-single" name="page_id" id="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
                             <option value="" disabled selected>Pilih ...</option>
                             @foreach ($page as $row)
-                                <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
+                            <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                             @endforeach
                         </select>
                         @error('page_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="kategori_id" class="form-label">Kategori <span class="text-danger">*</span></label>
-                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
+                        <select class="form-select js-example-basic-single" name="kategori_id" id="Addkategori_id" aria-label="Default select example"  data-placeholder="Pilih Kategori" required>
                             <option value="" disabled selected>Pilih ...</option>
                             @foreach ($kategori as $row)
-                                <option value="{{ $row->id_kategori }}">{{ $row->nama_kategori }}</option>
+                            <option value="{{ $row->id_kategori }}">{{ $row->nama_kategori }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -198,19 +221,16 @@
                                 <i class="glyphicon glyphicon-download-alt"></i>
                                 <p>Drag and drop an image file here or click to choose one.</p>
                             </div>
-                            <input type="file" name="photo" class="dropzone" id="photo" accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+                            <input type="file" name="photo" class="dropzone" id="photo" accept=".png, .jpg, .jpeg, .bmp" onchange="previewImage(event)" style="display: none;height: 300px;">
 
                             <!-- Image preview area -->
-                            <div id="image_preview" class="mt-3"
-                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 20px;">
-                                <img id="preview_image" src="" alt="Image preview"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                            <div id="image_preview" class="image_preview" style="display: none;">
+                                <img id="preview_image" class="preview_image" src="" alt="Image preview">
                             </div>
-
                         </div>
-                        <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
-                        </small>
+                        <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                     </div>
+
 
                     <div class="mb-3">
                         <label for="body" class="form-label">Body <span class="text-danger">*</span></label>
@@ -236,8 +256,8 @@
 
 
 @foreach ($blog as $row)
-   <!-- Edit Blog Modal -->
-   <div class="modal modal-lg fade" id="edit{{ $row->id_blog }}" tabindex="-1" aria-labelledby="edit{{ $row->id_blog }}Label" aria-hidden="true">
+<!-- Edit Blog Modal -->
+<div class="modal modal-lg fade" id="edit{{ $row->id_blog }}" tabindex="-1" aria-labelledby="edit{{ $row->id_blog }}Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary-gradient text-white">
@@ -253,11 +273,11 @@
                     <!-- Page ID -->
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID</label>
-                        <select class="form-select" name="page_id" aria-label="Default select example" required>
+                        <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example"  data-placeholder="Pilih Page" required>
                             @foreach ($page as $element)
-                                <option value="{{ $element->id_page }}" {{ $element->id_page == $row->page_id ? 'selected' : '' }}>
-                                    {{ $element->nama_page }}
-                                </option>
+                            <option value="{{ $element->id_page }}" {{ $element->id_page == $row->page_id ? 'selected' : '' }}>
+                                {{ $element->nama_page }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -265,11 +285,11 @@
                     <!-- Kategori -->
                     <div class="mb-3">
                         <label for="kategori_id" class="form-label">Kategori</label>
-                        <select class="form-select" name="kategori_id" id="kategori_id" aria-label="Default select example" required>
+                        <select class="form-select  js-example-basic-single" name="kategori_id" id="kategori_id" aria-label="Default select example"  data-placeholder="Pilih Kategori" required>
                             @foreach ($kategori as $element)
-                                <option value="{{ $element->id_kategori }}" {{ $element->id_kategori == $row->kategori_id ? 'selected' : '' }}>
-                                    {{ $element->nama_kategori }}
-                                </option>
+                            <option value="{{ $element->id_kategori }}" {{ $element->id_kategori == $row->kategori_id ? 'selected' : '' }}>
+                                {{ $element->nama_kategori }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
@@ -280,34 +300,29 @@
                         <input type="text" class="form-control" name="judul" id="judul" value="{{ $row->judul }}" required>
                     </div>
 
-                    <!-- Photo Upload -->
                     <div class="mb-3">
-                        <label for="photo" class="form-label">Upload Photo</label>
-                        <div class="dropzone-wrapper">
+                        <label for="edit_photo_{{ $row->id_blog }}" class="form-label">Upload Photo</label>
+                        <div class="dropzone-wrapper" style="height: 300px;">
                             <div class="dropzone-desc">
                                 <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Drag and drop an image file here or click to choose one.</p>
+                                <p>Choose a photo file or drag it here.</p>
                             </div>
-                            <input type="file" name="photo" class="dropzone" id="photo" accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+                            <input type="file" name="photo" class="dropzone" id="edit_photo_{{ $row->id_blog }}" accept=".png, .jpg, .jpeg" style="height: 300px;">
 
                             <!-- Image preview area -->
-                            <div id="image_preview" class="mt-3"
-                                style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 20px;">
-                                <img id="preview_image" src="" alt="Image preview"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                            <div id="edit_photo_preview_{{ $row->id_blog }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 200px; max-height: 200px;">
+                                @if($row->photo)
+                                <img src="{{ asset('storage/photos/' . $row->photo) }}" id="edit_photo_image_preview_{{ $row->id_blog }}" alt="Photo Preview" style="max-width: 100%;">
+                                @else
+                                <img src="" id="edit_photo_image_preview_{{ $row->id_blog }}" alt="Photo Preview" style="max-width: 100%; display: none;">
+                                @endif
                             </div>
-
-                            <!-- Display current photo if exists -->
-                            @if($row->photo)
-                                <div class="mt-2">
-                                    <img src="{{ asset('storage/photos/' . $row->photo) }}" alt="{{ $row->judul }}" class="img-thumbnail" style="width: 100px; height: auto;">
-                                </div>
-                            @endif
                         </div>
                         @error('photo')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
 
                     <!-- Body -->
                     <div class="mb-3">
@@ -317,15 +332,15 @@
 
                     <!-- Status & Buttons -->
                     <div class="modal-footer justify-content-between mx-3">
-                    <div class="mb-3 form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
-                        <label class="form-check-label" for="status">Aktif</label>
-                    </div>
+                        <div class="mb-3 form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="status" name="status" value="1" {{ $row->status ? 'checked' : '' }}>
+                            <label class="form-check-label" for="status">Aktif</label>
+                        </div>
 
-                    <div>
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
-                    </div>
+                        <div>
+                            <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success rounded-3 text-white">Update</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -334,80 +349,119 @@
 </div>
 
 
-<script>
 
-    document.addEventListener('DOMContentLoaded', function () {
-    const fileInput = document.getElementById('photo');
-    const previewImage = document.getElementById('preview_image');
-    const imagePreviewContainer = document.getElementById('image_preview');
 
-    // Handle file input change event to show preview
-    fileInput.addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
-            reader.onload = function (e) {
-                previewImage.src = e.target.result;
-                previewImage.style.display = 'block'; // Show the preview image
-            };
-
-            reader.readAsDataURL(file);
-        } else {
-            previewImage.src = '';
-            previewImage.style.display = 'none'; // Hide the preview image if no file
-        }
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+  $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder'); 
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
     });
+    </script>
+    
+    <script>
+                        document.getElementById('edit_photo_{{ $row->id_blog }}').addEventListener('change', function(event) {
+                            const file = event.target.files[0];
+                            if (file && file.type.startsWith('image/')) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    const previewImage = document.getElementById('edit_photo_image_preview_{{ $row->id_blog }}');
+                                    previewImage.src = e.target.result;
+                                    previewImage.style.display = 'block';
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
+                    </script>
+    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const fileInput = document.getElementById('photo');
+                            const previewImage = document.getElementById('preview_image');
+                            const imagePreviewContainer = document.getElementById('image_preview');
+                            const dropzone = document.querySelector('.dropzone-wrapper');
 
-    // Optional: Handle drag and drop for the file input
-    const dropzone = document.querySelector('.dropzone-wrapper');
+                            // Handle file input change event to show preview
+                            fileInput.addEventListener('change', function(event) {
+                                const file = event.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
 
-    dropzone.addEventListener('dragover', function (event) {
-        event.preventDefault();
-        dropzone.classList.add('dragging');
-    });
+                                    reader.onload = function(e) {
+                                        previewImage.src = e.target.result;
+                                        imagePreviewContainer.style.display = 'flex'; // Show the preview image
+                                    };
 
-    dropzone.addEventListener('dragleave', function () {
-        dropzone.classList.remove('dragging');
-    });
+                                    reader.readAsDataURL(file);
+                                } else {
+                                    previewImage.src = '';
+                                    imagePreviewContainer.style.display = 'none'; // Hide the preview image if no file
+                                }
+                            });
 
-    dropzone.addEventListener('drop', function (event) {
-        event.preventDefault();
-        dropzone.classList.remove('dragging');
+                            // Optional: Handle drag and drop for the file input
+                            dropzone.addEventListener('dragover', function(event) {
+                                event.preventDefault();
+                                dropzone.classList.add('dragging');
+                            });
 
-        const files = event.dataTransfer.files;
-        if (files.length > 0) {
-            fileInput.files = files;
-            const event = new Event('change');
-            fileInput.dispatchEvent(event);
-        }
-    });
-});
+                            dropzone.addEventListener('dragleave', function() {
+                                dropzone.classList.remove('dragging');
+                            });
 
-</script>
+                            dropzone.addEventListener('drop', function(event) {
+                                event.preventDefault();
+                                dropzone.classList.remove('dragging');
+
+                                const files = event.dataTransfer.files;
+                                if (files.length > 0) {
+                                    fileInput.files = files;
+                                    const changeEvent = new Event('change');
+                                    fileInput.dispatchEvent(changeEvent);
+                                }
+                            });
+
+                            // Show the dropzone on clicking the desc
+                            dropzone.addEventListener('click', function() {
+                                fileInput.click();
+                            });
+                        });
+                    </script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Gagal Menghapus',
-            text: "{{ session('error') }}",
-            showConfirmButton: true
-        });
-    </script>
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal Menghapus',
+        text: "{{ session('error') }}",
+        showConfirmButton: true
+    });
+</script>
 @endif
 
 @if(session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil',
-            text: "{{ session('success') }}",
-            showConfirmButton: true
-        });
-    </script>
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: "{{ session('success') }}",
+        showConfirmButton: true
+    });
+</script>
 @endif
 
 

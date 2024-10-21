@@ -160,4 +160,12 @@ class PageController extends Controller
         return redirect()->back()->with('success', 'Page berhasil dihapus.');
     }
 
+
+    public function show($id)
+    {
+        $page = page::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Page';
+        return view('admin.page.show', compact('page','Title','subtitle'));
+    }
 }

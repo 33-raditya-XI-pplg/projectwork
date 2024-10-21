@@ -73,8 +73,7 @@ class SliderController extends Controller
         if ($request->hasFile('image_file_edit')) {
             $imagePath = $request->file('image_file_edit')->store('public/images');
             $imageUrl = Storage::url($imagePath);
-
-            $slider->image_url = $imageUrl;
+            $slider->image_url = $imageUrl; // Update the image URL
         }
 
 
@@ -95,7 +94,16 @@ class SliderController extends Controller
 
 
 
-
+    public function show($id)
+    {
+        // Mengambil data berdasarkan id
+        $slider = slider::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail slider';
+    
+        // Kirim data profil ke view 'rincian'
+        return view('admin.slider.show', compact('slider','Title','subtitle'));
+    }
 
 
     public function destroy(Slider $slider)
