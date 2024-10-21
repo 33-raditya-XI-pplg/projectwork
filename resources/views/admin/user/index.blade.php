@@ -90,6 +90,10 @@
                                     <i class="fa-solid fa-bars"></i>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item text-dark" href="#" data-bs-toggle="modal"
+                                        data-bs-target="#rincian{{ $row->id_user }}"><i class="fa-solid fa-code pe-none"></i>
+                                        Rincian</a>
+                                    </li>
                                     <li><a class="dropdown-item text-info" href="{{ route('user.edit', $row->id_user) }}"
                                             data-bs-target="#edit{{ $row->id_user }}"><i
                                                 class="fa-regular fa-pen-to-square"></i> Edit</a>
@@ -98,11 +102,7 @@
                                             class="dropdown-item text-danger" data-confirm-delete="true"><i
                                                 class="fa-regular fa-trash-can pe-none"></i>
                                             Delete</a>
-                                    </li>
-                                    <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#rincian{{ $row->id_user }}"><i class="fa-solid fa-code pe-none"></i>
-                                        Rincian</a>
-                                    </li>
+                                    </li>                                    
                                 </ul>
                             </div>
                         </td>

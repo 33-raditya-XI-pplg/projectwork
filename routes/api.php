@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\Background\BackgroundController;
+use App\Http\Controllers\Api\Instansi\InstansiController;
 use App\Http\Controllers\Api\JenisEvt\JenisEventController;
 use App\Http\Controllers\Api\Pengguna\PenggunaController;
 use App\Http\Controllers\Api\Penguji\PengujiController;
+use App\Http\Controllers\Api\PenilaianController;
+use App\Http\Controllers\Api\sertifikatController;
 use App\Http\Controllers\Api\Skema\SkemController;
 use App\Http\Controllers\Api\TTD\TTDController;
 use Illuminate\Http\Request;
@@ -41,8 +44,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::get('/skema', [Api\SkemaController::class, 'index']);
-// Route::post('/skema', [Api\SkemaController::class, 'create']);
-// Route::get('/skema/{id}', [Api\SkemaController::class, 'update']);
+// Route::post('/skema', [Api\SkemaController::class, 'store']);
+// Route::put('/skema/{id}', [Api\SkemaController::class, 'update'])->name('update');
 // Route::delete('/skema/{id}', [Api\SkemaController::class, 'destroy']);
 // Route::get('/skema/{id}', [Api\SkemaController::class, 'show'])->name('show');
 
@@ -55,12 +58,17 @@ Route::post('/event', [Api\EventController::class, 'store'])->name('store');
 Route::put('/event/{id}', [Api\EventController::class, 'update'])->name('update');
 Route::delete('/event/{id}', [Api\EventController::class, 'destroy'])->name('destroy');
 
+//Api Sertifikasi
+Route::apiResource('sertifikat', sertifikatController::class);
+
+//Api Penialaian
+Route::apiResource('penilaian', PenilaianController::class);
 
 
 // APi Tempat
 Route::apiResource('tempat', TempatController::class);
 // Api Instansi
-Route::apiResource('instansi', TempatController::class);
+Route::apiResource('instansi', InstansiController::class);
 // Api Rentang_nilai
 Route::apiResource('rentang', Rentang_nilaiController::class);
 // Api Background
@@ -173,9 +181,6 @@ Route::get('/page/{id}', [Api\Page\PageController::class, 'show']);
 Route::post('/page', [Api\Page\PageController::class, 'store']);
 Route::put('/page/{id}', [Api\Page\PageController::class, 'update']);
 Route::delete('/page/{id}', [Api\Page\PageController::class, 'destroy']);
-
-
-
 // page end
 
 

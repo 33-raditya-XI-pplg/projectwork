@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Skema;
 use Illuminate\Http\Request;
 use App\Models\Upload_pembayaran;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -132,4 +134,32 @@ class UploadPembayaranController extends Controller
         });
         return redirect()->back();
     }
+    public function getSkema($eventId)
+    {
+        // Ambil semua event skema yang memiliki id_event yang sama
+        $events = \DB::table('tb_event_skema')->where('event_id', $eventId)->get();
+        // Cek apakah ada event yang ditemukan
+        if ($events->isEmpty()) {
+            return response()->json(['error' => 'Event tidak ditemukan.'], 404);
+        }
+        // Buat array untuk menyimpan skema yang terkait dengan event
+        $allSkema = [];
+        // Iterasi setiap event dan ambil skema yang terkait dengan skema_id
+        foreach ($events as $event) {
+            if ($event->skema_id) {
+                $skema = \DB::table('tb_skema')->where('id_skema', $event->skema_id)->first();
+                if ($skema) {
+                    $allSkema[] = $skema;
+                }
+            }
+        }
+        // Cek apakah skema ditemukan
+        if (empty($allSkema)) {
+            return response()->json(['error' => 'Tidak ada skema yang ditemukan untuk event terkait.'], 404);
+        }
+        return response()->json($allSkema); // Kembalikan semua skema yang ditemukan
+    }
+
+
+
 }

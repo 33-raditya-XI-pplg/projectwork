@@ -88,17 +88,17 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item text-dark" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#rincian{{ $row->id_ttd }}"><i class="fa-solid fa-code pe-none"></i>
+                                            Rincian</a>
+                                        </li>
                                         <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                 data-bs-target="#edit{{ $row->id_ttd }}"><i
                                                     class="fa-regular fa-pen-to-square"></i> Edit</a></li>
                                         <li><a href="{{ route('tandatangan.destroy', $row->id_ttd) }}" class="dropdown-item text-danger"
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>
-                                        </li>
-                                        <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#rincian{{ $row->id_ttd }}"><i class="fa-solid fa-code pe-none"></i>
-                                            Rincian</a>
-                                        </li>
+                                        </li>                                      
                                     </ul>
                                 </div>
                             </td>
@@ -168,7 +168,7 @@
                                                 <i class="glyphicon glyphicon-download-alt"></i>
                                                 <p>Pilih gambar atau seret ke sini.</p>
                                             </div>
-                                            <input type="file" name="path_ttd" class="dropzone" id="path_ttd" accept="image/*" required>
+                                            <input type="file" name="path_ttd" class="dropzone"  accept="image/*" required>
                                             <div id="image_preview_" class="mt-3">
                                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                             </div>
@@ -383,35 +383,62 @@
 </script>
 
 <script>    
-        document.getElementById('path_ttd').addEventListener('change', function(event) {
+        document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi preview image
+        const inputFile = document.querySelector('input[name="path_ttd"]');
         const preview = document.getElementById('preview_image_create');
-        const file = event.target.files[0];
-        const reader = new FileReader();
 
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block'; 
-        }
 
-        if (file) {
-            reader.readAsDataURL(file);
+        if (preview) {
+        preview.style.display = 'none';
+
+        inputFile.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                if (preview) { // Cek apakah preview tidak null
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                } else {
+                    console.error('Preview element not found');
+                }
+            }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    if (preview) {
+                        preview.src = '';
+                        preview.style.display = 'none';
+                    }
+                }
+            });
         } else {
-            preview.src = '';
-            preview.style.display = 'none'; 
+            console.error('Preview image element not found');
         }
-    });
+    
 
-            Dropzone.options.path_file = {
+        // Inisialisasi Dropzone
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone-wrapper", {
+            url: "/tandatangan", // URL server untuk unggahan
             maxFilesize: 2, 
-            acceptedFiles: "image/*", 
+            acceptedFiles: "image/*",
             init: function() {
                 this.on("success", function(file, response) {                    
+                    // Tangani response sukses
+                    console.log("Upload successful");
                 });
                 this.on("error", function(file, response) {
-                    document.getElementById('image_error').innerHTML = response.message;
+                    const errorElement = document.getElementById('image_error');
+                    if (errorElement) {
+                        errorElement.innerHTML = response.message || 'Upload failed';
+                    }
                 });
-              }
-            };       
+            }
+        });   
+    });   
 </script> 
 <script>
     document.querySelectorAll('[id^="path_ttd_"]').forEach(input => {

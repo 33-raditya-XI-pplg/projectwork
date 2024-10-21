@@ -105,17 +105,17 @@
                                 <i class="fa-solid fa-bars"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a href="{{ route('event-skema.show', [$evt->id_event, $list->id_event_skema]) }}"
+                                    class="dropdown-item text-dark"><i class="fa-solid fa-code pe-none"></i>
+                                    Rincian</a>
+                                </li>
                                 <li><a class="dropdown-item text-info" href="{{ route('event-skema.edit', [$evt->id_event, $list->id_event_skema]) }}"><i
                                             class="fa-regular fa-pen-to-square"></i> Edit</a></li>
                                 <li><a href="{{ route('event-skema.delete', [$evt->id_event, $list->skema_id]) }}"
                                         class="dropdown-item text-danger" data-confirm-delete="true"><i
                                             class="fa-regular fa-trash-can pe-none"></i>
                                         Delete</a>
-                                </li>
-                                <li><a href="{{ route('event-skema.show', [$evt->id_event, $list->id_event_skema]) }}"
-                                        class="dropdown-item text-warning"><i class="fa-solid fa-code pe-none"></i>
-                                        Rincian</a>
-                                </li>
+                                </li>                               
                             </ul>
                         </div>
                     </td>

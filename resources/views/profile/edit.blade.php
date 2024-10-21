@@ -175,11 +175,22 @@
             @if (Auth::user()->isLevel('Pengguna'))
             <br><h4>Pendidikan Terakhir</h4>
             <div class="mb-3 row">
+                <label for="instansi_id_{{ $user->id_user }}" class="col-sm-2 col-form-label">Nama Sekolah</label>
+                <div class="col-sm-10">
+                    <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id_{{ $user->id_user }}" data-placeholder="Pilih Instansi" required>
+                        <option value="" disabled selected></option> 
+                        @foreach ($institutions as $id_instansi => $name)
+                        <option value="{{ $id_instansi }}" {{ old('instansi_id', $user->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                        
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            {{-- <div class="mb-3 row">
                 <label for="nama_sekolah" class="col-sm-2 col-form-label">Nama Sekolah</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="nama_sekolah" name="nama_sekolah" value="{{ $user->nama_sekolah }}">
                 </div>
-            </div>
+            </div> --}}
             <div class="mb-3 row">
                 <label for="jurusan" class="col-sm-2 col-form-label">Jurusan</label>
                 <div class="col-sm-10">
@@ -216,7 +227,7 @@
             <div class="mb-3 row">
                 <label for="alamat_kota_perusahaan" class="col-sm-2 col-form-label">Pilih Kota</label>
                 <div class="col-sm-10">
-                    <select class="form-select js-example-basic-single" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan_{{ $user->id_user }}" data-placeholder="Pilih Kota Perusahaan" required>
+                    <select class="form-select js-example-basic-single" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan_{{ $user->id_user }}" data-placeholder="Pilih Kota Perusahaan" >
                         <option value="" disabled selected></option> 
                         @foreach ($regencies as $id => $name)
                             <option value="{{ $name }}" {{ old('alamat_kota_perusahaan', $user->alamat_kota_perusahaan) == $name ? 'selected' : '' }}>{{ $name }}</option>
@@ -250,7 +261,19 @@
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="type_penguji" name="type_penguji" value="{{ $user->type_penguji }}">
                 </div>
-            </div>          
+            </div>    
+            <div class="mb-3 row">
+                <label for="keahlian" class="col-sm-2 col-form-label">Keahlian</label>
+                <div class="col-sm-10">
+                    <textarea name="keahlian" id="keahlian" class="form-control"  rows="2">{{ $row->keahlian }}</textarea>
+                </div>
+            </div>                            
+            <div class="mb-3 row">
+                <label for="pengalaman" class="col-sm-2 col-form-label">Pengalaman Berapa Tahun</label>
+                <div class="col-sm-10">
+                    <textarea name="pengalaman" id="pengalaman" class="form-control"  rows="2">{{ $row->pengalaman }}</textarea>
+                </div>
+            </div>       
             @endif
 
             <div class="d-flex justify-content-end mb-2">

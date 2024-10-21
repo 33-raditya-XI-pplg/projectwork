@@ -21,7 +21,7 @@ class PengujiController extends Controller
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $regencies = DB::table('regencies')->pluck('name', 'id');
         $Title = 'Master Data';
-        $subtitle = 'Penguji';
+        $subtitle = 'Mentor';
         confirmDelete('Hapus Penguji', 'Apakah kamu yakin untuk menghapus?');
         return view('admin.penguji.index', compact('penguji', 'page', 'institutions', 'regencies', 'Title', 'subtitle'));
     }

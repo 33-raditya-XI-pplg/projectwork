@@ -2,6 +2,24 @@
 @section('title', 'Kegiatan')
 @section('content')
 
+<style>
+
+
+.select2-container--default{
+    text-align: center;
+}
+.btn i{
+    font-size: 12px;
+}
+.btn small{
+    font-size: 12px;
+}
+.btn-sm{
+    padding: 2px 4px;
+    font-size: 14px; 
+    line-height: 1;
+}
+</style>
 
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         @if ($errors->any())
@@ -10,15 +28,15 @@
             </div>
         @endif
         <div class="d-flex align-items-center mb-4">
-            <a class="btn btn-danger rounded" href="{{ route('event-skema.show', [$evt, $skema]) }}"><i
+            <a class="btn btn-danger btn-sm rounded me-3" href="{{ route('event-skema.show', [$evt, $skema]) }}"><i
                     class="fa-solid fa-angles-left"></i><small class="fw-bold">Kembali</small></a>
-            <select id="instansi" class="form-select mb-4 mx-3">
-                <option class="text-center" selected>Select Instansi</option>
+            <select id="instansi" class="form-select mb-4 mx-3 js-example-basic-single" data-placeholder="Pilih Instansi">
+                <option class="text-center" selected></option>
                 @foreach ($instansi as $list)
                     <option class="text-center" value="{{ $list->id_instansi }}">{{ $list->nama_instansi }}</option>
                 @endforeach
             </select>
-            <a class="btn btn-primary rounded pe-none px-4" id="show-peserta" href="javascript:void(0)"><i
+            <a class="btn btn-primary btn-sm rounded pe-none ms-3" id="show-peserta" href="javascript:void(0)"><i
                     class="fa-solid fa-magnifying-glass"></i><small class="fw-bold">Cari</small></a>
         </div>
         <form action="{{ route('event-skema.store-student', [$evt, $skema]) }}" method="POST">
@@ -44,9 +62,19 @@
 @endsection
 @push('script')
     <script>
+   
         var table = $('#peserta').DataTable();
         // search peserta
         $(document).ready(function() {
+            $('.js-example-basic-single').each(function(){
+                var placeholder = $(this).data('placeholder');
+                
+                $(this).select2({
+                placeholder:placeholder,
+                allowClear:true,
+                minimumResultsForSearch: Infinity
+                });
+            });
             $('#instansi').on('change', function() {
                 if (!isNaN($(this).val())) {
                     $('#show-peserta').removeClass('pe-none');

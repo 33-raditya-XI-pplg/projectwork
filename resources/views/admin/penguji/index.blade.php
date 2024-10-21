@@ -63,7 +63,7 @@
                 <thead class="fw-normal">
                     <th>No</th>
                     <th>Page Id</th>
-                    <th scope="col">Nama Penguji</th>
+                    <th scope="col">Nama Mentor</th>
                     <th scope="col">Instansi</th>
                     <th scope="col">NIK</th>
                     <th scope="col">Jabatan</th>
@@ -88,6 +88,10 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item text-dark" href="#" data-bs-toggle="modal"
+                                            data-bs-target="#rincian{{ $row->id_user }}"><i class="fa-solid fa-code pe-none"></i>
+                                            Rincian</a>
+                                        </li>
                                         <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                 data-bs-target="#edit{{ $row->id_user }}"><i
                                                     class="fa-regular fa-pen-to-square"></i> Edit</a>
@@ -95,11 +99,7 @@
                                         <li><a href="{{ route('penguji.destroy', $row->id_user) }}" class="dropdown-item text-danger"
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>
-                                        </li>
-                                        <li><a class="dropdown-item text-warning" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#rincian{{ $row->id_user }}"><i class="fa-solid fa-code pe-none"></i>
-                                            Rincian</a>
-                                        </li>
+                                        </li>                                      
                                     </ul>
                                 </div>
                             </td>
@@ -116,7 +116,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Penguji</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Mentor</h5>
                     <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -143,7 +143,7 @@
                             <div class="col">
                                 {{-- kanan --}}                        
                                     <div class="mb-3">
-                                        <label for="nama_lengkap" class="form-label">Nama Penguji</label>
+                                        <label for="nama_lengkap" class="form-label">Nama Mentor</label>
                                         <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
                                         value="{{old('nama_lengkap', isset($pengguji) ? $pengguji->nama_lengkap : '') }}" required>
                                     </div>
@@ -166,13 +166,13 @@
                                         value="{{old('no_telp', isset($pengguji) ? $pengguji->no_telp : '') }}"  required>
                                     </div>
                                     <div class="form-group mb-3">
-                                        <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                                        <label class="control-label mb-2">Upload Foto Mentor <span class="text-danger">*</span></label>
                                         <div class="dropzone-wrapper">
                                             <div class="dropzone-desc">
                                                 <i class="glyphicon glyphicon-download-alt"></i>
                                                 <p>Pilih gambar atau seret ke sini .</p>
                                             </div>
-                                            <input type="file" name="path_foto" class="dropzone" id="path_foto" accept="image/*" required>
+                                            <input type="file" name="path_foto" class="dropzone" accept="image/*" required>
                                             <div id="image_preview_" class="mt-3">
                                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                             </div>
@@ -217,7 +217,15 @@
                                     @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                    @enderror
-                                </div>                             
+                                </div>   
+                                <div class="mb-3 mt-5">
+                                    <label for="keahlian" class="form-label">Keahlian</label>
+                                    <textarea name="keahlian" id="keahlian" class="form-control"  rows="2">{{ old('keahlian',isset($pengguji) ? $pengguji->keahlian : '') }}</textarea>
+                                </div>                            
+                                <div class="mb-3 ">
+                                    <label for="pengalaman" class="form-label">Pengalaman Berapa Tahun</label>
+                                    <textarea name="pengalaman" id="pengalaman" class="form-control"  rows="2">{{ old('pengalaman',isset($pengguji) ? $pengguji->pengalaman : '') }}</textarea>
+                                </div>                            
                             </div>
                         </div>
                     </div>
@@ -247,7 +255,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary-gradient text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Penguji</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Mentor</h5>
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -273,7 +281,7 @@
                                 <div class="col">
                                     {{-- kanan --}}                                                                    
                                         <div class="mb-3">
-                                            <label for="nama_lengkap" class="form-label">Nama Penguji</label>
+                                            <label for="nama_lengkap" class="form-label">Nama Mentor</label>
                                             <input type="text" class="form-control" name="nama_lengkap"
                                                 id="nama_lengkap" value="{{ $row->nama_lengkap }}" required>
                                         </div>
@@ -295,7 +303,7 @@
                                             <input type="number" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
                                         </div>
                                         <div class="form-group mb-3">
-                                            <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                                            <label class="control-label mb-2">Upload Foto Mentor <span class="text-danger">*</span></label>
                                             <div class="dropzone-wrapper">
                                                 <div class="dropzone-desc">
                                                     <i class="glyphicon glyphicon-download-alt"></i>
@@ -346,7 +354,15 @@
                                                 <div class="mb-3 mt-5">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
-                                                </div>                              
+                                                </div>  
+                                                <div class="mb-3 mt-5">
+                                                    <label for="keahlian" class="form-label">Keahlian</label>
+                                                    <textarea name="keahlian" id="keahlian" class="form-control"  rows="2">{{ $row->keahlian }}</textarea>
+                                                </div>                            
+                                                <div class="mb-3 ">
+                                                    <label for="pengalaman" class="form-label">Pengalaman Berapa Tahun</label>
+                                                    <textarea name="pengalaman" id="pengalaman" class="form-control"  rows="2">{{ $row->pengalaman }}</textarea>
+                                                </div>                            
 
                                             </div>
                                         </div>
@@ -378,7 +394,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary-gradient text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Rincian Penguji</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Rincian Mentor</h5>
                         <button type="button" class="btn-kembali rounded-3" data-bs-dismiss="modal">Kembali</button> 
                     </div>
                      <div class="modal-body">                
@@ -390,11 +406,11 @@
                                 </div>
                                 <div class="col">
                                         <div class="mb-3">
-                                            <label for="nama_lengkap" class="form-label">Nama Penguji</label>
+                                            <label for="nama_lengkap" class="form-label">Nama Mentor</label>
                                             <input type="text" class="form-control" name="nama_lengkap"
                                                 id="nama_lengkap" value="{{ $row->nama_lengkap }}" disabled readonly >
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-3">
                                             <label for="instansi_id_{{ $row->id_user }}" class="form-label">Instansi</label>
                                             <input type="text" class="form-control" name="instansi" id="instansi_{{ $row->id_user }}" value="{{ $institutions[$row->instansi_id] ?? ''}}" disabled readonly>                                         
                                         </div>
@@ -402,10 +418,14 @@
                                             <label for="alamat" class="form-label">Alamat</label>
                                             <textarea class="form-control" id="alamat" name="alamat" rows="2"  disabled readonly >{{ $row->alamat }}</textarea>
                                         </div>
-                                        <div class="mb-4">
+                                        <div class="mb-2">
                                             <label for="no" class="form-label">No. telp</label>
                                             <input type="text" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}"disabled readonly >
-                                        </div>                                     
+                                        </div>    
+                                        <div class="mb-3">
+                                            <label for="keahlian" class="form-label">Keahlian</label>
+                                            <textarea name="keahlian" id="keahlian" class="form-control"  rows="2" disabled readonly>{{ $row->keahlian }}</textarea>
+                                        </div>                                   
                                 </div>
                                 <div class="col">
                                     {{-- kiri --}}
@@ -423,13 +443,17 @@
                                         <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota Perusahaan</label>                                      
                                         <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" disabled readonly>                               
                                     </div>
-                                    <div class="mb-3 mt-2">
+                                    <div class="mb- mt-5">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" disabled readonly>
-                                    </div>                                
+                                    </div>                                                                                        
+                                    <div class="mb-3 mt-3 ">
+                                        <label for="pengalaman" class="form-label">Pengalaman Berapa Tahun</label>
+                                        <textarea name="pengalaman" id="pengalaman" class="form-control"  rows="2" disabled readonly>{{ $row->pengalaman }}</textarea>
+                                    </div>   
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="control-label mb-2"> Foto Pengguji <span class="text-danger">*</span></label>
+                                    <label class="control-label mb-2"> Foto Mentor <span class="text-danger">*</span></label>
                                     <div class="dropzone-wrapper">                                       
                                         <div id="image_preview_" class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
                                                 <img  src="{{ asset($row->path_foto) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                             
@@ -445,12 +469,9 @@
         </div>
     @endforeach
 
-<!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> --}}
     <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
@@ -465,35 +486,62 @@
     });
     </script>
     <script>    
-        document.getElementById('path_foto').addEventListener('change', function(event) {
+       document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi preview image
+        const inputFile = document.querySelector('input[name="path_foto"]');
         const preview = document.getElementById('preview_image_create');
-        const file = event.target.files[0];
-        const reader = new FileReader();
 
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block'; // Show the image preview
-        }
 
-        if (file) {
-            reader.readAsDataURL(file);
+        if (preview) {
+        preview.style.display = 'none';
+
+        inputFile.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                if (preview) { // Cek apakah preview tidak null
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                } else {
+                    console.error('Preview element not found');
+                }
+            }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    if (preview) {
+                        preview.src = '';
+                        preview.style.display = 'none';
+                    }
+                }
+            });
         } else {
-            preview.src = '';
-            preview.style.display = 'none'; // Hide the image if no file selected
+            console.error('Preview image element not found');
         }
-    });
+    
 
-            Dropzone.options.path_file = {
+        // Inisialisasi Dropzone
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone-wrapper", {
+            url: "/penguji", // URL server untuk unggahan
             maxFilesize: 2, 
-            acceptedFiles: "image/*", 
+            acceptedFiles: "image/*",
             init: function() {
                 this.on("success", function(file, response) {                    
+                    // Tangani response sukses
+                    console.log("Upload successful");
                 });
                 this.on("error", function(file, response) {
-                    document.getElementById('image_error').innerHTML = response.message;
+                    const errorElement = document.getElementById('image_error');
+                    if (errorElement) {
+                        errorElement.innerHTML = response.message || 'Upload failed';
+                    }
                 });
-              }
-            };   
+            }
+        });
+    }); 
 </script> 
 <script>
   document.querySelectorAll('[id^="path_foto"]').forEach(input => {

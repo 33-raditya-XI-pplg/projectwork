@@ -34,6 +34,9 @@
                 object-fit: contain; 
                 display: block; 
             }
+            .shift-right {
+                padding-left: 20px; /* Atau bisa juga margin-left jika lebih tepat */
+            }
         </style>
     @endpush
 
@@ -53,7 +56,7 @@
                     <tbody class="table-responsive" style="vertical-align: middle">
                         @php $num = 1 @endphp
                         @foreach ($upload as $row)
-                            <tr>
+                        <tr class="event-row" data-event-id="{{ $row->id_event }}">
                                 <td>{{ $num++ }}</td>
                                 <td>{{ $row->nama_event }}</td>
                                 <td>{{ $row->tgl_mulai }}</td>
@@ -70,7 +73,7 @@
                                     </a>                                        
                                     @endif
                                 </td>                            
-                            </tr>
+                            </tr>                      
                         @endforeach
                     </tbody>
                 </table>
@@ -119,6 +122,78 @@
             </div>
         </div>
     </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var eventRows = document.querySelectorAll('.event-row');
+    
+    eventRows.forEach(function(row) {
+        row.addEventListener('click', function() {
+            var eventId = this.getAttribute('data-event-id');
+            var skemaRow = document.getElementById('skema-row-' + eventId);
+         
+            if (!skemaRow) {
+                skemaRow = document.createElement('tr');
+                skemaRow.id = 'skema-row-' + eventId;
+                skemaRow.classList.add('skema-row');
+                skemaRow.innerHTML = `
+                    <td colspan="6">
+                        <div id="skema-container-${eventId}" style="padding-left:150px;"></div>
+                    </td>
+                `;
+                this.parentNode.insertBefore(skemaRow, this.nextSibling);
+            }
+
+            if (skemaRow.style.display === 'none' || skemaRow.style.display === '') {
+                skemaRow.style.display = 'table-row';
+
+                var skemaContainer = document.getElementById('skema-container-' + eventId);
+                if (!skemaContainer.innerHTML) {
+                    fetch(`/getSkema/${eventId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.length > 0) {
+                                var table = document.createElement('table');
+                                table.classList.add('table', 'table-sm', 'table-bordered');
+                                               
+                                var thead = document.createElement('thead');
+                                thead.innerHTML = `
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Skema</th>                                      
+                                    </tr>
+                                `;
+                                table.appendChild(thead);
+                              
+                                var tbody = document.createElement('tbody');
+                                data.forEach(function(skema, index) {
+                                    var row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td>${index + 1}</td>
+                                        <td>${skema.nama_skema}</td>
+                                    `;
+                                    tbody.appendChild(row);
+                                });
+                                table.appendChild(tbody);                        
+                                skemaContainer.innerHTML = '';
+                                skemaContainer.appendChild(table);
+                            } else {
+                                skemaContainer.innerHTML = '<p>Tidak ada skema untuk event ini.</p>';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching skema:', error);
+                            skemaContainer.innerHTML = '<p>Terjadi kesalahan saat memuat skema.</p>';
+                        });
+                }
+            } else {                
+                skemaRow.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     var uploadModal = document.getElementById('uploadModal');
@@ -162,7 +237,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });  
 });
-
     </script>
       {{-- upload gambar  --}}
     <script>

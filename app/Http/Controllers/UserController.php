@@ -53,7 +53,15 @@ class UserController extends Controller
                 'status' => 'Belum Verified'
             ]);
         }
+
+
+        $nama_sekolah = DB::table('tb_instansi')
+            ->where('id_instansi', $request->instansi_id)
+            ->value('nama_instansi');
+
         $data = $request->all();
+        $data['nama_sekolah'] = $nama_sekolah;
+
         if ($request->hasFile('path_foto')) {
             $foto = $request->file('path_foto');
             $filename = 'foto_' . $request->nomor_induk . '.' . $foto->getClientOriginalExtension();
@@ -89,7 +97,13 @@ class UserController extends Controller
             $request->merge(['status' => 'Belum Verified']);
         }
 
+
+        $nama_sekolah = DB::table('tb_instansi')
+            ->where('id_instansi', $request->instansi_id)
+            ->value('nama_instansi');
+
         $data = $request->all();
+        $data['nama_sekolah'] = $nama_sekolah;
 
         if ($request->hasFile('path_foto')) {
             if ($user->path_foto) {

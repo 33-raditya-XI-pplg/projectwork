@@ -9,16 +9,16 @@
 
         <div class="d-flex flex-row mx-2">
             <div class="card-header me-2 w-100 mx-1">
-                <select id="event_select" name="event_select" class="chosen-select form-control"" data-placeholder="Pilih Event" >              
-                    <option hidden disabled selected>Pilih Event</option>
+                <select id="event_select" name="event_select" class=" form-control js-example-basic-single" data-placeholder="Pilih Event" >              
+                    <option hidden disabled selected></option>
                     @foreach ($event as $row)
                         <option value="{{ $row->id_event }}">{{ $row->nama_event }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="card-header me-2 w-100 mx-1">
-                <select id="skema_select" name="skema_select" class="chosen-select form-control">
-                    <option hidden disabled selected>Pilih Event Dahulu</option>
+                <select id="skema_select" name="skema_select" class=" form-control js-example-basic-single" data-placeholder="Pilih Event Dahulu">
+                    <option hidden disabled selected> </option>
                 </select>
             </div>
             <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1" disabled>Submit</button>
@@ -197,16 +197,21 @@
 
 @push('script')
 
-    {{-- <script>
-$(document).ready(function() {
-    $('.js-basic').select2({        
-        allowClear: true
-    });
-});
-    </script> --}}
+    <script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    }); 
+    </script>
 <script>
     
-    $(".chosen-select").chosen()
 
     $(document).ready(function() {
         var skemaID;

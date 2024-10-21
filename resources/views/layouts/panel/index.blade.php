@@ -111,13 +111,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+
+    
+    {{-- <script src="{{ asset('assets/js/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/select2.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
     <script src="{{ asset('assets/js/swithbutton.js') }}">
     </script>
-    <script src="{{ asset('assets/js/ckeditor.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/ckeditor.js') }}"></script> --}}
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+
     <script src="{{ asset('') }}vendor/DataTables/datatables.js"></script>
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/module.js"></script>
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/hotkeys.js"></script>
@@ -153,68 +157,66 @@
             }
         }
     </script>
-    <script>
-        $(document).ready(function() {
-            const ckeditorElements = document.querySelectorAll('.ck-editor');
-            const tables = document.querySelectorAll('#example');
+   <script>
+    let editors = {};
 
-            // Destroy the existing DataTable instance
-            $('#example').DataTable().destroy();
-            // create new DataTable instance
-            tables.forEach(function(table) {
-                new DataTable(table, {
-                    // scrollX: true,
-                    // deferRender: true
-                });
-            });
-            ckeditorElements.forEach(function(element) {
+    $(document).ready(function() {
+        // Inisialisasi CKEditor untuk setiap textarea
+        const ckeditorElements = document.querySelectorAll('.ck-editor');
+        ckeditorElements.forEach(function(element) {
+            if (!editors[element.name]) {
                 ClassicEditor
                     .create(element)
+                    .then(editor => {
+                        editors[element.name] = editor;  // Simpan instance editor
+                    })
                     .catch(error => {
                         console.error(error);
                     });
-            });
+            }
         });
 
-        $("#image_upload_form").validate({
-    rules: {
-      nama: {
-        required: true,
-        maxlength: 255
-      }
-    },
-
-    kategori: {
-        nama: {
-          required: true,
-          minlength: 255
-        },
-        image:{
-            required:true,
-            extensions: "png|jpep|jpg|bmp"
+        const tables = document.querySelectorAll('#example');            
+        if (tables.length) { // Perbaiki 'tables.lenght' menjadi 'tables.length'
+            tables.forEach(function(table) {
+                if ($.fn.DataTable.isDataTable(table)) {
+                    $(table).DataTable().destroy(); // Hancurkan DataTable yang sudah ada
+                }
+                new DataTable(table); // Buat DataTable baru
+            });
         }
-      },
+    });
 
+    $("#image_upload_form").validate({
+        rules: {
+            nama: {
+                required: true,
+                maxlength: 255
+            },
+            kategori: {
+                required: true,
+            },
+            image: {
+                required: true,
+                extension: "png|jpeg|jpg|bmp" // perbaiki ejaan "jpep" menjadi "jpeg"
+            }
+        },
+        messages: {
+            nama: {
+                required: "Please enter an Image Caption",
+                maxlength: "max. 255 characters"
+            },
+            kategori: {
+                required: "Please select a category",
+            },
+            image: {
+                required: "Please upload an image",
+                extension: "only png, jpeg, jpg, bmp formats are allowed"
+            }
+        }
+    });
+</script>
 
-
-    messages: {
-      nama: {
-        required: "Please enter an Image Caption",
-        maxlength:("max. 255 charackter")
-      },
-      kategori: {
-        required: "Please select category",
-
-      },
-      image: {
-        required: "Please upload image",
-        extensions:"only jpeg,p"
-
-      },
-
-    }
-  });
-    </script>
     @stack('script')
     @include('sweetalert::alert')
 </body>

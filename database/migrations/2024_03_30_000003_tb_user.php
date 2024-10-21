@@ -43,6 +43,8 @@ return new class extends Migration {
             $table->string('level')->nullable();
             $table->string('jabatan_penguji')->nullable();
             $table->string('type_penguji')->nullable();
+            $table->text('keahlian')->nullable();
+            $table->text('penggalaman')->nullable();
 
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
