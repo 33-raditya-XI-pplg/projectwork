@@ -159,17 +159,20 @@ class BlogController extends Controller
 
     public function show($id)
     {
+        // Mencari blog berdasarkan ID
         $blog = Blog::find($id);
         $Title = 'Management';
-        $subtitle = 'Blog';
-
+        $subtitle = 'Detail Blog';
+    
+        // Jika blog tidak ditemukan, redirect ke index dengan pesan error
         if (!$blog) {
-
-            return redirect()->route('blog.index')->with('error', 'Blog not found.');
+            return redirect()->route('blog.index')->with('error', 'Blog tidak ditemukan.');
         }
-
+    
+        // Mengirim data blog ke tampilan
         return view('admin.blog.show', compact('blog', 'Title', 'subtitle'));
     }
+ 
 
 
 }

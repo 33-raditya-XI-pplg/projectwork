@@ -50,7 +50,6 @@ class PartnerController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'nama_partner' => 'required|string|max:255',
@@ -63,9 +62,8 @@ class PartnerController extends Controller
             'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'status_partner' => 'nullable|boolean',
         ]);
-
+    
         try {
-
             $partner = new Partner();
             $partner->page_id = $request->page_id;
             $partner->nama_partner = $request->nama_partner;
@@ -76,25 +74,22 @@ class PartnerController extends Controller
             $partner->tanggal_bergabung = $request->tanggal_bergabung;
             $partner->website_partner = $request->website_partner;
             $partner->status_partner = $request->status_partner ? true : false;
-
-
+    
             if ($request->hasFile('logo')) {
                 $file = $request->file('logo');
                 $filename = time() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('public', $filename);
                 $partner->logo = $filename;
             }
-
-
+    
             $partner->save();
-
-
+    
             return redirect()->back()->with('success', 'Partner berhasil ditambahkan!');
         } catch (\Exception $e) {
-
-            return redirect()->back()->withErrors(['msg' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
+            return redirect()->back()->withErrors(['msg' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
     }
+    
 
 
 
@@ -107,7 +102,9 @@ class PartnerController extends Controller
     public function show($id)
     {
         $partner = Partner::findOrFail($id);
-        return view('admin.partner.show', compact('partner'));
+        $Title = 'Management';
+        $subtitle = 'Detail Partner';
+        return view('admin.partner.show', compact('partner','Title','subtitle'));
     }
 
     /**
@@ -126,43 +123,38 @@ class PartnerController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-    $validatedData = $request->validate([
-        'page_id' => 'required|exists:tb_page,id_page',
-        'nama_partner' => 'required|string|max:100',
-        'email_partner' => 'required|email|max:100|unique:tb_partner,email_partner,' . $id . ',id_partner',
-        'telepon_partner' => 'nullable|string|max:20',
-        'alamat_partner' => 'nullable|string|max:255',
-        'jenis_partner' => 'nullable|string|max:50',
-        'tanggal_bergabung' => 'nullable|date',
-        'website_partner' => 'nullable|url|max:255',
-        'status_partner' => 'nullable',
-        'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
-
-
+        $validatedData = $request->validate([
+            'page_id' => 'required|exists:tb_page,id_page',
+            'nama_partner' => 'required|string|max:100',
+            'email_partner' => 'required|email|max:100|unique:tb_partner,email_partner,' . $id . ',id_partner',
+            'telepon_partner' => 'required|digits:12',
+            'alamat_partner' => 'nullable|string|max:255',
+            'jenis_partner' => 'nullable|string|max:50',
+            'tanggal_bergabung' => 'nullable|date',
+            'website_partner' => 'nullable|url|max:255',
+            'status_partner' => 'nullable',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+    
         $statusPartner = $request->has('status_partner') && $request->input('status_partner') === 'on';
-
         $partner = Partner::findOrFail($id);
-
+    
         if ($request->hasFile('logo')) {
-
             if ($partner->logo) {
                 Storage::disk('public')->delete($partner->logo);
             }
-
             $logoPath = $request->file('logo')->store('logos', 'public');
             $validatedData['logo'] = $logoPath;
         } else {
-
             $validatedData['logo'] = $partner->logo;
         }
+    
         $validatedData['status_partner'] = $statusPartner;
         $partner->update($validatedData);
-
-
+    
         return redirect()->route('partner.index')->with('success', 'Partner berhasil diperbarui.');
     }
+    
 
 
 

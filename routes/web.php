@@ -158,6 +158,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/galeri/{id}', [GaleriController::class, 'destroy'])->name('galeri.destroy');
 
         //kategori
+        Route::get('/kategori/{kategori}/rincian', [KategoriController::class, 'show'])->name('kategori.show');
         Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.indek');
         Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
@@ -175,6 +176,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('video.destroy');
 
         //page
+        Route::get('/page/{page}/rincian', [PageController::class, 'show'])->name('page.show');
         Route::get('/page', [PageController::class, 'index'])->name('page.index');
         Route::post('/page', [PageController::class, 'store'])->name('page.store');
         Route::put('/page/{id}', [PageController::class, 'update'])->name('page.update');
@@ -183,6 +185,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/admin/page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
 
         // blog 
+
         Route::resource('admin/blog', BlogController::class);
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.indek');
         Route::post('/blog', [BlogController::class, 'store'])->name('blog.store');
@@ -191,7 +194,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::put('/admin/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
 
         // Profile perusahaan
-        Route::get('/profil/rincian/{id}', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
+        Route::get('/profil/{profil}/rincian', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
         Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
         Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
         Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
@@ -208,7 +211,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('/partner', [PartnerController::class, 'store'])->name('partner.store');
         Route::put('/admin/partner/{id}', [PartnerController::class, 'update'])->name('partner.update');
         Route::delete('admin/partner/{partner}', [PartnerController::class, 'destroy'])->name('partner.destroy');
-        Route::get('/partner/{partner}', [PartnerController::class, 'show'])->name('partner.show');
+        Route::get('/partner/{partner}/rincian', [PartnerController::class, 'show'])->name('partner.rincian');
 
         //testimoni
         Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni.indek');
@@ -217,6 +220,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/testimoni{testimoni}', [TestimoniController::class, 'destroy'])->name('testimoni.destroy');
 
         //slider
+        Route::get('/slider/{slider}/rincian', [SliderController::class, 'show'])->name('slider.show');
         Route::get('/slider', [SliderController::class, 'index'])->name('slider.indek');
         Route::post('/slider', [SliderController::class, 'store'])->name('slider.store');
         Route::put('/slider{slider}', [SliderController::class, 'update'])->name('slider.update');

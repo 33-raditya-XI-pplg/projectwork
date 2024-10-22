@@ -10,8 +10,56 @@
 {{-- <h1>Galeri</h1> --}}
 @push('style')
 
+<!-- Include CSS Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include JS Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <style>
+      .select2-close-mask{
+        z-index: 2099 !important;
+    }
+    .select2-dropdown{
+        z-index: 3051 !important;
+    }
+.dropzone-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer;
+}
+
+.image_preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    max-height: 200px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.preview_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.dropzone-desc {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
 
     .gallery-container {
         display: flex;
@@ -190,25 +238,62 @@
                                                 @csrf
                                                 @method('PUT')
 
-                                                <div class="form-group">
-                                                    <label for="image">Upload New Image (Optional)</label>
-                                                    <input type="file" name="image" class="form-control" id="image">
-                                                </div>
+                                    
+                                                <div class="mb-3">
+    <label for="edit_photo_{{ $item->id_galeri }}" class="form-label">Upload Photo</label>
+    <div class="dropzone-wrapper">
+        <div class="dropzone-desc">
+            <i class="glyphicon glyphicon-download-alt"></i>
+            <p>Choose a photo file or drag it here.</p>
+        </div>
+        <input type="file" name="path_file" class="dropzone" id="edit_photo_{{ $item->id_galeri }}" accept=".png, .jpg, .jpeg" style="opacity: 0; position: absolute; width: 100%; height: 100%;">
+        
+        <!-- Image preview area -->
+        <div id="edit_photo_preview_{{ $item->id_galeri }}" class="image_preview mt-3">
+            @if($item->path_file)
+                <img src="{{ asset($item->path_file) }}" id="edit_photo_image_preview_{{ $item->id_galeri }}" alt="Photo Preview" class="preview_image">
+            @else
+                <img src="" id="edit_photo_image_preview_{{ $item->id_galeri }}" alt="Photo Preview" class="preview_image" style="display: none;">
+            @endif
+        </div>
+    </div>
+</div>
 
-                                                <div class="form-group">
+                    <script>
+    document.getElementById('edit_photo_{{ $item->id_galeri }}').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImage = document.getElementById('edit_photo_image_preview_{{ $item->id_galeri }}');
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block'; // Show the new image
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Reset the preview if no file is selected
+            const previewImage = document.getElementById('edit_photo_image_preview_{{ $item->id_galeri }}');
+            previewImage.src = '';
+            previewImage.style.display = 'none'; // Hide the preview if no valid image
+        }
+    });
+</script>
+
+
+                                                <div class="form-group mb-4">
                                                     <label for="name">Name</label>
-                                                    <input type="text" name="name" class="form-control" id="name" value="{{ $item->nama }}" required>
+                                                    <input type="text" name="name" class="form-control  mt-2" id="name" value="{{ $item->nama }}" required>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="form-group mb-4">
                                                     <label for="description">Description</label>
-                                                    <textarea name="description" class="form-control" id="description" required>{{ $item->deskripsi }}</textarea>
+                                                    <textarea name="description" class="form-control  mt-2" id="description" required>{{ $item->deskripsi }}</textarea>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="form-group mb-4">
                                                     <label for="kategori">Pilih Kategori:</label>
-                                                    <select class="form-control" id="kategori" name="kategori" required>
-                                                        <option value="">Select category</option>
+                                                    <select class="form-control  js-example-basic-single  mt-2" id="edit_kategori" name="kategori"  data-placeholder="Pilih kategori" required>
+                                                        <option value=""></option>
                                                         <option value="partner" {{ $item->kategori == 'partner' ? 'selected' : '' }}>Partner</option>
                                                         <option value="klien" {{ $item->kategori == 'klien' ? 'selected' : '' }}>Klien</option>
                                                         <option value="gambar" {{ $item->kategori == 'gambar' ? 'selected' : '' }}>Gambar</option>
@@ -279,16 +364,15 @@
                         enctype="multipart/form-data">
                         @csrf
 
-                        <div class="form-group mb-3">
-                            <label for="page_id">Page ID <span class="text-danger">*</span></label>
-                            <select name="page_id" class="form-control" id="page_id" required>
-                                <option value="">Select Page ID</option>
-                                @foreach ($pages as $page)
-                                    <option value="{{ $page->id_page }}">{{ $page->id_page }} - {{ $page->nama_page }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+        <div class="form-group mb-3">
+        <label for="page_id">Page ID <span class="text-danger">*</span></label>
+        <select name="page_id" class="form-control js-example-basic-single" id="page_id" data-placeholder="Select Page ID" required>
+        <option value="">Select Page ID</option>
+        @foreach ($pages as $page)
+            <option value="{{ $page->id_page }}">{{ $page->id_page }} - {{ $page->nama_page }}</option>
+        @endforeach
+    </select>
+</div>
 
 
 
@@ -300,41 +384,38 @@
                                 id="nama" required>
                         </div>
 
-                        <!-- Category Selection -->
-                        <div class="form-group mb-3">
-                            <label for="kategori">Pilih Kategori <span class="text-danger">*</span></label>
-                            <select class="form-control" id="kategori" name="kategori" required>
-                                <option value="">Select category</option>
-                                <option value="partner">Partner</option>
-                                <option value="klien">Klien</option>
-                                <option value="gambar">Gambar</option>
-                                <option value="video">Video</option>
-                            </select>
-                        </div>
+                       
+<!-- Category Selection with Select2 -->
+<div class="form-group mb-3">
+    <label for="kategori">Pilih Kategori <span class="text-danger">*</span></label>
+    <select class="form-control js-example-basic-single" id="create_kategori" name="kategori" data-placeholder="Select Category" required>
+        <option value="">Select category</option>
+        <option value="partner">Partner</option>
+        <option value="klien">Klien</option>
+        <option value="gambar">Gambar</option>
+        <option value="video">Video</option>
+    </select>
+</div>
 
                         <div class="form-group mb-6">
-                            <label class="control-label">Upload Image <span class="text-danger">*</span></label>
-                            <div class="dropzone-wrapper">
-                                <div class="dropzone-desc">
-                                    <i class="glyphicon glyphicon-download-alt"></i>
-                                    <p>Choose an image file or drag it here.</p>
-                                </div>
-                                <input type="file" name="path_file" class="dropzone" id="path_file"
-                                    accept="image/*,video/*" required>
+    <label class="control-label">Upload Image <span class="text-danger">*</span></label>
+    <div class="dropzone-wrapper">
+        <div class="dropzone-desc">
+            <i class="glyphicon glyphicon-download-alt"></i>
+            <p>Choose an image file or drag it here.</p>
+        </div>
+        <input type="file" name="path_file" class="dropzone" id="path_file" accept="image/*,video/*" required>
+        
+        <div id="image_preview" class="image_preview mt-3">
+            <img id="preview_image" src="" alt="Image preview" class="preview_image" style="display: none;">
+        </div>
+    </div>
+    <div class="mt-2">
+        <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+    </div>
+    <div id="image_error"></div>
+</div>
 
-
-                                <div id="image_preview" class="mt-3"
-                                    style="display: flex; align-items: center; justify-content: center; max-width: 300px; max-height: 300px; overflow: hidden; border: 1px solid #ddd; padding: 65px;">
-                                    <img id="preview_image" src="" alt="Image preview"
-                                        style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb
-                                </small>
-                            </div>
-                            <div id="image_error"></div>
-                        </div>
 
 
                         <!-- Description (optional) -->
@@ -361,8 +442,22 @@
     </div>
 @push('script')
 
+<script>
+      $(document).ready(function() {
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder, 
+                allowClear: true,
+                minimumResultsForSearch: Infinity 
+            });
+        });
+    });
+</script>
 
     <script>
+        
         $(document).ready(function() {
             // Handle file input change event to show preview
             $('#path_file').on('change', function(event) {

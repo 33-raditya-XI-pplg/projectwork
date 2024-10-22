@@ -1,6 +1,6 @@
 @extends('layouts.panel.index')
 
-@section('title', 'Rincian Profil Perusahaan')
+@section('title', 'Rincian Slider')
 
 @section('content')
 
@@ -11,19 +11,16 @@
 
 <!-- Additional Custom Styling -->
 <style>
-    /* Table header text styling */
     th {
         font-weight: bold;
         font-size: 1rem;
         color: #343a40;
         text-transform: uppercase;
     }
-    /* Table data text styling */
     td {
         font-size: 1rem;
         color: #6c757d;
     }
-    /* Image hover effect */
     .profile-image {
         transition: transform 0.3s ease-in-out;
     }
@@ -31,7 +28,6 @@
         transform: scale(1.1);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
-    /* Button styling */
     .btn-outline-success, .btn-outline-danger {
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
@@ -41,47 +37,42 @@
 
 <div class="container">
     <div class="bg-white rounded-4 px-4 py-3 mb-5 shadow-lg">
-        <h3 class="mb-4 pt-4 pb-4 text-center" style="font-weight: 700; color: #007bff;">PROFIL PERUSAHAAN</h3>
+        <h3 class="mb-4 pt-4 pb-4 text-center" style="font-weight: 700; color: #007bff;">RINCIAN SLIDER</h3>
 
-        <!-- Display Profile Details -->
+        <!-- Display Slider Details -->
         <table class="table table-striped">
             <tbody>
                 <tr>
-                    <th>Nama Page</th>
-                    <td>{{ \App\Models\Page::find($profil->page_id)->nama_page ?? 'N/A' }}</td>
+                    <th>Page</th>
+                    <td>{{ \App\Models\Page::find($slider->page_id)->nama_page ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <th>Tentang Kami</th>
-                    <td>{!! preg_replace('/<p>|<\/p>/', '', $profil->tentang_kami) !!}</td>
+                    <th>Title</th>
+                    <td>{{ $slider->title }}</td>
                 </tr>
                 <tr>
-                    <th>Visi</th>
-                    <td>{!! preg_replace('/<p>|<\/p>/', '', $profil->visi) !!}</td>
+                    <th>Description</th>
+                    <td>{{ $slider->description }}</td>
                 </tr>
                 <tr>
-                    <th>Misi</th>
-                    <td>{!! preg_replace('/<p>|<\/p>/', '', $profil->misi) !!}</td>
-                </tr>
-                <tr>
-                    <th>Sejarah</th>
-                    <td>{!! preg_replace('/<p>|<\/p>/', '', $profil->sejarah) !!}</td>
+                    <th>Position</th>
+                    <td>{{ $slider->position }}</td>
                 </tr>
                 <tr>
                     <th>Status</th>
                     <td>
-                        <button class="btn rounded-3 {{ $profil->status ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>
-                            {{ $profil->status ? 'Aktif' : 'Non-Aktif' }}
+                        <button class="btn rounded-3 {{ $slider->status ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>
+                            {{ $slider->status ? 'Aktif' : 'Non-Aktif' }}
                         </button>
                     </td>
                 </tr>
                 <tr>
-                    <th>Struktur Organisasi</th>
-               
-                <td class=" pt-5 pb-5">
-                        @if ($profil->path_struktur_organisasi)
-                            <img src="{{ asset('storage/' . $profil->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="profile-image img-fluid rounded-3 color: #343a40" style="width: 300px; height: auto; border: 2px solid #007bff;">
+                    <th>Image</th>
+                    <td class="pt-5 pb-5">
+                        @if ($slider->image_url)
+                            <img src="{{ $slider->image_url ? asset($slider->image_url) : asset('images/default.png') }}" alt="Slider Image" class="profile-image img-fluid rounded-3" style="width: 300px; height: auto; border: 2px solid #007bff;">
                         @else
-                            <span class="text-muted">Tidak ada gambar tersedia</span>
+                            <span class="text-muted">No image available</span>
                         @endif
                     </td>
                 </tr>
@@ -90,7 +81,7 @@
 
         <!-- Back Button -->
         <div class="mt-4 text-center">
-            <a href="{{ route('profil.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('slider.index') }}" class="btn btn-secondary">Kembali</a>
         </div>
     </div>
 </div>
