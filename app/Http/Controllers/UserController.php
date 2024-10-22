@@ -18,10 +18,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        $pengguna = User::where('level', 'Pengguna')->get();
+        $pengguna = User::where('level', 'Pengguna')->get()->map(function ($user) {
+            //logika lengkapi profile    
+            $user->isProfileComplete = !empty($user->nama_lengkap) && !empty($user->alamat) && !empty($user->jenis_kelamin)
+                && !empty($user->tgl_lahir) && !empty($user->tempat_lahir) && !empty($user->nomor_induk)
+                && !empty($user->alamat_kota) && !empty($user->nama_sekolah) && !empty($user->jurusan)
+                && !empty($user->jenjang) && !empty($user->tahun_lulus);
+            return $user;
+        });
         $page = Page::all();
-        confirmDelete('Hapus Pengguna', 'Apakah kamu yakin untuk menghapus?');
-
         $Title = 'Master Data';
         $subtitle = 'Pengguna';
         return view('admin.user.index', compact('pengguna', 'page', 'Title', 'subtitle'));

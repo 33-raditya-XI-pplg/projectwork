@@ -37,7 +37,7 @@
                             echo $row->deskripsi
                             @endphp
                         </td>
-                        <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                        <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                         </td>
                         <td>
                             <div class="dropdown">
@@ -182,7 +182,7 @@
         @endforeach
 
 <!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -199,6 +199,6 @@
             });
         });
     });
-    </script>
+    </script> --}}
 
 @endsection

@@ -197,7 +197,7 @@
 
 @push('script')
 
-    <script>
+    {{-- <script>
     $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder');
@@ -209,7 +209,7 @@
             });
         });
     }); 
-    </script>
+    </script> --}}
 <script>
     
 

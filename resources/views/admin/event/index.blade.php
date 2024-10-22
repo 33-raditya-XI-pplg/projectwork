@@ -39,7 +39,7 @@
                 max-height: 100%;
                 object-fit: contain;
                 display: block;
-            }
+            }           
         </style>
     @endpush
 
@@ -81,10 +81,11 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="btn @if ($row->status == 'Publish') btn-outline-primary
-                                        @elseif ($row->status == 'Draft') btn-outline-warning
-                                        @elseif ($row->status == 'Berlangsung') btn-outline-warning
-                                        @elseif ($row->status == 'Selesai') btn-outline-success
+                                        <td><button type="button" class="badge 
+                                        @if ($row->status == 'Publish') bg-primary 
+                                        @elseif ($row->status == 'Draft') bg-info
+                                        @elseif ($row->status == 'Berlangsung') bg-secondary
+                                        @elseif ($row->status == 'Selesai') bg-success
                                         @endif
                                         rounded-3" disabled>{{ $row->status }}</button></td>
                                         <td>
@@ -141,7 +142,7 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="btn btn-outline-warning rounded-3"
+                                        <td><button type="button" class="badge bg-warning rounded-3"
                                             disabled>Draft</button></td>
                                         <td>
                                             <div class="dropdown">
@@ -192,7 +193,7 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                            <td><button type="button" class="btn btn-outline-primary rounded-3"
+                                            <td><button type="button" class="badge bg-primary rounded-3"
                                                 disabled>Publish</button></td>
                                         <td>
                                             <div class="dropdown">
@@ -241,7 +242,7 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                            <td><button type="button" class="btn btn-outline-warning rounded-3"
+                                            <td><button type="button" class="badge bg-secondary rounded-3"
                                                 disabled>Berlangsung</button></td>
                                         <td>
                                             <div class="dropdown">
@@ -290,7 +291,7 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                            <td><button type="button" class="btn btn-outline-success rounded-3"
+                                            <td><button type="button" class="badge bg-success rounded-3"
                                                 disabled>Selesai</button></td>
                                         <td>
                                             <div class="dropdown">
@@ -354,7 +355,7 @@
                             <div class="col">
                                 {{-- kanan --}}                             
                                     <div class="mb-3">
-                                        <label for="nama_event" class="form-label">Nama Event</label>
+                                        <label for="nama_event" class="form-label ">Nama Event</label>
                                         <input type="text" class="form-control" name="nama_event" id="nama_event"
                                             required>
                                     </div>
@@ -396,16 +397,18 @@
                                             @endforeach
                                         </select>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 mt-4">
                                     <label for="tgl_berakhir" class="form-label">Tanggal Berakhir</label>
                                     <input type="date" class="form-control" id="tgl_berakhir" name="tgl_berakhir"
                                         placeholder="DD/MM/YYYY" required>
                                 </div>
-                                <label for="biaya_regis" class="form-label">Biaya</label>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" required>
-                                  </div>
+                                <div class="mt-3">
+                                    <label for="biaya_regis" class="form-label">Biaya</label>
+                                    <div class="input-group mb-3 ">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" required>
+                                    </div>
+                                </div>
                                   <div class="mb-3">
                                     <label for="visibilitas" class="form-label">Visibilitas</label>
                                     <select class="form-select text-capitalize js-example-basic-single" name="visibilitas" aria-label="Default select example" data-placeholder="Pilih Visibilitas"
@@ -427,7 +430,7 @@
                                         <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                     </div>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-2">
                                     <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                                 </div>
                                 @error('foto')
@@ -534,16 +537,18 @@
                                             @endforeach
                                         </select>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 mt-4">
                                     <label for="tgl_berakhir" class="form-label">Tanggal Berakhir</label>
                                     <input type="date" class="form-control" id="tgl_berakhir" name="tgl_berakhir"
                                         placeholder="DD/MM/YYYY" value="{{ $row->tgl_berakhir }}" required>
                                 </div>
-                                <label for="biaya_regis" class="form-label">Biaya</label>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">Rp</span>
-                                    <input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" value="{{ $row->biaya_regis }}" required>
-                                  </div>
+                                <div class="mt-3">
+                                    <label for="biaya_regis" class="form-label">Biaya</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">Rp</span>
+                                        <input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" value="{{ $row->biaya_regis }}" required>
+                                    </div>
+                                </div>
                                   <div class="mb-3">
                                     <label for="visibilitas" class="form-label">Visibilitas</label>
                                     <select class="form-select text-capitalize js-example-basic-single" name="visibilitas" aria-label="Default select example" data-placeholder="Pilih Visibilitas"
@@ -569,7 +574,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="mt-4">
+                                <div class="mt-2">
                                     <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                                 </div>
                                 @error('path_foto')
@@ -610,9 +615,9 @@
     </div>
     @endforeach
 <!-- Include JS Select2 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
 
-    <script>
+    {{-- <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder'); 
@@ -624,7 +629,7 @@
             });
         });
     });
-    </script>
+    </script> --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const statusCheckbox = document.getElementById('status');

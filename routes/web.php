@@ -137,6 +137,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('user/update-status/{id}', [UserController::class, 'updateStatus'])->name('user.updateStatus');
         Route::post('user/import', [UserController::class, 'import'])->name('user.import');
         Route::resource('/penguji', PengujiController::class);
+        Route::post('/penguji/update-status/{id}', [PengujiController::class, 'updateStatus'])->name('penguji.updateStatus');
+
         Route::resource('/instansi', InstansiController::class);
         Route::resource('/jenis-event', JenisEventController::class);
         Route::resource('/tempat', TempatController::class);

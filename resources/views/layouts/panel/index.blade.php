@@ -41,6 +41,37 @@
         <link rel="stylesheet" href="{{asset('assets/css/partner.css')}}">
         <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+        <style>
+                input[type="text"],
+                input[type="number"],
+                input[type="email"],
+                input[type="date"],
+                textarea,
+                select,
+                .form-control,
+                .input-group-text{
+                        border-width: 0.1px;
+                        border-color:black !important;
+            }
+            .select2-container .select2-selection--single{
+                border-width:0.2px !important;
+                border-color:black !important;  
+             
+            }
+            .select2-container .select2-selection__clear{
+                position: absolute;
+                left: 26px;
+                top: 50%;
+                transform: translateY(-5%);
+                z-index: 1;
+            }
+            .select2-close-mask{
+            z-index: 2099 !important;
+            }
+            .select2-dropdown{
+                z-index: 3051 !important;
+            }
+        </style>
     @stack('style')
 
     {{-- @include('layouts.env') --}}
@@ -134,6 +165,21 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script></script>
+    
+    {{-- inisialisasi js --}}
+    <script>
+        $(document).ready(function() {
+              $('.js-example-basic-single').each(function() {
+                  var placeholder = $(this).data('placeholder'); 
+                  
+                  $(this).select2({
+                      placeholder: placeholder, 
+                      allowClear: true,
+                      minimumResultsForSearch: Infinity 
+                  });
+              });
+          });
+          </script>
     {{-- <script>
         var button = document.getElementById('add')
         button.style.display = 'none';

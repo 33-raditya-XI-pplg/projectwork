@@ -16,10 +16,26 @@ class PengujiController extends Controller
     {
         $penguji = User::where('level', 'Penguji')
             ->with('userInstansi')->get();
+
+        foreach ($penguji as $user) {
+            $user->isProfileComplete = !empty($user->nama_lengkap) &&
+                !empty($user->alamat) &&
+                !empty($user->nomor_induk) &&
+                !empty($user->alamat_kota) &&
+                // !empty($user->penguji) &&
+                // !empty($user->jabatan_penguji) &&
+                !empty($user->no_telp) &&
+                !empty($user->email) &&
+                !empty($user->pengalaman) &&
+                !empty($user->keahlian);
+        }
         // $instansi = Instansi::all();
         $page = Page::all();
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $regencies = DB::table('regencies')->pluck('name', 'id');
+        $isProfileComplete = !empty($user->nama_lengkap) && !empty($user->alamat) && !empty($user->jenis_kelamin)
+            && !empty($user->tgl_lahir) && !empty($user->tempat_lahir) && !empty($user->nomor_induk) && !empty($user->nomor_induk)
+            && !empty($user->alamat_kota) && !empty($user->penguji) && !empty($user->type_penguji);
         $Title = 'Master Data';
         $subtitle = 'Mentor';
         confirmDelete('Hapus Penguji', 'Apakah kamu yakin untuk menghapus?');
@@ -41,7 +57,7 @@ class PengujiController extends Controller
         // dd($request);
         if (!$request->has('status')) {
             $request->merge([
-                'status' => 'Nonaktif'
+                'status' => 'Belum Verified'
             ]);
         }
 
@@ -68,7 +84,7 @@ class PengujiController extends Controller
 
         if (!$request->has('status')) {
             $request->merge([
-                'status' => 'Nonaktif'
+                'status' => 'Belum Verified'
             ]);
         }
         $data = $request->all();
@@ -122,5 +138,21 @@ class PengujiController extends Controller
 
         toast('User berhasil dihapus.', 'success');
         return redirect()->back();
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $user = User::find($id);
+        if (empty($user->nomor_induk) || empty($user->nama_lengkap) || empty($user->alamat) || empty($user->alamat_kota) || empty($user->email) || empty($user->keahlian) || empty($user->pengalaman) || empty($user->no_telp) || empty($user->jabatan_penguji)) {
+            return response()->json([
+                'message' => 'Profile pengguna belum lengkap. Tidak dapat Memverifikasi Pengguna'
+            ], 400);
+        }
+        $user->status = $request->status;
+        $user->save();
+
+
+        return response()->json([
+            'message' => 'Status pengguna berhasil diperbarui menjadi ' . $request->status
+        ]);
     }
 }

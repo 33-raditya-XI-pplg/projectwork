@@ -1,6 +1,6 @@
 @extends('layouts.panel.index')
 @section('content')
-<style>
+<style>  
     .dropzone-wrapper {
         display: flex;
         align-items: center;
@@ -43,7 +43,7 @@
                         @method('PUT')
                         <div class="mb-3">
                             <label for="page_id" class="form-label">Page Id</label>
-                            <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                            <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
                                     required>
                                     @foreach ($page as $set)
                                     <option value="{{ $set->id_page }}" {{ $set->id_page == $skema->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
@@ -120,7 +120,7 @@
 
 @push('script')
 <!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -137,7 +137,7 @@
             });
         });
     });
-    </script>
+    </script> --}}
     <script>
         $(document).ready(function() {
             $('#addSubSkema').click(function() {

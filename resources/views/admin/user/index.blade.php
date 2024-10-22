@@ -78,11 +78,23 @@
                         <td>{{ $row->nomor_induk ?? '-' }}</td>
                         <td>{{ $row->jenis_kelamin ?? '-' }}</td>
                         <td>
+                            @php
+                                $statusClass = 'bg-danger';   
+                                $statusLabel = 'Belum Verified';
+
+                                if($row->status == 'Verified'){
+                                    $statusClass = 'bg-success';
+                                    $statusLabel = 'Verified';
+                                }elseif(!$row->isProfileComplete){
+                                    $statusClass = 'bg-warning';
+                                    $statusLabel = 'Profile Belum Lengkap';
+                                }
+                            @endphp
                             <button type="button"
-                            class="btn rounded-3 {{ $row->status == 'Verified' ? 'btn-outline-success' : 'btn-outline-danger' }}"
-                            onclick="toggleStatus({{ $row->id_user }}, this)">
-                            {{ $row->status }}
-                        </button>
+                                class="badge rounded-3 {{ $statusClass }}"
+                                onclick="toggleStatus({{ $row->id_user }},this)">
+                                {{ $statusLabel}}                                
+                            </button>
                         <td>
                             <div class="dropdown">
                                 <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
@@ -112,7 +124,7 @@
         </table>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal import-->
     <div class="modal fade" id="excel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -258,11 +270,23 @@ function toggleStatus(userId, button) {
         console.error('Elemen button tidak terdefinisi');
         return;
     }
-  
+
     let currentStatus = button.innerText.trim();
+
+    // Jika statusnya adalah "Profile Belum Lengkap", tidak perlu melanjutkan eksekusi
+    if (currentStatus === 'Profile Belum Lengkap') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal Verifikasi',
+            text: 'Pengguna belum melengkapi profile. Tidak dapat memverifikasi.',
+            timer:2000,
+        });
+        return;
+    }
+
     let newStatus = (currentStatus === 'Verified') ? 'Belum Verified' : 'Verified';
 
-    console.log('UserID: ', userId, 'Current Status: ', currentStatus, 'New Status: ', newStatus);
+    console.log('UserID:', userId, 'Current Status:', currentStatus, 'New Status:', newStatus);
 
     $.ajax({
         url: '{{ route('user.updateStatus', ':id') }}'.replace(':id', userId),
@@ -272,50 +296,43 @@ function toggleStatus(userId, button) {
             status: newStatus
         },
         success: function(response) {
-            console.log('Respon server: ', response.message);  
-            
-            if(response.message.includes('Profie Pengguna belum lengkap')){
-               Swal.fire({
-                icon:'error',
-                title:'Gagal Verifikasi',
-                text:'Pengguna belum melengkapi profile. Tidak dapat memverifikasi.'
-               })
-                return;
-            }
+            console.log('Respon server:', response.message);
 
+            // Update status tombol jika berhasil
             if (newStatus === 'Verified') {
-                button.classList.remove('btn-outline-danger');
-                button.classList.add('btn-outline-success');
+                button.classList.remove('bg-danger', 'bg-warning');
+                button.classList.add('bg-success');
+                button.innerText = 'Verified';
             } else {
-                button.classList.remove('btn-outline-success');
-                button.classList.add('btn-outline-danger');
+                button.classList.remove('bg-success', 'bg-warning');
+                button.classList.add('bg-danger');
+                button.innerText = 'Belum Verified';
             }
-
-            button.innerText = newStatus;
         },
         error: function(xhr, status, error) {
-            if(xhr.status === 400) {
+            if (xhr.status === 400) {
                 Swal.fire({
-                    icon:'error',
-                    title:'Kesalahan',
-                    text:xhr.responseJSON.message,
-                    position:'top',
-                    width:'450px',
-                    showConfirmButton:false,
-                    timer:5000,
-                    toast:true,
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    text: xhr.responseJSON.message,
+                    position: 'top',
+                    width: '450px',
+                    showConfirmButton: false,
+                    timer: 5000,
+                    toast: true,
                 });
-            }else{
-                console.error('Gagal memperbarui status: ' + error);
+            } else {
+                console.error('Gagal memperbarui status:', error);
                 Swal.fire({
-                    icon:'error',
-                    title:'Kesalahan',
-                    text:'Terjadi kesalahan saat memperbarui status',
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    text: 'Terjadi kesalahan saat memperbarui status',
                 });
             }
         }
     });
 }
+
     </script>
     
         

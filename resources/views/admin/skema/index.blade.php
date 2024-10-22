@@ -18,7 +18,7 @@
                             <th scope="row">{{ $loop->index + 1 }}</th>
                             <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '- '}}</td>
                             <td>{{ $row->nama_skema }}</td>
-                            <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                            <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                             </td>
                             <td>
                                 <div class="dropdown">

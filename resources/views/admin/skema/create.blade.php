@@ -42,7 +42,7 @@
 						@csrf
 						<div class="mb-3">
 							<label name="page_id" for="form-label">Page Id</label>
-							<select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+							<select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
 							<option disabled selected></option>
 							@foreach ($page as $row)
 							<option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
@@ -106,7 +106,7 @@
 
 @push('script')
 	<!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -123,7 +123,7 @@
             });
         });
     });
-    </script>
+    </script> --}}
     <script>
         $(document).ready(function() {
 			$('#addSubSkema').click(function() {

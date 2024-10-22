@@ -79,7 +79,24 @@
                             <td>{{ $row->userInstansi->nama_instansi }}</td>
                             <td>{{ $row->nomor_induk }}</td>
                             <td>{{ $row->jabatan_penguji }}</td>
-                            <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                            <td>
+                                @php
+                                $statusClass = 'bg-danger';   
+                                $statusLabel = 'Belum Verified';
+
+                                if($row->status == 'Verified'){
+                                    $statusClass = 'bg-success';
+                                    $statusLabel = 'Verified';
+                                }elseif(!$row->isProfileComplete){
+                                    $statusClass = 'bg-warning';
+                                    $statusLabel = 'Profile Belum Lengkap';
+                                }
+                            @endphp
+                            <button type="button"
+                                class="badge rounded-3 {{ $statusClass }}"
+                                onclick="toggleStatus({{ $row->id_user }},this)">
+                                {{ $statusLabel}}                                
+                            </button>
                             </td>
                             <td>
                                 <div class="dropdown">
@@ -177,7 +194,7 @@
                                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                             </div>
                                         </div>
-                                        <div class="mt-4">
+                                        <div class="mt-2">
                                             <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                                         </div>
                                         @error('foto')
@@ -234,9 +251,9 @@
                 </div>
                 <div class="modal-footer justify-content-between mx-3">
                     <div class="form-check form-switch mb-3">
-                        <label for="status" class="me-3">Status</label>
+                        {{-- <label for="status" class="me-3">Status</label>
                         <input class="form-check-input" type="checkbox" role="switch" id="status"
-                            name="status" value="Aktif">
+                            name="status" value="Aktif"> --}}
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -318,7 +335,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="mt-4">
+                                            <div class="mt-2">
                                                 <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                                             </div>
                                             @error('path_foto')
@@ -373,9 +390,9 @@
 
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
-                            <label for="status" class="me-3">Status</label>
+                            {{-- <label for="status" class="me-3">Status</label>
                             <input class="form-check-input" type="checkbox" role="switch" id="status"
-                                name="status" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}>
+                                name="status" value="Aktif" {{ $row->status == 'Aktif' ? 'checked' : '' }}> --}}
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -470,9 +487,9 @@
     @endforeach
 
 <!-- Include JS Select2 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> --}}
-    <script>
+    {{-- <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder'); 
@@ -484,8 +501,76 @@
             });
         });
     });
-    </script>
+    </script> --}}
     <script>    
+    function toggleStatus(userId, button) {
+    if (!button) {
+            console.error('Elemen button tidak terdefinisi');
+            return;
+        }
+
+        let currentStatus = button.innerText.trim();
+
+        // Jika statusnya adalah "Profile Belum Lengkap", tidak perlu melanjutkan eksekusi
+        if (currentStatus === 'Profile Belum Lengkap') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Verifikasi',
+                text: 'Pengguna belum melengkapi profile. Tidak dapat memverifikasi.',
+                timer:2000,
+            });
+            return;
+        }
+
+        let newStatus = (currentStatus === 'Verified') ? 'Belum Verified' : 'Verified';
+
+        console.log('UserID:', userId, 'Current Status:', currentStatus, 'New Status:', newStatus);
+
+        $.ajax({
+            url: '{{ route('penguji.updateStatus', ':id') }}'.replace(':id', userId),
+            type: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                status: newStatus
+            },
+            success: function(response) {
+                console.log('Respon server:', response.message);
+
+                // Update status tombol jika berhasil
+                if (newStatus === 'Verified') {
+                    button.classList.remove('bg-danger', 'bg-warning');
+                    button.classList.add('bg-success');
+                    button.innerText = 'Verified';
+                } else {
+                    button.classList.remove('bg-success', 'bg-warning');
+                    button.classList.add('bg-danger');
+                    button.innerText = 'Belum Verified';
+                }
+            },
+            error: function(xhr, status, error) {
+                if (xhr.status === 400) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan',
+                        text: xhr.responseJSON.message,
+                        position: 'top',
+                        width: '450px',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        toast: true,
+                    });
+                } else {
+                    console.error('Gagal memperbarui status:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Kesalahan',
+                        text: 'Terjadi kesalahan saat memperbarui status',
+                    });
+                }
+            }
+            });
+        }
+
        document.addEventListener('DOMContentLoaded', function() {
         // Inisialisasi preview image
         const inputFile = document.querySelector('input[name="path_foto"]');

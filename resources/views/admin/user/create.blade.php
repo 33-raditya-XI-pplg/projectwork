@@ -134,34 +134,11 @@
                             @error('no_telp')
                             <div class="text-danger">{{ $message }}</div>
                            @enderror
-                    </div>
-                    <div class="form-group mb-3">
-                        <label class="control-label mb-2">Upload Foto Pengguna <span class="text-danger">*</span></label>
-                        <div class="dropzone-wrapper">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Pilih gambar atau seret ke sini .</p>
-                            </div>
-                            <input type="file" name="path_foto" class="dropzone" id="path_foto" accept="image/*"
-                                {{ isset($pengguna) && $pengguna->path_foto ? '' : ' required' }}>
-                            <div id="image_preview" class="mt-3">
-                                <img id="preview_image" src="{{ isset($pengguna) ? asset($pengguna->path_foto) : '' }}" alt="Image preview"
-                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ isset($pengguna) ? 'block' : 'none' }};">
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
-                        </div>
-                        @error('path_foto')
-                        <div class="text-danger">{{ $message }}</div>
-                       @enderror
-                    </div>
-
+                    </div>               
                 </div>
 
                 <div class="col">
-                    <h5 class="text-center text-primary mb-4 fw-bold rounded">- Data Pendidikan Terakhir -</h5>
-                    
+                    <h5 class="text-center text-primary mb-4 fw-bold rounded">- Data Pendidikan Terakhir -</h5>                    
                     <div class="mt-3">
                         <label for="nama_sekolah" class="form-label">Nama Sekolah/Universitas</label>
                         <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi"   required>               
@@ -200,9 +177,9 @@
                             <div class="text-danger">{{ $message }}</div>
                            @enderror
                     </div>
-                    <h5 class="text-center text-primary mt-5 fw-bold rounded" style="margin-bottom: 28px;">- Data Pekerjaan Sekarang -</h5>
+                    <h5 class="text-center text-primary mt-2 fw-bold rounded" style="margin-bottom: 28px;">- Data Pekerjaan Sekarang -</h5>
                     
-                    <div class="mt-3">
+                    <div class="mt-1">
                         <label for="nama_perusahaan" class="form-label">Nama Perusahaan</label>
                         <input type="text" class="form-control" name="nama_perusahaan" id="nama_perusahaan"
                              value="{{old('nama_perusahaan', isset($pengguna) ? $pengguna->nama_perusahaan : '') }}">
@@ -210,14 +187,14 @@
                              <div class="text-danger">{{ $message }}</div>
                             @enderror
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-1">
                         <label for="alamat_perusahaan" class="form-label">Alamat</label>
                         <textarea class="form-control" id="alamat_perusahaan" name="alamat_perusahaan" rows="2" >{{old('alamat_perusahaan', isset($pengguna) ? $pengguna->alamat_perusahaan : '') }}</textarea>
                         @error('alamat_perusahaan')
                         <div class="text-danger">{{ $message }}</div>
                        @enderror
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-2">
                         <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
                         <select class="form-select js-example-basic-single" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan" data-placeholder="Pilih Kota Perusahaan" >
                             <option disabled selected></option> 
@@ -230,7 +207,7 @@
                        @enderror
                         {{-- <textarea class="form-control" id="alamat_kota_perusahaan" name="alamat_kota_perusahaan" rows="2" >{{ isset($pengguna) ? $pengguna->alamat_kota_perusahaan : '' }}</textarea> --}}
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-2">
                         <label for="jabatan_pekerjaan" class="form-label">Jabatan</label>
                         <input type="text" class="form-control" name="jabatan_pekerjaan" id="jabatan_pekerjaan"
                              value="{{old('jabatan_pekerjaan', isset($pengguna) ? $pengguna->jabatan_pekerjaan : '') }}">
@@ -238,20 +215,41 @@
                              <div class="text-danger">{{ $message }}</div>
                             @enderror
                     </div>
-                    <div class="mt-3">
+                    <div class="mt-2">
                         <label for="no_telp_perusahaan" class="form-label">Telepon Perusahaan</label>
                         <input type="number" class="form-control" name="no_telp_perusahaan" id="no_telp_perusahaan"
                              value="{{old('no_telp_perusahaan', isset($pengguna) ? $pengguna->no_telp_perusahaan : '') }}">
                              @error('no_telp_perusahaan')
                              <div class="text-danger">{{ $message }}</div>
                             @enderror
-                    </div>          
-                    <div class="modal-footer justify-content-left mt-10">                 
-                            <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
-                        
-                    </div>
+                    </div>                             
                 </div>
-                
+                    <div class="form-group ">
+                        <label class="control-label mb-2">Upload Foto Pengguna <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih gambar atau seret ke sini .</p>
+                            </div>
+                            <input type="file" name="path_foto" class="dropzone" id="path_foto" accept="image/*"
+                                {{ isset($pengguna) && $pengguna->path_foto ? '' : ' required' }}>
+                            <div id="image_preview" class="mt-3">
+                                <img id="preview_image" src="{{ isset($pengguna) ? asset($pengguna->path_foto) : '' }}" alt="Image preview"
+                                    style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ isset($pengguna) ? 'block' : 'none' }};">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                        </div>
+                        @error('path_foto')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    </div>
+
+                    <div class="modal-footer justify-content-left px-3 ">                 
+                        <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+                    
+                </div>
                 <!-- <div class="d-grid mt-3 ">
                     <button type="submit" class="btn btn-primary rounded">Simpan</button>
                 </div> -->
@@ -272,15 +270,15 @@
 
     <script>
        $(document).ready(function() {
-        $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder'); 
+    //     $('.js-example-basic-single').each(function() {
+    //         var placeholder = $(this).data('placeholder'); 
             
-            $(this).select2({
-                placeholder: placeholder, 
-                allowClear: true,
-                minimumResultsForSearch: Infinity 
-            });
-        });
+    //         $(this).select2({
+    //             placeholder: placeholder, 
+    //             allowClear: true,
+    //             minimumResultsForSearch: Infinity 
+    //         });
+    //     });
         // menampilkan gambar 
         document.getElementById('path_foto').addEventListener('change', function (event) {
             const file = event.target.files[0];
@@ -296,17 +294,25 @@
             }
         });
     
-        Dropzone.options.path_file = {
-            maxFilesize: 2,
+           // Inisialisasi Dropzone
+           Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone-wrapper", {
+            url: "/user", // URL server untuk unggahan
+            maxFilesize: 2, 
             acceptedFiles: "image/*",
             init: function() {
                 this.on("success", function(file, response) {                    
+                    // Tangani response sukses
+                    console.log("Upload successful");
                 });
-                this.on("error", function(file, response) {                    
-                    document.getElementById('image_error').innerHTML = response.message;
+                this.on("error", function(file, response) {
+                    const errorElement = document.getElementById('image_error');
+                    if (errorElement) {
+                        errorElement.innerHTML = response.message || 'Upload failed';
+                    }
                 });
             }
-        };
+        });  
     });    
     </script>
     

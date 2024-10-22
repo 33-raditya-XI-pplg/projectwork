@@ -79,7 +79,7 @@
                             <td>{{ $row->jabatan }}</td>
                             <td>{{ $row->nomor_induk }}</td>
                             <td>{{ $row->ttdInstansi->nama_instansi }}</td>
-                            <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                            <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                             </td>
                             <td>
                                 <div class="dropdown">
@@ -128,7 +128,7 @@
                         <div class="row">
                             <div class="mb-3">
                                 <label name="page_id" for="form-label">Page Id</label>
-                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
                                 <option disabled selected></option>
                                 @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
@@ -154,14 +154,14 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="instansi" class="form-label">Instansi</label>
-                                        <select class="form-select js-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi"   required>                                                  
+                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi"   required>                                                  
                                             <option value="" disabled selected></option> 
                                             @foreach ($institutions as $id_instansi => $name)
                                             <option value="{{ $id_instansi }}" {{old('instansi_id', (isset($pengguji) ? $pengguji->instansi_id : '') == $id_instansi) ? 'selected' : '' }}>{{ $name }}</option>                         
                                             @endforeach
                                         </select>
                                     </div>                                 
-                                    <div class="form-group mb-6">
+                                    <div class="form-group mb-2">
                                         <label class="control-label mb-2">Upload Tanda Tangan <span class="text-danger">*</span></label>
                                         <div class="dropzone-wrapper">
                                             <div class="dropzone-desc">
@@ -173,7 +173,7 @@
                                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                                             </div>
                                         </div>
-                                        <div class="mt-4">
+                                        <div class="mt-2">
                                             <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2MB</small>
                                         </div>
                                         @error('path_ttd')
@@ -225,7 +225,7 @@
                                     {{-- kanan --}}                                                                         
                                         <div class="mb-3">
                                             <label for="page_id" class="form-label">Page Id</label>
-                                            <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                            <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
                                                     required>
                                                     @foreach ($page as $set)
                                                     <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
@@ -256,7 +256,7 @@
                                             @endforeach
                                         </select>
                                     </div>                                
-                                    <div class="form-group mb-6">
+                                    <div class="form-group mb-2">
                                         <label class="control-label mb-2">Upload Foto Tandatangan  <span class="text-danger">*</span></label>
                                         <div class="dropzone-wrapper">
                                             <div class="dropzone-desc">
@@ -273,7 +273,7 @@
                                             </div>
                                             
                                         </div>
-                                        <div class="mt-4">
+                                        <div class="mt-2">
                                             <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                                         </div>
                                         @error('path_foto')
@@ -357,16 +357,16 @@
         </div>
     @endforeach
 <!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> --}}
+{{-- <script>
   $(document).ready(function() {
         $('.js-single').each(function() {
             var placeholder = $(this).data('placeholder');
-            
+             
             $(this).select2({
                 placeholder: placeholder, 
                 allowClear: true,
@@ -380,7 +380,7 @@
         });
     @endforeach
 });
-</script>
+</script> --}}
 
 <script>    
         document.addEventListener('DOMContentLoaded', function() {

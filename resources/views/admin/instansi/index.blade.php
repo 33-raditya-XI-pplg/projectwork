@@ -88,7 +88,7 @@
                             <td>{{ $row->nomor_instansi }}</td>
                             <td>{{ $row->nama_kepala_instansi }}</td>
                             <td>{{ $row->jabatan_kepala }}</td>
-                            <td><button type="button" class="btn rounded-3 {{ $row->status == 'Aktif' ? 'btn-outline-success' : 'btn-outline-danger' }}" disabled>{{ $row->status }}</button>
+                            <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                             </td>
                             <td>
                                 <div class="dropdown">
@@ -136,7 +136,7 @@
                         <div class="row">
                             <div class="mb-3">
                                 <label name="page_id" for="form-label">Page Id</label>
-                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
                                 <option disabled selected></option>
                                 @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
@@ -162,27 +162,7 @@
                                     <div class="mb-3">
                                         <label for="no_telp" class="form-label">No. telp</label>
                                         <input type="number" class="form-control" name="no_telp" id="no_telp" required>
-                                    </div>
-                                    <div class="form-group mb-6">
-                                        <label class="control-label mb-2">Upload Logo Instansi <span class="text-danger">*</span></label>
-                                        <div class="dropzone-wrapper">
-                                            <div class="dropzone-desc">
-                                                <i class="glyphicon glyphicon-download-alt"></i>
-                                                <p>Pilih gambar atau seret ke sini .</p>
-                                            </div>
-                                            <input type="file" name="path_logo" class="dropzone"  accept="image/*" required>
-                                            <div id="image_preview_" class="mt-3">
-                                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
-                                        </div>
-                                        @error('foto')
-                                        <div class="text-danger">{{ $message }}</div>
-                                       @enderror
-                                    </div>
-
+                                    </div>                                
                             </div>
                             <div class="col">
                                 {{-- kiri --}}
@@ -198,7 +178,7 @@
                                 </div>
                                 <div class="mb-5">
                                     <label for="alamat_kota_{{ $row->id_instansi }}" class="form-label">Kota</label>
-                                    <select class="form-select js-single" name="alamat_kota" id="alamat_kota_{{ $row->id_instansi }}" data-placeholder="Pilih Kota" required>
+                                    <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_instansi }}" data-placeholder="Pilih Kota" required>
                                         <option value="" disabled selected></option> 
                                         @foreach ($regencies as $id => $name)
                                             <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
@@ -220,6 +200,25 @@
                         </div>
                     </div>
                     {{-- end form --}}
+                    <div class="form-group mb-2">
+                        <label class="control-label mb-2">Upload Logo Instansi <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih gambar atau seret ke sini .</p>
+                            </div>
+                            <input type="file" name="path_logo" class="dropzone"  accept="image/*" required>
+                            <div id="image_preview_" class="mt-3">
+                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                        </div>
+                        @error('foto')
+                        <div class="text-danger">{{ $message }}</div>
+                       @enderror
+                    </div>
 
                 </div>
                 <div class="modal-footer justify-content-between mx-3">
@@ -260,7 +259,7 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="page_id" class="form-label">Page Id</label>
-                                    <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                    <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
                                             required>
                                             @foreach ($page as $set)
                                             <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
@@ -286,31 +285,7 @@
                                         <div class="mb-3">
                                             <label for="no" class="form-label">No. telp</label>
                                             <input type="number" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" required>
-                                        </div>                            
-                                        <div class="form-group mb-6">
-                                            <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
-                                            <div class="dropzone-wrapper">
-                                                <div class="dropzone-desc">
-                                                    <i class="glyphicon glyphicon-download-alt"></i>
-                                                    <p>Pilih gambar atau seret ke sini .</p>
-                                                </div>
-                                                <input type="file" name="path_logo" class="dropzone" id="path_logo_{{ $row->id_instansi }}" accept="image/*">
-                                                <div id="image_preview_" class="mt-3 d-flex justify-content-center">
-                                                    @if($row->path_logo)
-                                                        <img id="preview_image_edit_{{ $row->id_instansi }}" src="{{ asset($row->path_logo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                                                    @else
-                                                        <img id="preview_image_edit_{{ $row->id_instansi }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="mt-4">
-                                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
-                                            </div>
-                                            @error('path_foto')
-                                            <div class="text-danger">{{ $message }}</div>
-                                           @enderror
-                                        </div>
-
+                                        </div>                                           
                                 </div>
                                 <div class="col">
                                     {{-- kiri --}}
@@ -336,7 +311,7 @@
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div class="mb-3 mt-4">
+                                    <div class="mb-3 mt-5">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
                                     </div>
@@ -345,7 +320,29 @@
                             </div>
                         </div>
                         {{-- end form --}}
-
+                        <div class="form-group ">
+                            <label class="control-label mb-2">Upload Foto Pengguji <span class="text-danger">*</span></label>
+                            <div class="dropzone-wrapper">
+                                <div class="dropzone-desc">
+                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                    <p>Pilih gambar atau seret ke sini .</p>
+                                </div>
+                                <input type="file" name="path_logo" class="dropzone" id="path_logo_{{ $row->id_instansi }}" accept="image/*">
+                                <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                                    @if($row->path_logo)
+                                        <img id="preview_image_edit_{{ $row->id_instansi }}" src="{{ asset($row->path_logo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                    @else
+                                        <img id="preview_image_edit_{{ $row->id_instansi }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                            </div>
+                            @error('path_foto')
+                            <div class="text-danger">{{ $message }}</div>
+                           @enderror
+                        </div>
                     </div>
                     <div class="modal-footer justify-content-between mx-3">
                         <div class="form-check form-switch">
@@ -441,7 +438,7 @@
 
 
 <!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -464,7 +461,7 @@
         });
     @endforeach
 });
-</script>
+</script> --}}
 
 <script>    
    document.addEventListener('DOMContentLoaded', function() {

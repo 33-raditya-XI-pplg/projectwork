@@ -85,10 +85,11 @@
                         <div class="row">
                             <div class="mb-3">
                                 <label for="page_id" class="form-label">Page Id</label>
-                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
                                         required>
+                                        <option disabled selected></option>
                                         @foreach ($page as $set)
-                                        <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
+                                        <option value="{{ $set->id_page }}" >{{ $set->nama_page }}</option>
                                         @endforeach
                                     </select>
                             </div>
@@ -127,7 +128,7 @@
                                 </div>
                                 <div class="mb-1">
                                     <label for="orientasi_bg" class="form-label">Orientation</label>
-                                    <select class="form-select" name="orientasi_bg" required>
+                                    <select class="form-select js-example-basic-single" name="orientasi_bg" required>
                                         <option selected>Landscape</option>
                                         <option>Potrait</option>
                                     </select>
@@ -167,7 +168,7 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="page_id" class="form-label">Page Id</label>
-                                    <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                    <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
                                             required>
                                             @foreach ($page as $set)
                                             <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
@@ -214,7 +215,7 @@
                                     </div>
                                     <div class="mb-1">
                                         <label for="orientasi_bg" class="form-label">Orientation</label>
-                                        <select class="form-select" name="orientasi_bg" required>
+                                        <select class="form-select js-example-basic-single" name="orientasi_bg" required>
                                             <option {{ $row->orientasi_bg == 'landscape' ? 'selected' : '' }}>Landscape
                                             </option>
                                             <option {{ $row->orientasi_bg == 'potrait' ? 'selected' : '' }}>Potrait

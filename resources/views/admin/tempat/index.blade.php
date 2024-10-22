@@ -78,7 +78,7 @@
                         <div class="row">
                             <div class="mb-3">
                                 <label name="page_id" for="form-label">Page Id</label>
-                                <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
                                 <option disabled selected></option>
                                 @foreach ($page as $row)
                                 <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
@@ -105,7 +105,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="alamat_kota_{{ $row->id_tempat }}" class="form-label">Kota</label>
-                                        <select class="form-select js-single" name="alamat_kota" id="alamat_kota_{{ $row->id_tempat }}" data-placeholder="Pilih Kota" required>
+                                        <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_tempat }}" data-placeholder="Pilih Kota" required>
                                             <option value="" disabled selected></option> 
                                             @foreach ($regencies as $id => $name)
                                                 <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
@@ -162,7 +162,7 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="page_id" class="form-label">Page Id</label>
-                                    <select class="form-select js-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
+                                    <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
                                             required>
                                             @foreach ($page as $set)
                                             <option value="{{ $set->id_page }}" {{ $set->id_page == $row->page_id ? 'selected' : '' }}>{{ $set->nama_page }}</option>
@@ -227,7 +227,7 @@
         </div>
         @endforeach
     <!-- Include CSS Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
     <!-- Include JS Select2 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -250,6 +250,6 @@
         });
     @endforeach
 });
-    </script>
+    </script> --}}
 @endsection
 
