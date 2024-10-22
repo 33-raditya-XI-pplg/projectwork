@@ -59,7 +59,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item text-success" href="{{ route('page.show', $page->id_page) }}">
+                                    <a class="dropdown-item text-black" href="{{ route('page.show', $page->id_page) }}">
                                         <i class="fa-regular fa-eye"></i> Rincian
                                     </a>
                                 </li>

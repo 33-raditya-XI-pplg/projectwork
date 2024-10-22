@@ -135,7 +135,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                                <a class="dropdown-item text-success" href="{{ route('slider.show', $row->id_slider) }}">
+                                                <a class="dropdown-item text-black" href="{{ route('slider.show', $row->id_slider) }}">
                                                     <i class="fa-regular fa-eye"></i> Rincian
                                                 </a>
                                             </li>

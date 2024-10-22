@@ -69,7 +69,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-success" href="{{ route('kategori.show', $row->id_kategori) }}">
+                                <a class="dropdown-item text-black" href="{{ route('kategori.show', $row->id_kategori) }}">
                                     <i class="fa-regular fa-eye"></i> Rincian
                                 </a>
                             </li>

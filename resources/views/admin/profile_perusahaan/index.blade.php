@@ -160,7 +160,7 @@
                                                     data-bs-target="#edit{{ $row->id_profil_perusahaan }}"><i
                                                         class="fa-regular fa-pen-to-square"></i> Edit</a></li>
                                             <li>
-                                                <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-success">
+                                                <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-black">
                                                     <i class="fa-solid fa-eye"></i> Rincian </a>
                                             </li>
                                             <li><a href="{{ route('profil.destroy', $row->id_profil_perusahaan) }}"

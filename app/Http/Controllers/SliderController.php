@@ -96,12 +96,10 @@ class SliderController extends Controller
 
     public function show($id)
     {
-        // Mengambil data berdasarkan id
         $slider = slider::findOrFail($id);
         $Title = 'Management';
         $subtitle = 'Detail slider';
     
-        // Kirim data profil ke view 'rincian'
         return view('admin.slider.show', compact('slider','Title','subtitle'));
     }
 

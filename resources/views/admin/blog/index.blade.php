@@ -126,7 +126,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item text-success" href="{{ route('blog.show', $row->id_blog) }}">
+                                                <a class="dropdown-item text-black" href="{{ route('blog.show', $row->id_blog) }}">
                                                     <i class="fa-regular fa-eye"></i> Rincian
                                                 </a>
                                             </li>

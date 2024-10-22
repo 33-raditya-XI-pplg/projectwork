@@ -92,7 +92,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item text-success" href="{{ route('partner.show', $partner->id_partner) }}">
+                                                <a class="dropdown-item text-black" href="{{ route('partner.rincian', $partner->id_partner) }}">
                                                     <i class="fa-regular fa-eye"></i> Rincian
                                                 </a>
                                             </li>
