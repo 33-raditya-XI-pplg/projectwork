@@ -97,9 +97,8 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-dark" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#rincian{{ $row->id_instansi }}"><i class="fa-solid fa-code pe-none"></i>
-                                            Rincian</a>
+                                        <li><a class="dropdown-item text-black" href="{{ route('instansi.show', $row->id_instansi) }}">
+                                            <i class="fa-solid fa-code pe-none"></i> Rincian</a>
                                         </li>
                                         <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                 data-bs-target="#edit{{ $row->id_instansi }}"><i
@@ -361,80 +360,6 @@
         </div>
     @endforeach
                  
-        {{-- Rincian --}}
-    @foreach ($instansi as $row)
-    <div class="modal modal-lg fade" id="rincian{{ $row->id_instansi }}" tabindex="-1" aria-labelledby="add"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Rincian Instansi</h5>  
-                    <div class="">
-                        <button type="button" class="btn-kembali rounded-3" data-bs-dismiss="modal">Kembali</button>                                                                
-                    </div>           
-                </div>
-                <div class="modal-body">                   
-                    <div class="container">
-                        <div class="row">
-                            <div class="mb-3">
-                                <label for="page" class="form-label">Page Id</label>
-                                <input type="text" class="form-control" name="page" id="page" value="{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
-                            </div>
-                            <div class="col">
-                                    <div class="mb-3">
-                                        <label for="nama_instansi" class="form-label">Nama Instansi</label>
-                                        <input type="text" class="form-control" name="nama_instansi"
-                                            id="nama_instansi" value="{{ $row->nama_instansi }}" readonly disabled >
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nomor_instansi" class="form-label">Nomor Instansi</label>
-                                        <input type="number" class="form-control" name="nomor_instansi"
-                                            id="nomor_instansi" value="{{ $row->nomor_instansi }}" readonly disabled>
-                                    </div>
-                                    <div class="mb-1">
-                                        <label for="alamat" class="form-label">Alamat</label>
-                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" readonly disabled >{{ $row->alamat }} </textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="no" class="form-label">No. telp</label>
-                                        <input type="number" class="form-control" name="no_telp" id="no_telp" value="{{ $row->no_telp }}" readonly disabled >
-                                 </div>                            
-                            </div>
-                            <div class="col">
-                                {{-- kiri --}}
-                                <div class="mb-3">
-                                    <label for="nama_kepala_instansi" class="form-label">Kepala Instansi</label>
-                                    <input type="text" class="form-control" name="nama_kepala_instansi" id="nama_kepala_instansi" value="{{ $row->nama_kepala_instansi }}" readonly disabled >
-                                </div>
-                                <div class="mb-3">
-                                    <label for="jabatan_kepala" class="form-label">Jabatan</label>
-                                    <input type="text" class="form-control" name="jabatan_kepala" id="jabatan_kepala" value="{{ $row->jabatan_kepala }}" readonly disabled >
-                                </div>
-                                <div class="mb-5">
-                                    <label for="alamat_kota" class="form-label">Kota</label>
-                                    <input type="text" class="form-control" name="alamat_kota" id="alamat_kota" value="{{ $row->alamat_kota }}" readonly disabled>                                 
-                                </div>
-                                <div class="mb-3 mt-4">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" readonly disabled >
-                                </div>
-                            </div>
-                            {{-- foto gambar --}}
-                            <div class="col-md-12 mb-2">    
-                                <label class="control-label mb-2">Foto Pengguji <span class="text-danger">*</span></label>
-                                <div class="dropzone-wrapper_rincian">
-                                    <div id="image_preview_" class="mt-3 d-flex justify-content-center">                    
-                                            <img src="{{ asset($row->path_logo) }}" alt="Image preview" class="img-fluid" style="max-width: auto; max-height: auto; object-fit: contain;">                               
-                                    </div>
-                                </div>                                                              
-                            </div>                                                
-                        </div>
-                    </div>            
-                </div>             
-            </div>
-        </div>
-    </div>
-    @endforeach
 
 
 <!-- Include CSS Select2 -->

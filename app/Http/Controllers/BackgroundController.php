@@ -56,9 +56,12 @@ class BackgroundController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $background = Background::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Tandatangan';
+        return view('admin.background.show', compact('background', 'Title', 'subtitle'));
     }
 
     /**

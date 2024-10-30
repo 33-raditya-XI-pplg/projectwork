@@ -99,9 +99,9 @@
                                                 </a>
 
                                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a href="#" class="dropdown-item text-success" id="registerButton">
+                                                    <li><a href="#" class="dropdown-item text-success registerButton">
                                                             <i class="fa-regular fa-pen-to-square small-icon"></i> Daftar</a>
-                                                            <form id="mendaftarForm" action="{{ route('mendaftar.event') }}" method="POST">
+                                                            <form id="mendaftarForm-{{ $row->id_event_skema }}" class="mendaftarForm" action="{{ route('mendaftar.event') }}" method="POST">
                                                                 @csrf
                                                                 <input type="hidden" name="event_skema_id" required value="{{ $row->id_event_skema }}">
                                                             </form>
@@ -128,12 +128,19 @@
 
 @push('script')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var button = document.getElementById('tambahBtn');
-            button.style.display = 'none';
-        });
-        
-        document.getElementById('registerButton').addEventListener('click', function () {
+   document.addEventListener("DOMContentLoaded", function () {
+    // Hide the button when the page loads
+    var tambahBtn = document.getElementById('tambahBtn');
+    if (tambahBtn) {
+        tambahBtn.style.display = 'none';
+    }
+
+    // Handle all register buttons
+    var registerButtons = document.querySelectorAll('.registerButton');
+    registerButtons.forEach(function (button, index) {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent default action
+
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Anda akan mendaftar untuk event ini!",
@@ -144,10 +151,17 @@
                 confirmButtonText: 'Daftar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('mendaftarForm').submit();
+                    // Get the correct form using the index
+                    var forms = document.querySelectorAll('.mendaftarForm');
+                    if (forms[index]) {
+                        forms[index].submit();
+                    }
                 }
-            })
+            });
         });
+    });
+});
+
 
     </script>
 @endpush

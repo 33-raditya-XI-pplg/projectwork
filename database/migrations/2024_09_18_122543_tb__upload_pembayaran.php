@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('tb_upload_pembayaran', function (Blueprint $table) {
             $table->id('id_upload_pembayaran');
-            $table->foreignId('event_id')->constrained('tb_event', 'id_event')->onDelete('cascade');
+            $table->foreignId('event_skema_id')->constrained('tb_event_skema', 'id_event_skema')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('tb_user', 'id_user')->onDelete(('cascade'));
             $table->string('status_pembayaran')->default('Belum Dibayar');
             $table->string('bukti_pembayaran')->nullable();

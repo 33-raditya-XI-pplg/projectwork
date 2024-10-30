@@ -43,14 +43,14 @@
         @foreach ($bg as $row)
         <div class="col">
             <div class=" border-light shadow">
-                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#rincian{{ $row->id_background }}">
+                <button class="btn btn-light"><a class="dropdown-item text-black" href="{{ route('background.show', $row->id_background) }}">
                         <img src="{{ asset($row->path_bg) }}" height="450" class="card-img-top" alt="..."
                             style="object-fit: scale-down">                    
                     <div class="card-body">
                         {{-- <h6 class="text text-warning text-capitalize">{{ $row->orientasi_bg }}</h6> --}}
                         <div class="d-flex justify-content-between">
                             <div class="fw-bold h5">Background {{ $row->nama_bg }}</div>
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center mx-2">
                                 <a class="btn btn-primary rounded text-end mt-2" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_background }}">
                                     <i class="fa-regular fa-pen-to-square  text-white pe-none" style="font-size: 0.7rem;"></i>
                                 </a>
@@ -149,6 +149,7 @@
         </div>
     </div>
 
+    {{-- edit --}}
     @foreach ($bg as $row)
         <div class="modal modal-lg fade" id="edit{{ $row->id_background }}" tabindex="-1" aria-labelledby="edit"
             aria-hidden="true">
@@ -241,64 +242,6 @@
         </div>
     @endforeach
 
-{{-- Rincian  --}}
-
-    @foreach ($bg as $row)
-        <div class="modal modal-lg fade" id="rincian{{ $row->id_background }}" tabindex="-1" aria-labelledby="rincian"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary-gradient text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Preview Background</h5>
-                        <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">                        
-                        <div class="container">                          
-                            <div class="row">                                
-                                    <div class="col-md-12 mb-2">                                    
-                                        <label class="control-label mb-2"> Background <span class="text-danger">*</span></label>                                   
-                                        <div class="dropzone-wrapperr mx-auto">                                      
-                                                <div id="image_preview_" class="mt-3 d-flex justify-content-center">                                                
-                                                    <img  src="{{ asset($row->path_bg) }}" alt="Image preview" class="img-fluid" style="max-width: auto; max-height: auto; object-fit: contain;">                                         
-                                                </div>                                                                      
-                                             </div>                                                                                                                                                                             
-                                    </div>
-                                    
-                                <div class="col-md-10 mx-auto">
-                                    <!-- kanan -->
-                                    <div class="mb-">
-                                        <label for="page" class="form-label">Page Id</label>
-                                        <input type="text" class="form-control" name="page" id="page" value="{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="nama_bg" class="form-label ">Nama Background</label>
-                                        <input class="form-control form-control-sm " id="nama_bg" name="nama_bg"
-                                            type="text" value="{{ $row->nama_bg }}" readonly disabled>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="rincian_bg" class="form-label">Rincian</label>
-                                        <textarea class="form-control form-control-sm" id="rincian_bg" name="rincian_bg" rows="2" required disabled readonly  >{{ $row->rincian_bg }}</textarea>
-                                        {{-- <input class="form-control form-control-sm" id="rincian_bg" name="rincian_bg"
-                                            type="text" value="{{ $row->rincian_bg }}" readonly disabled> --}}
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="orientasi_bg" class="form-label">Orientation</label>
-                                        <select class="form-select" name="orientasi_bg" required disabled readonly >
-                                            <option {{ $row->orientasi_bg == 'landscape' ? 'selected' : '' }}>Landscape
-                                            </option>
-                                            <option {{ $row->orientasi_bg == 'potrait' ? 'selected' : '' }}>Potrait
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                    
-                    </div>                          
-                </div>
-            </div>
-        </div>
-    @endforeach
     
     <script>    
         document.addEventListener('DOMContentLoaded', function() {

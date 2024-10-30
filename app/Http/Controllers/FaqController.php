@@ -98,7 +98,22 @@ class FaqController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $faq = Faq::findOrFail($id);
+        $pertanyaanList = array_map(function ($item) {
+            return strip_tags(trim($item));
+        }, explode('</li>', $faq->pertanyaan));
 
+        $jawabanList = array_map(function ($item) {
+            return strip_tags(trim($item));
+        }, explode('</li>', $faq->jawaban));
+
+        $count = min(count($pertanyaanList), count($jawabanList));
+        $Title = 'Management';
+        $subtitle = 'Detail Faq';
+        return view('admin.faq.show', compact('faq', 'jawabanList', 'pertanyaanList', 'count', 'Title', 'subtitle'));
+    }
 
     public function destroy($id)
     {

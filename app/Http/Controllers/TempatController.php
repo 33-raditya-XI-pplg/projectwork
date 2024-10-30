@@ -65,6 +65,13 @@ class TempatController extends Controller
       return redirect()->back();
    }
 
+   public function show($id)
+   {
+      $tempat = Tempat::findOrFail($id);
+      $Title = 'Management';
+      $subtitle = 'Detail Tempat';
+      return view('admin.tempat.show', compact('tempat', 'Title', 'subtitle'));
+   }
    public function destroy($id)
    {
       $checkChildID = Event::where('tempat_id', $id)->count();

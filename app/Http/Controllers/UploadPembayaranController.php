@@ -19,51 +19,63 @@ class UploadPembayaranController extends Controller
         }
 
         if (auth()->user()->level === 'Admin') {
-            $upload = \DB::table('tb_event')
-                ->leftJoin('tb_upload_pembayaran', 'tb_event.id_event', '=', 'tb_upload_pembayaran.event_id')
+            // Admin Query: Join `tb_event_skema` -> `tb_event` -> `tb_upload_pembayaran`
+            $upload = \DB::table('tb_event_skema')
+                ->leftJoin('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                ->leftJoin('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                ->leftJoin('tb_upload_pembayaran', 'tb_event_skema.id_event_skema', '=', 'tb_upload_pembayaran.event_skema_id')
                 ->leftJoin('tb_user', 'tb_upload_pembayaran.user_id', '=', 'tb_user.id_user')
                 ->select(
                     'tb_upload_pembayaran.id_upload_pembayaran',
+                    'tb_event_skema.id_event_skema',
+                    'tb_skema.nama_skema',
                     'tb_event.nama_event',
                     'tb_upload_pembayaran.bukti_pembayaran',
                     'tb_upload_pembayaran.status_pembayaran',
                     'tb_event.tgl_mulai',
                     'tb_event.tgl_berakhir',
                     'tb_upload_pembayaran.user_id',
-                    'tb_user.nama_lengkap',
+                    'tb_user.nama_lengkap'
                 )
-                ->where('tb_upload_pembayaran.status_pembayaran', 'Menunggu', )
+                ->where('tb_upload_pembayaran.status_pembayaran', 'Menunggu')
+                ->where('tb_event.biaya_regis', '>', 0)
                 ->get();
-            // dd($upload);
+
             $Title = 'Upload Pembayaran';
             return view('admin.upload.index', compact('upload', 'Title'));
+
         } elseif (auth()->user()->level === 'Pengguna') {
             $userId = auth()->user()->id_user;
-            // Query khusus user, misal event yang sudah dibayar
-            $upload = \DB::table('tb_event')
-                ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
-                    $join->on('tb_event.id_event', '=', 'tb_upload_pembayaran.event_id')
-                        ->where('tb_upload_pembayaran.user_id', '=', $userId);
 
+            // User Query: Join `tb_event_skema` -> `tb_event` -> `tb_upload_pembayaran`
+            $upload = \DB::table('tb_event_skema')
+                ->leftJoin('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                ->leftJoin('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
+                    $join->on('tb_event_skema.id_event_skema', '=', 'tb_upload_pembayaran.event_skema_id')
+                        ->where('tb_upload_pembayaran.user_id', '=', $userId);
                 })
                 ->where('tb_event.status', 'Berlangsung')
+                ->where('tb_event.biaya_regis', '>', 0)
                 ->select(
-                    'tb_event.id_event',
+                    'tb_event_skema.id_event_skema',
+                    'tb_event_skema.event_id',
+                    'tb_skema.nama_skema',
                     'tb_event.nama_event',
                     'tb_upload_pembayaran.bukti_pembayaran',
                     'tb_upload_pembayaran.status_pembayaran',
+                    // 'tb_upload_pembayaran.event_skema_id',
                     'tb_event.tgl_mulai',
                     'tb_event.tgl_berakhir',
-                    'tb_event.status',
-
+                    'tb_event.status'
                 )
-                // ->whereNotNull('tb_upload_pembayaran.bukti_pembayaran')
                 ->get();
+            // ->groupBy('nama_event');
 
+            // dd($upload);
             $Title = 'Upload Pembayaran';
             return view('user.upload.index', compact('upload', 'Title'));
         }
-        // dd($upload);
 
     }
     public function store(Request $request)
@@ -71,7 +83,7 @@ class UploadPembayaranController extends Controller
         // Validasi file upload
         $request->validate(rules: [
             'upload_file' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Sesuaikan aturan sesuai kebutuhan
-            'event_id' => 'required|exists:tb_event,id_event', // Pastikan event_id valid
+            'event_skema_id' => 'required|exists:tb_event_skema,id_event_skema', // Pastikan event_id valid
         ]);
 
 
@@ -92,14 +104,20 @@ class UploadPembayaranController extends Controller
         $path = $request->file('upload_file')->store('uploads', 'public');
 
         // Simpan data ke database
-        Upload_pembayaran::create([
-            'event_id' => $request->event_id,
+        $upload = Upload_pembayaran::create([
+            'event_skema_id' => $request->event_skema_id,
             'user_id' => $userId,
             'status_pembayaran' => 'Menunggu',
             'bukti_pembayaran' => $path,
         ]);
 
-        return redirect()->back()->with('success', 'Pembayaran berhasil diunggah. Status: Menunggu');
+        // dd($request->all()); 
+
+        if ($upload) {
+            return redirect()->back()->with('success', 'Pembayaran berhasil diunggah. Status: Menunggu');
+        } else {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data.');
+        }
     }
 
     public function updateStatus(Request $request, $id_upload_pembayaran)

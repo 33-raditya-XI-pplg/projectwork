@@ -17,7 +17,7 @@ class LaporanPerkembanganController extends Controller
 {
     public function index()
     {
-        $events = Event::all(); // Ganti nama variabel ke $events
+        $events = Event::where('status', 'Selesai')->get(); // Ganti nama variabel ke $events
         // $laporan = LaporanPerkembangan::all();
         $kemampuan = kemampuan_dasar::all();
         $Title = 'Laporan Perkembangan';

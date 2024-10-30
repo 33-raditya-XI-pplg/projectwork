@@ -46,6 +46,11 @@
                                     <i class="fa-solid fa-bars"></i>
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <a class="dropdown-item text-black" href="{{ route('jenis-event.show', $row->id_jenis_event) }}">
+                                            <i class="fa-solid fa-code pe-none"></i> Rincian
+                                        </a>
+                                    </li>
                                     <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                             data-bs-target="#edit{{ $row->id_jenis_event }}"><i
                                                 class="fa-regular fa-pen-to-square"></i> Edit</a></li>

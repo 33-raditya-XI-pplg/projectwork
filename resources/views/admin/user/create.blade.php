@@ -245,10 +245,13 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                     </div>
-
                     <div class="modal-footer justify-content-left px-3 ">                 
-                        <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
-                    
+                        <div class=" text-end mx-1">
+                            <a href="{{ route('user.index') }}" class="btn btn-danger rounded">Batal</a>
+                        </div>
+                        <div class="mx-1">
+                            <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+                        </div>                    
                 </div>
                 <!-- <div class="d-grid mt-3 ">
                     <button type="submit" class="btn btn-primary rounded">Simpan</button>

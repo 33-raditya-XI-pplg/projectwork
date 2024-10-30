@@ -71,9 +71,6 @@ class PageController extends Controller
 
 
 
-
-
-
     public function edit($id)
     {
         $page = Page::findOrFail($id);
@@ -166,6 +163,6 @@ class PageController extends Controller
         $page = page::findOrFail($id);
         $Title = 'Management';
         $subtitle = 'Detail Page';
-        return view('admin.page.show', compact('page','Title','subtitle'));
+        return view('admin.page.show', compact('page', 'Title', 'subtitle'));
     }
 }

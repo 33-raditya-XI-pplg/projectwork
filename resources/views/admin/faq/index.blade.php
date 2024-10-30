@@ -17,7 +17,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <!-- Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+{{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> --}}
 <!-- Include SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <!-- Include SweetAlert2 JS -->
@@ -51,11 +51,11 @@
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
                     <td>{{ \App\Models\Page::find($row->page_id)->nama_page }}</td>
-                    <td>{{ $row->pertanyaan }}</td>
-                    <td>{{ $row->jawaban }}</td>
+                    <td>{!! $row->pertanyaan !!}</td>
+                    <td>{!! $row->jawaban !!}</td>
                     <td>
-                        <button type="button" class="btn rounded-3
-                            {{ $row->status === 'true' ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                        <button type="button" class="badge rounded-3
+                            {{ $row->status === 'true' ? 'bg-success' : 'bg-danger' }}"
                             disabled>
                             {{ $row->status === 'true' ? 'Aktif' : 'Nonaktif' }}
                         </button>
@@ -67,6 +67,11 @@
                                 <i class="fa-solid fa-bars"></i>
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_faq }}">
+                                <li>
+                                    <a class="dropdown-item text-black" href="{{ route('faq.show', $row->id_faq) }}">
+                                        <i class="fa-solid fa-code pe-none"></i> Rincian
+                                    </a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_faq }}">
                                         <i class="fa-regular fa-pen-to-square"></i> Edit
@@ -180,7 +185,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('faq.store') }}" method="POST">
+                <form id="faqForm" action="{{ route('faq.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
@@ -222,7 +227,7 @@
 <!-- End of Insert Modal -->
 
 <!-- FAQ Accordion -->
-<div class="bg-light rounded-4 px-4 py-4 mb-5 shadow-lg">
+{{-- <div class="bg-light rounded-4 px-4 py-4 mb-5 shadow-lg">
     <div class="container">
         <div class="row">
             @foreach ($faq as $item)
@@ -241,9 +246,9 @@
             @endforeach
         </div>
     </div>
-</div>
+</div> --}}
 
-<style>
+{{-- <style>
     .card {
         perspective: 1000px;
         position: relative;
@@ -273,7 +278,7 @@
     .card:hover .card-back {
         transform: rotateY(0deg);
     }
-</style>
+</style> --}}
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

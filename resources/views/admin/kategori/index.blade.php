@@ -47,10 +47,10 @@
             <tr>
                 <th scope="row">{{ $index + 1 }}</th>
                 <td>{{ $row->nama_kategori }}</td>
-                <!-- <td>{{ $row->deskripsi }}</td> -->
+                {{-- <!-- <td>{{ $row->deskripsi }}</td> --> --}}
                 <td>
-                    <button type="button" class="btn rounded-3
-                            {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                    <button type="button" class="badge rounded-3
+                            {{ $row->status ? 'bg-success' : 'bg-danger' }}"
                         disabled>
                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                     </button>
@@ -63,16 +63,16 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li>
+                                <a class="dropdown-item text-black" href="{{ route('kategori.show', $row->id_kategori) }}">
+                                    <i class="fa-solid fa-code pe-none"></i> Rincian
+                                </a>
+                            </li>
+                            <li>
                                 <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                     data-bs-target="#edit{{ $row->id_kategori }}">
                                     <i class="fa-regular fa-pen-to-square"></i> Edit
                                 </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-black" href="{{ route('kategori.show', $row->id_kategori) }}">
-                                    <i class="fa-regular fa-eye"></i> Rincian
-                                </a>
-                            </li>
+                            </li>                         
                             <form id="delete-form-{{ $row->id_kategori }}" action="{{ route('kategori.destroy', $row->id_kategori) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')

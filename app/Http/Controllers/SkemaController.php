@@ -189,7 +189,14 @@ class SkemaController extends Controller
         }
     }
 
-
+    public function show($id)
+    {
+        $skema = Skema::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Tempat';
+        $sub_skema = Sub_Skema::where('skema_id', $skema->id_skema)->get();
+        return view('admin.skema.show', compact('skema', 'sub_skema', 'Title', 'subtitle'));
+    }
     public function destroy(Skema $skema)
     {
         $checkChildID = Event_Skema::where('skema_id', $skema->id_skema)->count();

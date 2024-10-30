@@ -12,7 +12,7 @@ class Upload_pembayaran extends Model
     protected $primaryKey = 'id_upload_pembayaran';
 
     protected $fillable = [
-        'event_id',
+        'event_skema_id',
         'user_id',
         'status_pembayaran',
         'bukti_pembayaran',

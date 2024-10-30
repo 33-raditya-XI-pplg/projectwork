@@ -15,7 +15,7 @@ class Testimoni extends Model
 
     protected $fillable = [
         'page_id',
-        'nama',
+        'id_user',
         'email',
         'tanggal',
         'rating',
@@ -45,5 +45,10 @@ class Testimoni extends Model
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 }

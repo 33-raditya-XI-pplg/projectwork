@@ -2,6 +2,7 @@
 
 
 
+use App\Http\Controllers\User\TestimoniUserController;
 use App\Http\Controllers\UploadPembayaranController;
 use App\Models\Upload_pembayaran;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,8 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
 
     Route::resource('uploadPembayaran-user', UploadPembayaranController::class);
 
+    Route::resource('testimoni-user', TestimoniUserController::class)->except(['show']);
+    Route::get('testimoni-user/{id}/detail', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
 
 
     //profile
@@ -74,16 +77,17 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
 
 });
+
 Route::group(['prefix' => 'penguji', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [DashboardController::class, 'user_index']);
-    Route::resource('event-user', EventUsersController::class);
-    Route::resource('sertifikat-user', SertifikatUsersController::class);
-    Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
-    Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
+    // Route::resource('event', EventUsersController::class);
+    // Route::resource('sertifikat', SertifikatUsersController::class);
+    // Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
+    // Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
 
-    Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
-    Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
-    Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
+    // Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
+    // Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
+    // Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 
     //profile
     Route::resource('profile-penguji', ProfileController::class)->except(['edit', 'show'])->names(['profile-penguji', 'profile-penguji.update']);
@@ -130,18 +134,26 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
 
     Route::group(['prefix' => 'master'], function () {
-        Route::resource('tandatangan', SignatureController::class);
-        Route::resource('skema', SkemaController::class);
-        Route::resource('background', BackgroundController::class);
-        Route::resource('/user', UserController::class)->except('show');
+        Route::resource('tandatangan', SignatureController::class)->except(['show']);
+        Route::get('tandatangan/{id}/detail', [SignatureController::class, 'show'])->name('tandatangan.show');
+        Route::resource('skema', SkemaController::class)->except(['show']);
+        Route::get('skema/{id}/detail', [SkemaController::class, 'show'])->name('skema.show');
+        Route::resource('background', BackgroundController::class)->except(['show']);
+        Route::get('background/{id}/detail', [BackgroundController::class, 'show'])->name('background.show');
+        Route::resource('/user', UserController::class)->except(['show']);
+        Route::get('/user{id}/detail', [UserController::class, 'show'])->name('user.show');
         Route::post('user/update-status/{id}', [UserController::class, 'updateStatus'])->name('user.updateStatus');
         Route::post('user/import', [UserController::class, 'import'])->name('user.import');
-        Route::resource('/penguji', PengujiController::class);
+        Route::resource('/penguji', PengujiController::class)->except(['show']);
+        Route::get('penguji/{id}/detail', [PengujiController::class, 'show'])->name('penguji.show');
         Route::post('/penguji/update-status/{id}', [PengujiController::class, 'updateStatus'])->name('penguji.updateStatus');
 
-        Route::resource('/instansi', InstansiController::class);
-        Route::resource('/jenis-event', JenisEventController::class);
-        Route::resource('/tempat', TempatController::class);
+        Route::resource('/instansi', InstansiController::class)->except(['show']);
+        Route::get('/instansi/{id}/detail', [InstansiController::class, 'show'])->name('instansi.show');
+        Route::resource('/jenis-event', JenisEventController::class)->except(['show']);
+        Route::get('/jenis-event/{id}/detail', [JenisEventController::class,'show'])->name('jenis-event.show');
+        Route::resource('/tempat', TempatController::class)->except(['show']);
+        Route::get('/tampat/{id}/detail', [TempatController::class, 'show'])->name('tempat.show');
         Route::resource('/rentang-nilai', RentangNilaiController::class);
     });
 
@@ -158,7 +170,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/galeri/{id}', [GaleriController::class, 'destroy'])->name('galeri.destroy');
 
         //kategori
-        Route::get('/kategori/{kategori}/rincian', [KategoriController::class, 'show'])->name('kategori.show');
+        Route::get('/kategori/{kategori}/detail', [KategoriController::class, 'show'])->name('kategori.show');
         Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.indek');
         Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
         Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
@@ -176,7 +188,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('video.destroy');
 
         //page
-        Route::get('/page/{page}/rincian', [PageController::class, 'show'])->name('page.show');
+        Route::get('/page/{page}/detail', [PageController::class, 'show'])->name('page.show');
         Route::get('/page', [PageController::class, 'index'])->name('page.index');
         Route::post('/page', [PageController::class, 'store'])->name('page.store');
         Route::put('/page/{id}', [PageController::class, 'update'])->name('page.update');
@@ -186,15 +198,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
         // blog 
 
-        Route::resource('admin/blog', BlogController::class);
+        // Route::resource('/blog', BlogController::class);
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.indek');
         Route::post('/blog', [BlogController::class, 'store'])->name('blog.store');
         Route::put('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
         Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
-        Route::put('/admin/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+        Route::put('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+        Route::get('/blog/{id}/detail', [BlogController::class, 'show'])->name('blog.show');
 
         // Profile perusahaan
-        Route::get('/profil/{profil}/rincian', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
+        Route::get('/profil/{profil}/detail', [ProfilPerusahaanController::class, 'rincian'])->name('profil.rincian');
         Route::get('/profil', [ProfilPerusahaanController::class, 'index'])->name('profil.index');
         Route::post('/profil', [ProfilPerusahaanController::class, 'store'])->name('profil.store');
         Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
@@ -209,18 +222,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         // Partner
         Route::get('/partner', [PartnerController::class, 'index'])->name('partner.index');
         Route::post('/partner', [PartnerController::class, 'store'])->name('partner.store');
-        Route::put('/admin/partner/{id}', [PartnerController::class, 'update'])->name('partner.update');
-        Route::delete('admin/partner/{partner}', [PartnerController::class, 'destroy'])->name('partner.destroy');
-        Route::get('/partner/{partner}/rincian', [PartnerController::class, 'show'])->name('partner.rincian');
+        Route::put('/partner/{id}', [PartnerController::class, 'update'])->name('partner.update');
+        Route::delete('/partner/{partner}', [PartnerController::class, 'destroy'])->name('partner.destroy');
+        Route::get('/partner/{partner}/detail', [PartnerController::class, 'show'])->name('partner.rincian');
 
         //testimoni
         Route::get('/testimoni', [TestimoniController::class, 'index'])->name('testimoni.indek');
         Route::post('/testimoni', [TestimoniController::class, 'store'])->name('testimoni.store');
         Route::put('/testimoni{testimoni}', [TestimoniController::class, 'update'])->name('testimoni.update');
+        Route::get('/testimoni/{testimoni}/detail', [TestimoniController::class, 'show'])->name('testimoni.show');
         Route::delete('/testimoni{testimoni}', [TestimoniController::class, 'destroy'])->name('testimoni.destroy');
 
+
         //slider
-        Route::get('/slider/{slider}/rincian', [SliderController::class, 'show'])->name('slider.show');
+        Route::get('/slider/{slider}/detail', [SliderController::class, 'show'])->name('slider.show');
         Route::get('/slider', [SliderController::class, 'index'])->name('slider.indek');
         Route::post('/slider', [SliderController::class, 'store'])->name('slider.store');
         Route::put('/slider{slider}', [SliderController::class, 'update'])->name('slider.update');
@@ -230,6 +245,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/faq', [FaqController::class, 'index'])->name('faq.indek');
         Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
         Route::put('/faq/{id}', [FaqController::class, 'update'])->name('faq.update');
+        Route::get('/faq/{id}/detail', [FaqController::class, 'show'])->name('faq.show');
         Route::delete('/admin/faq/{id}', [FaqController::class, 'destroy'])->name('faq.destroy');
     });
 
@@ -294,3 +310,9 @@ Route::get('/slider', [SliderController::class, 'index'])->name('slider.index');
 Route::post('/slider', [SliderController::class, 'store'])->name('slider.store');
 Route::put('/slider{slider}', [SliderController::class, 'update'])->name('slider.update');
 Route::delete('/slider{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
+Route::get('/get-email/{nama}', [TestimoniController::class, 'getEmail'])->name('getEmail');
+Route::post('/testimoni-user', [TestimoniUserController::class, 'store'])->name('testimoni-user.store');
+Route::get('/testimoni-user', [TestimoniUserController::class, 'index'])->name('testimoni-user.indek');
+Route::put('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'update'])->name('testimoni-user.update');
+// Route::get('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
+

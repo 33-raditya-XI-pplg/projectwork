@@ -27,6 +27,10 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item text-black" href="{{ route('skema.show', $row->id_skema) }}">
+                                            <i class="fa-solid fa-code pe-none"></i>
+                                            Rincian</a>
+                                        </li>
                                         <li><a href="{{ route('skema.edit', $row->id_skema) }}" class="dropdown-item text-info" >
                                             <i class="fa-regular fa-pen-to-square"></i> Edit</a>
                                         </li>

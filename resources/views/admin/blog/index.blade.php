@@ -24,40 +24,32 @@
     }
 
     .dropzone-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 240px;
-        border: 2px dashed #ddd;
-        background-color: #f9f9f9;
-        position: relative;
-        cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 240px;
+    border: 2px dashed #ddd;
+    background-color: #f9f9f9;
+    position: relative;
+    cursor: pointer; 
     }
-
-    .image_preview {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: auto;
-        max-width: 200px;
-        max-height: 200px;
-        overflow: hidden;
-        margin: 0 auto;
-    }
-
-    .preview_image {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        display: block;
-    }
-
-    .dropzone-desc {
-        text-align: center;
-        padding: 20px;
-        color: #888;
+   #image_preview_ {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%; 
+       height: auto; 
+       max-width: 200px; 
+       max-height: 200px; 
+       overflow: hidden;
+       margin: 0 auto; 
+   }
+   #preview_image_create, #preview_image_edit_ {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; 
+    display: block; 
     }
 
     .blog-card img {
@@ -84,7 +76,7 @@
                                 <th>No</th>
                                 <th scope="col">Page Name</th>
                                 <th scope="col">Judul</th>
-                                <th scope="col">Slug</th>
+                                {{-- <th scope="col">Slug</th> --}}
                                 <!-- <th scope="col">Body</th> -->
                                 {{-- <th scope="col">Photo</th> --}}
                                 <th scope="col">Kategori</th>
@@ -98,7 +90,7 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $row->page->nama_page ?? 'N/A' }}</td> <!-- Use eager loaded page relationship -->
                                 <td>{{ $row->judul }}</td>
-                                <td>{{ $row->slug }}</td>
+                                {{-- <td>{{ $row->slug }}</td> --}}
                                 <!-- <td>{{ Str::limit(strip_tags($row->body), 100) }}</td> -->
                                 {{-- <td>
                                     <!-- Display the photo or a default image if not set -->
@@ -108,8 +100,8 @@
                                     {{ $row->kategori->nama_kategori ?? 'N/A' }}
                                 </td>
                                 <td>
-                                    <button type="button" class="btn rounded-3
-                                        {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                    <button type="button" class="badge rounded-3
+                                        {{ $row->status ? 'bg-success' : 'bg-danger' }}"
                                         disabled>
                                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                     </button>
@@ -121,15 +113,15 @@
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_blog }}">
                                             <li>
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
+                                                <a class="dropdown-item text-black" href="{{ route('blog.show', $row->id_blog) }}">
+                                                    <i class="fa-solid fa-code pe-none"></i> Rincian
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item text-black" href="{{ route('blog.show', $row->id_blog) }}">
-                                                    <i class="fa-regular fa-eye"></i> Rincian
+                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}">
+                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
                                                 </a>
-                                            </li>
+                                            </li>                                      
                                             <li>
                                                 <form id="deleteForm{{ $row->id_blog }}" action="{{ route('blog.destroy', $row->id_blog) }}" method="POST" style="display: inline;">
                                                     @csrf
@@ -184,7 +176,7 @@
             <div class="modal-body">
                 <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
+                    <input type="hidden" name="created_by" value="{{ Auth::user()->id_blog }}">
 
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
@@ -214,7 +206,7 @@
                         <input type="text" class="form-control" name="judul" id="judul" required>
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="photo" class="form-label">Upload Photo <span class="text-danger">*</span></label>
                         <div class="dropzone-wrapper">
                             <div class="dropzone-desc">
@@ -229,6 +221,26 @@
                             </div>
                         </div>
                         <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                    </div> --}}
+
+                    <div class="form-group mb-2">
+                        <label class="control-label mb-2">Upload Foto <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih gambar atau seret ke sini.</p>
+                            </div>
+                            <input type="file" name="photo" class="dropzone"  accept="image/*" required>
+                            <div id="image_preview_" class="mt-3">
+                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2MB</small>
+                        </div>
+                        @error('path_ttd')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
 
@@ -252,11 +264,8 @@
     </div>
 </div>
 
-
-
-
-@foreach ($blog as $row)
 <!-- Edit Blog Modal -->
+@foreach ($blog as $row)
 <div class="modal modal-lg fade" id="edit{{ $row->id_blog }}" tabindex="-1" aria-labelledby="edit{{ $row->id_blog }}Label" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -268,7 +277,7 @@
                 <form action="{{ route('blog.update', ['id' => $row->id_blog]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
+                    <input type="hidden" name="updated_by" value="{{ Auth::user()->id_blog }}">
 
                     <!-- Page ID -->
                     <div class="mb-3">
@@ -300,27 +309,28 @@
                         <input type="text" class="form-control" name="judul" id="judul" value="{{ $row->judul }}" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="edit_photo_{{ $row->id_blog }}" class="form-label">Upload Photo</label>
-                        <div class="dropzone-wrapper" style="height: 300px;">
+                    <div class="form-group mb-3">
+                        <label class="control-label mb-2">Upload Foto Mentor <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
                             <div class="dropzone-desc">
                                 <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Choose a photo file or drag it here.</p>
+                                <p>Pilih gambar atau seret ke sini .</p>
                             </div>
-                            <input type="file" name="photo" class="dropzone" id="edit_photo_{{ $row->id_blog }}" accept=".png, .jpg, .jpeg" style="height: 300px;">
-
-                            <!-- Image preview area -->
-                            <div id="edit_photo_preview_{{ $row->id_blog }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 200px; max-height: 200px;">
+                            <input type="file" name="photo" class="dropzone" id="photo_{{ $row->id_blog }}" accept="image/*">
+                            <div id="image_preview_" class="mt-3 d-flex justify-content-center">
                                 @if($row->photo)
-                                <img src="{{ asset('storage/photos/' . $row->photo) }}" id="edit_photo_image_preview_{{ $row->id_blog }}" alt="Photo Preview" style="max-width: 100%;">
+                                    <img id="preview_image_edit_{{ $row->id_blog }}" src="{{ asset($row->photo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                                 @else
-                                <img src="" id="edit_photo_image_preview_{{ $row->id_blog }}" alt="Photo Preview" style="max-width: 100%; display: none;">
+                                    <img id="preview_image_edit_{{ $row->id_blog }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                                 @endif
                             </div>
                         </div>
-                        @error('photo')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                        </div>
+                        @error('path_foto')
+                        <div class="text-danger">{{ $message }}</div>
+                       @enderror
                     </div>
 
 
@@ -347,16 +357,15 @@
         </div>
     </div>
 </div>
-
-
+@endforeach
 
 
 <!-- Include CSS Select2 -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 <!-- Include JS Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> --}}
     <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
@@ -385,62 +394,88 @@
                             }
                         });
                     </script>
-    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const fileInput = document.getElementById('photo');
-                            const previewImage = document.getElementById('preview_image');
-                            const imagePreviewContainer = document.getElementById('image_preview');
-                            const dropzone = document.querySelector('.dropzone-wrapper');
-
-                            // Handle file input change event to show preview
-                            fileInput.addEventListener('change', function(event) {
-                                const file = event.target.files[0];
-                                if (file) {
-                                    const reader = new FileReader();
-
-                                    reader.onload = function(e) {
-                                        previewImage.src = e.target.result;
-                                        imagePreviewContainer.style.display = 'flex'; // Show the preview image
-                                    };
-
-                                    reader.readAsDataURL(file);
-                                } else {
-                                    previewImage.src = '';
-                                    imagePreviewContainer.style.display = 'none'; // Hide the preview image if no file
-                                }
-                            });
-
-                            // Optional: Handle drag and drop for the file input
-                            dropzone.addEventListener('dragover', function(event) {
-                                event.preventDefault();
-                                dropzone.classList.add('dragging');
-                            });
-
-                            dropzone.addEventListener('dragleave', function() {
-                                dropzone.classList.remove('dragging');
-                            });
-
-                            dropzone.addEventListener('drop', function(event) {
-                                event.preventDefault();
-                                dropzone.classList.remove('dragging');
-
-                                const files = event.dataTransfer.files;
-                                if (files.length > 0) {
-                                    fileInput.files = files;
-                                    const changeEvent = new Event('change');
-                                    fileInput.dispatchEvent(changeEvent);
-                                }
-                            });
-
-                            // Show the dropzone on clicking the desc
-                            dropzone.addEventListener('click', function() {
-                                fileInput.click();
-                            });
-                        });
-                    </script>
+<script>    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Inisialisasi preview image
+    const inputFile = document.querySelector('input[name="photo"]');
+    const preview = document.getElementById('preview_image_create');
 
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    if (preview) {
+    preview.style.display = 'none';
+
+    inputFile.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            if (preview) { // Cek apakah preview tidak null
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            } else {
+                console.error('Preview element not found');
+            }
+        }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                if (preview) {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
+            }
+        });
+    } else {
+        console.error('Preview image element not found');
+    }
+
+
+    // Inisialisasi Dropzone
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone(".dropzone-wrapper", {
+        url: "/blog", // URL server untuk unggahan
+        maxFilesize: 2, 
+        acceptedFiles: "image/*",
+        init: function() {
+            this.on("success", function(file, response) {                    
+                // Tangani response sukses
+                console.log("Upload successful");
+            });
+            this.on("error", function(file, response) {
+                const errorElement = document.getElementById('image_error');
+                if (errorElement) {
+                    errorElement.innerHTML = response.message || 'Upload failed';
+                }
+            });
+        }
+    });   
+});   
+</script> 
+<script>
+    document.querySelectorAll('[id^="photo"]').forEach(input => {
+      input.addEventListener('change', function(event) {
+          const id = this.id.split('_')[1]; // Mengambil ID dari input
+          const preview = document.getElementById(`preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
+          const file = event.target.files[0];
+          const reader = new FileReader();
+  
+          reader.onload = function(e) {
+              preview.src = e.target.result;
+              preview.style.display = 'block'; // Tampilkan preview gambar
+          }
+  
+          if (file) {
+              reader.readAsDataURL(file);
+          } else {
+              preview.src = '';
+              preview.style.display = 'none'; // Sembunyikan gambar jika tidak ada file
+          }
+      });
+    });
+  </script>
+
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 
 @if(session('error'))
 <script>
@@ -463,8 +498,5 @@
     });
 </script>
 @endif
-
-
-@endforeach
 
 @endsection

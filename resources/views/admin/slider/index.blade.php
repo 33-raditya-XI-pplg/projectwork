@@ -116,8 +116,8 @@
                         {{-- <td><a href="{{ $row->image_url }}" target="_blank">{{ $row->image_url }}</a></td> --}}
                         <td>{{ $row->position }}</td>
                         <td>
-                            <button type="button" class="btn rounded-3
-                                {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                            <button type="button" class="badge rounded-3
+                                {{ $row->status ? 'bg-success' : 'bg-danger' }}"
                                 disabled>
                                 {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                             </button>
@@ -130,15 +130,15 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_slider }}">
                                    
-                                        <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_slider }}">
-                                            <i class="fa-regular fa-pen-to-square"></i> Edit
+                                    <li>
+                                        <a class="dropdown-item text-black" href="{{ route('slider.show', $row->id_slider) }}">
+                                            <i class="fa-solid fa-code pe-none"></i> Rincian
                                         </a>
                                     </li>
-                                    <li>
-                                                <a class="dropdown-item text-black" href="{{ route('slider.show', $row->id_slider) }}">
-                                                    <i class="fa-regular fa-eye"></i> Rincian
-                                                </a>
-                                            </li>
+                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_slider }}">
+                                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                                    </a>
+                                </li>
                                     <li>
                                     <li>
                                         <form id="deleteForm{{ $row->id_slider }}" action="{{ route('slider.destroy', $row->id_slider) }}" method="POST" style="display: inline;">
@@ -179,17 +179,17 @@
     </div>
 </div>
 
-<!-- Slider Carousel with Swipe Support
+{{-- <!-- Slider Carousel with Swipe Support --}}
 <div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
     <div class="carousel-inner">
-        @foreach ($slider as $index => $slide)
+        @foreach ($slider as $index => $row)
             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ $slide->image_url }}" class="d-block" alt="{{ $slide->title }}" style="max-height: 500px; max-width: 80%;">
+                    <img src="{{ $row->image_url }}" class="d-block" alt="{{ $row->title }}" style="max-height: 500px; max-width: 80%;">
                 </div>
                 <div class="carousel-caption d-none d-md-block">
-                    <h5>{{ $slide->title }}</h5>
-                    <p>{{ $slide->description }}</p>
+                    <h5>{{ $row->title }}</h5>
+                    <p>{{ $row->description }}</p>
                 </div>
             </div>
         @endforeach
@@ -204,7 +204,7 @@
     </button>
 </div>
 
- Add Swiper.js or Bootstrap Swipe Handling -->
+ {{-- Add Swiper.js or Bootstrap Swipe Handling --> --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var carousel = document.querySelector('#sliderCarousel');

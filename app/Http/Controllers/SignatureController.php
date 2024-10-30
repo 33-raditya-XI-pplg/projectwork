@@ -85,6 +85,14 @@ class SignatureController extends Controller
         return redirect()->back();
     }
 
+    public function show($id)
+    {
+        $ttd = Ttd::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Tandatangan';
+        return view('admin.tandatangan.show', compact('ttd', 'Title', 'subtitle'));
+    }
+
     public function destroy($id)
     {
         $ttd = Ttd::find($id);

@@ -131,6 +131,14 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
+    public function show($id)
+    {
+        $pengguna = User::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Pengguna';
+        return view('admin.user.show', compact('pengguna', 'Title', 'subtitle'));
+    }
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);

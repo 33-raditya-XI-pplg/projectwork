@@ -44,6 +44,9 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <li><a class="dropdown-item text-black" href="{{ route('tempat.show', $row->id_tempat) }}">
+                                            <i class="fa-solid fa-code pe-none"></i> Rincian</a>
+                                        </li>
                                         <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                 data-bs-target="#edit{{ $row->id_tempat }}"><i
                                                     class="fa-regular fa-pen-to-square"></i> Edit</a></li>
@@ -60,89 +63,89 @@
             </table>
         </div>
 
- <!-- insert -->
- <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary-gradient text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah tempat</h5>
-                    <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('tempat.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="created_by" value="{{ Auth::user()->id_tempat }}">
-                    {{-- form --}}
-                    <div class="container">
-                        <div class="row">
-                            <div class="mb-3">
-                                <label name="page_id" for="form-label">Page Id</label>
-                                <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
-                                <option disabled selected></option>
-                                @foreach ($page as $row)
-                                <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
-                                @endforeach
-                                 </select>
-                            </div>
-                            <div class="col">
-                                {{-- kanan --}}                                                                
+        <!-- insert -->
+        <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary-gradient text-white">
+                            <h5 class="modal-title" id="exampleModalLabel">Tambah tempat</h5>
+                            <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ route('tempat.store') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="created_by" value="{{ Auth::user()->id_tempat }}">
+                            {{-- form --}}
+                            <div class="container">
+                                <div class="row">
                                     <div class="mb-3">
-                                        <label for="nama_tempat" class="form-label">Nama tempat</label>
-                                        <input type="text" class="form-control" name="nama_tempat" id="nama_tempat"
-                                            required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="alamat" class="form-label">Alamat</label>
-                                        <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
-                                    </div>
-                            </div>
-                            <div class="col">
-                                {{-- kiri --}}
-                                <div class="mb-3">
-                                        <label for="no_telp" class="form-label">No. telp</label>
-                                        <input type="number" class="form-control" name="no_telp" id="no_telp" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="alamat_kota_{{ $row->id_tempat }}" class="form-label">Kota</label>
-                                        <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_tempat }}" data-placeholder="Pilih Kota" required>
-                                            <option value="" disabled selected></option> 
-                                            @foreach ($regencies as $id => $name)
-                                                <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
-                                            @endforeach
+                                        <label name="page_id" for="form-label">Page Id</label>
+                                        <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
+                                        <option disabled selected></option>
+                                        @foreach ($page as $row)
+                                        <option value="{{ $row->id_page }}" >{{ $row->nama_page }}</option>
+                                        @endforeach
                                         </select>
-                                        @error('alamat_kota')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
                                     </div>
+                                    <div class="col">
+                                        {{-- kanan --}}                                                                
+                                            <div class="mb-3">
+                                                <label for="nama_tempat" class="form-label">Nama tempat</label>
+                                                <input type="text" class="form-control" name="nama_tempat" id="nama_tempat"
+                                                    required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="alamat" class="form-label">Alamat</label>
+                                                <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
+                                            </div>
+                                    </div>
+                                    <div class="col">
+                                        {{-- kiri --}}
+                                        <div class="mb-3">
+                                                <label for="no_telp" class="form-label">No. telp</label>
+                                                <input type="number" class="form-control" name="no_telp" id="no_telp" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="alamat_kota_{{ $row->id_tempat }}" class="form-label">Kota</label>
+                                                <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_tempat }}" data-placeholder="Pilih Kota" required>
+                                                    <option value="" disabled selected></option> 
+                                                    @foreach ($regencies as $id => $name)
+                                                        <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('alamat_kota')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                    </div>
+                                    <div class="form-group mb-5">
+                                        <label for="link_maps">Link Maps</label>
+                                        <textarea class="form-control mt-2" id="link_maps" name="link_maps" rows="3"></textarea>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group mb-5">
-                                <label for="link_maps">Link Maps</label>
-                                <textarea class="form-control mt-2" id="link_maps" name="link_maps" rows="3"></textarea>
+                            {{-- end form --}}
+
+                        </div>
+                        <div class="modal-footer justify-content-between mx-3">
+                            <div class="form-check form-switch mb-3" display="none">
+                                <!-- <label for="status" class="me-3">Status</label>
+                                <input class="form-check-input" type="checkbox" role="switch" id="status"
+                                    name="status" value="Aktif"> -->
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
                             </div>
                         </div>
-                    </div>
-                    {{-- end form --}}
-
-                </div>
-                <div class="modal-footer justify-content-between mx-3">
-                    <div class="form-check form-switch mb-3" display="none">
-                        <!-- <label for="status" class="me-3">Status</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="status"
-                            name="status" value="Aktif"> -->
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success rounded-3 text-white">Simpan</button>
+                        </form>
                     </div>
                 </div>
-                </form>
-            </div>
         </div>
-    </div>
 
- @foreach ($tempat as $row)
         <!-- edit -->
+        @foreach ($tempat as $row)        
         <div class="modal modal-lg fade" id="edit{{ $row->id_tempat }}" tabindex="-1" aria-labelledby="add"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

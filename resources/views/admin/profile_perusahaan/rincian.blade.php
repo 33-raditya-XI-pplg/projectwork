@@ -1,6 +1,6 @@
 @extends('layouts.panel.index')
 
-@section('title', 'Rincian Profil Perusahaan')
+@section('title', 'Detail Profil Perusahaan')
 
 @section('content')
 
@@ -41,10 +41,10 @@
 
 <div class="container">
     <div class="bg-white rounded-4 px-4 py-3 mb-5 shadow-lg">
-        <h3 class="mb-4 pt-4 pb-4 text-center" style="font-weight: 700; color: #007bff;">PROFIL PERUSAHAAN</h3>
+        {{-- <h3 class="mb-4 pt-4 pb-4 text-center" style="font-weight: 700; color: #007bff;">PROFIL PERUSAHAAN</h3> --}}
 
         <!-- Display Profile Details -->
-        <table class="table table-striped">
+        {{-- <table class="table table-striped">
             <tbody>
                 <tr>
                     <th>Nama Page</th>
@@ -79,19 +79,57 @@
                
                 <td class=" pt-5 pb-5">
                         @if ($profil->path_struktur_organisasi)
-                            <img src="{{ asset('storage/' . $profil->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="profile-image img-fluid rounded-3 color: #343a40" style="width: 300px; height: auto; border: 2px solid #007bff;">
+                            <img src="{{ asset('storage/' . $profil->path_struktur_organisasi) }}" alt="Struktur Organisasi" class="profile-image img-fluid rounded-3 color: #343a40" style="width: 300px; height: auto;">
                         @else
                             <span class="text-muted">Tidak ada gambar tersedia</span>
                         @endif
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </table> --}}
 
-        <!-- Back Button -->
-        <div class="mt-4 text-center">
-            <a href="{{ route('profil.index') }}" class="btn btn-secondary">Kembali</a>
-        </div>
+        <div class="row">
+            <div class="mb-3">
+                <label for="page" class="form-label"><h5>Page Id</h5></label>
+                <input type="text" class="form-control" value="{{ \App\Models\Page::find($profil->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+            </div>
+
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Tentang Kami</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->tentang_kami }}</textarea>
+            </div>   
+            
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Visi</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->visi }}</textarea>
+            </div>  
+             
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Misi</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->misi }}</textarea>
+            </div>   
+
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Sejarah</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->sejarah }}</textarea>
+            </div>   
+            <div class="text-center">
+                <div>
+                    <h3>Gambar</h3>
+                </div>
+                <div class="dropzone-wrapper" style="max-width:400px; margin:auto;">                                       
+                    <div class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
+                            {{-- <img  src="{{ asset($testimoni->photo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                              --}}
+                        @if ($profil->path_struktur_organisasi)
+                            <img src="{{ asset('storage/' . $profil->path_struktur_organisasi)  }}"  class="profile-image img-fluid rounded-3 color: #343a40" style="width: 250px; height: auto;" alt="user" />
+                        @endif
+                    </div>
+                </div>                                       
+            </div>
+                    <!-- Back Button -->
+                <div class="mt-4 text-end">
+                    <a href="{{ route('profil.index') }}" class="btn btn-secondary">Kembali</a>
+                </div>    
     </div>
 </div>
 

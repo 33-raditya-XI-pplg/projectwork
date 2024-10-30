@@ -125,7 +125,7 @@
                             <tr>
                                 <th>No</th>
                                 <th scope="col">Page Id</th>
-                                <th scope="col">Tentang Kami</th>
+                                {{-- <th scope="col">Tentang Kami</th> --}}
                                 <!--<th scope="col">Visi</th>
                                 <th scope="col">Misi</th>
                                 <th scope="col">Sejarah</th> -->
@@ -138,13 +138,13 @@
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
-                                <td>{!! strip_tags($row->tentang_kami, '<br><strong><em>') !!}</td>
+                                {{-- <td>{!! strip_tags($row->tentang_kami, '<br><strong><em>') !!}</td> --}}
                                 <!-- <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
                                     <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
                                     <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td> -->
                                 <td>
-                                    <button type="button" class="btn rounded-3
-                                                {{ $row->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                    <button type="button" class="badge rounded-3
+                                                {{ $row->status ? 'bg-success' : 'bg-danger' }}"
                                         disabled>
                                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                     </button>
@@ -156,13 +156,13 @@
                                             <i class="fa-solid fa-bars"></i>
                                         </a>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_profil_perusahaan }}">
-                                            <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#edit{{ $row->id_profil_perusahaan }}"><i
-                                                        class="fa-regular fa-pen-to-square"></i> Edit</a></li>
                                             <li>
                                                 <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-black">
-                                                    <i class="fa-solid fa-eye"></i> Rincian </a>
+                                                    <i class="fa-solid fa-code pe-none"></i> Rincian </a>
                                             </li>
+                                            <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#edit{{ $row->id_profil_perusahaan }}"><i
+                                                        class="fa-regular fa-pen-to-square"></i> Edit</a></li>                                          
                                             <li><a href="{{ route('profil.destroy', $row->id_profil_perusahaan) }}"
                                                     class="dropdown-item text-danger" data-confirm-delete="true"><i
                                                         class="fa-regular fa-trash-can pe-none"></i>

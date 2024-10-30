@@ -93,7 +93,12 @@
 									name="status" value="Aktif">
 							</div>
 							<div class="d-flex justify-content-end mb-2">
-								<button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+								<div class=" text-end mx-1">
+									<a href="{{ route('skema.index') }}" class="btn btn-danger rounded">Batal</a>
+								</div>
+								<div class="mx-1">
+									<button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+								</div>
 							</div>	
 						</div>	
 					</form>

@@ -32,7 +32,7 @@
                     <!-- <td>{{ $page->deskripsi }}</td> -->
                     <td>
                         @if($page->pindah_halaman)
-                        <a href="{{ $page->pindah_halaman }}" class="btn btn-primary btn-sm" target="_blank">
+                        <a href="{{ $page->pindah_halaman }}" class="btn btn-primary btn-sm rounded" target="_blank">
                             Pindah Halaman
                         </a>
                         @else
@@ -40,8 +40,8 @@
                         @endif
                     </td>
                     <td>
-                        <button type="button" class="btn rounded-3
-                                {{ $page->status ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                        <button type="button" class="badge rounded-3
+                                {{ $page->status ? 'bg-success' : 'bg-danger' }}"
                             disabled>
                             {{ $page->status ? 'Aktif' : 'Non-Aktif' }}
                         </button>
@@ -54,15 +54,15 @@
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $page->id_page }}">
                                 <li>
-                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $page->id_page }}">
-                                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                                    <a class="dropdown-item text-black" href="{{ route('page.show', $page->id_page) }}">
+                                        <i class="fa-solid fa-code pe-none"></i> Rincian
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item text-black" href="{{ route('page.show', $page->id_page) }}">
-                                        <i class="fa-regular fa-eye"></i> Rincian
+                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $page->id_page }}">
+                                        <i class="fa-regular fa-pen-to-square"></i> Edit
                                     </a>
-                                </li>
+                                </li>                            
                                 <li>
                                     <form id="deleteForm{{ $page->id_page }}" action="{{ route('page.destroy', $page->id_page) }}" method="POST" style="display: inline;">
                                         @csrf

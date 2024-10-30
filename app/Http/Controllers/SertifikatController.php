@@ -17,7 +17,7 @@ class SertifikatController extends Controller
 {
     public function index()
     {
-        $event = Event::all();
+        $event = Event::where('status', 'Selesai')->get();
         $Title = 'Sertifikat';
         confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?');
         return view('admin.sertifikat.index', compact('event', 'Title'));

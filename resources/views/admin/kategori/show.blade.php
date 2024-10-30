@@ -1,6 +1,6 @@
 @extends('layouts.panel.index')
 
-@section('title', 'Rincian Kategori')
+@section('title', 'Detail Kategori')
 
 @section('content')
 
@@ -9,12 +9,9 @@
 <!-- Include SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="container">
-    <div class="bg-white rounded-4 px-4 py-3 mb-5 shadow-lg">
-        <h4 class="mb-4">{{ $kategori->nama_kategori }}</h4>
-
+<div class="container">  
         <!-- Display Kategori Details -->
-        <table class="table table-striped">
+        {{-- <table class="table table-striped">
             <tbody>
                 <tr>
                     <th>Nama Kategori</th>
@@ -33,13 +30,26 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
-
-        <!-- Back Button -->
-        <div class="mt-4">
-            <a href="{{ route('kategori.index') }}" class="btn btn-secondary">Kembali</a>
+        </table> --}}
+        {{-- <div class="mb-3">
+            <label for="page" class="form-label"><h5>Page Id</h5></label>
+            <input type="text" class="form-control" value="{{ \App\Models\Page::find($kategori->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+        </div> --}}
+            <div class="mb-3">
+                    <div class="rating-input">
+                        <label for="no" class="form-label"><h5>Nama Kategori</h5></label>
+                        <input type="text" class="form-control" value="{{ $kategori->nama_kategori }}" disabled readonly>                  
+                    </div> 
+                </div> 
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Deskripsi</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{ $kategori->deskripsi }}</textarea>
+            </div>              
+              <!-- Back Button -->
+              <div class="mt-4 text-end">
+                <a href="{{ route('kategori.indek') }}" class="btn btn-secondary">Kembali</a>
+            </div>
         </div>
-    </div>
 </div>
 
 @endsection

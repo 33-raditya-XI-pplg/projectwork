@@ -62,7 +62,7 @@ class PartnerController extends Controller
             'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'status_partner' => 'nullable|boolean',
         ]);
-    
+
         try {
             $partner = new Partner();
             $partner->page_id = $request->page_id;
@@ -74,25 +74,27 @@ class PartnerController extends Controller
             $partner->tanggal_bergabung = $request->tanggal_bergabung;
             $partner->website_partner = $request->website_partner;
             $partner->status_partner = $request->status_partner ? true : false;
-    
+
+            // if ($request->hasFile('logo')) {
+            //     $file = $request->file('logo');
+            //     $filename = time() . '.' . $file->getClientOriginalExtension();
+            //     $file->storeAs('public', $filename);
+            //     $partner->logo = $filename;
+            // }
             if ($request->hasFile('logo')) {
                 $file = $request->file('logo');
-                $filename = time() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('public', $filename);
-                $partner->logo = $filename;
+                $filename = 'logo_' . $request->telepon_partner . '.' . $file->getClientOriginalExtension();
+                $storedPath = $file->storeAs('public/logo', $filename);
+                $partner->logo = "/storage/logo/$filename";
             }
-    
+
             $partner->save();
-    
+
             return redirect()->back()->with('success', 'Partner berhasil ditambahkan!');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['msg' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
     }
-    
-
-
-
     /**
      *
      *
@@ -104,7 +106,7 @@ class PartnerController extends Controller
         $partner = Partner::findOrFail($id);
         $Title = 'Management';
         $subtitle = 'Detail Partner';
-        return view('admin.partner.show', compact('partner','Title','subtitle'));
+        return view('admin.partner.show', compact('partner', 'Title', 'subtitle'));
     }
 
     /**
@@ -135,26 +137,44 @@ class PartnerController extends Controller
             'status_partner' => 'nullable',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-    
+
         $statusPartner = $request->has('status_partner') && $request->input('status_partner') === 'on';
         $partner = Partner::findOrFail($id);
-    
+
+        // if ($request->hasFile('logo')) {
+        //     if ($partner->logo) {
+        //         Storage::disk('public')->delete($partner->logo);
+        //     }
+        //     $logoPath = $request->file('logo')->store('logos', 'public');
+        //     $validatedData['logo'] = $logoPath;
+        // } else {
+        //     $validatedData['logo'] = $partner->logo;
+        // }
+
         if ($request->hasFile('logo')) {
             if ($partner->logo) {
-                Storage::disk('public')->delete($partner->logo);
+                $oldPhotoPath = str_replace('/storage', 'public', $partner->logo);
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
             }
-            $logoPath = $request->file('logo')->store('logos', 'public');
-            $validatedData['logo'] = $logoPath;
+            $file = $request->file('logo');
+            $filename = 'logo_' . $request->telepon_partner . '.' . $file->getClientOriginalExtension();
+            $storedPath = $file->storeAs('public/logo', $filename);
+
+            // Menyimpan path logo ke dalam validatedData
+            $validatedData['logo'] = "/storage/logo/$filename";
         } else {
+            // Jika tidak ada file logo yang diunggah, gunakan logo lama
             $validatedData['logo'] = $partner->logo;
         }
-    
+
         $validatedData['status_partner'] = $statusPartner;
         $partner->update($validatedData);
-    
+
         return redirect()->route('partner.index')->with('success', 'Partner berhasil diperbarui.');
     }
-    
+
 
 
 

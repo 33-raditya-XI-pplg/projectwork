@@ -56,6 +56,7 @@
                 </a>
             </li>
             @endif
+            
             @if(Auth::user()->level == 'Pengguna')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'event-user' ? 'active' : '' }}">
                 <a href="{{ route('event-user.index') }}" class="item-link">
@@ -74,7 +75,13 @@
                     <i class="fas fa-file-arrow-up"></i>
                     <span>Upload Bukti Pembayaran </span>
                 </a>
-            </li>         
+            </li>    
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'testimoni-user' ? 'active' : '' }} position-relative">
+                <a href="{{route('testimoni-user.index')}}" class="item-link">
+                    <i class="fas fa-star"></i>
+                    <span>Testimoni </span>
+                </a>
+            </li>    
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'profile-user' ? 'active' : '' }}">
                 <a href="{{ route('profile-user.index') }}" class="item-link">
                     <i class="fa fa-user link-icon"></i>
@@ -82,6 +89,7 @@
                 </a>
             </li>        
             @endif
+            
             @if(Auth::user()->level == 'Admin')
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'master' ? 'active' : '' }}">
                 <a href="" class="item-link">

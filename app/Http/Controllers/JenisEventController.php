@@ -63,4 +63,12 @@ class JenisEventController extends Controller
         toast('Jenis Event Terhapus', 'success');
         return redirect()->back();
     }
+
+    public function show($id)
+    {
+        $jenis_evt = Jenis_Event::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail jenis event';
+        return view('admin.jenis-evt.show', compact('jenis_evt','Title','subtitle'));
+    }
 }

@@ -46,14 +46,15 @@
         padding: 0.5rem 1rem;
         font-weight: 500;
     }
+    .form-control {
+        background-color: #e5e8ec;
+        border: 1px solid #ced4da;       
+    }
 </style>
 
 <div class="container">
-    <div class="bg-white rounded-4 px-4 py-3 mb-5 shadow-lg">
-        <h3 class="mb-4 pt-4 pb-4 text-center" style="font-weight: 700; color: #007bff;">RINCIAN PARTNER</h3>
-
         <!-- Display Partner Details -->
-        <table class="table table-striped">
+        {{-- <table class="table table-striped">
             <tbody>
                 <tr>
                     <th>Page Id</th>
@@ -98,24 +99,78 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Logo Partner</th>
-                
+                    <th>Logo Partner</th>                
                     <td class="pt-5 pb-5">
                         @if ($partner->logo)
-                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="Logo" class="logo-img">
+                        <img src="{{ asset($partner->logo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         @else
                         <span class="text-muted">Tidak ada logo tersedia</span>
                         @endif
                     </td>
                 </tr>
             </tbody>
-        </table>
-
-        <!-- Back Button -->
-        <div class="mt-4 text-center">
-            <a href="{{ route('partner.index') }}" class="btn btn-secondary">Kembali</a>
+        </table> --}}
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="page" class="form-label"><h5>Page Id</h5></label>
+                    <input type="text" class="form-control" value="{{ \App\Models\Page::find($partner->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+                </div>
+                    <div class="mb-3">
+                        <label for="nama_lengkap" class="form-label"><h5>Email</h5></label>
+                        <input type="text" class="form-control" value="{{ $partner->email_partner }}" disabled readonly >
+                    </div>                                                                                                                                                               
+                    <div class="mb-3">
+                        <label for="nama_lengkap" class="form-label"><h5>Jenis Partner</h5></label>
+                        <input type="text" class="form-control" value="{{ $partner->jenis_partner }}" disabled readonly >
+                    </div>                                                                                                                                                                                                                                                                                                                                       
+            </div>
+            <div class="col">
+                {{-- kiri --}}                                                                                                                                                               
+                <div class="mb-3">
+                    <label for="nama_lengkap" class="form-label"><h5>Nama Partner</h5></label>
+                    <input type="text" class="form-control" value="{{ $partner->nama_partner }}" disabled readonly >
+                </div>  
+                <div class="mb-3">
+                    <label for="no" class="form-label"><h5>Nomor Telepon</h5></label>
+                    <input type="text" class="form-control" value="{{ $partner->telepon_partner }}"disabled readonly >
+                </div>                           
+                <div class="mb-3">
+                    <label for="no" class="form-label"><h5>Tanggal Bergabung</h5></label>
+                    <input type="text" class="form-control" value="{{ $partner->tanggal_bergabung->format('d-m-Y') }}"disabled readonly >
+                </div>                           
+            </div>
+            <div class="mb-3">
+                <div class="rating-input">
+                    <label for="no" class="form-label"><h5>Website Partner</h5></label>
+                    <input type="text" class="form-control text-primary" 
+                        value="{{ $partner->website_partner }}" 
+                        onclick="window.open('{{ $partner->website_partner }}', '_blank')"
+                        readonly>               
+                </div> 
+            </div> 
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Alamat Partner</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{ $partner->alamat_partner }}</textarea>
+            </div>   
+            <div class="text-center">
+                <div>
+                    <h2>Logo Partner</h2>
+                </div>
+                <div class="dropzone-wrapper" style="max-width:400px; margin:auto;">                                       
+                    <div class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
+                            {{-- <img  src="{{ asset($testimoni->photo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                              --}}
+                        @if ($partner->logo)
+                            <img src="{{ asset($partner->logo) }}"  class="profile-image img-fluid rounded-3 color: #343a40" style="width: 250px; height: auto;" alt="user" />
+                        @endif
+                    </div>
+                </div>                                       
+            </div>
+                 <!-- Back Button -->
+            <div class="mt-2 text-end">
+                <a href="{{ route('partner.index') }}" class="btn btn-secondary">Kembali</a>
+            </div>
         </div>
-    </div>
 </div>
 
 @endsection

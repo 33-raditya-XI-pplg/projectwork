@@ -17,6 +17,7 @@
                         <th scope="col" width="5%">No</th>
                         <th scope="col" width="20%">Nama</th>
                         <th scope="col" width="20%">Event</th>
+                        <th scope="col" width="20%">Skema</th>
                         <th scope="col" width="15%">Tanggal Mulai</th>
                         <th scope="col" width="15%">Tanggal Berakhir</th>
                         <th scope="col" width="8%">Status</th>
@@ -29,13 +30,14 @@
                             <tr class="clickable-row event-row" data-id="{{ $row->id_upload_pembayaran }}">
                                 <td>{{ $num++ }}</td>
                                 <td>{{ $row->nama_lengkap }}</td>                          
+                                <td>{{ $row->nama_skema }}</td>
                                 <td>{{ $row->nama_event }}</td>                          
                                 <td>{{ $row->tgl_mulai }}</td>
                                 <td>{{ $row->tgl_berakhir }}</td>
                                 <td>{{ $row->status_pembayaran ?? 'Belum Dibayar' }}</td>
                                 <td class="text-center">                                                               
                                     <div class="dropdown" >
-                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton{{ $row->id_upload_pembayaran }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-primary btn-sm dropdown-toggle rounded" type="button" id="dropdownMenuButton{{ $row->id_upload_pembayaran }}" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fa-solid fa-bars"></i>                                            
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_upload_pembayaran }}">
@@ -73,7 +75,7 @@
             </div>
         </div>        
     </div>
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             var eventRows = document.querySelectorAll('.event-row');
             
@@ -142,7 +144,7 @@
                 });
             });
         });
-        </script>
+        </script> --}}
     <script>
 document.addEventListener('DOMContentLoaded', function () {
     var uploadModal = document.getElementById('uploadModal');

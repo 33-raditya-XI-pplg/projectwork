@@ -58,17 +58,26 @@ class BlogController extends Controller
         $data['body'] = strip_tags($request->body);
 
 
+        // if ($request->hasFile('photo')) {
+        //     $file = $request->file('photo');
+        //     $filename = time() . '.' . $file->getClientOriginalExtension();
+        //     $file->storeAs('public/photos', $filename);
+        //     $data['photo'] = $filename;
+        //     Storage::url($file);
+        //     $data = $request->except(['photo']);
+        //     $data['photo'] = "/storage/photos/$filename";
+        // }
+
         if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/photos', $filename);
-            $data['photo'] = $filename;
-            // Storage::url($file);
+            $foto = $request->file('photo');
+            $filename = 'foto_' . time() . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/photos', $filename);
+            Storage::url($storedPath);
             // $data = $request->except(['photo']);
-            // $data['photo'] = "/storage/blog/$filename";
+            $data['photo'] = "/storage/photos/$filename";
         }
 
-
+        // dd($data);
         $data['status'] = $request->has('status') ? $request->status : false;
 
 
@@ -106,15 +115,18 @@ class BlogController extends Controller
 
 
         if ($request->hasFile('photo')) {
-
-            if ($blog->photo) {
-                Storage::delete('public/photos/' . $blog->photo);
+            if ($blog->path_foto) {
+                $oldPhotoPath = str_replace('/storage', 'public', $blog->photo);
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
             }
-
-            $file = $request->file('photo');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/photos', $filename);
-            $data['photo'] = $filename;
+            $foto = $request->file('photo');
+            $filename = 'foto_' . time() . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/photos', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['photo']);
+            $data['photo'] = "/storage/photos/$filename";
         }
 
 
@@ -163,16 +175,16 @@ class BlogController extends Controller
         $blog = Blog::find($id);
         $Title = 'Management';
         $subtitle = 'Detail Blog';
-    
+
         // Jika blog tidak ditemukan, redirect ke index dengan pesan error
         if (!$blog) {
             return redirect()->route('blog.index')->with('error', 'Blog tidak ditemukan.');
         }
-    
+
         // Mengirim data blog ke tampilan
         return view('admin.blog.show', compact('blog', 'Title', 'subtitle'));
     }
- 
+
 
 
 }

@@ -88,9 +88,8 @@
                                         <i class="fa-solid fa-bars"></i>
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-dark" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#rincian{{ $row->id_ttd }}"><i class="fa-solid fa-code pe-none"></i>
-                                            Rincian</a>
+                                        <li><a class="dropdown-item text-black" href="{{ route('tandatangan.show', $row->id_ttd) }}">
+                                            <i class="fa-solid fa-code pe-none"></i> Rincian</a>
                                         </li>
                                         <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
                                                 data-bs-target="#edit{{ $row->id_ttd }}"><i
@@ -305,57 +304,7 @@
         </div>
     @endforeach
 
-    {{-- Rincian --}}
-    @foreach ($tanda_tangan as $row)    
-        <div class="modal modal-lg fade" id="rincian{{ $row->id_ttd }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary-gradient text-white">
-                        <h5 class="modal-title" id="exampleModalLabel">Rincian Penandatangan</h5>    
-                        <button type="button" class="btn-kembali rounded-3" data-bs-dismiss="modal">Kembali</button>          
-                    </div>
-                    <div class="modal-body">                                        
-                        <div class="container">
-                            <div class="row">
-                                <div class="mb-3">
-                                    <label for="page" class="form-label">Page Id</label>
-                                    <input type="text" class="form-control" name="page" id="page" value="{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
-                                </div>
-                                <div class="col">
-                                        <div class="mb-3">
-                                        <label for="nama_ttd" class="form-label">Nama TTD</label>
-                                        <input type="text" class="form-control" name="nama_ttd" id="nama_ttd" disabled readonly required value="{{ $row->nama_ttd }}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="nomor_induk" class="form-label">NIK</label>
-                                        <input type="text" class="form-control" name="nomor_induk" id="nomor_induk" disabled readonly value="{{ $row->nomor_induk }}">
-                                    </div>
-                                    </div>
-                                    <div class="col">
-                                    <div class="mb-3">
-                                        <label for="jabatan" class="form-label">Jabatan</label>
-                                        <input type="text" class="form-control" name="jabatan" id="jabatan" disabled readonly value="{{ $row->jabatan }}">
-                                    </div>                                 
-                                    <div class="mb-3">
-                                        <label for="instansi" class="form-label">Instansi</label>                                        
-                                        <input type="text" class="form-control"  name="instansi" id="instansi_{{ $row->id_user }}" value="{{ $institutions[$row->instansi_id] ?? ''}}" disabled readonly>
-                                    </div>
-                                </div>                            
-                                <div class="form-group mb-6">
-                                    <label class="control-label mb-2">Upload Foto Tandatangan  <span class="text-danger">*</span></label>
-                                    <div class="dropzone-wrapper">                                            
-                                        <div id="image_preview_" class="mt-3 d-flex justify-content-center" disabled readonly>                                       
-                                                <img  src="{{ asset($row->path_ttd) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                       
-                                        </div>                                            
-                                    </div>                                   
-                                </div>
-                            </div>
-                        </div>  
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
+
 <!-- Include CSS Select2 -->
 {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 

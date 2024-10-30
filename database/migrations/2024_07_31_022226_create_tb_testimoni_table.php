@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->bigIncrements('id_testimoni');
             // foreign key
             $table->foreignId('page_id')->constrained('tb_page', 'id_page')->cascadeOnDelete();
-            $table->string('nama', 100);
+            $table->foreignId('id_user')->constrained('tb_user', 'id_user')->cascadeOnDelete();
+            // $table->string('nama', 100);
             $table->string('email', 100);
             $table->date('tanggal');
             $table->integer('rating')->check('rating >= 1 AND rating <= 5');

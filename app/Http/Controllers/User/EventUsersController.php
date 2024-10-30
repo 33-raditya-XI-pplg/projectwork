@@ -106,12 +106,14 @@ class EventUsersController extends Controller
             ->exists();
 
         if ($isRegistered) {
-            Alert::error('Gagal Mendaftar!');
+            Alert::error('Gagal Mendaftar!', 'Anda sudah terdaftar di event ini');
             return redirect()->back();
         }
 
         $eventSkema = DB::table('tb_event_skema')
+            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
             ->where('id_event_skema', $request->event_skema_id)
+            ->select('tb_event_skema.*', 'tb_event.biaya_regis')
             ->first();
 
         if (!$eventSkema) {
@@ -119,23 +121,38 @@ class EventUsersController extends Controller
             return redirect()->back();
         }
 
-        $uploadPembayaran = DB::table('tb_upload_pembayaran')
-            ->where('user_id', $userID)
-            ->where('event_id', $eventSkema->event_id)
-            ->first();
+        if ($eventSkema->biaya_regis > 0) {
 
-        if (!$uploadPembayaran || $uploadPembayaran->status_pembayaran !== 'Sudah Dibayar') {
-            Alert::error('Gagal mendaftar !', 'Anda belum melakukan pembayaran untuk event ini.');
-            return redirect()->back();
+            $uploadPembayaran = DB::table('tb_upload_pembayaran')
+                ->where('user_id', $userID)
+                ->where('event_skema_id', $eventSkema->id_event_skema)
+                ->first();
+
+            if (!$uploadPembayaran) {
+                Alert::error('Gagal mendaftar!', 'Anda belum melakukan pembayaran untuk event ini.');
+                return redirect()->back();
+            }
+
+            if ($uploadPembayaran->status_pembayaran !== 'Sudah Dibayar') {
+                Alert::error('Gagal mendaftar!', 'Status pembayaran Anda belum terkonfirmasi.');
+                return redirect()->back();
+            }
+
+            DB::table('tb_peserta')->insert([
+                'user_id' => $userID,
+                'event_skema_id' => $request->event_skema_id,
+                'upload_pembayaran_id' => $uploadPembayaran->id_upload_pembayaran,
+                'created_by' => $userID,
+                'created_at' => now()
+            ]);
+        } else {
+            DB::table('tb_peserta')->insert([
+                'user_id' => $userID,
+                'event_skema_id' => $request->event_skema_id,
+                'created_by' => $userID,
+                'created_at' => now()
+            ]);
         }
-
-        DB::table('tb_peserta')->insert([
-            'user_id' => $userID,
-            'event_skema_id' => $request->event_skema_id,
-            'upload_pembayaran_id' => $uploadPembayaran->id_upload_pembayaran,
-            'created_by' => $userID,
-            'created_at' => now()
-        ]);
 
         Alert::success('Berhasil Mendaftar!', 'Data berhasil ditambahkan.');
         return redirect()->back();

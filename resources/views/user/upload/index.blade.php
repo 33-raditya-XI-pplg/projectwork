@@ -45,42 +45,57 @@
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
                 <table id="example" class="table">
                     <thead class="fw-normal">
-                        <th scope="col" width="5%">No</th>
-                        <th scope="col" width="20%">Event</th>
-                        <th scope="col" width="15%">Tanggal Mulai</th>
-                        <th scope="col" width="15%">Tanggal Berakhir</th>
-                        <th scope="col" width="8%">Status Pembayaran </th>
-                        <th scope="col" width="8%" class="text-center">Aksi</th>
+                        <tr>
+                            <th scope="col" width="5%">No</th>
+                            <th scope="col" width="20%">Event</th>
+                            <th scope="col" width="20%">Skema</th>
+                            <th scope="col" width="15%">Tanggal Mulai</th>
+                            <th scope="col" width="15%">Tanggal Berakhir</th>
+                            <th scope="col" width="8%">Status Pembayaran</th>
+                            <th scope="col" width="8%" class="text-center">Aksi</th>
+                        </tr>
                     </thead>
- 
+    
                     <tbody class="table-responsive" style="vertical-align: middle">
-                        @php $num = 1 @endphp
+                        @php 
+                            $num = 1; 
+                            $previousEventName = ''; // Variable to track the previous event name
+                        @endphp
+    
                         @foreach ($upload as $row)
-                        <tr class="event-row" data-event-id="{{ $row->id_event }}">
-                                <td>{{ $num++ }}</td>
+                            @if ($row->nama_event !== $previousEventName)
+                                @php 
+                                    $previousEventName = $row->nama_event; // Update previous event name
+                                    $num = 1; // Reset number when event name changes
+                                @endphp
+                            @endif
+    
+                            <tr class="event-row" data-event-id="{{ $row->id_event_skema }}">
+                                <td>{{ $num++ }}</td> <!-- Display current number -->
                                 <td>{{ $row->nama_event }}</td>
+                                <td>{{ $row->nama_skema }}</td>
                                 <td>{{ $row->tgl_mulai }}</td>
                                 <td>{{ $row->tgl_berakhir }}</td>
                                 <td>{{ $row->status_pembayaran ?? 'Belum Dibayar' }}</td>
                                 <td class="text-center">
-                                    @if (($row->status_pembayaran === 'Menunggu' || $row->status_pembayaran === 'Sudah Dibayar') && $row->bukti_pembayaran )
-                                    <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}" class="btn btn-secondary btn-sm rounded" target="_blank">
-                                        <i class="fa fa-eye"></i> Lihat
-                                    </a>
+                                    @if (($row->status_pembayaran === 'Menunggu' || $row->status_pembayaran === 'Sudah Dibayar') && $row->bukti_pembayaran)
+                                        <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}" class="btn btn-secondary btn-sm rounded" target="_blank">
+                                            <i class="fa fa-eye"></i> Lihat
+                                        </a>
                                     @else
-                                    <a href="#" class="btn btn-secondary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#uploadModal" data-id="{{ $row->id_event }}">
-                                        <i class="fa fa-money-bill-1-wave"></i> Bayar
-                                    </a>                                        
+                                        <a href="#" class="btn btn-secondary btn-sm rounded" data-bs-toggle="modal" data-bs-target="#uploadModal" data-id="{{ $row->id_event_skema }}">
+                                            <i class="fa fa-money-bill-1-wave"></i> Bayar
+                                        </a>
                                     @endif
                                 </td>                            
-                            </tr>                      
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
-
             </div>
         </div>        
     </div>
+    
     {{-- Modal untuk membuka modal --}}
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -92,9 +107,9 @@
                 <div class="modal-body">
                     <form id="uploadForm" action="{{ route('uploadPembayaran-user.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="event_id" id="event_id" value="">
+                    <input type="hidden" name="event_skema_id" id="event_skema_id" value="{{ $row->id_event_skema }}">
                     
-                    <div class="form-group mb-6">
+                    <div class="form-group mb-2">
                         <label class="control-label mb-2">Upload Foto Pengguna <span class="text-danger">*</span></label>
                         <div class="dropzone-wrapper">
                             <div class="dropzone-desc">
@@ -108,14 +123,13 @@
                                     style="max-width: 100%; max-height: 100%; object-fit: contain; display: {{ isset($pengguna) ? 'block' : 'none' }};">
                             </div>
                         </div>
-                        <div class="mt-4">
+                        <div class="mt-1">
                             <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                         </div>
                         @error('path_foto')
                         <div class="text-danger">{{ $message }}</div>
                        @enderror
                     </div>
-
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>
@@ -123,7 +137,7 @@
         </div>
     </div>
 
-<script>
+{{-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     var eventRows = document.querySelectorAll('.event-row');
     
@@ -192,51 +206,52 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-</script>
+</script> --}}
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var uploadModal = document.getElementById('uploadModal');
-    uploadModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; 
-        var eventId = button.getAttribute('data-id'); 
-        // var status = button.getAttribute('data-status');
-        // var file = button.getAttribute('data-file');
-        
-        var eventInput = document.getElementById('event_id');
-        var uploadSection = document.getElementById('uploadSection');
-        // var viewSection = document.getElementById('viewSection');
-        // var buktiPembayaranLink = document.getElementById('bukti_pembayaran')
-        var submitButton = document.getElementById('submitButton');
-        if (eventInput) {
-            eventInput.value = eventId; 
-        // } 
+    document.addEventListener('DOMContentLoaded', function () {
+        var uploadModal = document.getElementById('uploadModal');
+        uploadModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; 
+            var eventId = button.getAttribute('data-id'); 
+            // var status = button.getAttribute('data-status');
+            // var file = button.getAttribute('data-file');
+            
+            var eventInput = document.getElementById('event_skema_id');
+            // var uploadSection = document.getElementById('uploadSection');
+            console.log(document.getElementById('event_skema_id').value);
+            // var viewSection = document.getElementById('viewSection');
+            // var buktiPembayaranLink = document.getElementById('bukti_pembayaran')
+            // var submitButton = document.getElementById('submitButton');
+            if (eventInput) {
+                eventInput.value = eventId; 
+            // } 
 
-        // if(status === 'Menunggu'){
-        //     uploadSection.style.display='none';
-        //     viewSection.style.display='block';
-        //     buktiPembayaranLink.href=file;
-        //     buktiPembayaranLink.innerText='Lihat Bukti Pembayaran';
-        }else {
-            console.error('Hidden input with ID "event_id" not found.');
-            // uploadSection.style.display = 'block';
-            // viewSection.style.display = 'none';
+            // if(status === 'Menunggu'){
+            //     uploadSection.style.display='none';
+            //     viewSection.style.display='block';
+            //     buktiPembayaranLink.href=file;
+            //     buktiPembayaranLink.innerText='Lihat Bukti Pembayaran';
+            }else {
+                console.error('Hidden input with ID "event_id" not found.');
+                // uploadSection.style.display = 'block';
+                // viewSection.style.display = 'none';
+            }
+            document.getElementById('upload_file').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('preview_image');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Show the image preview
+            }
+            reader.readAsDataURL(file);
         }
-        document.getElementById('upload_file').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById('preview_image');
-    
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block'; // Show the image preview
-        }
-        reader.readAsDataURL(file);
-    }
-        });
-    });  
-});
+            });
+        });  
+    });
     </script>
       {{-- upload gambar  --}}
     <script>

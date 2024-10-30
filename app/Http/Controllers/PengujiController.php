@@ -110,6 +110,14 @@ class PengujiController extends Controller
         return redirect()->back();
     }
 
+    public function show($id)
+    {
+        $penguji = User::findOrFail($id);
+        $Title = 'Management';
+        $subtitle = 'Detail Testimoni';
+        return view('admin.penguji.show', compact('penguji', 'Title', 'subtitle'));
+    }
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);

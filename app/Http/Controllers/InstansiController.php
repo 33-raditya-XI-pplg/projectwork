@@ -89,6 +89,14 @@ class InstansiController extends Controller
       return redirect()->back();
    }
 
+   public function show($id)
+   {
+      $instansi = Instansi::findOrFail($id);
+      $Title = 'Management';
+      $subtitle = 'Detail Instansi';
+      return view('admin.instansi.show', compact('instansi', 'Title', 'subtitle'));
+   }
+
    public function destroy($id)
    {
       $logo = Instansi::find($id)->path_logo;

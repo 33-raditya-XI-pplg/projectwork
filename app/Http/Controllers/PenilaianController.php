@@ -13,7 +13,7 @@ class PenilaianController extends Controller
 {
     public function index()
     {
-        $event = Event::all();
+        $event = Event::where('status', 'Selesai')->get();
         $Title = 'Penilaian';
         confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?');
         return view('admin.penilaian.index', compact('event', 'Title'));

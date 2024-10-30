@@ -1,6 +1,6 @@
 @extends('layouts.panel.index')
 
-@section('title', 'Rincian Blog')
+@section('title', 'Detail Blog')
 
 @section('content')
 
@@ -46,12 +46,10 @@
     }
 </style>
 
-<div class="container">
-    <div class="bg-white rounded-4 px-4 py-3 mb-5 shadow-lg">
-        <h3 class="mb-4 pt-4 pb-4 text-center" style="font-weight: 700; color: #007bff;">RINCIAN BLOG</h3>
+<div class="container"> 
 
         <!-- Display Blog Details -->
-        <table class="table table-striped">
+        {{-- <table class="table table-striped">
             <tbody>
                 <tr>
                     <th>Page Id</th>
@@ -87,20 +85,55 @@
                
                     <td class=" pt-4 pb-4">
                         @if ($blog->photo)
-                        <img src="{{ asset('storage/photos/' . $blog->photo) }}" alt="Blog Image" class="blog-img">
+                        <img src="{{ asset($blog->photo) }}" alt="Blog Image" class="blog-img">
                         @else
                         <span class="text-muted">Tidak ada foto tersedia</span>
                         @endif
                     </td>
                 </tr>
             </tbody>
-        </table>
-
-        <!-- Back Button -->
-        <div class="mt-4 text-center">
-            <a href="{{ route('blog.index') }}" class="btn btn-secondary">Kembali</a>
+        </table> --}}
+        <div class="row">  
+            <div class="mb-3">
+                <label for="page" class="form-label"><h5>Page Id</h5></label>
+                <input type="text" class="form-control" value="{{ \App\Models\Page::find($blog->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+            </div>                                                                                                                                                           
+                <div class="mb-3">
+                    <label for="nama_lengkap" class="form-label"><h5>Judul Blog</h5></label>
+                    <input type="text" class="form-control" value="{{  $blog->judul }}" disabled readonly >
+                </div>  
+                <div class="mb-3">
+                    <label for="no" class="form-label"><h5>Slug</h5></label>
+                    <input type="text" class="form-control" value="{{ $blog->slug }}"disabled readonly >
+                </div>                                   
+            <div class="mb-3">
+                <div class="rating-input">
+                    <label for="no" class="form-label"><h5>Kategori</h5></label>
+                    <input type="text" class="form-control" value="{{ $blog->kategori->nama_kategori }}" disabled readonly>              
+                </div> 
+            </div> 
+            <div class="mb-3 ">
+                <label for="pengalaman" class="form-label"><h5>Body</h5></label>
+                <textarea class="form-control"  rows="2" disabled readonly>{{  $blog->body }}</textarea>
+            </div>   
+            <div class="text-center">
+                <div>
+                    <h2>Foto Testimoni</h2>
+                </div>
+                <div class="dropzone-wrapper" style="max-width:400px; margin:auto;">                                       
+                    <div class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
+                            {{-- <img  src="{{ asset($testimoni->photo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                              --}}
+                        @if ($blog->photo)
+                            <img src="{{ asset($blog->photo) }}"  class="profile-image img-fluid rounded-3 color: #343a40" style="width: 250px; height: auto;" alt="user" />
+                        @endif
+                    </div>
+                </div>                                       
+            </div>
+                  <!-- Back Button -->
+            <div class="mt-4 text-end">
+                <a href="{{ route('blog.indek') }}" class="btn btn-secondary">Kembali</a>
+            </div>
         </div>
-    </div>
 </div>
 
 @endsection
