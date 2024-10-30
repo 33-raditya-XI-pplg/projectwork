@@ -22,7 +22,7 @@
                 </div> 
             <div class="mb-3 ">
                 <label for="pengalaman" class="form-label"><h5>Deskripsi</h5></label>
-                <textarea class="form-control"  rows="2" disabled readonly>{{ $jenis_evt->deskripsi }}</textarea>
+                <textarea class="form-control"  rows="2" disabled readonly>{!! $jenis_evt->deskripsi !!}</textarea>
             </div>              
               <!-- Back Button -->
               <div class="mt-4 text-end">

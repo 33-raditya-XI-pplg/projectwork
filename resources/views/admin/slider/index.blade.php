@@ -182,15 +182,15 @@
 {{-- <!-- Slider Carousel with Swipe Support --}}
 <div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
     <div class="carousel-inner">
-        @foreach ($slider as $index => $row)
+        @foreach ($slider as $index => $slide)
             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                 <div class="d-flex justify-content-center">
-                    <img src="{{ $row->image_url }}" class="d-block" alt="{{ $row->title }}" style="max-height: 500px; max-width: 80%;">
+                    <img src="{{ asset($row->image_url) }}" class="d-block" alt="{{ $slide->title }}" style="max-height: 500px; max-width: 80%;">
                 </div>
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>{{ $row->title }}</h5>
-                    <p>{{ $row->description }}</p>
-                </div>
+                {{-- <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ $slide->title }}</h5>
+                    <p>{{ $slide->description }}</p>
+                </div> --}}
             </div>
         @endforeach
     </div>
