@@ -55,7 +55,7 @@ use App\Http\Controllers\LaporanPerkembanganController;
 
 Route::get('/', fn() => redirect('/login'));
 
-Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']], function () {
     Route::get('dashboard', [DashboardController::class, 'user_index']);
     Route::resource('event-user', EventUsersController::class);
     Route::resource('sertifikat-user', SertifikatUsersController::class);
@@ -78,7 +78,7 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'penguji', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'penguji', 'middleware' => ['auth', 'checkRole:Penguji']], function () {
     Route::get('dashboard', [DashboardController::class, 'user_index']);
     // Route::resource('event', EventUsersController::class);
     // Route::resource('sertifikat', SertifikatUsersController::class);
@@ -100,7 +100,7 @@ Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
     Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']], function () {
 
     //dashboard
     Route::get('dashboard', [DashboardController::class, 'admin_index']);
@@ -151,7 +151,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::resource('/instansi', InstansiController::class)->except(['show']);
         Route::get('/instansi/{id}/detail', [InstansiController::class, 'show'])->name('instansi.show');
         Route::resource('/jenis-event', JenisEventController::class)->except(['show']);
-        Route::get('/jenis-event/{id}/detail', [JenisEventController::class,'show'])->name('jenis-event.show');
+        Route::get('/jenis-event/{id}/detail', [JenisEventController::class, 'show'])->name('jenis-event.show');
         Route::resource('/tempat', TempatController::class)->except(['show']);
         Route::get('/tampat/{id}/detail', [TempatController::class, 'show'])->name('tempat.show');
         Route::resource('/rentang-nilai', RentangNilaiController::class);
