@@ -29,8 +29,8 @@ class UserSeeder extends Seeder
 
             'nomor_induk' => 2020101050,
             'alamat' => 'Jalan yang licin',
-            'alamat_kota' => 'Banyuwangi Timur',
-            'no_telp' => '082331867741',
+            'alamat_kota' => 'KABUPATEN BANYUWANGI',
+            'no_telp' => '0823112',
 
             'created_by' => 0,
         ]);
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
 
             'alamat' => 'Jalan yang terjal',
-            'alamat_kota' => 'Jember',
+            'alamat_kota' => 'KABUPATEN BONDOWOSO',
             'no_telp' => '082331072471',
 
             'nomor_induk' => 2020101070,
@@ -74,7 +74,7 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
 
             'alamat' => 'Jalan yang terportal',
-            'alamat_kota' => 'Jember',
+            'alamat_kota' => 'KABUPATEN JEMBER',
             'no_telp' => '08233107971',
 
             'nomor_induk' => 2020101071,
@@ -98,8 +98,8 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
 
             'alamat' => 'Jalan yang longsor',
-            'alamat_kota' => 'Ambulu',
-            'no_telp' => '08233107972',
+            'alamat_kota' => 'KABUPATEN JEMBER',
+            'no_telp' => '082331079',
 
             'nomor_induk' => 2020101072,
             'jabatan_penguji' => 'Penguji Tingkat 2',
@@ -122,8 +122,8 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
 
             'alamat' => 'Jalan tanpa nama',
-            'alamat_kota' => 'Tegal Gede',
-            'no_telp' => '08233107973',
+            'alamat_kota' => 'KABUPATEN BANYUWANGI',
+            'no_telp' => '082331079',
 
             'nomor_induk' => 2020101073,
             'jabatan_penguji' => 'Penguji Tingkat 2',
@@ -147,8 +147,8 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
             'nomor_induk' => 2020101090,
             'alamat' => 'Jalan yang benar',
-            'alamat_kota' => 'Papua Barat',
-            'no_telp' => '082331867134',
+            'alamat_kota' => 'KABUPATEN LUMAJANG',
+            'no_telp' => '0823318657',
 
             'nama_sekolah' => 'Politeknik Negeri Jember',
             'Jurusan' => 'Teknik Komputer',
@@ -157,7 +157,7 @@ class UserSeeder extends Seeder
 
             'nama_perusahaan' => 'Sumber Makmur',
             'alamat_perusahaan' => 'Jalan yang hancur',
-            'alamat_kota_perusahaan' => 'Jember',
+            'alamat_kota_perusahaan' => 'KABUPATEN BANYUWANGI',
             'jabatan_pekerjaan' => 'Teknisi',
             'no_telp_perusahaan' => '12300123',
 
@@ -178,7 +178,7 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
             'nomor_induk' => 2020101091,
             'alamat' => 'Jalan yang berat',
-            'alamat_kota' => 'Papua Timur',
+            'alamat_kota' => 'KABUPATEN LUMAJANG',
             'no_telp' => '082331867631',
 
             'nama_sekolah' => 'Politeknik Negeri Jember',
@@ -188,7 +188,7 @@ class UserSeeder extends Seeder
 
             'nama_perusahaan' => 'Sumber Kencono',
             'alamat_perusahaan' => 'Jalan yang belok',
-            'alamat_kota_perusahaan' => 'Jember',
+            'alamat_kota_perusahaan' => 'KABUPATEN JEMBER',
             'jabatan_pekerjaan' => 'Sysadmin',
             'no_telp_perusahaan' => '12300214',
 
@@ -209,8 +209,8 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
             'nomor_induk' => 2020101091,
             'alamat' => 'Jalan yang berat',
-            'alamat_kota' => 'Papua Timur',
-            'no_telp' => '082331867631',
+            'alamat_kota' => 'KABUPATEN PROBOLINGGO',
+            'no_telp' => '08233186',
 
             'nama_sekolah' => 'Politeknik Negeri Jember',
             'Jurusan' => 'Teknik Komputer',
@@ -219,7 +219,7 @@ class UserSeeder extends Seeder
 
             'nama_perusahaan' => 'Sumber Kencono',
             'alamat_perusahaan' => 'Jalan yang belok',
-            'alamat_kota_perusahaan' => 'Jember',
+            'alamat_kota_perusahaan' => 'KABUPATEN JEMBER',
             'jabatan_pekerjaan' => 'Sysadmin',
             'no_telp_perusahaan' => '12300214',
 
@@ -240,8 +240,8 @@ class UserSeeder extends Seeder
             'jenis_kelamin' => 'Laki-Laki',
             'nomor_induk' => 2020101091,
             'alamat' => 'Jalan yang berat',
-            'alamat_kota' => 'Papua Timur',
-            'no_telp' => '082331867631',
+            'alamat_kota' => 'KOTA SURABAYA',
+            'no_telp' => '082331631',
 
             'nama_sekolah' => 'Politeknik Negeri Jember',
             'Jurusan' => 'Teknik Komputer',
@@ -250,7 +250,7 @@ class UserSeeder extends Seeder
 
             'nama_perusahaan' => 'Sumber Kencono',
             'alamat_perusahaan' => 'Jalan yang belok',
-            'alamat_kota_perusahaan' => 'Jember',
+            'alamat_kota_perusahaan' => 'KABUPATEN JEMBER',
             'jabatan_pekerjaan' => 'Sysadmin',
             'no_telp_perusahaan' => '12300214',
 

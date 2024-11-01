@@ -26,36 +26,6 @@ class PesertaSeeder extends Seeder
 
                 'created_by' => 0,
             ],
-            [
-                'user_id' => 8,
-                'event_skema_id' => 1,
-
-                'created_by' => 0,
-            ],
-            [
-                'user_id' => 9,
-                'event_skema_id' => 1,
-
-                'created_by' => 0,
-            ],
-            [
-                'user_id' => 6,
-                'event_skema_id' => 2,
-
-                'created_by' => 0,
-            ],
-            [
-                'user_id' => 7,
-                'event_skema_id' => 2,
-
-                'created_by' => 0,
-            ],
-            [
-                'user_id' => 6,
-                'event_skema_id' => 3,
-
-                'created_by' => 0,
-            ]
         ]);
     }
 }

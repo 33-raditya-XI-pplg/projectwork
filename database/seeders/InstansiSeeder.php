@@ -23,9 +23,9 @@ class InstansiSeeder extends Seeder
                 'path_logo' => 'assets\img\icon.png',
                 'status' => 'Aktif',
                 'alamat' => 'Jalan yang termasuk benar',
-                'alamat_kota' => 'Jember',
+                'alamat_kota' => 'KABUPATEN PROBOLINGGO',
                 'email' => 'polije@gmail.com',
-                'no_telp' => '0334-18045',
+                'no_telp' => '033418045',
 
                 'created_by' => 0,
             ],
@@ -37,9 +37,9 @@ class InstansiSeeder extends Seeder
                 'path_logo' => 'assets\img\icon.png',
                 'status' => 'Aktif',
                 'alamat' => 'Jalan yang termasuk salah',
-                'alamat_kota' => 'Lhoksumawe',
+                'alamat_kota' => 'KABUPATEN PASURUAN',
                 'email' => 'sumawe@gmail.com',
-                'no_telp' => '0334-18046',
+                'no_telp' => '033418046',
 
                 'created_by' => 0,
             ],
@@ -51,12 +51,13 @@ class InstansiSeeder extends Seeder
                 'path_logo' => 'assets\img\icon.png',
                 'status' => 'Aktif',
                 'alamat' => 'Jalan yang mepet sawah',
-                'alamat_kota' => 'Mboreng',
+                'alamat_kota' => 'KABUPATEN MOJOKERTO',
                 'email' => 'satelite@gmail.com',
-                'no_telp' => '0334-18047',
+                'no_telp' => '033418047',
 
                 'created_by' => 0,
             ]
         ]);
     }
 }
+

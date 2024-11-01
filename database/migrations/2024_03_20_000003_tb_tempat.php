@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id('id_tempat');
             $table->foreignId('page_id')->nullable()->constrained('tb_page', 'id_page')->cascadeOnDelete();
             $table->string('nama_tempat');
-            $table->integer('no_telp', 20)->nullable();
+            $table->integer('no_telp')->nullable();
             $table->text('alamat');
             $table->string('alamat_kota');
             $table->string('link_maps');

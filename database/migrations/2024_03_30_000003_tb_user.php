@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->text('alamat')->nullable();
             $table->string('alamat_kota')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
-            $table->integer('no_telp', 20)->nullable();
+            $table->biginteger('no_telp')->unsigned()->nullable();
 
             $table->string('nama_sekolah')->nullable();
             $table->string('jurusan')->nullable();
@@ -37,7 +37,7 @@ return new class extends Migration {
             $table->text('alamat_perusahaan')->nullable();
             $table->string('alamat_kota_perusahaan')->nullable();
             $table->string('jabatan_pekerjaan')->nullable();
-            $table->integer('no_telp_perusahaan', 20)->nullable();
+            $table->integer('no_telp_perusahaan')->nullable();
 
             $table->string('status')->nullable();
             $table->string('level')->nullable();
