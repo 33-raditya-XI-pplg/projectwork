@@ -217,7 +217,7 @@
         <i class="glyphicon glyphicon-download-alt"></i>
         <p>Choose an image file or drag it here.</p>
     </div>
-    <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
+    <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg" style=" width: 100%; height: 240px;">
     
     <div id="image_preview_add" class="image_preview" style="display: none;">
         <img id="preview_image_add" src="" alt="Image preview" class="preview_image">
@@ -301,7 +301,7 @@
             <i class="glyphicon glyphicon-download-alt"></i>
             <p>Choose an image file or drag it here.</p>
         </div>
-        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style="height: 244px;">
+        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style=" width: 100%; height: 240px;">
 
         <!-- Image preview area -->
         <div id="edit_struktur_organisasi_preview_{{ $row->id_profil_perusahaan }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 300px;">
