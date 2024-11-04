@@ -73,13 +73,16 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']
 
 
     //profile
-    Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names(['profile-user', 'profile-user.update']);
-    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
+    Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names([
+        'edit' => 'profile.edit-user',
+        'update' => 'profile.update-user'
+    ]);
+    Route::get('profile-user/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
 
 });
 
 Route::group(['prefix' => 'penguji', 'middleware' => ['auth', 'checkRole:Penguji']], function () {
-    Route::get('dashboard', [DashboardController::class, 'user_index']);
+    Route::get('dashboard', [DashboardController::class, 'penguji_index']);
     // Route::resource('event', EventUsersController::class);
     // Route::resource('sertifikat', SertifikatUsersController::class);
     // Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
@@ -90,15 +93,18 @@ Route::group(['prefix' => 'penguji', 'middleware' => ['auth', 'checkRole:Penguji
     // Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 
     //profile
-    Route::resource('profile-penguji', ProfileController::class)->except(['edit', 'show'])->names(['profile-penguji', 'profile-penguji.update']);
-    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit-penguji');
+    Route::resource('profile-penguji', ProfileController::class)->except(['edit', 'show'])->names([
+        'edit' => 'profile.edit-penguji',
+        'update' => 'profile.update-penguji'
+    ]);
+    Route::get('profile-penguji/edit', [ProfileController::class, 'edit'])->name('profile.edit-penguji');
 
 });
 
-Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
-    Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
-    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-});
+// Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
+//     Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
+//     Route::put('profile-penguji/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+// });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']], function () {
 
@@ -140,7 +146,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
         Route::get('skema/{id}/detail', [SkemaController::class, 'show'])->name('skema.show');
         Route::resource('background', BackgroundController::class)->except(['show']);
         Route::get('background/{id}/detail', [BackgroundController::class, 'show'])->name('background.show');
-        Route::resource('/user', UserController::class)->except(['show']);
+        Route::resource('/user', UserController::class)->except(['show', 'destroy']);
+        Route::get('/user{id}', [UserController::class, 'destroy'])->name('user.destroy');
         Route::get('/user{id}/detail', [UserController::class, 'show'])->name('user.show');
         Route::post('user/update-status/{id}', [UserController::class, 'updateStatus'])->name('user.updateStatus');
         Route::post('user/import', [UserController::class, 'import'])->name('user.import');
@@ -250,8 +257,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
     });
 
     //profile
-    Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
-    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::resource('profile-admin', ProfileController::class)->except(['edit', 'show'])->names([
+        'edit' => 'profile.edit-admin',
+        'update' => 'profile.update-admin'
+    ]);
+    Route::get('profile-admin/edit', [ProfileController::class, 'edit'])->name('profile.edit-admin');
 
     // jquery
     Route::get('/peserta/instansi/{instansi}/event-skema/{skema}', [EventSkemaController::class, 'search'])->name('getPeserta');

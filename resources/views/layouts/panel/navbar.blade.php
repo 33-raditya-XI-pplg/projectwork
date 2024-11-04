@@ -18,7 +18,7 @@
                 <div class="nav-dropdown-content" style="border-radius: 7px">
                     <ul class="nav-dropdown-menu">
                         <li class="nav-dropdown-item">
-                            <a href="{{ route('profile.index') }}" class="nav-dropdown-item-link"><i class="fas fa-user-alt"></i> Profil</a>
+                            <a href="{{ route('profile-admin.index') }}" class="nav-dropdown-item-link"><i class="fas fa-user-alt"></i> Profil</a>
                         </li>
                         <li class="nav-dropdown-item">
                             <a href="{{ url('/logout') }}" onclick="event.preventDefault();

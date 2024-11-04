@@ -41,9 +41,9 @@
         @if(Auth::user()->level == 'Admin')
         <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
         @elseif(Auth::user()->level == 'Pengguna')
-        <form action="{{ route('profile-user.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">       
+        <form action="{{ route('profile.update-user', $user->id_user) }}" method="POST" enctype="multipart/form-data">       
         @elseif(Auth::user()->level == 'Penguji')
-        <form action="{{ route('profile-penguji.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.update-penguji', $user->id_user) }}" method="POST" enctype="multipart/form-data">
         @endif
             @csrf
             @method('PUT')
@@ -291,7 +291,13 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
-            <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+            @if(Auth::user()->level == 'Admin')
+        <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        @elseif(Auth::user()->level == 'Pengguna')
+        <form action="{{ route('profile.update-user', $user->id_user) }}" method="POST" enctype="multipart/form-data">       
+        @elseif(Auth::user()->level == 'Penguji')
+        <form action="{{ route('profile.update-penguji', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        @endif
             @csrf
             @method('PUT')
             <div class="modal-header bg-primary-gradient text-white">

@@ -151,7 +151,7 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "{{ route('profile.edit-user', Auth::user()->id_user) }}";
+                    window.location.href = "{{ route('profile.edit-penguji', Auth::user()->id_user) }}";
                 }
             });
         </script>
