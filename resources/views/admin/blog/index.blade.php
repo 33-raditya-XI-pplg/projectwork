@@ -230,7 +230,7 @@
                                 <i class="glyphicon glyphicon-download-alt"></i>
                                 <p>Pilih gambar atau seret ke sini.</p>
                             </div>
-                            <input type="file" name="photo" class="dropzone"  accept="image/*" required>
+                            <input type="file" name="photo" class="dropzone"  accept="image/*" style=" width: 100%; height: 240px;" required>
                             <div id="image_preview_" class="mt-3">
                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                             </div>
@@ -316,7 +316,7 @@
                                 <i class="glyphicon glyphicon-download-alt"></i>
                                 <p>Pilih gambar atau seret ke sini .</p>
                             </div>
-                            <input type="file" name="photo" class="dropzone" id="photo_{{ $row->id_blog }}" accept="image/*">
+                            <input type="file" name="photo" class="dropzone" id="photo_{{ $row->id_blog }}" accept="image/*" style=" width: 100%; height: 240px;">
                             <div id="image_preview_" class="mt-3 d-flex justify-content-center">
                                 @if($row->photo)
                                     <img id="preview_image_edit_{{ $row->id_blog }}" src="{{ asset($row->photo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">

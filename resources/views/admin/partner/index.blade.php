@@ -199,23 +199,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    {{-- <div class="mb-3">
-                        <label for="edit_logo_{{ $partner->id_partner }}" class="form-label">Upload Logo</label>
-                        <div class="dropzone-wrapper">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Drag and drop a logo file here or click to choose one.</p>
-                            </div>
-                            <input type="file" name="logo" class="dropzone" id="edit_logo_{{ $partner->id_partner }}" accept=".png, .jpg, .jpeg" style="display: none;">
-                            <div class="image_preview" id="edit_logo_preview_{{ $partner->id_partner }}" style="display: none;">
-                                <img src="{{ asset('path/to/logo/' . $partner->logo) }}" id="edit_logo_image_preview_{{ $partner->id_partner }}" alt="Logo Preview" class="preview_image">
-                            </div>
-                        </div>
-                        <small style="color: red;">Format must be: .jpg, .jpeg, .png and max size 2MB</small>
-                        @error('logo')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror                   
-                    </div> --}}
+                  
                     {{-- dropzone --}}
                     <div class="form-group mb-2">
                         <label class="control-label mb-2">Upload Logo <span class="text-danger">*</span></label>
@@ -225,7 +209,7 @@
                                 <p>Pilih gambar atau seret ke sini.</p>
                             </div>
                             <input type="file" name="logo" class="dropzone"  accept="image/*" required>
-                            <div id="image_preview" class=" image_previe mt-3">
+                            <div id="image_preview_" class="mt-3">
                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                             </div>
                         </div>
@@ -329,27 +313,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            {{-- <div class="mb-3">
-                                <label for="edit_logo_{{ $partner->id_partner }}" class="form-label">Upload Logo</label>
-                                <div class="dropzone-wrapper" style="height: 300px;">
-                                    <div class="dropzone-desc">
-                                        <i class="glyphicon glyphicon-download-alt"></i>
-                                        <p>Choose a logo file or drag it here.</p>
-                                    </div>
-                                    <input type="file" name="logo" class="dropzone" id="edit_logo_{{ $partner->id_partner }}" accept=".png, .jpg, .jpeg">
-                                    <!-- Image preview area -->
-                                    <div id="edit_logo_preview_{{ $partner->id_partner }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 300px;">
-                                        @if($partner->logo)
-                                        <img src="{{ asset('storage/' . $partner->logo) }}" id="edit_logo_image_preview_{{ $partner->id_partner }}" alt="Logo Preview" style="max-width: 100%;">
-                                        @else
-                                        <img src="" id="edit_logo_image_preview_{{ $partner->id_partner }}" alt="Logo Preview" style="max-width: 100%; display: none;">
-                                        @endif
-                                    </div>
-                                </div>
-                                @error('logo')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
                                 {{-- dropzone --}}
                                 <div class="form-group mb-2">
                                     <label class="control-label mb-2">Upload Logo  <span class="text-danger">*</span></label>
@@ -359,11 +322,11 @@
                                             <p>Pilih gambar atau seret ke sini .</p>
                                         </div>
                                         <input type="file" name="logo" class="dropzone" id="logo_{{ $partner->id_partner }}" accept="image/*">
-                                        <div id="image_preview_{{ $partner->id_partner }}" class=" image_preview mt-3 d-flex justify-content-center">
+                                        <div id="image_preview_{{ $partner->id_partner }}" class="mt-3 d-flex justify-content-center">
                                             @if($partner->logo)
-                                                <img id="preview_image_edit_{{ $partner->id_partner }}" src="{{ asset($partner->logo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                <img id="preview_image_edit_{{ $partner->id_partner }}" src="{{ asset($partner->logo) }}" alt="Image preview" style="max-width:200px; max-height:200px; object-fit: contain;">
                                             @else
-                                                <img id="preview_image_edit_{{ $partner->id_partner }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                <img id="preview_image_edit_{{ $partner->id_partner }}" src="" alt="No image uploaded" style="max-width:200px; max-height:200px; object-fit: contain;">
                                             @endif
                                         </div>
                                         

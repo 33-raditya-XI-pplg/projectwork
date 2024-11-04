@@ -196,45 +196,25 @@
                         <textarea class="form-control ck-editor" id="tentang_kami" name="tentang_kami" rows="3"></textarea>
                     </div>
 
-                    {{-- <div class="mb-3">
-                            <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
-                            <div class="dropzone-wrapper" id="dropzone_struktur_add">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Choose an image file or drag it here.</p>
-                            </div>
-                            <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
-                            
-                            <div id="image_preview_add" class="image_preview" style="display: none;">
-                                <img id="preview_image_add" src="" alt="Image preview" class="preview_image">
-                            </div>
-                            </div>
-                            <div class="mt-2">
-                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
-                            </div>
-                            <div id="image_error"></div>
-                    </div> --}}
-                    {{-- dropzone --}}
-                    <div class="form-group mb-3">
-                        <label class="control-label mb-2">Upload Struktur Organisasi <span class="text-danger">*</span></label>
-                        <div class="dropzone-wrapper">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Pilih gambar atau seret ke sini .</p>
-                            </div>
-                            <input type="file" name="path_struktur_organisasi" class="dropzone" accept="image/*" required>
-                            <div id="image_preview_" class="mt-3">
-                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
-                        </div>
-                        @error('path_struktur_organisasi')
-                        <div class="text-danger">{{ $message }}</div>
-                       @enderror
-                    </div>
+                    <div class="mb-3">
+    <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
+    <div class="dropzone-wrapper" id="dropzone_struktur_add">
+    <div class="dropzone-desc">
+        <i class="glyphicon glyphicon-download-alt"></i>
+        <p>Choose an image file or drag it here.</p>
+    </div>
+    <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
+    
+    <div id="image_preview_add" class="image_preview" style="display: none;">
+        <img id="preview_image_add" src="" alt="Image preview" class="preview_image">
+    </div>
+</div>
 
+            <div class="mt-2">
+                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+            </div>
+            <div id="image_error"></div>
+        </div>
                     <div class="mb-3">
                         <label for="visi" class="form-label">Visi</label>
                         <textarea class="form-control ck-editor" id="visi" name="visi" rows="3"></textarea>
@@ -300,14 +280,14 @@
                     </div>
 
 
-                   {{-- <div class="mb-3">
-                        <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
-                        <div class="dropzone-wrapper" style="height: 300px;">
-                        <div class="dropzone-desc">
-                            <i class="glyphicon glyphicon-download-alt"></i>
-                            <p>Choose an image file or drag it here.</p>
-                        </div>
-                        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style="height: 244px;">
+                   <div class="mb-3">
+    <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
+    <div class="dropzone-wrapper" style="height: 300px;">
+        <div class="dropzone-desc">
+            <i class="glyphicon glyphicon-download-alt"></i>
+            <p>Choose an image file or drag it here.</p>
+        </div>
+        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style="height: 244px;">
 
                         <!-- Image preview area -->
                         <div id="edit_struktur_organisasi_preview_{{ $row->id_profil_perusahaan }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 300px;">
