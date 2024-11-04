@@ -55,7 +55,7 @@ class TestimoniController extends Controller
 
 
         Testimoni::create($data);
-        Alert::success('Berhasil Tersimpan!', 'Data berhasil disimpan.');
+        Alert::success('Berhasil Tersimpan!', 'Testimoni berhasil dibuat.');
 
         return redirect()->back();
     }
@@ -88,8 +88,8 @@ class TestimoniController extends Controller
 
         ]);
 
-        return redirect()->route('testimoni.index')
-            ->with('success', 'Testimoni updated successfully.');
+        return redirect()->route('testimoni.indek')
+            ->with('success', 'Testimoni berhasil diperbarui.');
     }
 
 
@@ -106,8 +106,8 @@ class TestimoniController extends Controller
     {
         $testimoni->delete();
 
-        return redirect()->route('testimoni.index')
-            ->with('success', 'Testimoni deleted successfully.');
+        return redirect()->route('testimoni.indek')
+            ->with('success', 'Testimoni berhasil dihapus.');
     }
 
     // Uncomment and implement if needed

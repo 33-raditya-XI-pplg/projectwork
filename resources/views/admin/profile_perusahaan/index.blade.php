@@ -5,7 +5,7 @@
 @push('style')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 <style>
-.dropzone-wrapper {
+   .dropzone-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,36 +16,22 @@
     position: relative;
     cursor: pointer; 
 }
-
-.image_preview {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%; 
-    height: auto; 
-    max-width: 200px; 
-    max-height: 200px; 
-    overflow: hidden;
-    margin: 0 auto; 
-}
-
-.preview_image {
+   #image_preview_ {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%; 
+       height: auto; 
+       max-width: 200px; 
+       max-height: 200px; 
+       overflow: hidden;
+       margin: 0 auto; 
+   }
+   #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain; 
     display: block; 
-}
-
-.dropzone-desc {
-    text-align: center;
-    padding: 20px;
-    color: #888;
-}
-
-
-.dropzone-wrapper.dragging {
-    background-color: #e3f2fd;
-    border-color: #90caf9;
 }
 
     .section__container {
@@ -210,25 +196,45 @@
                         <textarea class="form-control ck-editor" id="tentang_kami" name="tentang_kami" rows="3"></textarea>
                     </div>
 
-                    <div class="mb-3">
-    <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
-    <div class="dropzone-wrapper" id="dropzone_struktur_add">
-    <div class="dropzone-desc">
-        <i class="glyphicon glyphicon-download-alt"></i>
-        <p>Choose an image file or drag it here.</p>
-    </div>
-    <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
-    
-    <div id="image_preview_add" class="image_preview" style="display: none;">
-        <img id="preview_image_add" src="" alt="Image preview" class="preview_image">
-    </div>
-</div>
+                    {{-- <div class="mb-3">
+                            <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
+                            <div class="dropzone-wrapper" id="dropzone_struktur_add">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Choose an image file or drag it here.</p>
+                            </div>
+                            <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi" accept=".png, .jpg, .jpeg">
+                            
+                            <div id="image_preview_add" class="image_preview" style="display: none;">
+                                <img id="preview_image_add" src="" alt="Image preview" class="preview_image">
+                            </div>
+                            </div>
+                            <div class="mt-2">
+                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
+                            </div>
+                            <div id="image_error"></div>
+                    </div> --}}
+                    {{-- dropzone --}}
+                    <div class="form-group mb-3">
+                        <label class="control-label mb-2">Upload Struktur Organisasi <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih gambar atau seret ke sini .</p>
+                            </div>
+                            <input type="file" name="path_struktur_organisasi" class="dropzone" accept="image/*" required>
+                            <div id="image_preview_" class="mt-3">
+                                <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                        </div>
+                        @error('path_struktur_organisasi')
+                        <div class="text-danger">{{ $message }}</div>
+                       @enderror
+                    </div>
 
-            <div class="mt-2">
-                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp</small>
-            </div>
-            <div id="image_error"></div>
-        </div>
                     <div class="mb-3">
                         <label for="visi" class="form-label">Visi</label>
                         <textarea class="form-control ck-editor" id="visi" name="visi" rows="3"></textarea>
@@ -294,38 +300,49 @@
                     </div>
 
 
-                   <div class="mb-3">
-    <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
-    <div class="dropzone-wrapper" style="height: 300px;">
-        <div class="dropzone-desc">
-            <i class="glyphicon glyphicon-download-alt"></i>
-            <p>Choose an image file or drag it here.</p>
-        </div>
-        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style="height: 244px;">
+                   {{-- <div class="mb-3">
+                        <label for="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" class="form-label">Upload Struktur Organisasi Image</label>
+                        <div class="dropzone-wrapper" style="height: 300px;">
+                        <div class="dropzone-desc">
+                            <i class="glyphicon glyphicon-download-alt"></i>
+                            <p>Choose an image file or drag it here.</p>
+                        </div>
+                        <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}" accept=".png, .jpg, .jpeg" style="height: 244px;">
 
-        <!-- Image preview area -->
-        <div id="edit_struktur_organisasi_preview_{{ $row->id_profil_perusahaan }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 300px;">
-            @if($row->path_struktur_organisasi)
-            <img src="{{ asset('storage/' . $row->path_struktur_organisasi) }}" id="edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}" alt="Struktur Organisasi Preview" style="max-width: 100%;">
-            @else
-            <img src="" id="edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}" alt="Struktur Organisasi Preview" style="max-width: 100%; display: none;">
-            @endif
-        </div>
-    </div>   
-        <script>
-            document.getElementById('path_struktur_organisasi_edit_{{ $row->id_profil_perusahaan }}').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const previewImage = document.getElementById('edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}');
-                        previewImage.src = e.target.result;
-                        previewImage.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>    
+                        <!-- Image preview area -->
+                        <div id="edit_struktur_organisasi_preview_{{ $row->id_profil_perusahaan }}" class="mt-3" style="display: flex; align-items: center; justify-content: center; max-width: 300px;">
+                            @if($row->path_struktur_organisasi)
+                            <img src="{{ asset('storage/' . $row->path_struktur_organisasi) }}" id="edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}" alt="Struktur Organisasi Preview" style="max-width: 100%;">
+                            @else
+                            <img src="" id="edit_struktur_organisasi_image_preview_{{ $row->id_profil_perusahaan }}" alt="Struktur Organisasi Preview" style="max-width: 100%; display: none;">
+                            @endif
+                        </div>
+                    </div>   --}}
+                    {{-- dropzone --}}
+                    <div class="form-group mb-3">
+                        <label class="control-label mb-2">Upload Struktur Organisasi <span class="text-danger">*</span></label>
+                        <div class="dropzone-wrapper">
+                            <div class="dropzone-desc">
+                                <i class="glyphicon glyphicon-download-alt"></i>
+                                <p>Pilih gambar atau seret ke sini.</p>
+                            </div>
+                            <input type="file" name="path_struktur_organisasi" class="dropzone" id="path_struktur_organisasi_{{ $row->id_profil_perusahaan }}" accept="image/*">
+                            <div id="image_preview_" class="mt-3 d-flex justify-content-center">
+                                @if($row->path_struktur_organisasi)
+                                    <img id="preview_image_edit_{{ $row->id_profil_perusahaan }}" src="{{ asset($row->path_struktur_organisasi) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                @else
+                                    <img id="preview_image_edit_{{ $row->id_profil_perusahaan }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                @endif
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
+                        </div>
+                        @error('path_struktur_perusahaan')
+                        <div class="text-danger">{{ $message }}</div>
+                       @enderror
+                    </div>
+
                     <div class="mb-3">
                         <label for="visi" class="form-label">Visi</label>
                         <textarea class="form-control ck-editor" id="visi" name="visi" rows="3">{{ old('visi', $row->visi) }}</textarea>
@@ -360,85 +377,91 @@
 </div>
 @endforeach
 
-    <!-- Script untuk preview gambar -->
-    <script>
-       document.addEventListener('DOMContentLoaded', function () {
-    const addFileInput = document.getElementById('path_struktur_organisasi');
-    
-    if (addFileInput) {
-        addFileInput.addEventListener('change', function(event) {
-            console.log("File selected: ", event.target.files[0]); // Debug
-            const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log("Preview ready"); // Debug
-                    document.getElementById('preview_image_add').src = e.target.result;
-                    document.getElementById('image_preview_add').style.display = 'flex';
-                };
+
+<script>    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Inisialisasi preview image
+    const inputFile = document.querySelector('input[name="path_struktur_organisasi"]');
+    const preview = document.getElementById('preview_image_create');
+
+
+    if (preview) {
+    preview.style.display = 'none';
+
+    inputFile.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            if (preview) { // Cek apakah preview tidak null
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            } else {
+                console.error('Preview element not found');
+            }
+        }
+
+            if (file) {
                 reader.readAsDataURL(file);
+            } else {
+                if (preview) {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
             }
         });
-  
+    } else {
+        console.error('Preview image element not found');
+    }
 
-                // Prevent duplicate listeners by setting a flag
-                fileInput.dataset.listenerAttached = true;
-            }
 
-            // Handle drag and drop
-            dropzone.addEventListener('dragover', function (event) {
-                event.preventDefault();
-                dropzone.classList.add('dragging');
+    // Inisialisasi Dropzone
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone(".dropzone-wrapper", {
+        url: "/profil", // URL server untuk unggahan
+        maxFilesize: 2, 
+        acceptedFiles: "image/*",
+        init: function() {
+            this.on("success", function(file, response) {                    
+                // Tangani response sukses
+                console.log("Upload successful");
             });
-
-            dropzone.addEventListener('dragleave', function () {
-                dropzone.classList.remove('dragging');
-            });
-
-            dropzone.addEventListener('drop', function (event) {
-                event.preventDefault();
-                dropzone.classList.remove('dragging');
-
-                const files = event.dataTransfer.files;
-                if (files.length > 0) {
-                    fileInput.files = files;
-                    const changeEvent = new Event('change');
-                    fileInput.dispatchEvent(changeEvent);
+            this.on("error", function(file, response) {
+                const errorElement = document.getElementById('image_error');
+                if (errorElement) {
+                    errorElement.innerHTML = response.message || 'Upload failed';
                 }
             });
+        }
+    });   
+});   
+</script> 
 
-            // Click on the dropzone to open file selector
-            dropzone.addEventListener('click', function () {
-                fileInput.click();
-            });
-        });
-    </script>
+<script>
+    document.querySelectorAll('[id^="path_struktur_organisasi"]').forEach(input => {
+        input.addEventListener('change', function(event) {
+            const id = this.id.split('_')[3]; 
+            const preview = document.getElementById(`preview_image_edit_${id}`); 
+            const file = event.target.files[0];
 
-    <!-- Include jQuery terlebih dahulu -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-    <!-- Include JS Select2 setelah jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>\
-
-    <!-- Script Select2 -->
-    <script>
-         $(document).ready(function() {
-        $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder');
-            
-            $(this).select2({
-                placeholder: placeholder, 
-                allowClear: true,
-                minimumResultsForSearch: Infinity 
-            });
+            if (file) { 
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result; 
+                    preview.style.display = 'block'; 
+                }
+                reader.readAsDataURL(file); 
+            } else {
+                preview.src = '{{ asset($row->path_struktur_organisasi) }}'; 
+                preview.style.display = 'block'; 
+            }
         });
     });
-    </script>
+</script>
 @endsection
  
 @push('scripts')
     
-
 
     <!-- Script untuk CKEditor -->
     <script src="{{ asset('js/ckeditor.js') }}"></script>

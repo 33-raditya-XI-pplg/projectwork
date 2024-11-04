@@ -25,7 +25,7 @@ class ProfilPerusahaanController extends Controller
 
 
     public function store(Request $request)
-    { 
+    {
         $data = $request->validate([
             'page_id' => 'required|exists:tb_page,id_page',
             'tentang_kami' => 'required|string',
@@ -44,9 +44,17 @@ class ProfilPerusahaanController extends Controller
         $data['status'] = $request->has('status') ? true : false;
 
 
+        // if ($request->hasFile('path_struktur_organisasi')) {
+        //     $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
+        //     $data['path_struktur_organisasi'] = $imagePath;
+        // }
         if ($request->hasFile('path_struktur_organisasi')) {
-            $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
-            $data['path_struktur_organisasi'] = $imagePath;
+            $foto = $request->file('path_struktur_organisasi');
+            $filename = 'foto_' . time() . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/struktur_organisasi', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_struktur_organisasi']);
+            $data['path_struktur_organisasi'] = "/storage/struktur_organisasi/$filename";
         }
 
         Profil_Perusahaan::create($data);
@@ -77,14 +85,28 @@ class ProfilPerusahaanController extends Controller
         $data['status'] = $request->has('status') ? true : false;
 
 
+        // if ($request->hasFile('path_struktur_organisasi')) {
+
+        //     if ($profil->path_struktur_organisasi) {
+        //         Storage::disk('public')->delete($profil->path_struktur_organisasi);
+        //     }
+
+        //     $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
+        //     $data['path_struktur_organisasi'] = $imagePath;
+        // }
         if ($request->hasFile('path_struktur_organisasi')) {
-
             if ($profil->path_struktur_organisasi) {
-                Storage::disk('public')->delete($profil->path_struktur_organisasi);
+                $oldPhotoPath = str_replace('/storage', 'public', $profil->path_struktur_organisasi);
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
             }
-
-            $imagePath = $request->file('path_struktur_organisasi')->store('struktur_organisasi', 'public');
-            $data['path_struktur_organisasi'] = $imagePath;
+            $foto = $request->file('path_struktur_organisasi');
+            $filename = 'foto_' . time() . '.' . $foto->getClientOriginalExtension();
+            $storedPath = $foto->storeAs('public/struktur_organisasi', $filename);
+            Storage::url($storedPath);
+            $data = $request->except(['path_struktur_organisasi']);
+            $data['path_struktur_organisasi'] = "/storage/struktur_organisasi/$filename";
         }
 
         $profil->update($data);
@@ -104,11 +126,11 @@ class ProfilPerusahaanController extends Controller
         $profil = Profil_Perusahaan::findOrFail($id);
         $Title = 'Management';
         $subtitle = 'Detail profil perusahaan';
-    
+
         // Kirim data profil ke view 'rincian'
-        return view('admin.profile_perusahaan.rincian', compact('profil','Title','subtitle'));
+        return view('admin.profile_perusahaan.rincian', compact('profil', 'Title', 'subtitle'));
     }
-    
+
 
 
 

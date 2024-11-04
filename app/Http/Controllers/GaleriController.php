@@ -69,7 +69,7 @@ class GaleriController extends Controller
         $validatedData = Galeri::all();
 
 
-        return redirect()->route('galeri.index')->with('success', 'Galeri created successfully.');
+        return redirect()->route('galeri.index')->with('success', 'Galeri berhasil dibuat.');
     }
 
 

@@ -106,9 +106,9 @@ class KategoriController extends Controller
 
         try {
             $kategori->delete();
-            return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus.');
+            return redirect()->route('kategori.indek')->with('success', 'Kategori berhasil dihapus.');
         } catch (QueryException $e) {
-            return redirect()->route('kategori.index')->with('error', 'Terjadi kesalahan saat menghapus kategori.');
+            return redirect()->route('kategori.indek')->with('error', 'Terjadi kesalahan saat menghapus kategori.');
         }
     }
     public function show($id)
@@ -116,6 +116,6 @@ class KategoriController extends Controller
         $kategori = kategori::findOrFail($id);
         $Title = 'Management';
         $subtitle = 'Detail Kategori';
-        return view('admin.kategori.show', compact('kategori','Title','subtitle'));
+        return view('admin.kategori.show', compact('kategori', 'Title', 'subtitle'));
     }
 }

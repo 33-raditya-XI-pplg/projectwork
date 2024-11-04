@@ -2,34 +2,6 @@
 @section('title', 'Kategori')
 @section('content')
 
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
-@if (session('success'))
-<div class="alert alert-success">
-    {{ session('success') }}
-</div>
-@endif
-
-
-<!-- Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-<!-- CKEditor 5 -->
-<script src="https://cdn.ckeditor.com/ckeditor5/ckeditor5-build-classic/ckeditor.js"></script>
-
-<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css" />
-
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
     <table id="example" class="table">
@@ -182,6 +154,7 @@
 
 <!-- End of Insert Modal -->
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if (session('error'))
 <script>
     Swal.fire({
@@ -212,7 +185,6 @@
     }
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if(session('error'))
 <script>

@@ -49,8 +49,8 @@ class SliderController extends Controller
             'status' => $request->boolean('status', false),
         ]);
 
-        return redirect()->route('slider.index')
-            ->with('success', 'Slider created successfully.');
+        return redirect()->route('slider.indek')
+            ->with('success', 'Slider berhasil dibuat.');
     }
 
 
@@ -88,8 +88,8 @@ class SliderController extends Controller
             'status' => $status,
         ]);
 
-        return redirect()->route('slider.index')
-            ->with('success', 'Slider updated successfully.');
+        return redirect()->route('slider.indek')
+            ->with('success', 'Slider berhasil diperbarui.');
     }
 
 
@@ -99,8 +99,8 @@ class SliderController extends Controller
         $slider = slider::findOrFail($id);
         $Title = 'Management';
         $subtitle = 'Detail slider';
-    
-        return view('admin.slider.show', compact('slider','Title','subtitle'));
+
+        return view('admin.slider.show', compact('slider', 'Title', 'subtitle'));
     }
 
 
@@ -108,7 +108,7 @@ class SliderController extends Controller
     {
         $slider->delete();
 
-        return redirect()->route('slider.index')
-            ->with('success', 'Slider deleted successfully.');
+        return redirect()->route('slider.indek')
+            ->with('success', 'Slider berhasil dihapus.');
     }
 }

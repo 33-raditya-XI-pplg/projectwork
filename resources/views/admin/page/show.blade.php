@@ -9,6 +9,13 @@
 <!-- Include SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<style>
+     .form-control {
+        background-color: #e5e8ec;
+        border: 1px solid #ced4da;       
+    }
+</style>
+
 <div class="container"> 
 
         <!-- Display Page Details -->
@@ -63,6 +70,16 @@
                 @endif                 
             </div> 
         </div>                  --}}
+
+        <div class="mb-3">
+            <div class="rating-input">
+                <label for="no" class="form-label"><h5>Pindah Halaman</h5></label>
+                <input type="text" class="form-control text-primary" 
+                    value="{{ $page->pindah_halaman }}" 
+                    onclick="window.open('{{ $page->pindah_halaman }}', '_blank')"
+                    readonly>               
+            </div> 
+        </div> 
       <!-- Back Button -->
         <div class="mt-4 text-end">
         <a href="{{ route('page.index') }}" class="btn btn-secondary">Kembali</a>

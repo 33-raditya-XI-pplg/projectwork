@@ -180,17 +180,17 @@
 </div>
 
 {{-- <!-- Slider Carousel with Swipe Support --}}
-<div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+{{-- <div id="sliderCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
     <div class="carousel-inner">
         @foreach ($slider as $index => $slide)
             <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
                 <div class="d-flex justify-content-center">
                     <img src="{{ asset($row->image_url) }}" class="d-block" alt="{{ $slide->title }}" style="max-height: 500px; max-width: 80%;">
                 </div>
-                {{-- <div class="carousel-caption d-none d-md-block">
+                <div class="carousel-caption d-none d-md-block">
                     <h5>{{ $slide->title }}</h5>
                     <p>{{ $slide->description }}</p>
-                </div> --}}
+                </div>
             </div>
         @endforeach
     </div>
@@ -202,7 +202,7 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
-</div>
+</div> --}}
 
  {{-- Add Swiper.js or Bootstrap Swipe Handling --> --}}
 <script>

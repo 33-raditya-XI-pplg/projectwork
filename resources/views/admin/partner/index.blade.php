@@ -13,11 +13,12 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 240px;
+    height: 220px;
     border: 2px dashed #ddd;
     background-color: #f9f9f9;
     position: relative;
     cursor: pointer; 
+    overflow: hidden;
 }
 
 .image_preview {
@@ -25,31 +26,20 @@
     align-items: center;
     justify-content: center;
     width: 100%; 
-    height: auto; 
+    height: 100%;  
     max-width: 200px; 
     max-height: 200px; 
     overflow: hidden;
     margin: 0 auto; 
 }
 
-.preview_image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; 
-    display: block; 
-}
-
-.dropzone-desc {
-    text-align: center;
-    padding: 20px;
-    color: #888;
-}
-
 #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
+    object-fit: cover; 
     display: block; 
+    max-width: 200px; 
+    max-height: 200px; 
 }
 
 
@@ -235,14 +225,14 @@
                                 <p>Pilih gambar atau seret ke sini.</p>
                             </div>
                             <input type="file" name="logo" class="dropzone"  accept="image/*" required>
-                            <div id="image_preview_" class="mt-3">
+                            <div id="image_preview" class=" image_previe mt-3">
                                 <img id="preview_image_create" src="" alt="Image preview" style="display: none;">
                             </div>
                         </div>
                         <div class="mt-2">
                             <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2MB</small>
                         </div>
-                        @error('path_ttd')
+                        @error('logo')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -369,7 +359,7 @@
                                             <p>Pilih gambar atau seret ke sini .</p>
                                         </div>
                                         <input type="file" name="logo" class="dropzone" id="logo_{{ $partner->id_partner }}" accept="image/*">
-                                        <div id="image_preview_{{ $partner->id_partner }}" class="mt-3 d-flex justify-content-center">
+                                        <div id="image_preview_{{ $partner->id_partner }}" class=" image_preview mt-3 d-flex justify-content-center">
                                             @if($partner->logo)
                                                 <img id="preview_image_edit_{{ $partner->id_partner }}" src="{{ asset($partner->logo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                                             @else
@@ -509,7 +499,7 @@ document.querySelectorAll('[id^="logo_"]').forEach(input => {
 });
 </script>
 
-<!-- {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+{{-- <!-- {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script> --}}
     @if (session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -521,7 +511,7 @@ document.querySelectorAll('[id^="logo_"]').forEach(input => {
             });
         });
     </script>
-@endif --}} -->
+@endif 
 
 
 @if ($errors->any())

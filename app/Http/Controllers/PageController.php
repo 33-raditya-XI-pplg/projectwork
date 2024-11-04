@@ -42,7 +42,7 @@ class PageController extends Controller
                 'updated_by' => Auth::id(),
             ]);
 
-            return Redirect::route('page.index')->with('success', 'Page created successfully.');
+            return Redirect::route('page.index')->with('success', 'Page berhasil dibuat.');
         } catch (\Exception $e) {
             return Redirect::route('page.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -66,7 +66,7 @@ class PageController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('page.index')->with('success', 'Page updated successfully.');
+        return redirect()->route('page.index')->with('success', 'Page berhasil diperbarui.');
     }
 
 
