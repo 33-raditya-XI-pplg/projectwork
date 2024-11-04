@@ -37,6 +37,12 @@
         padding: 0.5rem 1rem;
         font-weight: 500;
     }
+    .form-control {
+    background-color: #e5e8ec;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 4px;
+}
 </style>
 
 <div class="container">
@@ -91,27 +97,27 @@
         <div class="row">
             <div class="mb-3">
                 <label for="page" class="form-label"><h5>Page Id</h5></label>
-                <input type="text" class="form-control" value="{{ \App\Models\Page::find($profil->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
+                <input type="text" class="form-control rounded" value="{{ \App\Models\Page::find($profil->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}" disabled readonly>
             </div>
 
             <div class="mb-3 ">
                 <label for="pengalaman" class="form-label"><h5>Tentang Kami</h5></label>
-                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->tentang_kami }}</textarea>
+                <div class="form-control rounded"  rows="2" disabled readonly>{!! $profil->tentang_kami !!}</div>
             </div>   
             
             <div class="mb-3 ">
                 <label for="pengalaman" class="form-label"><h5>Visi</h5></label>
-                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->visi }}</textarea>
+                <div class="form-control rounded"  rows="2" disabled readonly>{!! $profil->visi !!}</div>
             </div>  
              
             <div class="mb-3 ">
                 <label for="pengalaman" class="form-label"><h5>Misi</h5></label>
-                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->misi }}</textarea>
+                <div class="form-control rounded"  rows="2" disabled readonly>{!! $profil->misi !!}</div>
             </div>   
 
             <div class="mb-3 ">
                 <label for="pengalaman" class="form-label"><h5>Sejarah</h5></label>
-                <textarea class="form-control"  rows="2" disabled readonly>{{ $profil->sejarah }}</textarea>
+                <div class="form-control rounded"  rows="2" disabled readonly>{!! $profil->sejarah !!}</div>
             </div>   
             <div class="text-center">
                 <div>
@@ -121,7 +127,7 @@
                     <div class="mt-3 d-flex justify-content-center" disabled readonly>                                                  
                             {{-- <img  src="{{ asset($testimoni->photo) }}" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">                                              --}}
                         @if ($profil->path_struktur_organisasi)
-                            <img src="{{ asset('storage/' . $profil->path_struktur_organisasi)  }}"  class="profile-image img-fluid rounded-3 color: #343a40" style="width: 250px; height: auto;" alt="user" />
+                            <img src="{{ asset( $profil->path_struktur_organisasi)  }}"  class="profile-image img-fluid rounded-3 color: #343a40" style="width: 250px; height: auto;" alt="user" />
                         @endif
                     </div>
                 </div>                                       
