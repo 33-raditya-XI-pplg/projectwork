@@ -39,7 +39,7 @@
     </div> --}}
     <div class="card-body">
         @if(Auth::user()->level == 'Admin')
-        <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.update-admin', $user->id_user) }}" method="POST" enctype="multipart/form-data">
         @elseif(Auth::user()->level == 'Pengguna')
         <form action="{{ route('profile.update-user', $user->id_user) }}" method="POST" enctype="multipart/form-data">       
         @elseif(Auth::user()->level == 'Penguji')
@@ -277,7 +277,12 @@
             @endif
 
             <div class="d-flex justify-content-end mb-2">
-                <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+                <div class=" text-end mx-1">
+                    <a href="{{ route('profile-admin.index') }}" class="btn btn-danger rounded">Batal</a>
+                </div>
+                <div class="mx-1">
+                    <button type="submit" class="btn btn-success rounded text-white">Simpan</button>
+                </div>
             </div>
         </form>        
     </div>
@@ -292,7 +297,7 @@
         <div class="modal-content">
 
             @if(Auth::user()->level == 'Admin')
-        <form action="{{ route('profile.update', $user->id_user) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('profile.update-admin', $user->id_user) }}" method="POST" enctype="multipart/form-data">
         @elseif(Auth::user()->level == 'Pengguna')
         <form action="{{ route('profile.update-user', $user->id_user) }}" method="POST" enctype="multipart/form-data">       
         @elseif(Auth::user()->level == 'Penguji')

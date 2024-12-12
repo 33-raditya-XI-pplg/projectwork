@@ -47,12 +47,12 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-sm-4 text-center">
-                <div class="bg-primary position-relative p-2 shadow rounded-4 w-100 h-50 hover-expand" style="margin-top: 3em; display: flex; justify-content: center; align-items: center;">
-                @if ($data->path_foto)
-                <img class="profile-image rounded-4" src="{{ $data->path_foto }}" alt="foto_{{ explode(' ', $data->nama_lengkap)[0] }}" style="width: 100px; height: 100px; object-fit: cover;">
-    @else
-        <img class="profile-image rounded-4" src="{{ asset('assets/img/icon.png') }}" alt="Default Photo" style="width: 100px; height: 100px; object-fit: cover;">
-    @endif
+                <div class="bg-primary position-relative p-2 py-3 px-4 shadow rounded-4 h-80  hover-expand" style="margin-top: 3em; display: flex; justify-content: center; align-items: center;">
+                     @if ($data->path_foto)
+                        <img class="profile-image rounded-4" src="{{ $data->path_foto }}" alt="foto_{{ explode(' ', $data->nama_lengkap)[0] }}" style="width: 100px; height: 100px; object-fit: cover;">
+                    @else
+                        <img class="profile-image rounded-4" src="{{ asset('assets/img/icon.png') }}" alt="Default Photo" style="width: 100px; height: 100px; object-fit: cover;">
+                    @endif
                     </div>
                 </div>
                 <div class="col-sm-8">
@@ -66,7 +66,7 @@
                             </div>
                         <div class="col-2 text-end">
                             @if(Auth::user()->level == 'Admin')
-                                <a href="{{ route('profile.edit') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i></a>
+                                <a href="{{ route('profile.edit-admin') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i></a>
                             @elseif(Auth::user()->level == 'Pengguna')
                                 <a href="{{ route('profile.edit-user') }}" class="btn btn-primary rounded-4"><i class="fa-solid fa-pen-to-square" style="font-size:1.2rem;"></i></a>                        
                             @elseif(Auth::user()->level == 'Penguji')

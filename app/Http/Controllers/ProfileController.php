@@ -183,7 +183,7 @@ class ProfileController extends Controller
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');
         if (Auth::user()->level == 'Admin') {
-            return redirect()->route('profile.index');
+            return redirect()->route('profile-admin.index');
         } elseif (Auth::user()->level == 'Pengguna') {
             return redirect()->route('profile-user.index');
         } elseif (Auth::user()->level == 'Penguji') {

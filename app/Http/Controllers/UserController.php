@@ -86,7 +86,7 @@ class UserController extends Controller
     {
         $pengguna = User::findOrFail($id);
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
-        $regencies = DB::table('regencies')->where('name', 'Like', '%KOTA%')->pluck('name', 'id');
+        $regencies = DB::table('regencies')->pluck('name', 'id');
 
         $Title = 'Master Data';
         $subtitle = 'Pengguna edit';

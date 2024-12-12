@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
+
 class PengujiController extends Controller
 {
     public function index()
@@ -61,6 +62,8 @@ class PengujiController extends Controller
             ]);
         }
 
+        dd($request->all());
+        ;
         $data = $request->all();
         if ($request->hasFile('path_foto')) {
             $foto = $request->file('path_foto');
@@ -116,6 +119,8 @@ class PengujiController extends Controller
         $Title = 'Management';
         $subtitle = 'Detail Testimoni';
         return view('admin.penguji.show', compact('penguji', 'Title', 'subtitle'));
+
+        // Simpan foto baru
     }
 
     public function destroy($id)
@@ -124,28 +129,27 @@ class PengujiController extends Controller
 
         if ($user->level == 'Penguji') {
             $checkChildID = DB::table('tb_menguji')
-                ->where('user_id', $id)
                 ->count();
 
             if ($checkChildID > 0) {
                 Alert::error('Gagal Menghapus!', 'Tidak dapat menghapus karena data masih digunakan.');
                 return redirect()->back();
             }
-        }
 
-        if (!empty($user->path_foto)) {
-            if (file_exists(public_path($user->path_foto))) {
-                unlink(public_path($user->path_foto));
-                $user->delete();
+            if (!empty($user->path_foto)) {
+                if (file_exists(public_path($user->path_foto))) {
+                    unlink(public_path($user->path_foto));
+                    $user->delete();
+                } else {
+                    $user->delete();
+                }
             } else {
                 $user->delete();
             }
-        } else {
-            $user->delete();
-        }
 
-        toast('User berhasil dihapus.', 'success');
-        return redirect()->back();
+            toast('User berhasil dihapus.', 'success');
+            return redirect()->back();
+        }
     }
     public function updateStatus(Request $request, $id)
     {
