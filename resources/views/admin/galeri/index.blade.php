@@ -165,23 +165,12 @@
             <!-- Button to trigger the modal -->
             {{-- <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a> --}}
 
-            @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-3 position-relative" role="alert">
-    {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: absolute; top: -15px; right: 10px;"></button>
-</div>
-
-
-            @endif
-
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3">
-                        {{ $error }}
-                        <strong>Failed</strong>
-                    </div>
-                @endforeach
-            @endif
+            <form method="GET" action="{{ route('galeri.index') }}">
+                <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none; width: 180px;">
+                    <option value="">Cari Berdasarkan</option>
+                    <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }} style="margin-right: 10px;">Terbaru</option>
+                </select>
+            </form>
 
             <!-- Gallery Section -->
             <div class="card-body mt-4">

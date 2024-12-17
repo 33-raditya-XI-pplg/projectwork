@@ -12,10 +12,13 @@ use App\Models\Page;
 class GaleriController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $pages = Page::all();
-        $galeri = Galeri::all();
+        $filter = $request->input('filter');
+        $galeri = Galeri::when($filter == 'latest', function ($query) {
+            return $query->orderBy('created_at', 'desc'); // Filter gambar terbaru
+        })->get();
         $Title = 'Management';
         $subtitle = 'Galeri';
 

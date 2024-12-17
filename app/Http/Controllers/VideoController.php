@@ -18,13 +18,18 @@ class VideoController extends Controller
      *  public function index()
 
      */
-    public function index()
+    public function index(Request $request)
     {
 
         $pages = Page::all();
 
 
-        $videos = Galeri::where('kategori', 'video')->get();
+        $filter = $request->input('filter');
+
+        $videos = Galeri::where('kategori', 'video')
+            ->when($filter == 'latest', function ($query) {
+                return $query->orderBy('created_at', 'desc'); // Filter video terbaru
+            })->get();
 
         $Title = 'Management';
         $subtitle = 'Video';

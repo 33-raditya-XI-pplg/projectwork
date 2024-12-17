@@ -161,6 +161,13 @@
         </div>
     </div> --}}
 
+    <form method="GET" action="{{ route('video.index') }}">
+        <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none; width: 180px; margin-left: 20px;">
+            <option value="">Cari Berdasarkan</option>
+            <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+        </select>
+    </form>
+
     <!-- Table to display videos -->
     <div class="container mt-4">
         <div class="video-section">
