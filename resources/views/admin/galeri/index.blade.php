@@ -166,17 +166,26 @@
             {{-- <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a> --}}
 
             <form method="GET" action="{{ route('galeri.index') }}">
-                <div class="input-group mb-3" style="width: 250px; margin-left: 20px;">                  
-                    <span class="input-group-text bg-primary text-white border-0">
-                        <i class="fas fa-filter"></i>
-                    </span>
-                <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none; width: 180px;">
-                    <option value="">Cari Berdasarkan</option>
-                    <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
-                    <option value="oldest" {{ request('filter') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-                    <option value="az" {{ request('filter') == 'az' ? 'selected' : '' }}> A - Z</option> 
-                </select>
-                </div>
+                <div class="d-flex align-items-center" style="margin-left: 20px;">             
+                    <div class="input-group" style="width: 250px;">
+                        <span class="input-group-text bg-primary text-white border-0">
+                            <i class="fas fa-filter"></i>
+                        </span>
+                        <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none;">
+                            <option value="" selected disabled>Cari Berdasarkan</option>
+                            <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                            <option value="oldest" {{ request('filter') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                            <option value="az" {{ request('filter') == 'az' ? 'selected' : '' }}>Nama</option>
+                            <option value="page1" {{ request('filter') == 'page1' ? 'selected' : '' }}>Kategori LPK</option>
+                            <option value="page2" {{ request('filter') == 'page2' ? 'selected' : '' }}>Kategori LSP</option>
+                        </select>
+                    </div>
+                    @if (request()->has('filter'))
+                    <a href="{{ route('galeri.index') }}" class="btn btn-danger" style="border:none;">
+                        ✖ Reset
+                    </a>
+                @endif
+            </div>
             </form>
 
             <!-- Gallery Section -->
@@ -293,7 +302,6 @@
                                                         <option value="partner" {{ $item->kategori == 'partner' ? 'selected' : '' }}>Partner</option>
                                                         <option value="klien" {{ $item->kategori == 'klien' ? 'selected' : '' }}>Klien</option>
                                                         <option value="gambar" {{ $item->kategori == 'gambar' ? 'selected' : '' }}>Gambar</option>
-                                                        <option value="video" {{ $item->kategori == 'video' ? 'selected' : '' }}>Video</option>
                                                     </select>
                                                 </div>
                                                 <div class="d-flex justify-content-end w-100 mt-3">
@@ -388,8 +396,7 @@
         <option value="">Select category</option>
         <option value="partner">Partner</option>
         <option value="klien">Klien</option>
-        <option value="gambar">Gambar</option>
-        <option value="video">Video</option>
+        <option value="gambar">Gambar</option> 
     </select>
 </div>
 

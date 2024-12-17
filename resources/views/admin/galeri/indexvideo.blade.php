@@ -162,12 +162,26 @@
     </div> --}}
 
     <form method="GET" action="{{ route('video.index') }}">
-        <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none; width: 180px; margin-left: 20px;">
-            <option value="">Cari Berdasarkan</option>
-            <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
-            <option value="oldest" {{ request('filter') == 'oldest' ? 'selected' : '' }}>Terlama</option>
-            <option value="az" {{ request('filter') == 'az' ? 'selected' : '' }}>A - Z</option>
-        </select>
+        <div class="d-flex align-items-center" style="margin-left: 20px;">             
+            <div class="input-group" style="width: 250px;">
+                <span class="input-group-text bg-primary text-white border-0">
+                    <i class="fas fa-filter"></i>
+                </span>
+                <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none;">
+                    <option value="" selected disabled>Cari Berdasarkan</option>
+                    <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                    <option value="oldest" {{ request('filter') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                    <option value="az" {{ request('filter') == 'az' ? 'selected' : '' }}>Nama</option>
+                    <option value="page1" {{ request('filter') == 'page1' ? 'selected' : '' }}>Kategori LPK</option>
+                    <option value="page2" {{ request('filter') == 'page2' ? 'selected' : '' }}>Kategori LSP</option>
+                </select>
+            </div>
+            @if (request()->has('filter'))
+            <a href="{{ route('galeri.index') }}" class="btn btn-danger">
+                ✖ Reset
+            </a>
+        @endif
+    </div>
     </form>
 
     <!-- Table to display videos -->

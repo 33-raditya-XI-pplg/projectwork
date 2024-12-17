@@ -36,6 +36,12 @@ class VideoController extends Controller
             ->when($filter == 'az', function ($query) {
                 return $query->orderBy('nama', 'asc');
             })
+            ->when($filter == 'page1', function ($query) {
+                return $query->where('page_id', 1);
+            })
+            ->when($filter == 'page2', function ($query) {
+                return $query->where('page_id', 2);
+            })
             ->get();
         $Title = 'Management';
         $subtitle = 'Video';
