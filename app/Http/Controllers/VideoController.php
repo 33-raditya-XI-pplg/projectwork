@@ -29,8 +29,14 @@ class VideoController extends Controller
         $videos = Galeri::where('kategori', 'video')
             ->when($filter == 'latest', function ($query) {
                 return $query->orderBy('created_at', 'desc'); // Filter video terbaru
-            })->get();
-
+            })
+            ->when($filter == 'oldest', function ($query) {
+                return $query->orderBy('created_at', 'asc');
+            })
+            ->when($filter == 'az', function ($query) {
+                return $query->orderBy('nama', 'asc');
+            })
+            ->get();
         $Title = 'Management';
         $subtitle = 'Video';
         return view('admin.galeri.indexvideo', compact('videos', 'pages', 'Title', 'subtitle'));

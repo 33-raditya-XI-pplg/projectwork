@@ -166,10 +166,17 @@
             {{-- <a href="#addImageModal" data-bs-toggle="modal" class="btn btn-primary btn-block mt-3">Upload Gambar</a> --}}
 
             <form method="GET" action="{{ route('galeri.index') }}">
+                <div class="input-group mb-3" style="width: 250px; margin-left: 20px;">                  
+                    <span class="input-group-text bg-primary text-white border-0">
+                        <i class="fas fa-filter"></i>
+                    </span>
                 <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none; width: 180px;">
                     <option value="">Cari Berdasarkan</option>
-                    <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }} style="margin-right: 10px;">Terbaru</option>
+                    <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                    <option value="oldest" {{ request('filter') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+                    <option value="az" {{ request('filter') == 'az' ? 'selected' : '' }}> A - Z</option> 
                 </select>
+                </div>
             </form>
 
             <!-- Gallery Section -->

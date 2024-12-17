@@ -17,8 +17,15 @@ class GaleriController extends Controller
         $pages = Page::all();
         $filter = $request->input('filter');
         $galeri = Galeri::when($filter == 'latest', function ($query) {
-            return $query->orderBy('created_at', 'desc'); // Filter gambar terbaru
-        })->get();
+            return $query->orderBy('created_at', 'desc');
+        })
+            ->when($filter == 'oldest', function ($query) {
+                return $query->orderBy('created_at', 'asc');
+            })
+            ->when($filter == 'az', function ($query) {
+                return $query->orderBy('nama', 'asc');
+            })
+            ->get();
         $Title = 'Management';
         $subtitle = 'Galeri';
 

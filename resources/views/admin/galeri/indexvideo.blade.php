@@ -165,6 +165,8 @@
         <select name="filter" onchange="this.form.submit()" class="form-control" style="background-color: #0d76e7; color: white; border:none; width: 180px; margin-left: 20px;">
             <option value="">Cari Berdasarkan</option>
             <option value="latest" {{ request('filter') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+            <option value="oldest" {{ request('filter') == 'oldest' ? 'selected' : '' }}>Terlama</option>
+            <option value="az" {{ request('filter') == 'az' ? 'selected' : '' }}>A - Z</option>
         </select>
     </form>
 
