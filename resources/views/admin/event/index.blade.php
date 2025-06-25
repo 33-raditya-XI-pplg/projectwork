@@ -39,7 +39,7 @@
                 max-height: 100%;
                 object-fit: contain;
                 display: block;
-            }           
+            }
         </style>
     @endpush
 
@@ -81,8 +81,8 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="badge 
-                                        @if ($row->status == 'Publish') bg-primary 
+                                        <td><button type="button" class="badge
+                                        @if ($row->status == 'Publish') bg-primary
                                         @elseif ($row->status == 'Draft') bg-info
                                         @elseif ($row->status == 'Berlangsung') bg-secondary
                                         @elseif ($row->status == 'Selesai') bg-success
@@ -108,7 +108,7 @@
                                                             class="dropdown-item text-danger" data-confirm-delete="true"><i
                                                                 class="fa-regular fa-trash-can pe-none"></i>
                                                             Delete</a>
-                                                    </li>                                                   
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -353,7 +353,7 @@
                                     </select>
                             </div>
                             <div class="col">
-                                {{-- kanan --}}                             
+                                {{-- kanan --}}
                                     <div class="mb-3">
                                         <label for="nama_event" class="form-label ">Nama Event</label>
                                         <input type="text" class="form-control" name="nama_event" id="nama_event"
@@ -383,7 +383,7 @@
                                                 <option value="{{ $row->id_tempat }}" >{{ $row->nama_tempat }}</option>
                                                 @endforeach
                                             </select>
-                                    </div>                                
+                                    </div>
                             </div>
                             <div class="col">
                                 {{-- kiri --}}
@@ -406,7 +406,7 @@
                                     <label for="biaya_regis" class="form-label">Biaya</label>
                                     <div class="input-group mb-3 ">
                                         <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" required>
+                                        <input type="text" class="form-control currency" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" required>
                                     </div>
                                 </div>
                                   <div class="mb-3">
@@ -417,7 +417,7 @@
                                             <option class="text-capitalize">privat</option>
                                         </select>
                                 </div>
-                            </div>                          
+                            </div>
                             <div class="form-group mb-3">
                                 <label class="control-label mb-2">Upload Banner <span class="text-danger">*</span></label>
                                 <div class="dropzone-wrapper">
@@ -496,7 +496,7 @@
                                     </select>
                             </div>
                             <div class="col">
-                                {{-- kanan --}}                              
+                                {{-- kanan --}}
                                     <div class="mb-3">
                                         <label for="nama_event" class="form-label">Nama Event</label>
                                         <input type="text" class="form-control" name="nama_event" id="nama_event" value="{{ $row->nama_event }}"
@@ -524,7 +524,7 @@
                                                 <option value="{{ $set->id_tempat }}" {{ $set->id_tempat == $row->tempat_id ? 'selected' : '' }}>{{ $set->nama_tempat }}</option>
                                                 @endforeach
                                             </select>
-                                    </div>                            
+                                    </div>
                             </div>
                             <div class="col">
                                 {{-- kiri --}}
@@ -546,7 +546,7 @@
                                     <label for="biaya_regis" class="form-label">Biaya</label>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" value="{{ $row->biaya_regis }}" required>
+                                        <input type="text" class="form-control currency" aria-label="Dollar amount (with dot and two decimal places)" name="biaya_regis" value="{{ $row->biaya_regis }}" required>
                                     </div>
                                 </div>
                                   <div class="mb-3">
@@ -557,7 +557,7 @@
                                             <option class="text-capitalize"  {{ $row->visibilitas == 'privat' ? 'selected' : '' }}>privat</option>
                                         </select>
                                 </div>
-                            </div>                       
+                            </div>
                             <div class="mb-3">
                                 <label  class="control-label mb-2">Upload Banner <span class="text-danger">*</span></label>
                                 <div class="dropzone-wrapper">
@@ -601,7 +601,7 @@
                         <label for="status" class="me-3">Status </label>
                         <input class="form-check-input" type="checkbox" role="switch" id="status"
                                name="status_checkbox" {{ in_array($row->status, ['Selesai', 'Berlangsung', 'Publish']) ? 'checked' : '' }}>
-                        <input type="hidden" name="status" value="Draft"> 
+                        <input type="hidden" name="status" value="Draft">
                     </div>
                     <div>
                         <button type="button" class="btn btn-danger rounded-3"
@@ -620,12 +620,12 @@
     {{-- <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder'); 
-            
+            var placeholder = $(this).data('placeholder');
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
     });
@@ -638,12 +638,12 @@
                 hiddenInput.value = statusCheckbox.checked ? 'Publish' : 'Draft';
 
                 statusCheckbox.addEventListener('change', function() {
-                    hiddenInput.value = this.checked ? 'Publish' : 'Draft'; 
+                    hiddenInput.value = this.checked ? 'Publish' : 'Draft';
             });
         });
         </script>
     {{-- dropzone create --}}
-    <script>    
+    <script>
      document.addEventListener('DOMContentLoaded', function() {
         // Inisialisasi preview image
         const inputFile = document.querySelector('input[name="path_banner"]');
@@ -678,16 +678,16 @@
         } else {
             console.error('Preview image element not found');
         }
-    
+
 
         // Inisialisasi Dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone(".dropzone-wrapper", {
             url: "/event", // URL server untuk unggahan
-            maxFilesize: 2, 
+            maxFilesize: 2,
             acceptedFiles: "image/*",
             init: function() {
-                this.on("success", function(file, response) {                    
+                this.on("success", function(file, response) {
                     // Tangani response sukses
                     console.log("Upload successful");
                 });
@@ -700,7 +700,7 @@
             }
         });
     });
-</script> 
+</script>
 {{-- dropzone edit --}}
 <script>
   document.querySelectorAll('[id^="path_banner"]').forEach(input => {
@@ -725,5 +725,25 @@
   });
 </script>
 
+<script src="
+https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js
+"></script>
+<script>
+    var cleave = document.getElementsByClassName('currency');
+    for (let index = 0; index < cleave.length; index++) {
+        const element = cleave[index];
+        new Cleave(element, {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+    }
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script>
+    var myNumeral = numeral(1000);
+
+    var value = myNumeral.value();
+</script>
 @endsection
 

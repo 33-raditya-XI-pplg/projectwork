@@ -180,7 +180,10 @@ class EventController extends Controller
             $data['path_banner'] = "/storage/banner-evt/$filename";
         }
 
-        $evt->update($data);
+        $finalData = $request->except(['biaya_regis']);
+        $finalData['biaya_regis'] = (int) str_replace(',', '', $request->biaya_regis);
+
+        $evt->update($finalData);
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diubah.');
         // dd($status);
         // dd($request->all());
