@@ -55,8 +55,7 @@ class EventUsersController extends Controller
         confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?'); // Include SweetAlert to View
         $userID = Auth::user()->id_user;
 
-        $data_event = DB::table('tb_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+        $data_event = Event::findOrFail($eventID)
             ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
             ->select(
                 'tb_event.nama_event',
@@ -67,7 +66,7 @@ class EventUsersController extends Controller
                 'tb_event.tgl_berakhir',
                 'tb_tempat.nama_tempat'
             )
-            ->where('tb_event_skema.event_id', $eventID)
+            ->where('tb_event.id_event', $eventID)
             ->first();
 
         $data_skema = DB::table('tb_event')
