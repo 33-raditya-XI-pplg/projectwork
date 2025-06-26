@@ -102,6 +102,8 @@ class EventController extends Controller
             $data['path_banner'] = "/storage/banner-evt/$filename";
         }
 
+        $data['biaya_regis'] = (int) str_replace(',', '', $request->biaya_regis);
+        $data['biaya_regis'] = '' . $data['biaya_regis'] . '';
         Event::create($data);
 
         Alert::success('Berhasil Tersimpan!', 'Data berhasil diperbarui.');

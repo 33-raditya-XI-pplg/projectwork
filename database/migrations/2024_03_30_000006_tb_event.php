@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->date('tgl_mulai');
             $table->date('tgl_berakhir');
 
-            $table->integer('biaya_regis');
+            $table->decimal('biaya_regis', 15, 2);
             $table->string('path_banner');
             $table->longText('deskripsi')->nullable();
 
