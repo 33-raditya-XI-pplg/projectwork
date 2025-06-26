@@ -95,66 +95,50 @@ class EventUsersController extends Controller
         return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner', 'Title', 'subtitle'));
     }
 
-    public function mendaftar(Request $request)
-    {
-        $userID = Auth::user()->id_user;
+public function mendaftar(Request $request)
+{
+    $userID = Auth::user()->id_user;
 
-        $isRegistered = DB::table('tb_peserta')
-            ->where('user_id', $userID)
-            ->where('event_skema_id', $request->event_skema_id)
-            ->exists();
+    // Cek apakah sudah terdaftar
+    $isRegistered = DB::table('tb_peserta')
+        ->where('user_id', $userID)
+        ->where('event_skema_id', $request->event_skema_id)
+        ->exists();
 
-        if ($isRegistered) {
-            Alert::error('Gagal Mendaftar!', 'Anda sudah terdaftar di event ini');
-            return redirect()->back();
-        }
-
-        $eventSkema = DB::table('tb_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->where('id_event_skema', $request->event_skema_id)
-            ->select('tb_event_skema.*', 'tb_event.biaya_regis')
-            ->first();
-
-        if (!$eventSkema) {
-            Alert::error('Gagal Mendaftar!', 'Event skema tidak ditemukan.');
-            return redirect()->back();
-        }
-
-        if ($eventSkema->biaya_regis > 0) {
-
-            $uploadPembayaran = DB::table('tb_upload_pembayaran')
-                ->where('user_id', $userID)
-                ->where('event_skema_id', $eventSkema->id_event_skema)
-                ->first();
-
-            if (!$uploadPembayaran) {
-                Alert::error('Gagal mendaftar!', 'Anda belum melakukan pembayaran untuk event ini.');
-                return redirect()->back();
-            }
-
-            if ($uploadPembayaran->status_pembayaran !== 'Sudah Dibayar') {
-                Alert::error('Gagal mendaftar!', 'Status pembayaran Anda belum terkonfirmasi.');
-                return redirect()->back();
-            }
-
-            DB::table('tb_peserta')->insert([
-                'user_id' => $userID,
-                'event_skema_id' => $request->event_skema_id,
-                'upload_pembayaran_id' => $uploadPembayaran->id_upload_pembayaran,
-                'created_by' => $userID,
-                'created_at' => now()
-            ]);
-        } else {
-            DB::table('tb_peserta')->insert([
-                'user_id' => $userID,
-                'event_skema_id' => $request->event_skema_id,
-                'created_by' => $userID,
-                'created_at' => now()
-            ]);
-        }
-
-        Alert::success('Berhasil Mendaftar!', 'Data berhasil ditambahkan.');
+    if ($isRegistered) {
+        Alert::error('Gagal Mendaftar!', 'Anda sudah terdaftar di event ini.');
         return redirect()->back();
     }
+
+    // Cek detail skema
+    $eventSkema = DB::table('tb_event_skema')
+        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+        ->where('id_event_skema', $request->event_skema_id)
+        ->select('tb_event_skema.*', 'tb_event.biaya_regis')
+        ->first();
+
+    if (!$eventSkema) {
+        Alert::error('Gagal Mendaftar!', 'Event skema tidak ditemukan.');
+        return redirect()->back();
+    }
+
+    // Simpan ke tabel peserta, tanpa cek status pembayaran
+    $pesertaId = DB::table('tb_peserta')->insertGetId([
+        'user_id' => $userID,
+        'event_skema_id' => $request->event_skema_id,
+        'created_by' => $userID,
+        'created_at' => now()
+    ]);
+
+    // Jika event berbayar, arahkan ke halaman upload bukti pembayaran
+    if ($eventSkema->biaya_regis > 0) {
+        Alert::success('Berhasil Mendaftar!', 'Silakan unggah bukti pembayaran.');
+      return redirect()->route('uploadPembayaran-user.index'); // atau route ke halaman upload kamu
+    }
+
+    // Jika gratis, selesai
+    Alert::success('Berhasil Mendaftar!', 'Anda berhasil terdaftar.');
+    return redirect()->back();
+}
 
 }

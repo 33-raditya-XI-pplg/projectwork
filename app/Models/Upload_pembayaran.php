@@ -20,7 +20,7 @@ class Upload_pembayaran extends Model
         'updated_by',
     ];
     protected $attributes = [
-        'status_pembayaran' => 'Belum Dibayar' // Default value
+        'status_pembayaran' => '' // Default value
     ];
     public function event()
     {

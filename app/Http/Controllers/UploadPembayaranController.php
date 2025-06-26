@@ -20,7 +20,7 @@ class UploadPembayaranController extends Controller
 
         if (auth()->user()->level === 'Admin') {
             // Admin Query: Join `tb_event_skema` -> `tb_event` -> `tb_upload_pembayaran`
-            $upload = \DB::table('tb_event_skema')
+            $upload = DB::table('tb_event_skema')
                 ->leftJoin('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                 ->leftJoin('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
                 ->leftJoin('tb_upload_pembayaran', 'tb_event_skema.id_event_skema', '=', 'tb_upload_pembayaran.event_skema_id')
@@ -48,7 +48,7 @@ class UploadPembayaranController extends Controller
             $userId = auth()->user()->id_user;
 
             // User Query: Join `tb_event_skema` -> `tb_event` -> `tb_upload_pembayaran`
-            $upload = \DB::table('tb_event_skema')
+            $upload = DB::table('tb_event_skema')
                 ->leftJoin('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                 ->leftJoin('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
                 ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
@@ -91,7 +91,7 @@ class UploadPembayaranController extends Controller
         $userId = auth()->user()->id_user;
 
         // Ambil data peserta dari tabel tb_peserta berdasarkan user yang login
-        $peserta = \DB::table('tb_user')
+        $peserta = DB::table('tb_user')
             ->where('id_user', $userId)
             ->first();
 
@@ -111,7 +111,7 @@ class UploadPembayaranController extends Controller
             'bukti_pembayaran' => $path,
         ]);
 
-        // dd($request->all()); 
+        // dd($request->all());
 
         if ($upload) {
             return redirect()->back()->with('success', 'Pembayaran berhasil diunggah. Status: Menunggu');
@@ -142,7 +142,7 @@ class UploadPembayaranController extends Controller
             // Tambahkan Alert jika pembayaran diselesaikan
             // Alert::success('Pembayaran Diselesaikan', 'Pembayaran telah diselesaikan.');
         }
-        //hapus database dengan status_belum dibayar 
+        //hapus database dengan status_belum dibayar
         DB::transaction(function () use ($upload, $id_upload_pembayaran) {
             DB::table('tb_upload_pembayaran')
                 ->where('user_id', $upload->user_id)
@@ -155,7 +155,7 @@ class UploadPembayaranController extends Controller
     public function getSkema($eventId)
     {
         // Ambil semua event skema yang memiliki id_event yang sama
-        $events = \DB::table('tb_event_skema')->where('event_id', $eventId)->get();
+        $events = DB::table('tb_event_skema')->where('event_id', $eventId)->get();
         // Cek apakah ada event yang ditemukan
         if ($events->isEmpty()) {
             return response()->json(['error' => 'Event tidak ditemukan.'], 404);
@@ -165,7 +165,7 @@ class UploadPembayaranController extends Controller
         // Iterasi setiap event dan ambil skema yang terkait dengan skema_id
         foreach ($events as $event) {
             if ($event->skema_id) {
-                $skema = \DB::table('tb_skema')->where('id_skema', $event->skema_id)->first();
+                $skema = DB::table('tb_skema')->where('id_skema', $event->skema_id)->first();
                 if ($skema) {
                     $allSkema[] = $skema;
                 }
