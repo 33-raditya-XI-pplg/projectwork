@@ -67,6 +67,8 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']
     Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 
     Route::resource('uploadPembayaran-user', UploadPembayaranController::class);
+    Route::get('/upload/create/{eventId}', [UploadPembayaranController::class, 'create']);
+
 
     Route::resource('testimoni-user', TestimoniUserController::class)->except(['show']);
     Route::get('testimoni-user/{id}/detail', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
@@ -203,7 +205,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
         Route::put('/admin/page/{id}', [PageController::class, 'update'])->name('page.update');
         Route::get('/admin/page/{id}/edit', [PageController::class, 'edit'])->name('page.edit');
 
-        // blog 
+        // blog
 
         // Route::resource('/blog', BlogController::class);
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.indek');
@@ -269,7 +271,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
 });
 Route::get('/getSkema/{id_event}', [UploadPembayaranController::class, 'getSkema']);
 
-// AJAX Request -- Menu Laporan 
+// AJAX Request -- Menu Laporan
 Route::get('/laporanperkembangan/fetchEventData/{id}', [LaporanPerkembanganController::class, 'fetchEventData']);
 Route::get('laporanperkembangan/fetchSkemaData/{id}', [LaporanperkembanganController::class, 'fetchSkemaData']);
 Route::get('laporanperkembangan/fetchPesertaData/{id}', [LaporanperkembanganController::class, 'fetchPesertaData']);
@@ -325,4 +327,5 @@ Route::post('/testimoni-user', [TestimoniUserController::class, 'store'])->name(
 Route::get('/testimoni-user', [TestimoniUserController::class, 'index'])->name('testimoni-user.indek');
 Route::put('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'update'])->name('testimoni-user.update');
 // Route::get('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
+Route::get('/cek-peserta/{event_skema_id}', [UploadPembayaranController::class, 'cekPeserta']);
 

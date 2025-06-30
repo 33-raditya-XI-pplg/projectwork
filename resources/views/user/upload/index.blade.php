@@ -89,8 +89,7 @@
                                             <i class="fa fa-eye"></i> Lihat
                                         </a>
                                     @else
-                                        <a href="#" class="btn btn-secondary btn-sm rounded" data-bs-toggle="modal"
-                                            data-bs-target="#uploadModal" data-id="{{ $row->id_event_skema }}">
+                                        <a href="#" class="btn btn-secondary btn-sm rounded" data-id="{{ $row->id_event_skema }}">
                                             <i class="fa fa-money-bill-1-wave"></i> Bayar
                                         </a>
                                     @endif
@@ -223,47 +222,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var uploadModal = document.getElementById('uploadModal');
-            uploadModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget;
-                var eventId = button.getAttribute('data-id');
-                // var status = button.getAttribute('data-status');
-                // var file = button.getAttribute('data-file');
-
-                var eventInput = document.getElementById('event_skema_id');
-                // var uploadSection = document.getElementById('uploadSection');
-                console.log(document.getElementById('event_skema_id').value);
-                // var viewSection = document.getElementById('viewSection');
-                // var buktiPembayaranLink = document.getElementById('bukti_pembayaran')
-                // var submitButton = document.getElementById('submitButton');
-                if (eventInput) {
-                    eventInput.value = eventId;
-                    // }
-
-                    // if(status === 'Menunggu'){
-                    //     uploadSection.style.display='none';
-                    //     viewSection.style.display='block';
-                    //     buktiPembayaranLink.href=file;
-                    //     buktiPembayaranLink.innerText='Lihat Bukti Pembayaran';
-                } else {
-                    console.error('Hidden input with ID "event_id" not found.');
-                    // uploadSection.style.display = 'block';
-                    // viewSection.style.display = 'none';
-                }
-                document.getElementById('upload_file').addEventListener('change', function(event) {
+            // Preview image on file input change
+            var uploadFileInput = document.getElementById('upload_file');
+            if (uploadFileInput) {
+                uploadFileInput.addEventListener('change', function(event) {
                     const file = event.target.files[0];
                     const preview = document.getElementById('preview_image');
-
                     if (file) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
                             preview.src = e.target.result;
-                            preview.style.display = 'block'; // Show the image preview
+                            preview.style.display = 'block';
                         }
                         reader.readAsDataURL(file);
                     }
                 });
-            });
+            }
         });
     </script>
     {{-- upload gambar  --}}
@@ -280,4 +254,56 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn[data-id]').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var eventId = this.getAttribute('data-id');
+                    fetch('/cek-peserta/' + eventId)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status) {
+                                var uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
+                                uploadModal.show();
+                                document.getElementById('event_skema_id').value = eventId;
+                            } else {
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Tidak Bisa Upload',
+                                        text: data.message,
+                                        confirmButtonColor: '#3085d6',
+                                        confirmButtonText: 'OK'
+                                    });
+                                } else {
+                                    alert(data.message);
+                                }
+                            }
+                        });
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var uploadModalEl = document.getElementById('uploadModal');
+            if (uploadModalEl) {
+                uploadModalEl.addEventListener('hidden.bs.modal', function () {
+                    var fileInput = document.getElementById('upload_file');
+                    var previewImg = document.getElementById('preview_image');
+                    if (fileInput) fileInput.value = '';
+                    if (previewImg) {
+                        previewImg.src = '';
+                        previewImg.style.display = 'none';
+                    }
+
+                    document.getElementsByClassName('modal-backdrop').forEach(function(element) {
+                        element.remove();
+                    });
+                });
+            }
+        });
+    </script>
 @endsection

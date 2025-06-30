@@ -177,7 +177,20 @@ class UploadPembayaranController extends Controller
         }
         return response()->json($allSkema); // Kembalikan semua skema yang ditemukan
     }
-
+    
+    public function cekPeserta($event_skema_id)
+    {
+        $userId = auth()->user()->id_user;
+        $peserta = DB::table('tb_peserta')
+            ->where('user_id', $userId)
+            ->where('event_skema_id', $event_skema_id)
+            ->first();
+        if ($peserta) {
+            return response()->json(['status' => true]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Anda belum terdaftar sebagai peserta pada event/skema ini.']);
+        }
+    }
 
 
 }
