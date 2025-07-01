@@ -43,17 +43,19 @@ class UploadPembayaranController extends Controller
 
             $Title = 'Upload Pembayaran';
             return view('admin.upload.index', compact('upload', 'Title'));
-
         } elseif (auth()->user()->level === 'Pengguna') {
             $userId = auth()->user()->id_user;
 
-            // User Query: Join `tb_event_skema` -> `tb_event` -> `tb_upload_pembayaran`
             $upload = DB::table('tb_event_skema')
                 ->leftJoin('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                 ->leftJoin('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
                 ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
                     $join->on('tb_event_skema.id_event_skema', '=', 'tb_upload_pembayaran.event_skema_id')
                         ->where('tb_upload_pembayaran.user_id', '=', $userId);
+                })
+                ->join('tb_peserta', function ($join) use ($userId) {
+                    $join->on('tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+                        ->where('tb_peserta.user_id', '=', $userId);
                 })
                 ->where('tb_event.status', 'Berlangsung')
                 ->where('tb_event.biaya_regis', '>', 0)
@@ -64,19 +66,15 @@ class UploadPembayaranController extends Controller
                     'tb_event.nama_event',
                     'tb_upload_pembayaran.bukti_pembayaran',
                     'tb_upload_pembayaran.status_pembayaran',
-                    // 'tb_upload_pembayaran.event_skema_id',
                     'tb_event.tgl_mulai',
                     'tb_event.tgl_berakhir',
                     'tb_event.status'
                 )
                 ->get();
-            // ->groupBy('nama_event');
 
-            // dd($upload);
             $Title = 'Upload Pembayaran';
             return view('user.upload.index', compact('upload', 'Title'));
         }
-
     }
     public function store(Request $request)
     {
@@ -177,7 +175,7 @@ class UploadPembayaranController extends Controller
         }
         return response()->json($allSkema); // Kembalikan semua skema yang ditemukan
     }
-    
+
     public function cekPeserta($event_skema_id)
     {
         $userId = auth()->user()->id_user;
@@ -191,6 +189,4 @@ class UploadPembayaranController extends Controller
             return response()->json(['status' => false, 'message' => 'Anda belum terdaftar sebagai peserta pada event/skema ini.']);
         }
     }
-
-
 }

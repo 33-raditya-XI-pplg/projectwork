@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     </script>
-
+{{-- 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var uploadModalEl = document.getElementById('uploadModal');
@@ -305,5 +305,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         });
-    </script>
+    </script> --}}
 @endsection
