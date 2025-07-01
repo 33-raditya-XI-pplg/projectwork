@@ -37,24 +37,24 @@
     border: 2px dashed #ddd;
     background-color: #f9f9f9;
     position: relative;
-    cursor: pointer; 
+    cursor: pointer;
 }
    #image_preview_ {
        display: flex;
        align-items: center;
        justify-content: center;
-       width: 100%; 
-       height: auto; 
-       max-width: 200px; 
-       max-height: 200px; 
+       width: 100%;
+       height: auto;
+       max-width: 200px;
+       max-height: 200px;
        overflow: hidden;
-       margin: 0 auto; 
+       margin: 0 auto;
    }
    #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
-    display: block; 
+    object-fit: contain;
+    display: block;
 }
    </style>
 
@@ -81,7 +81,7 @@
                             <td>{{ $row->jabatan_penguji }}</td>
                             <td>
                                 @php
-                                $statusClass = 'bg-danger';   
+                                $statusClass = 'bg-danger';
                                 $statusLabel = 'Belum Verified';
 
                                 if($row->status == 'Verified'){
@@ -95,7 +95,7 @@
                             <button type="button"
                                 class="badge rounded-3 {{ $statusClass }}"
                                 onclick="toggleStatus({{ $row->id_user }},this)">
-                                {{ $statusLabel}}                                
+                                {{ $statusLabel}}
                             </button>
                             </td>
                             <td>
@@ -116,7 +116,7 @@
                                         <li><a href="{{ route('penguji.destroy', $row->id_user) }}" class="dropdown-item text-danger"
                                                 data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
                                                 Delete</a>
-                                        </li>                                      
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
@@ -158,7 +158,7 @@
                                 </select>
                             </div>
                             <div class="col">
-                                {{-- kanan --}}                        
+                                {{-- kanan --}}
                                     <div class="mb-3">
                                         <label for="nama_lengkap" class="form-label">Nama Mentor</label>
                                         <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap"
@@ -167,9 +167,9 @@
                                     <div class="mb-3">
                                         <label for="instansi_id" class="form-label">Instansi</label>
                                         <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi" required>
-                                            <option value="" disabled selected></option> 
+                                            <option value="" disabled selected></option>
                                             @foreach ($institutions as $id_instansi => $name)
-                                                <option value="{{ $id_instansi }}" {{ old('instansi_id') == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                         
+                                                <option value="{{ $id_instansi }}" {{ old('instansi_id') == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -212,13 +212,13 @@
                                 </div>
                                 <div class="mb-2">
                                     <label for="jabatan_penguji" class="form-label">Jabatan</label>
-                                    <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji" 
+                                    <input type="text" class="form-control" name="jabatan_penguji" id="jabatan_penguji"
                                     value="{{old('jabatan_penguji', isset($pengguji) ? $pengguji->jabatan_penguji : '') }}" required>
                                 </div>
                                 <div class="mb-5">
                                     <label for="alamat_kota" class="form-label">Kota</label>
-                                    <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota" data-placeholder="Pilih Kota" required>                                   
-                                        <option value="" disabled selected></option> 
+                                    <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota" data-placeholder="Pilih Kota" required>
+                                        <option value="" disabled selected></option>
                                         @foreach ($regencies as $id => $name)
                                         <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
                                         @endforeach
@@ -229,20 +229,20 @@
                                 </div>
                                 <div class="mb-4 mt-5">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" 
+                                    <input type="email" class="form-control" name="email" id="email"
                                     value="{{old('email', isset($pengguji) ? $pengguji->email : '') }}"  required>
                                     @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                    @enderror
-                                </div>   
+                                </div>
                                 <div class="mb-3 mt-5">
                                     <label for="keahlian" class="form-label">Keahlian</label>
                                     <textarea name="keahlian" id="keahlian" class="form-control"  rows="2">{{ old('keahlian',isset($pengguji) ? $pengguji->keahlian : '') }}</textarea>
-                                </div>                            
+                                </div>
                                 <div class="mb-3 ">
                                     <label for="pengalaman" class="form-label">Pengalaman Berapa Tahun</label>
                                     <textarea name="pengalaman" id="pengalaman" class="form-control"  rows="2">{{ old('pengalaman',isset($pengguji) ? $pengguji->pengalaman : '') }}</textarea>
-                                </div>                            
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -279,7 +279,7 @@
                 <form action="{{ route('penguji.update', $row->id_user) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">   
+                        <input type="hidden" name="updated_by" value="{{ Auth::user()->id_user }}">
 
                     <div class="modal-body">
                         {{-- {{ dd($row) }} --}}
@@ -296,7 +296,7 @@
                                         </select>
                                 </div>
                                 <div class="col">
-                                    {{-- kanan --}}                                                                    
+                                    {{-- kanan --}}
                                         <div class="mb-3">
                                             <label for="nama_lengkap" class="form-label">Nama Mentor</label>
                                             <input type="text" class="form-control" name="nama_lengkap"
@@ -305,9 +305,9 @@
                                         <div class="mb-4">
                                             <label for="instansi_id_{{ $row->id_user }}" class="form-label">Instansi</label>
                                             <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id_{{ $row->id_user }}" data-placeholder="Pilih Instansi" required>
-                                                <option value="" disabled selected></option> 
+                                                <option value="" disabled selected></option>
                                                 @foreach ($institutions as $id_instansi => $name)
-                                                    <option value="{{ $id_instansi }}" {{ old('instansi_id', $row->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                        
+                                                    <option value="{{ $id_instansi }}" {{ old('instansi_id', $row->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -359,7 +359,7 @@
                                                 <div class="mb-2">
                                                     <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota</label>
                                                     <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_user }}" data-placeholder="Pilih Kota" required>
-                                                        <option value="" disabled selected></option> 
+                                                        <option value="" disabled selected></option>
                                                         @foreach ($regencies as $id => $name)
                                                             <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
                                                         @endforeach
@@ -371,15 +371,15 @@
                                                 <div class="mb-3 mt-5">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="email" class="form-control" name="email" id="email" value="{{ $row->email }}" required>
-                                                </div>  
+                                                </div>
                                                 <div class="mb-3 mt-5">
                                                     <label for="keahlian" class="form-label">Keahlian</label>
                                                     <textarea name="keahlian" id="keahlian" class="form-control"  rows="2">{{ $row->keahlian }}</textarea>
-                                                </div>                            
+                                                </div>
                                                 <div class="mb-3 ">
                                                     <label for="pengalaman" class="form-label">Pengalaman Berapa Tahun</label>
                                                     <textarea name="pengalaman" id="pengalaman" class="form-control"  rows="2">{{ $row->pengalaman }}</textarea>
-                                                </div>                            
+                                                </div>
 
                                             </div>
                                         </div>
@@ -405,7 +405,7 @@
         </div>
     @endforeach
 
-  
+
 
 <!-- Include JS Select2 -->
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
@@ -413,17 +413,17 @@
     {{-- <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder'); 
-            
+            var placeholder = $(this).data('placeholder');
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
     });
     </script> --}}
-    <script>    
+    <script>
     function toggleStatus(userId, button) {
     if (!button) {
             console.error('Elemen button tidak terdefinisi');
@@ -526,16 +526,16 @@
         } else {
             console.error('Preview image element not found');
         }
-    
+
 
         // Inisialisasi Dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone(".dropzone-wrapper", {
             url: "/penguji", // URL server untuk unggahan
-            maxFilesize: 2, 
+            maxFilesize: 2,
             acceptedFiles: "image/*",
             init: function() {
-                this.on("success", function(file, response) {                    
+                this.on("success", function(file, response) {
                     // Tangani response sukses
                     console.log("Upload successful");
                 });
@@ -547,8 +547,8 @@
                 });
             }
         });
-    }); 
-</script> 
+    });
+</script>
 <script>
   document.querySelectorAll('[id^="path_foto"]').forEach(input => {
     input.addEventListener('change', function(event) {

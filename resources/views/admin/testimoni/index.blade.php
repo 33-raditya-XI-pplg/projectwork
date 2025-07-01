@@ -54,18 +54,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%; 
-    height: auto; 
-    max-width: 200px; 
-    max-height: 200px; 
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    max-height: 200px;
     overflow: hidden;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
-    display: block; 
+    object-fit: contain;
+    display: block;
 }
 
 </style>
@@ -123,54 +123,51 @@
                                             {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                         </button>
                                     </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                id="dropdownMenuButton{{ $row->id_testimoni }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa-solid fa-bars"></i>
-                                            </a>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_testimoni }}">
-                                                <li>
-                                                    <a class="dropdown-item text-black" href="{{ route('testimoni.show', $row->id_testimoni) }}">
-                                                        <i class="fa-solid fa-code pe-none"></i> Rincian
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_testimoni }}">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <form id="deleteForm{{ $row->id_testimoni }}" action="{{ route('testimoni.destroy', $row->id_testimoni) }}" method="POST" style="display: inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_testimoni }}')">
-                                                            <i class="fa-regular fa-trash-can pe-none"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('testimoni.show', $row->id_testimoni) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
 
-                                        <script>
-                                            function confirmDelete(testimoniId) {
-                                                Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: "You won't be able to revert this!",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Yes, delete it!',
-                                                    cancelButtonText: 'Cancel'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        document.getElementById('deleteForm' + testimoniId).submit();
-                                                    }
-                                                });
-                                            }
-                                        </script>
-                                    </td>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_testimoni }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
+
+        <form id="deleteForm{{ $row->id_testimoni }}" action="{{ route('testimoni.destroy', $row->id_testimoni) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $row->id_testimoni }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(testimoniId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + testimoniId).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -319,9 +316,9 @@
 
                         <div class="mb-3">
                             <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
-                            <label for="nama" class="form-label">Nama</label>               
+                            <label for="nama" class="form-label">Nama</label>
                             <input type="text" class="form-control" name="nama" id="nama" value="{{ $row->user->nama_lengkap }}" readonly disabled>
-                        
+
                         </div>
 
                         <div class="mb-3">
@@ -343,7 +340,7 @@
                                 <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
                                 <label for="rating" class="form-label">Rating</label>
                                 <div class="d-flex align-items-center position-relative">
-                                    <input type="text" class="form-control" disabled readonly style="padding-right: 30px;">                           
+                                    <input type="text" class="form-control" disabled readonly style="padding-right: 30px;">
                                     <div class="position-absolute" style="top: 50%; right: 640px; transform: translateY(-50%);">
                                         @for ($i = 1; $i <= 5; $i++)
                                             <i class="fa fa-star {{ $i <= $row->rating ? 'text-warning' : 'text-muted' }}"></i>
@@ -351,7 +348,7 @@
                                     </div>
                                 </div>
                             </div>
-                                                                              
+
                         </div>
 
                         <div class="mb-3">
@@ -363,7 +360,7 @@
                         <div class="mb-3">
                             <p class="text-danger">Field ini tidak dapat diedit oleh admin.</p>
                             <label for="photo" class="form-label">Foto</label>
-                            <div class="dropzone-wrapper">                             
+                            <div class="dropzone-wrapper">
                                 <div id="image_preview_" class="mt-3 d-flex justify-content-center">
                                         @if ($row->photo)
                                             <img  src="{{ asset( $row->photo) }}" alt="Testimoni Foto" class="img-thumbnail mt-2" style="max-height: 100px max-widht:100px;">
@@ -371,9 +368,9 @@
                                             <p>Tidak ada foto yang diunggah.</p>
                                         @endif
                                         <input type="hidden" name="photo" value="{{ $row->photo }}">
-                                </div>                                
-                            </div>                       
-                        </div>                 
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="mb-3">
                             <p class="text-primary">Field ini dapat diedit oleh admin.</p>
@@ -398,7 +395,7 @@
         </div>
     </div>
     @endforeach
-    
+
     <!-- Testimonials Section -->
     {{-- <div class="section__container">
         <div class="header">
@@ -416,14 +413,14 @@
                     @if ($testimonial->photo)
                         <img src="{{ asset('storage/' . $testimonial->photo) }}" alt="user" />
                     @endif
-    
+
                     <!-- Rating Stars -->
                     <div class="rating">
                         @for ($i = 1; $i <= 5; $i++)
                             <i class="fa {{ $i <= $testimonial->rating ? 'fa-star filled' : 'fa-star' }}"></i>
                         @endfor
                     </div>
-    
+
                     <p class="name">{{ $testimonial->nama }}</p>
                 </div>
             @endforeach
@@ -442,14 +439,14 @@
       $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder');
-            
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
-    });   
+    });
 </script> --}}
 
 <!-- Add this script in your Blade view, preferably at the bottom -->
@@ -487,7 +484,7 @@
     });
 </script>
 
-<script>    
+<script>
     document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi preview image
     const inputFile = document.querySelector('input[name="photo"]');
@@ -528,10 +525,10 @@
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone-wrapper", {
         url: "/testimoni", // URL server untuk unggahan
-        maxFilesize: 2, 
+        maxFilesize: 2,
         acceptedFiles: "image/*",
         init: function() {
-            this.on("success", function(file, response) {                    
+            this.on("success", function(file, response) {
                 // Tangani response sukses
                 console.log("Upload successful");
             });
@@ -542,9 +539,9 @@
                 }
             });
         }
-    });   
-});   
-</script> 
+    });
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

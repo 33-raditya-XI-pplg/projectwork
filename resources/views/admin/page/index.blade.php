@@ -46,54 +46,51 @@
                             {{ $page->status ? 'Aktif' : 'Non-Aktif' }}
                         </button>
                     </td>
-                    <td>
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton{{ $page->id_page }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </a>
+                   <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('page.show', $page->id_page) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
 
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $page->id_page }}">
-                                <li>
-                                    <a class="dropdown-item text-black" href="{{ route('page.show', $page->id_page) }}">
-                                        <i class="fa-solid fa-code pe-none"></i> Rincian
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $page->id_page }}">
-                                        <i class="fa-regular fa-pen-to-square"></i> Edit
-                                    </a>
-                                </li>                            
-                                <li>
-                                    <form id="deleteForm{{ $page->id_page }}" action="{{ route('page.destroy', $page->id_page) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $page->id_page }}')">
-                                            <i class="fa-regular fa-trash-can pe-none"></i> Delete
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $page->id_page }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
 
-                            <script>
-                                function confirmDelete(pageId) {
-                                    Swal.fire({
-                                        title: 'Are you sure?',
-                                        text: "You won't be able to revert this!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes, delete it!',
-                                        cancelButtonText: 'Cancel'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            document.getElementById('deleteForm' + pageId).submit();
-                                        }
-                                    });
-                                }
-                            </script>
-                        </div>
-                    </td>
+        <form id="deleteForm{{ $page->id_page }}" action="{{ route('page.destroy', $page->id_page) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $page->id_page }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span class="text-white">Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(pageId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + pageId).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                 </tr>
                 <!-- Modal for Adding Page -->
 

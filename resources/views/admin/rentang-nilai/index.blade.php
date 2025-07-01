@@ -16,17 +16,17 @@
         </thead>
         <tbody class="" style="vertical-align: middle">
             @foreach ($rentang as $row)
-                <?php 
+                <?php
                     if ($row->keterangan_rentang_nilai === "Sangat Kompeten" || $row->keterangan_rentang_nilai === "Cukup Kompeten") {
                         $color = 'color: green; font-weight: bold;';
-                    } 
+                    }
                     elseif ($row->keterangan_rentang_nilai === "Kurang Kompeten" || $row->keterangan_rentang_nilai === "Tidak Kompeten") {
                         $color = 'color: red; font-weight: normal;';
                     } else {
                         $color = 'color: black; font-weight: normal;';
                     }
                 ?>
-                
+
                 <tr>
                     <th scope="row">{{ $loop->index + 1 }}</th>
                     <td>{{ $row->nama_konversi_nilai }}</td>
@@ -34,23 +34,22 @@
                     <td style="{{ $color }}">{{ $row->keterangan_rentang_nilai }}</td>
                     <td>{{ $row->rentang_atas }}</td>
                     <td>{{ $row->rentang_bawah }}</td>
-                    <td>
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                        data-bs-target="#edit{{ $row->id_rentang_nilai }}"><i
-                                            class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                <li><a href="{{ route('rentang-nilai.destroy', $row->id_rentang_nilai) }}" class="dropdown-item text-danger"
-                                        data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                        Delete</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
+                    <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_rentang_nilai }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        <a href="{{ route('rentang-nilai.destroy', $row->id_rentang_nilai) }}" data-confirm-delete="true"
+            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Delete</span>
+        </a>
+    </div>
+</td>
+
                 </tr>
             @endforeach
         </tbody>
@@ -95,7 +94,7 @@
                         <td><span style="color: green; font-weight: bold;">Sangat Kompeten</span></td>
                         <td>100</td>
                         <td>94</td>
-                    </tr>        
+                    </tr>
                     <tr>
                         <th scope="row">2</th>
                         <td>konversi_abcd</td>
@@ -103,7 +102,7 @@
                         <td><span style="color: green; font-weight: bold;">Cukup Kompeten</span></td>
                         <td>93</td>
                         <td>84</td>
-                    </tr>   
+                    </tr>
                     <tr>
                         <th scope="row">3</th>
                         <td>konversi_abcd</td>
@@ -111,7 +110,7 @@
                         <td><span style="color: red; font-weight: bold;">Kurang Kompeten</span></td>
                         <td>83</td>
                         <td>74</td>
-                    </tr>   
+                    </tr>
                     <tr>
                         <th scope="row">4</th>
                         <td>konversi_abcd</td>
@@ -119,7 +118,7 @@
                         <td><span style="color: red; font-weight: bold;">Tidak Kompeten</span></td>
                         <td>73</td>
                         <td>0</td>
-                    </tr>   
+                    </tr>
                 </tbody>
             </table>
 
@@ -178,16 +177,16 @@
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
                                     <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" required>
                                 </div>
-                            </div>                         
+                            </div>
                             <div class="col">
                                 <div class="mb-3">
                                     <label for="rentang_bawah" class="form-label">Rentang Bawah</label>
                                     <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required>
                                 </div>
                             </div>
-                            
+
                         </div>
-                                
+
                 </div>
                 {{-- end form --}}
 
@@ -205,7 +204,7 @@
 
 {{-- edit --}}
 @foreach ( $rentang as $row)
-    
+
 
 <div class="modal modal-lg fade" id="edit{{ $row->id_rentang_nilai }}" tabindex="-1" aria-labelledby="add" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -231,12 +230,12 @@
                         </div>
 
                         <div class="row">
-                         
+
                                 <div class="mb-3">
                                     <label for="inisial_rentang_nilai" class="form-label">Inisial</label>
                                     <input type="text" class="form-control" name="inisial_rentang_nilai" id="inisial_rentang_nilai"
                                         required value="{{ $row->inisial_rentang_nilai}}">
-                                </div>                            
+                                </div>
                                 <div class="mb-3">
                                     <label for="keterangan_rentang_nilai" class="form-label">Keterangan</label>
                                     <textarea class="form-control" name="keterangan_rentang_nilai" id="keterangan_rentang_nilai" rows="2">{{ $row->keterangan_rentang_nilai }}</textarea>
@@ -244,7 +243,7 @@
                                         required value="{{ $row->keterangan_rentang_nilai}}"> --}}
                                 </div>
 
-                            <div class="col">                                                    
+                            <div class="col">
                                 <div class="mb-3">
                                     <label for="rentang_atas" class="form-label">Rentang Atas</label>
                                     <input type="number" class="form-control" name="rentang_atas" id="rentang_atas" value="{{ $row->rentang_atas}}" required>
@@ -256,9 +255,9 @@
                                     <input type="number" class="form-control" name="rentang_bawah" id="rentang_bawah" required value="{{ $row->rentang_bawah}}">
                                 </div>
                             </div>
-                            
+
                         </div>
-                        
+
                 </div>
                 {{-- end form --}}
 

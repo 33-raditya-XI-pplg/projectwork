@@ -14,24 +14,24 @@
     border: 2px dashed #ddd;
     background-color: #f9f9f9;
     position: relative;
-    cursor: pointer; 
+    cursor: pointer;
 }
    #image_preview_ {
        display: flex;
        align-items: center;
        justify-content: center;
-       width: 100%; 
-       height: auto; 
-       max-width: 200px; 
-       max-height: 200px; 
+       width: 100%;
+       height: auto;
+       max-width: 200px;
+       max-height: 200px;
        overflow: hidden;
-       margin: 0 auto; 
+       margin: 0 auto;
    }
    #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
-    display: block; 
+    object-fit: contain;
+    display: block;
 }
 
     .section__container {
@@ -135,29 +135,33 @@
                                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                     </button>
                                 </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                            id="dropdownMenuButton{{ $row->id_profil_perusahaan }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_profil_perusahaan }}">
-                                            <li>
-                                                <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}" class="dropdown-item text-black">
-                                                    <i class="fa-solid fa-code pe-none"></i> Rincian </a>
-                                            </li>
-                                            <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#edit{{ $row->id_profil_perusahaan }}"><i
-                                                        class="fa-regular fa-pen-to-square"></i> Edit</a></li>                                          
-                                            <li><a href="{{ route('profil.destroy', $row->id_profil_perusahaan) }}"
-                                                    class="dropdown-item text-danger" data-confirm-delete="true"><i
-                                                        class="fa-regular fa-trash-can pe-none"></i>
-                                                    Delete</a>
+                               <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('profil.rincian', $row->id_profil_perusahaan) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
 
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_profil_perusahaan }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
 
-                                        </ul>
-                                    </div>
-                                </td>
+        <form id="deleteForm{{ $row->id_profil_perusahaan }}" action="{{ route('profil.destroy', $row->id_profil_perusahaan) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1"
+                data-confirm-delete="true">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+</td>
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -277,7 +281,7 @@
                     <div class="mb-3">
                         <label for="tentang_kami" class="form-label">Tentang Kami <span class="text-danger">*</span></label>
                         <textarea class="form-control ck-editor" id="tentang_kami" name="tentang_kami" rows="3">{{ old('tentang_kami', $row->tentang_kami) }}</textarea>
-                    </div>  
+                    </div>
                     {{-- dropzone --}}
                     <div class="form-group mb-3">
                         <label class="control-label mb-2">Upload Struktur Organisasi <span class="text-danger">*</span></label>
@@ -338,7 +342,7 @@
 @endforeach
 
 
-<script>    
+<script>
     document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi preview image
     const inputFile = document.querySelector('input[name="path_struktur_organisasi"]');
@@ -379,10 +383,10 @@
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone-wrapper", {
         url: "/profil", // URL server untuk unggahan
-        maxFilesize: 2, 
+        maxFilesize: 2,
         acceptedFiles: "image/*",
         init: function() {
-            this.on("success", function(file, response) {                    
+            this.on("success", function(file, response) {
                 // Tangani response sukses
                 console.log("Upload successful");
             });
@@ -393,35 +397,35 @@
                 }
             });
         }
-    });   
-});   
-</script> 
+    });
+});
+</script>
 
 <script>
     document.querySelectorAll('[id^="path_struktur_organisasi"]').forEach(input => {
         input.addEventListener('change', function(event) {
-            const id = this.id.split('_')[3]; 
-            const preview = document.getElementById(`preview_image_edit_${id}`); 
+            const id = this.id.split('_')[3];
+            const preview = document.getElementById(`preview_image_edit_${id}`);
             const file = event.target.files[0];
 
-            if (file) { 
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    preview.src = e.target.result; 
-                    preview.style.display = 'block'; 
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
                 }
-                reader.readAsDataURL(file); 
+                reader.readAsDataURL(file);
             } else {
-                preview.src = '{{ asset($row->path_struktur_organisasi) }}'; 
-                preview.style.display = 'block'; 
+                preview.src = '{{ asset($row->path_struktur_organisasi) }}';
+                preview.style.display = 'block';
             }
         });
     });
 </script>
 @endsection
- 
+
 @push('scripts')
-    
+
 
     <!-- Script untuk CKEditor -->
     <script src="{{ asset('js/ckeditor.js') }}"></script>

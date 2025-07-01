@@ -88,30 +88,31 @@
                                         @elseif ($row->status == 'Selesai') bg-success
                                         @endif
                                         rounded-3" disabled>{{ $row->status }}</button></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a href="{{ route('event.rincian', $row->id_event) }}"
-                                                        class="dropdown-item text-dark"><i class="fa-solid fa-code pe-none"></i>
-                                                        Rincian</a>
-                                                </li>
-                                                    <li><a class="dropdown-item text-info" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->id_event }}"><i
-                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
-                                                            class="dropdown-item text-danger" data-confirm-delete="true"><i
-                                                                class="fa-regular fa-trash-can pe-none"></i>
-                                                            Delete</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
+                                       <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        {{-- Tombol Rincian --}}
+        <a href="{{ route('event.rincian', $row->id_event) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
+
+        {{-- Tombol Edit (modal) --}}
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        {{-- Tombol Delete --}}
+        <a href="{{ route('event.destroy', $row->id_event) }}" data-confirm-delete="true"
+            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Delete</span>
+        </a>
+    </div>
+</td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

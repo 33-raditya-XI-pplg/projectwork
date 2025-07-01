@@ -27,35 +27,51 @@
                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                     </button>
                 </td>
-                <td>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fa-solid fa-bars"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li>
-                                <a class="dropdown-item text-black" href="{{ route('kategori.show', $row->id_kategori) }}">
-                                    <i class="fa-solid fa-code pe-none"></i> Rincian
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#edit{{ $row->id_kategori }}">
-                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                </a>
-                            </li>                         
-                            <form id="delete-form-{{ $row->id_kategori }}" action="{{ route('kategori.destroy', $row->id_kategori) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" onclick="confirmDelete({{ $row->id_kategori }})" class="dropdown-item text-danger">
-                                    <i class="fa-regular fa-trash-can"></i> Delete
-                                </button>
-                            </form>
-                            </li>
-                        </ul>
-                    </div>
-                </td>
+                <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('kategori.show', $row->id_kategori) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
+
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_kategori }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        <form id="delete-form-{{ $row->id_kategori }}" action="{{ route('kategori.destroy', $row->id_kategori) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete({{ $row->id_kategori }})"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span class="text-white">Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Apakah kamu yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
             </tr>
 
             <!-- Edit Modal -->

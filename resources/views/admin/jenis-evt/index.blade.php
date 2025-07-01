@@ -33,34 +33,34 @@
                         <th scope="row">{{ $loop->index + 1 }}</th>
                         <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? '-'}}</td>
                         <td>{{ $row->nama_jenis_event }}</td>
-                        <td>@php 
+                        <td>@php
                             echo $row->deskripsi
                             @endphp
                         </td>
                         <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                         </td>
-                        <td>
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-bars"></i>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li>
-                                        <a class="dropdown-item text-black" href="{{ route('jenis-event.show', $row->id_jenis_event) }}">
-                                            <i class="fa-solid fa-code pe-none"></i> Rincian
-                                        </a>
-                                    </li>
-                                    <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#edit{{ $row->id_jenis_event }}"><i
-                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                    <li><a href="{{ route('jenis-event.destroy', $row->id_jenis_event) }}" class="dropdown-item text-danger"
-                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                            Delete</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
+                       <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('jenis-event.show', $row->id_jenis_event) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
+
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_jenis_event }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        <a href="{{ route('jenis-event.destroy', $row->id_jenis_event) }}" data-confirm-delete="true"
+            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Delete</span>
+        </a>
+    </div>
+</td>
+
                     </tr>
                 @endforeach
             </tbody>
@@ -93,10 +93,10 @@
                                     @endforeach
                                 </select>
                         </div>
-                        <div class="mb-3">                         
+                        <div class="mb-3">
                                 <label for="nama_jenis_event" class="form-label">Nama Jenis Event</label>
                                 <input type="text" class="form-control" name="nama_jenis_event" id="nama_jenis_event" required>
-                        </div>                    
+                        </div>
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label h-100">Deskripsi</label>
                             <textarea class="form-control ck-editor" id="deskripsi" name="deskripsi"></textarea>
@@ -151,18 +151,18 @@
                                         @endforeach
                                     </select>
                             </div>
-                            <div class="mb-3">                           
+                            <div class="mb-3">
                                 <label for="nama_jenis_event" class="form-label">Nama Jenis Event</label>
                                 <input type="text" class="form-control" name="nama_jenis_event" id="nama_jenis_event"
                                     required value="{{ $row->nama_jenis_event }}">
-                            </div>                         
+                            </div>
                             <div class="mb-3">
                                 <label for="deskripsi" class="form-label">Deskripsi</label>
                                 <textarea class="form-control ck-editor" id="deskripsi-edit" name="deskripsi" rows="10">{{ $row->deskripsi }}</textarea>
                             </div>
                             <div class="form-check">
                                 <label for="has_lampiran" class="me-3">Memiliki Lampiran </label>
-                                <input class="form-check-input" type="checkbox" role="switch" id="has_lampiran" 
+                                <input class="form-check-input" type="checkbox" role="switch" id="has_lampiran"
                                     name="has_lampiran" value="1" @if($row->has_lampiran) checked @endif>
                             </div>
                         </div>
@@ -196,11 +196,11 @@
     $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder');
-            
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
     });

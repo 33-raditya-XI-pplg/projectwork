@@ -122,55 +122,51 @@
                                 {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                             </button>
                         </td>
-                        <td>
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                    id="dropdownMenuButton{{ $row->id_slider }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-bars"></i>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_slider }}">
-                                   
-                                    <li>
-                                        <a class="dropdown-item text-black" href="{{ route('slider.show', $row->id_slider) }}">
-                                            <i class="fa-solid fa-code pe-none"></i> Rincian
-                                        </a>
-                                    </li>
-                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_slider }}">
-                                        <i class="fa-regular fa-pen-to-square"></i> Edit
-                                    </a>
-                                </li>
-                                    <li>
-                                    <li>
-                                        <form id="deleteForm{{ $row->id_slider }}" action="{{ route('slider.destroy', $row->id_slider) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_slider }}')">
-                                                <i class="fa-regular fa-trash-can"></i> Delete
-                                            </button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </div>
+                        <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('slider.show', $row->id_slider) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
 
-                            <script>
-                                function confirmDelete(sliderId) {
-                                    Swal.fire({
-                                        title: 'Are you sure?',
-                                        text: "You won't be able to revert this!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes, delete it!',
-                                        cancelButtonText: 'Cancel'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            document.getElementById('deleteForm' + sliderId).submit();
-                                        }
-                                    });
-                                }
-                            </script>
-                        </td>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_slider }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
+
+        <form id="deleteForm{{ $row->id_slider }}" action="{{ route('slider.destroy', $row->id_slider) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $row->id_slider }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(sliderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + sliderId).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                     </tr>
                 @endforeach
             </tbody>
@@ -230,7 +226,7 @@
         }
     });
 </script>
- 
+
 
 <!-- Insert Modal -->
 <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
@@ -345,13 +341,13 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control ck-editor" id="description" name="description" rows="3">{{ old('description', $row->description) }}</textarea>
-                    </div> 
-                    
-                    
-                    
+                    </div>
+
+
+
                     <div class="mb-3">
     <label for="edit_image_{{ $row->id_slider }}" class="form-label">Upload Image</label>
-    
+
     <!-- Dropzone Container -->
     <div class="dropzone-wrapper" style="height: 300px;">
         <div class="dropzone-desc">
@@ -516,7 +512,7 @@
         });
 
 
-       
+
     </script>
 
     @endif

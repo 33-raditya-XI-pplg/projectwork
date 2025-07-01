@@ -2,7 +2,7 @@
 @section('title', 'Tanda Tangan')
 @section('content')
 <style>
-    
+
 .select2-close-mask{
     z-index: 2099 !important;
 }
@@ -21,10 +21,10 @@
 }
 .btn-kembali:hover{
     background-color: #2980b9;
-    transform: scale(1.05); 
+    transform: scale(1.05);
 }
 .btn-kembali:active{
-    transform: scale(0.95); 
+    transform: scale(0.95);
     background-color: #1f5e83;
 }
 .dropzone-wrapper {
@@ -42,18 +42,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%; 
-    height: auto; 
-    max-width: 200px; 
-    max-height: 200px; 
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    max-height: 200px;
     overflow: hidden;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
-    display: block; 
+    object-fit: contain;
+    display: block;
 }
 </style>
 
@@ -81,26 +81,28 @@
                             <td>{{ $row->ttdInstansi->nama_instansi }}</td>
                             <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                             </td>
-                            <td>
-                                <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-black" href="{{ route('tandatangan.show', $row->id_ttd) }}">
-                                            <i class="fa-solid fa-code pe-none"></i> Rincian</a>
-                                        </li>
-                                        <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#edit{{ $row->id_ttd }}"><i
-                                                    class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                        <li><a href="{{ route('tandatangan.destroy', $row->id_ttd) }}" class="dropdown-item text-danger"
-                                                data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                                Delete</a>
-                                        </li>                                      
-                                    </ul>
-                                </div>
-                            </td>
+                            <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('tandatangan.show', $row->id_ttd) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
+
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_ttd }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        <a href="{{ route('tandatangan.destroy', $row->id_ttd) }}" data-confirm-delete="true"
+            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Delete</span>
+        </a>
+    </div>
+</td>
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -135,7 +137,7 @@
                                  </select>
                             </div>
                             <div class="col">
-                                {{-- kanan --}}                          
+                                {{-- kanan --}}
                                     <div class="mb-3">
                                         <label for="nama_ttd" class="form-label">Nama TTD</label>
                                         <input type="text" class="form-control" name="nama_ttd" id="nama_ttd"
@@ -153,13 +155,13 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="instansi" class="form-label">Instansi</label>
-                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi"   required>                                                  
-                                            <option value="" disabled selected></option> 
+                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id" data-placeholder="Pilih Instansi"   required>
+                                            <option value="" disabled selected></option>
                                             @foreach ($institutions as $id_instansi => $name)
-                                            <option value="{{ $id_instansi }}" {{old('instansi_id', (isset($pengguji) ? $pengguji->instansi_id : '') == $id_instansi) ? 'selected' : '' }}>{{ $name }}</option>                         
+                                            <option value="{{ $id_instansi }}" {{old('instansi_id', (isset($pengguji) ? $pengguji->instansi_id : '') == $id_instansi) ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
-                                    </div>                                 
+                                    </div>
                                     <div class="form-group mb-2">
                                         <label class="control-label mb-2">Upload Tanda Tangan <span class="text-danger">*</span></label>
                                         <div class="dropzone-wrapper">
@@ -212,7 +214,7 @@
                         <button type="button" class="btn-close btn-close-white me-2" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">                    
+                    <div class="modal-body">
                         <form action="{{ route('tandatangan.update', $row->id_ttd) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -221,7 +223,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col">
-                                    {{-- kanan --}}                                                                         
+                                    {{-- kanan --}}
                                         <div class="mb-3">
                                             <label for="page_id" class="form-label">Page Id</label>
                                             <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page id"
@@ -248,13 +250,13 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="instansi" class="form-label">Instansi</label>
-                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id_{{ $row->id_ttd }}" data-placeholder="Pilih Instansi" required>                             
-                                            <option value="" disabled selected></option> 
+                                        <select class="form-select js-example-basic-single" name="instansi_id" id="instansi_id_{{ $row->id_ttd }}" data-placeholder="Pilih Instansi" required>
+                                            <option value="" disabled selected></option>
                                             @foreach ($institutions as $id_instansi => $name)
-                                            <option value="{{ $id_instansi }}" {{ old('instansi_id', $row->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>                        
+                                            <option value="{{ $id_instansi }}" {{ old('instansi_id', $row->instansi_id) == $id_instansi ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
-                                    </div>                                
+                                    </div>
                                     <div class="form-group mb-2">
                                         <label class="control-label mb-2">Upload Foto Tandatangan  <span class="text-danger">*</span></label>
                                         <div class="dropzone-wrapper">
@@ -270,7 +272,7 @@
                                                     <img id="preview_image_edit_{{ $row->id_ttd }}" src="" alt="No image uploaded" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                                                 @endif
                                             </div>
-                                            
+
                                         </div>
                                         <div class="mt-2">
                                             <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
@@ -315,14 +317,14 @@
   $(document).ready(function() {
         $('.js-single').each(function() {
             var placeholder = $(this).data('placeholder');
-             
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
-        });    
-    
+        });
+
     @foreach($tanda_tangan as $row)
         $('#instansi_id_{{ $row->id_ttd }}').select2({
             allowClear: true
@@ -331,7 +333,7 @@
 });
 </script> --}}
 
-<script>    
+<script>
         document.addEventListener('DOMContentLoaded', function() {
         // Inisialisasi preview image
         const inputFile = document.querySelector('input[name="path_ttd"]');
@@ -366,16 +368,16 @@
         } else {
             console.error('Preview image element not found');
         }
-    
+
 
         // Inisialisasi Dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone(".dropzone-wrapper", {
             url: "/tandatangan", // URL server untuk unggahan
-            maxFilesize: 2, 
+            maxFilesize: 2,
             acceptedFiles: "image/*",
             init: function() {
-                this.on("success", function(file, response) {                    
+                this.on("success", function(file, response) {
                     // Tangani response sukses
                     console.log("Upload successful");
                 });
@@ -386,27 +388,27 @@
                     }
                 });
             }
-        });   
-    });   
-</script> 
+        });
+    });
+</script>
 <script>
     document.querySelectorAll('[id^="path_ttd_"]').forEach(input => {
         input.addEventListener('change', function(event) {
-            const id = this.id.split('_')[2]; 
+            const id = this.id.split('_')[2];
             const preview = document.getElementById(`preview_image_edit_${id}`);
             const file = event.target.files[0];
             const reader = new FileReader();
 
             reader.onload = function(e) {
                 preview.src = e.target.result;
-                preview.style.display = 'block'; 
+                preview.style.display = 'block';
             }
 
             if (file) {
                 reader.readAsDataURL(file);
             } else {
                 preview.src = '';
-                preview.style.display = 'none'; 
+                preview.style.display = 'none';
             }
         });
     });
