@@ -18,18 +18,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%; 
-    height: auto; 
-    max-width: 200px; 
-    max-height: 200px; 
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    max-height: 200px;
     overflow: hidden;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
-    display: block; 
+    object-fit: contain;
+    display: block;
 }
 
 </style>
@@ -86,35 +86,51 @@
                                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                     </button>
                                 </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                            id="dropdownMenuButton{{ $row->id_testimoni }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_testimoni }}">
-                                            <li>
-                                                <a class="dropdown-item text-black" href="{{ route('testimoni-user.show', $row->id_testimoni) }}">
-                                                    <i class="fa-solid fa-code pe-none"></i> Rincian
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_testimoni }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <form id="deleteForm-user{{ $row->id_testimoni }}" action="{{ route('testimoni-user.destroy', $row->id_testimoni) }}" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_testimoni }}')">
-                                                        <i class="fa-regular fa-trash-can pe-none"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>                               
-                                </td>
+                                <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('testimoni-user.show', $row->id_testimoni) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
+
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_testimoni }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
+
+        <form id="deleteForm-user{{ $row->id_testimoni }}" action="{{ route('testimoni-user.destroy', $row->id_testimoni) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $row->id_testimoni }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm-user' + id).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -157,7 +173,7 @@
                         <!-- Menyimpan id_user sebagai nilai tersembunyi -->
                         <input type="hidden" name="id_user" id="id_user" value="{{ Auth::user()->id_user }}">
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                         <!-- Menampilkan email pengguna yang sedang login -->
@@ -183,7 +199,7 @@
 
                     <div class="mb-3">
                         <label for="isi_testimoni" class="form-label">Isi Testimoni <span class="text-danger">*</span></label>
-                        <textarea class="form-control ck-editor" id="isi_testimoni" name="isi_testimoni" rows="3"></textarea>                       
+                        <textarea class="form-control ck-editor" id="isi_testimoni" name="isi_testimoni" rows="3"></textarea>
                         <span class="form-text text-danger">Harap masukkan minimal 3 kalimat.</span>
                     </div>
 
@@ -260,13 +276,13 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>                   
-                        <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap" value="{{ Auth::user()->nama_lengkap }}" readonly>                      
+                        <label for="nama" class="form-label">Nama <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap" value="{{ Auth::user()->nama_lengkap }}" readonly>
                         <input type="hidden" name="id_user" id="id_user" value="{{ Auth::user()->id_user }}">
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>                
+                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                         <input type="email" class="form-control" name="email" id="email" value="{{ Auth::user()->email }}" required readonly>
                     </div>
 
@@ -321,7 +337,7 @@
                        @enderror
                     </div>
 
-                    <div class="mb-3">                   
+                    <div class="mb-3">
                         <label for="status" class="form-label">Status Publikasi</label>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {{ $row->status ? 'checked' : '' }}>
@@ -351,7 +367,7 @@
         $('.js-example-basic').select2({
             placeholder: "Select an option", // Replace with your actual placeholder text
             allowClear: true,
-            minimumResultsForSearch: Infinity 
+            minimumResultsForSearch: Infinity
         });
 
         // Handle the modal showing event
@@ -359,16 +375,16 @@
             // Initialize Select2 for the elements inside the opened modal
             $(this).find('.js-example').select2({
                 placeholder: "Select an option", // Replace with your actual placeholder text
-                allowClear: true,                              
-                minimumResultsForSearch: Infinity 
-            });            
+                allowClear: true,
+                minimumResultsForSearch: Infinity
+            });
             $(this).find('#rating_edit').select2({
                 placeholder: "Select an option", // Replace with your actual placeholder text
-                allowClear: true,               
+                allowClear: true,
                 templateResult: formatState,
                 templateSelection: formatState,
-                minimumResultsForSearch: Infinity 
-            });            
+                minimumResultsForSearch: Infinity
+            });
         });
         function formatState(state) {
         if (!state.id) {
@@ -474,7 +490,7 @@
 </script>
 @endif
 {{-- dropzone craete --}}
-<script>    
+<script>
     document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi preview image
     const inputFile = document.querySelector('input[name="photo"]');
@@ -515,10 +531,10 @@
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone-wrapper", {
         url: "/testimoni-user", // URL server untuk unggahan
-        maxFilesize: 2, 
+        maxFilesize: 2,
         acceptedFiles: "image/*",
         init: function() {
-            this.on("success", function(file, response) {                    
+            this.on("success", function(file, response) {
                 // Tangani response sukses
                 console.log("Upload successful");
             });
@@ -529,9 +545,9 @@
                 }
             });
         }
-    });   
-});   
-</script> 
+    });
+});
+</script>
 <script>
     document.querySelectorAll('[id^="photo"]').forEach(input => {
       input.addEventListener('change', function(event) {
@@ -539,12 +555,12 @@
           const preview = document.getElementById(`preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
           const file = event.target.files[0];
           const reader = new FileReader();
-  
+
           reader.onload = function(e) {
               preview.src = e.target.result;
               preview.style.display = 'block'; // Tampilkan preview gambar
           }
-  
+
           if (file) {
               reader.readAsDataURL(file);
           } else {

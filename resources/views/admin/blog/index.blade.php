@@ -6,7 +6,7 @@
 <!-- Include SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-    
+
     .select2-close-mask{
         z-index: 2099 !important;
     }
@@ -32,24 +32,24 @@
     border: 2px dashed #ddd;
     background-color: #f9f9f9;
     position: relative;
-    cursor: pointer; 
+    cursor: pointer;
     }
    #image_preview_ {
        display: flex;
        align-items: center;
        justify-content: center;
-       width: 100%; 
-       height: auto; 
-       max-width: 200px; 
-       max-height: 200px; 
+       width: 100%;
+       height: auto;
+       max-width: 200px;
+       max-height: 200px;
        overflow: hidden;
-       margin: 0 auto; 
+       margin: 0 auto;
    }
    #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
-    display: block; 
+    object-fit: contain;
+    display: block;
     }
 
     .blog-card img {
@@ -106,53 +106,51 @@
                                         {{ $row->status ? 'Aktif' : 'Nonaktif' }}
                                     </button>
                                 </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3" id="dropdownMenuButton{{ $row->id_blog }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_blog }}">
-                                            <li>
-                                                <a class="dropdown-item text-black" href="{{ route('blog.show', $row->id_blog) }}">
-                                                    <i class="fa-solid fa-code pe-none"></i> Rincian
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                </a>
-                                            </li>                                      
-                                            <li>
-                                                <form id="deleteForm{{ $row->id_blog }}" action="{{ route('blog.destroy', $row->id_blog) }}" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_blog }}')">
-                                                        <i class="fa-regular fa-trash-can pe-none"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
+                               <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('blog.show', $row->id_blog) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
 
-                                    <script>
-                                        function confirmDelete(blogId) {
-                                            Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!',
-                                                cancelButtonText: 'Cancel'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    document.getElementById('deleteForm' + blogId).submit();
-                                                }
-                                            });
-                                        }
-                                    </script>
-                                </td>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_blog }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
+
+        <form id="deleteForm{{ $row->id_blog }}" action="{{ route('blog.destroy', $row->id_blog) }}" method="POST" style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $row->id_blog }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(blogId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + blogId).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -369,17 +367,17 @@
     <script>
   $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder'); 
-            
+            var placeholder = $(this).data('placeholder');
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
     });
     </script>
-    
+
     <script>
                         document.getElementById('edit_photo_{{ $row->id_blog }}').addEventListener('change', function(event) {
                             const file = event.target.files[0];
@@ -394,7 +392,7 @@
                             }
                         });
                     </script>
-<script>    
+<script>
     document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi preview image
     const inputFile = document.querySelector('input[name="photo"]');
@@ -435,10 +433,10 @@
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone-wrapper", {
         url: "/blog", // URL server untuk unggahan
-        maxFilesize: 2, 
+        maxFilesize: 2,
         acceptedFiles: "image/*",
         init: function() {
-            this.on("success", function(file, response) {                    
+            this.on("success", function(file, response) {
                 // Tangani response sukses
                 console.log("Upload successful");
             });
@@ -449,9 +447,9 @@
                 }
             });
         }
-    });   
-});   
-</script> 
+    });
+});
+</script>
 <script>
     document.querySelectorAll('[id^="photo"]').forEach(input => {
       input.addEventListener('change', function(event) {
@@ -459,12 +457,12 @@
           const preview = document.getElementById(`preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
           const file = event.target.files[0];
           const reader = new FileReader();
-  
+
           reader.onload = function(e) {
               preview.src = e.target.result;
               preview.style.display = 'block'; // Tampilkan preview gambar
           }
-  
+
           if (file) {
               reader.readAsDataURL(file);
           } else {

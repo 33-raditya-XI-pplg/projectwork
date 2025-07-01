@@ -8,7 +8,7 @@
     .select2-dropdown{
         z-index: 3051 !important;
     }</style>
-    
+
 <!-- Include CSS Select2 -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
@@ -60,54 +60,51 @@
                             {{ $row->status === 'true' ? 'Aktif' : 'Nonaktif' }}
                         </button>
                     </td>
-                    <td>
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                id="dropdownMenuButton{{ $row->id_faq }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $row->id_faq }}">
-                                <li>
-                                    <a class="dropdown-item text-black" href="{{ route('faq.show', $row->id_faq) }}">
-                                        <i class="fa-solid fa-code pe-none"></i> Rincian
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_faq }}">
-                                        <i class="fa-regular fa-pen-to-square"></i> Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    <form id="deleteForm{{ $row->id_faq }}" action="{{ route('faq.destroy', $row->id_faq) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $row->id_faq }}')">
-                                            <i class="fa-regular fa-trash-can"></i> Delete
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                    <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('faq.show', $row->id_faq) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
 
-                        <script>
-                            function confirmDelete(faqId) {
-                                Swal.fire({
-                                    title: 'Are you sure?',
-                                    text: "You won't be able to revert this!",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Yes, delete it!',
-                                    cancelButtonText: 'Cancel'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        document.getElementById('deleteForm' + faqId).submit();
-                                    }
-                                });
-                            }
-                        </script>
-                    </td>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_faq }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
+
+        <form id="deleteForm{{ $row->id_faq }}" action="{{ route('faq.destroy', $row->id_faq) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $row->id_faq }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(faqId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + faqId).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                 </tr>
 
                 <!-- Edit Modal -->

@@ -35,7 +35,7 @@
                         <td>{{ $row->jenis_kelamin ?? '-' }}</td>
                         <td>
                             @php
-                                $statusClass = 'bg-danger';   
+                                $statusClass = 'bg-danger';
                                 $statusLabel = 'Belum Verified';
 
                                 if($row->status == 'Verified'){
@@ -49,31 +49,30 @@
                             <button type="button"
                                 class="badge rounded-3 {{ $statusClass }}"
                                 onclick="toggleStatus({{ $row->id_user }},this)">
-                                {{ $statusLabel}}                                
+                                {{ $statusLabel}}
                             </button>
-                        <td>
-                            <div class="dropdown">
-                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-bars"></i>
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item text-black" href="{{ route('user.show', $row->id_user) }}">
-                                        <i class="fa-solid fa-code pe-none"></i>
-                                        Rincian</a>
-                                    </li>
-                                    <li><a class="dropdown-item text-info" href="{{ route('user.edit', $row->id_user) }}"
-                                            data-bs-target="#edit{{ $row->id_user }}"><i
-                                                class="fa-regular fa-pen-to-square"></i> Edit</a>
-                                    </li>
-                                    <li><a href="{{ route('user.destroy', $row->id_user) }}"
-                                            class="dropdown-item text-danger" data-confirm-delete="true"><i
-                                                class="fa-regular fa-trash-can pe-none"></i>
-                                            Delete</a>
-                                    </li>                                    
-                                </ul>
-                            </div>
-                        </td>
+                      <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('user.show', $row->id_user) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
+
+        <a href="{{ route('user.edit', $row->id_user) }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        <a href="{{ route('user.destroy', $row->id_user) }}" data-confirm-delete="true"
+            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Delete</span>
+        </a>
+    </div>
+</td>
+
                     </tr>
                 @endforeach
             </tbody>
@@ -179,8 +178,8 @@ function toggleStatus(userId, button) {
 }
 
     </script>
-    
-        
+
+
 
 @endsection
 

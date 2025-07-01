@@ -17,7 +17,7 @@
     border: 2px dashed #ddd;
     background-color: #f9f9f9;
     position: relative;
-    cursor: pointer; 
+    cursor: pointer;
     overflow: hidden;
 }
 
@@ -25,21 +25,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%; 
-    height: 100%;  
-    max-width: 200px; 
-    max-height: 200px; 
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
     overflow: hidden;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 #preview_image_create, #preview_image_edit_ {
     max-width: 100%;
     max-height: 100%;
-    object-fit: cover; 
-    display: block; 
-    max-width: 200px; 
-    max-height: 200px; 
+    object-fit: cover;
+    display: block;
+    max-width: 200px;
+    max-height: 200px;
 }
 
 
@@ -76,54 +76,51 @@
                                 <td>{{ $partner->nama_partner }}</td>
                                 <td>{{ $partner->jenis_partner ?? '-' }}</td>
                                 <td>{{ $partner->tanggal_bergabung ? $partner->tanggal_bergabung->format('d-m-Y') : '-' }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                            id="dropdownMenuButton{{ $partner->id_partner }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-bars"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $partner->id_partner }}">
-                                            <li>
-                                                <a class="dropdown-item text-black" href="{{ route('partner.rincian', $partner->id_partner) }}">
-                                                    <i class="fa-solid fa-code pe-none"></i> Rincian
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id_partner }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                </a>
-                                            </li>                                          
-                                            <li>
-                                                <form id="deleteForm{{ $partner->id_partner }}" action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="dropdown-item text-danger" onclick="confirmDelete('{{ $partner->id_partner }}')">
-                                                        <i class="fa-regular fa-trash-can"></i> Delete
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
+                               <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('partner.rincian', $partner->id_partner) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span>Rincian</span>
+        </a>
 
-                                    <script>
-                                        function confirmDelete(partnerId) {
-                                            Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!',
-                                                cancelButtonText: 'Cancel'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    document.getElementById('deleteForm' + partnerId).submit();
-                                                }
-                                            });
-                                        }
-                                    </script>
-                                </td>
+        <a href="#" data-bs-toggle="modal" data-bs-target="#editPartnerModal{{ $partner->id_partner }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span>Edit</span>
+        </a>
+
+        <form id="deleteForm{{ $partner->id_partner }}" action="{{ route('partner.destroy', $partner->id_partner) }}" method="POST" style="display:inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button" onclick="confirmDelete('{{ $partner->id_partner }}')"
+                class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                <span>Delete</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function confirmDelete(partnerId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm' + partnerId).submit();
+                }
+            });
+        }
+    </script>
+</td>
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -199,7 +196,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                  
+
                     {{-- dropzone --}}
                     <div class="form-group mb-2">
                         <label class="control-label mb-2">Upload Logo <span class="text-danger">*</span></label>
@@ -329,7 +326,7 @@
                                                 <img id="preview_image_edit_{{ $partner->id_partner }}" src="" alt="No image uploaded" style="max-width:200px; max-height:200px; object-fit: contain;">
                                             @endif
                                         </div>
-                                        
+
                                     </div>
                                     <div class="mt-2">
                                         <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
@@ -355,7 +352,7 @@
                                     <button type="button" class="btn btn-danger rounded-3 me-2" data-bs-dismiss="modal">Batal</button>
                                     <button type="submit" class="btn btn-success rounded-3">Simpan</button>
                             </div>
-                        </form>                                 
+                        </form>
             </div>
         </div>
     </div>
@@ -381,7 +378,7 @@
     });
 </script>
 
-<script>    
+<script>
     document.addEventListener('DOMContentLoaded', function() {
     // Inisialisasi preview image
     const inputFile = document.querySelector('input[name="logo"]');
@@ -422,10 +419,10 @@
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone-wrapper", {
         url: "/partner", // URL server untuk unggahan
-        maxFilesize: 2, 
+        maxFilesize: 2,
         acceptedFiles: "image/*",
         init: function() {
-            this.on("success", function(file, response) {                    
+            this.on("success", function(file, response) {
                 // Tangani response sukses
                 console.log("Upload successful");
             });
@@ -436,27 +433,27 @@
                 }
             });
         }
-    });   
-});   
-</script> 
+    });
+});
+</script>
 <script>
 document.querySelectorAll('[id^="logo_"]').forEach(input => {
     input.addEventListener('change', function(event) {
-        const id = this.id.split('_')[1]; 
+        const id = this.id.split('_')[1];
         const preview = document.getElementById(`preview_image_edit_${id}`);
         const file = event.target.files[0];
         const reader = new FileReader();
 
         reader.onload = function(e) {
             preview.src = e.target.result;
-            preview.style.display = 'block'; 
+            preview.style.display = 'block';
         }
 
         if (file) {
             reader.readAsDataURL(file);
         } else {
             preview.src = '';
-            preview.style.display = 'none'; 
+            preview.style.display = 'none';
         }
     });
 });
@@ -474,7 +471,7 @@ document.querySelectorAll('[id^="logo_"]').forEach(input => {
             });
         });
     </script>
-@endif 
+@endif
 
 
 @if ($errors->any())

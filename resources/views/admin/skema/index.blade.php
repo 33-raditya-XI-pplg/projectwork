@@ -20,26 +20,28 @@
                             <td>{{ $row->nama_skema }}</td>
                             <td><button type="button" class="badge rounded-3 {{ $row->status == 'Aktif' ? 'bg-success' : 'bg-danger' }}" disabled>{{ $row->status }}</button>
                             </td>
-                            <td>
-                                <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-black" href="{{ route('skema.show', $row->id_skema) }}">
-                                            <i class="fa-solid fa-code pe-none"></i>
-                                            Rincian</a>
-                                        </li>
-                                        <li><a href="{{ route('skema.edit', $row->id_skema) }}" class="dropdown-item text-info" >
-                                            <i class="fa-regular fa-pen-to-square"></i> Edit</a>
-                                        </li>
-                                        <li><a href="{{ route('skema.destroy', $row->id_skema) }}" class="dropdown-item text-danger" data-confirm-delete="true">
-                                            <i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
+                           <td class="text-center">
+    <div class="d-flex justify-content-center gap-2">
+        <a href="{{ route('skema.show', $row->id_skema) }}"
+            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Rincian</span>
+        </a>
+
+        <a href="{{ route('skema.edit', $row->id_skema) }}"
+            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Edit</span>
+        </a>
+
+        <a href="{{ route('skema.destroy', $row->id_skema) }}" data-confirm-delete="true"
+            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
+            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+            <span class="text-white">Delete</span>
+        </a>
+    </div>
+</td>
+
                         </tr>
                     @endforeach
                 </tbody>
