@@ -89,29 +89,27 @@
                                         @endif
                                         rounded-3" disabled>{{ $row->status }}</button></td>
                                        <td class="text-center">
-    <div class="d-flex justify-content-center gap-2">
-        {{-- Tombol Rincian --}}
-        <a href="{{ route('event.rincian', $row->id_event) }}"
-            class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
-            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
-            <span class="text-white">Rincian</span>
-        </a>
+                                            {{-- Tombol Rincian --}}
+                                            <a href="{{ route('event.rincian', $row->id_event) }}"
+                                                class="btn btn-primary btn-sm rounded text-white mb-3">
+                                                <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Rincian</span>
+                                            </a>
 
-        {{-- Tombol Edit (modal) --}}
-        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
-            class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
-            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
-            <span class="text-white">Edit</span>
-        </a>
+                                            {{-- Tombol Edit (modal) --}}
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                                class="btn btn-info btn-sm rounded text-white mb-3">
+                                                <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Edit</span>
+                                            </a>
 
-        {{-- Tombol Delete --}}
-        <a href="{{ route('event.destroy', $row->id_event) }}" data-confirm-delete="true"
-            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
-            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
-            <span class="text-white">Delete</span>
-        </a>
-    </div>
-</td>
+                                            {{-- Tombol Delete --}}
+                                            <a href="{{ route('event.destroy', $row->id_event) }}" data-confirm-delete="true"
+                                                class="btn btn-danger btn-sm rounded text-white mb-3">
+                                                <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Delete</span>
+                                            </a>
+                                        </td>
 
                                     </tr>
                                 @endforeach
