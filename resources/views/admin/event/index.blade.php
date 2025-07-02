@@ -137,28 +137,20 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="badge bg-warning rounded-3"
+                                        <td><button type="button" style="" class="badge  bg-secondary rounded-3"
                                             disabled>Draft</button></td>
                                         <td>
-                                            <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->id_event }}"><i
-                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
-                                                            class="dropdown-item text-danger"
-                                                            data-confirm-delete="true"><i
-                                                                class="fa-regular fa-trash-can pe-none"></i>
-                                                            Delete</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                 <a href="{{ route('event.rincian', $row->id_event) }}"
+                                                class="btn btn-primary btn-sm rounded text-white mb-3">
+                                                <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Rincian</span>
+                                            </a>
+                                               <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                                class="btn btn-info btn-sm rounded text-white mb-3">
+                                                <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Edit</span>
+                                            </a>
+                                             <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -190,26 +182,18 @@
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
                                             <td><button type="button" class="badge bg-primary rounded-3"
                                                 disabled>Publish</button></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->id_event }}"><i
-                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
-                                                            class="dropdown-item text-danger"
-                                                            data-confirm-delete="true"><i
-                                                                class="fa-regular fa-trash-can pe-none"></i>
-                                                            Delete</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                         <td>
+                                                 <a href="{{ route('event.rincian', $row->id_event) }}"
+                                                class="btn btn-primary btn-sm rounded text-white mb-3">
+                                                <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Rincian</span>
+                                            </a>
+                                               <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                                class="btn btn-info btn-sm rounded text-white mb-3">
+                                                <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Edit</span>
+                                            </a>
+                                             <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -237,28 +221,20 @@
                                         <td>{{ $row->tgl_mulai }}</td>
                                         <td>{{ $row->tgl_berakhir }}</td>
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                            <td><button type="button" class="badge bg-secondary rounded-3"
+                                            <td><button type="button" class="badge bg-danger rounded-3"
                                                 disabled>Berlangsung</button></td>
                                         <td>
-                                            <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->id_event }}"><i
-                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
-                                                            class="dropdown-item text-danger"
-                                                            data-confirm-delete="true"><i
-                                                                class="fa-regular fa-trash-can pe-none"></i>
-                                                            Delete</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                 <a href="{{ route('event.rincian', $row->id_event) }}"
+                                                class="btn btn-primary btn-sm rounded text-white mb-3">
+                                                <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Rincian</span>
+                                            </a>
+                                               <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                                class="btn btn-info btn-sm rounded text-white mb-3">
+                                                <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Edit</span>
+                                            </a>
+                                             <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -289,25 +265,17 @@
                                             <td><button type="button" class="badge bg-success rounded-3"
                                                 disabled>Selesai</button></td>
                                         <td>
-                                            <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a class="dropdown-item text-info" href="#"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#edit{{ $row->id_event }}"><i
-                                                                class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                                    <li><a href="{{ route('event.destroy', $row->id_event) }}"
-                                                            class="dropdown-item text-danger"
-                                                            data-confirm-delete="true"><i
-                                                                class="fa-regular fa-trash-can pe-none"></i>
-                                                            Delete</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                 <a href="{{ route('event.rincian', $row->id_event) }}"
+                                                class="btn btn-primary btn-sm rounded text-white mb-3">
+                                                <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Rincian</span>
+                                            </a>
+                                               <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                                class="btn btn-info btn-sm rounded text-white mb-3">
+                                                <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                                <span class="text-white">Edit</span>
+                                            </a>
+                                             <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
                                         </td>
                                     </tr>
                                 @endforeach

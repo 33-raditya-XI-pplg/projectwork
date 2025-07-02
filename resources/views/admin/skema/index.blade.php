@@ -34,10 +34,9 @@
             <span class="text-white">Edit</span>
         </a>
 
-        <a href="{{ route('skema.destroy', $row->id_skema) }}" data-confirm-delete="true"
-            class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1">
-            <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
-            <span class="text-white">Delete</span>
+        <a href="{{ route('skema.destroy', $row->id_skema) }}" class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1" data-confirm-delete="true">
+                                            <i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
+
         </a>
     </div>
 </td>
