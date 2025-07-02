@@ -27,14 +27,13 @@ class EventController extends Controller
         $today = Carbon::today();
         foreach ($evt as $event) {
             if ($event->status !== 'Draft') {
-                if ($today->lt($event->tgl_mulai)) {
+                if ($today->lte($event->tgl_mulai)) {
                     $event->status = 'Publish';
-                } elseif ($today->gte($event->tgl_berakhir)) {
-                    $event->status = 'Selesai';
-                } else {
+                } elseif ($today->gt($event->tgl_mulai) && $today->lte($event->tgl_berakhir)) {
                     $event->status = 'Berlangsung';
+                } elseif ($today->gt($event->tgl_berakhir)) {
+                    $event->status = 'Selesai';
                 }
-                // Save the updated status back to the database
                 $event->save();
             }
         }
@@ -74,16 +73,14 @@ class EventController extends Controller
         $status = $request->has('status') && $request->input('status') === 'Publish' ? 'Publish' : 'Draft';
 
         if ($status === 'Publish') {
-
             $today = carbon::today();
             $tgl_mulai = carbon::parse($request->tgl_mulai);
             $tgl_berakhir = carbon::parse($request->tgl_berakhir);
-
-            if ($today->lt($tgl_mulai)) {
+            if ($today->lte($tgl_mulai)) {
                 $status = 'Publish';
-            } elseif ($today->between($tgl_mulai, $tgl_berakhir)) {
+            } elseif ($today->gt($tgl_mulai) && $today->lte($tgl_berakhir)) {
                 $status = 'Berlangsung';
-            } else {
+            } elseif ($today->gt($tgl_berakhir)) {
                 $status = 'Selesai';
             }
         }
@@ -147,16 +144,14 @@ class EventController extends Controller
         }
 
         if ($status === 'Publish') {
-
             $today = carbon::today();
             $tgl_mulai = carbon::parse($request->tgl_mulai);
             $tgl_berakhir = carbon::parse($request->tgl_berakhir);
-
-            if ($today->lt($tgl_mulai)) {
+            if ($today->lte($tgl_mulai)) {
                 $status = 'Publish';
-            } elseif ($today->between($tgl_mulai, $tgl_berakhir)) {
+            } elseif ($today->gt($tgl_mulai) && $today->lte($tgl_berakhir)) {
                 $status = 'Berlangsung';
-            } else {
+            } elseif ($today->gt($tgl_berakhir)) {
                 $status = 'Selesai';
             }
         }
@@ -209,6 +204,4 @@ class EventController extends Controller
 
         return redirect()->back();
     }
-
-
 }
