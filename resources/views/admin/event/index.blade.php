@@ -104,11 +104,13 @@
                                             </a>
 
                                             {{-- Tombol Delete --}}
-                                            <a href="{{ route('event.destroy', $row->id_event) }}" data-confirm-delete="true"
+                                            {{-- <a href="{{ route('event.destroy', $row->id_event) }}" data-confirm-delete="true"
                                                 class="btn btn-danger btn-sm rounded text-white mb-3">
                                                 <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
                                                 <span class="text-white">Delete</span>
-                                            </a>
+                                            </a> --}}
+
+                                            <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
                                         </td>
 
                                     </tr>
