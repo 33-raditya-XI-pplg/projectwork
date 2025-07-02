@@ -83,8 +83,8 @@
                                         <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
                                         <td><button type="button" class="badge
                                         @if ($row->status == 'Publish') bg-primary
-                                        @elseif ($row->status == 'Draft') bg-info
-                                        @elseif ($row->status == 'Berlangsung') bg-secondary
+                                        @elseif ($row->status == 'Draft') bg-secondary
+                                        @elseif ($row->status == 'Berlangsung') bg-danger
                                         @elseif ($row->status == 'Selesai') bg-success
                                         @endif
                                         rounded-3" disabled>{{ $row->status }}</button></td>

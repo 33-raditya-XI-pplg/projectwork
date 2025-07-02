@@ -542,17 +542,23 @@
 
         //muncul create kemampuan
         $('#addKemampuanCreate').click(function() {
-            $('.kemampuan-wrapper-create').append('<div class="input-group mb-3 kemampuan_dasar-input-create d-flex align-items-center">' +
-            '<input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>' +
-            '<select class="form-control" name="create_keterangan[]" required style="max-width: 120px; background-color: #d1ecf1;">' +
-                '<option value="" disabled selected>Pilih Keterangan</option>' +
-                '<option value="kurang">Kurang</option>' +
-                '<option value="cukup">Cukup</option>' +
-                '<option value="baik">Baik</option>' +
-                '<option value="sangat baik">Sangat Baik</option>' +
-            '</select>' +
-            '<button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>' +
-            '</div>');
+            $('.kemampuan-wrapper-create').append(`<div class="row mb-3 kemampuan_dasar-input-create">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control" name="create_keterangan[]" required style="max-width: 120px; background-color: #d1ecf1;">
+                        <option value="" disabled selected>Pilih Keterangan</option>
+                        <option value="kurang">Kurang</option>
+                        <option value="cukup">Cukup</option>
+                        <option value="baik">Baik</option>
+                        <option value="sangat baik">Sangat Baik</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>
+                </div>
+            </div>`);
             $('#empty-input-message').hide(); // Sembunyikan pesan jika input tidak kosong
             });
 
