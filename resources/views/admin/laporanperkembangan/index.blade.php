@@ -196,10 +196,12 @@
                     </div>                                     
                     @if(isset($kemampuan) && !$kemampuan->isEmpty())
                         @foreach ($kemampuan as $row)
-                        <div class="input-group mb-3 kemampuan_dasar-input-edit">
-                            <input type="hidden" name="kemampuan_dasar_ids[]" value="{{ $row->id_kemampuan_dasar }}">
-                            <input type="text" class="form-control" name="edit_kemampuan_dasar[{{ $row->id_kemampuan_dasar }}]" value="{{ $row->kemampuan_dasar }}" 
-                                placeholder="Kemampuan Dasar" required>
+                        <div class="row mb-3 kemampuan_dasar-input-edit">
+                            <div class="col-md-7">
+                                <input type="hidden" name="kemampuan_dasar_ids[]" value="{{ $row->id_kemampuan_dasar }}">
+                                <input type="text" class="form-control" name="edit_kemampuan_dasar[{{ $row->id_kemampuan_dasar }}]" value="{{ $row->kemampuan_dasar }}" placeholder="Kemampuan Dasar" required>
+                            </div>
+                            <div class="col-md-3">
                                 <select class="form-control" name="edit_keterangan[{{ $row->id_kemampuan_dasar }}]" required style="max-width: 120px; background-color: #d1ecf1;">
                                     <option value="" disabled>Pilih Keterangan</option>
                                     <option value="kurang" {{ $row->keterangan == 'kurang' ? 'selected' : '' }}>Kurang</option>
@@ -207,9 +209,9 @@
                                     <option value="baik" {{ $row->keterangan == 'baik' ? 'selected' : '' }}>Baik</option>
                                     <option value="sangat baik" {{ $row->keterangan == 'sangat baik' ? 'selected' : '' }}>Sangat Baik</option>
                                 </select>
-
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-danger rounded removekemampuan" type="button">Remove</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-outline-danger rounded removekemampuan" type="button">Hapus</button>
                             </div>
                         </div>
                         @endforeach
@@ -543,11 +545,11 @@
         //muncul create kemampuan
         $('#addKemampuanCreate').click(function() {
             $('.kemampuan-wrapper-create').append(`<div class="row mb-3 kemampuan_dasar-input-create">
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
                 </div>
-                <div class="col-md-4">
-                    <select class="form-control" name="create_keterangan[]" required style="max-width: 120px; background-color: #d1ecf1;">
+                <div class="col-md-3">
+                    <select class="form-control" name="create_keterangan[]" required style="">
                         <option value="" disabled selected>Pilih Keterangan</option>
                         <option value="kurang">Kurang</option>
                         <option value="cukup">Cukup</option>
@@ -556,7 +558,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>
+                    <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
                 </div>
             </div>`);
             $('#empty-input-message').hide(); // Sembunyikan pesan jika input tidak kosong
@@ -574,17 +576,23 @@
 
         //muncul edit kemampuan
         $('#addKemampuanEdit').click(function() {
-            $('.kemampuan-wrapper-edit').append('<div class="input-group mb-3 kemampuan_dasar-input-edit d-flex align-items-center">' +
-            '<input type="text" class="form-control" name="edit_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>' +
-            '<select class="form-control" name="edit_keterangan[]" required style="max-width: 120px; background-color: #d1ecf1;">' +
-                '<option value="" disabled selected>Pilih Keterangan</option>' +
-                '<option value="kurang">Kurang</option>' +
-                '<option value="cukup">Cukup</option>' +
-                '<option value="baik">Baik</option>' +
-                '<option value="sangat baik">Sangat Baik</option>' +
-            '</select>' +
-            '<button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>' +
-            '</div>');
+            $('.kemampuan-wrapper-edit').append(`<div class="row mb-3 kemampuan_dasar-input-create">
+                <div class="col-md-7">
+                    <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control" name="create_keterangan[]" required style="">
+                        <option value="" disabled selected>Pilih Keterangan</option>
+                        <option value="kurang">Kurang</option>
+                        <option value="cukup">Cukup</option>
+                        <option value="baik">Baik</option>
+                        <option value="sangat baik">Sangat Baik</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
+                </div>
+            </div>`);
             checkEmptyInput('#empty-input-message'); // Sembunyikan pesan jika input tidak kosong
             });
 
@@ -846,18 +854,24 @@
                             // Check if data_kemampuan_dasar exists and populate
                             if (response.data_kemampuan_dasar && response.data_kemampuan_dasar.length > 0) {
                                 response.data_kemampuan_dasar.forEach(function(item) {
-                                    $('.kemampuan-wrapper-edit').append('<div class="input-group mb-3 kemampuan_dasar-input-edit">' +
-                                        '<input type="hidden" name="kemampuan_dasar_ids[]" value="' + item.id_kemampuan_dasar + '">' +
-                                        '<input type="text" class="form-control" name="edit_kemampuan_dasar[' + item.id_kemampuan_dasar + ']" value="' + item.kemampuan_dasar + '" placeholder="Kemampuan Dasar" required>' +
-                                        '<select class="form-control" name="edit_keterangan[' + item.id_kemampuan_dasar + ']" required style="max-width: 120px; background-color: #d1ecf1;">' +
-                                            '<option value="" disabled>Pilih Keterangan</option>' +
-                                            '<option value="kurang" ' + (item.keterangan === 'kurang' ? 'selected' : '') + '>Kurang</option>' +
-                                            '<option value="cukup" ' + (item.keterangan === 'cukup' ? 'selected' : '') + '>Cukup</option>' +
-                                            '<option value="baik" ' + (item.keterangan === 'baik' ? 'selected' : '') + '>Baik</option>' +
-                                            '<option value="sangat baik" ' + (item.keterangan === 'sangat baik' ? 'selected' : '') + '>Sangat Baik</option>' +
-                                        '</select>' +
-                                        '<button class="btn btn-outline-danger rounded removeKemampuan" type="button">Remove</button>' +
-                                    '</div>');
+                                    $('.kemampuan-wrapper-edit').append(`<div class="row kemampuan_dasar-input-edit">
+                                        <div class="col-md-7">
+                                            <input type="hidden" name="kemampuan_dasar_ids[]" value="${item.id_kemampuan_dasar}">
+                                            <input type="text" class="form-control" name="edit_kemampuan_dasar[${item.id_kemampuan_dasar}]" value="${item.kemampuan_dasar}" placeholder="Kemampuan Dasar" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control" name="edit_keterangan[${item.id_kemampuan_dasar}]" required style="">
+                                                <option value="" disabled>Pilih Keterangan</option>
+                                                <option value="kurang"  (${item.keterangan} === 'kurang' ? 'selected' : '')>Kurang</option>
+                                                <option value="cukup"  (${item.keterangan} === 'cukup' ? 'selected' : '')>Cukup</option>
+                                                <option value="baik"  (${item.keterangan} === 'baik' ? 'selected' : '')>Baik</option>
+                                                <option value="sangat baik"  (${item.keterangan} === 'sangat baik' ? 'selected' : '')>Sangat Baik</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
+                                        </div>
+                                    </div>`);
                                 });
                                 $('#empty-input-message').hide(); // Hide message if data exists
                             } else {
