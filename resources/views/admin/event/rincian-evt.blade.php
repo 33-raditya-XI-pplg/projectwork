@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col">
                         {{-- kanan --}}
-                        
+
                         <div class="mb-3">
                             <label for="nama_event" class="form-label">Nama Event</label>
                             <input type="hidden" name="event_id" value="{{ request()->route('event') }}">
@@ -62,7 +62,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="page_id" class="form-label">Page Id</label>
-                        <select class="form-select" name="page_id" aria-label="Default select example" disabled readonly>                                            
+                        <select class="form-select" name="page_id" aria-label="Default select example" disabled readonly>
                             {{-- <option selected>{{ \App\Models\Instansi::find($evt->instansi_id)->nama_instansi }}</option> --}}
                             <option  selected>{{ \App\Models\Page::find($evt->page_id)->nama_page ?? 'Nama halaman tidak ditemukan '}}</option>
                         </select>
@@ -93,33 +93,55 @@
             </thead>
             <tbody>
                 @foreach ($skema as $list)
-                    
-                <tr>
-                    <th scope="row">{{ $loop->index + 1 }}</th>
-                    <td>{{ \App\Models\Skema::find($list->skema_id)->nama_skema }}</td>
-                    <td>
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                id="dropdownMenuButton1" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="fa-solid fa-bars"></i>
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a href="{{ route('event-skema.show', [$evt->id_event, $list->id_event_skema]) }}"
-                                    class="dropdown-item text-dark"><i class="fa-solid fa-code pe-none"></i>
-                                    Rincian</a>
-                                </li>
-                                <li><a class="dropdown-item text-info" href="{{ route('event-skema.edit', [$evt->id_event, $list->id_event_skema]) }}"><i
-                                            class="fa-regular fa-pen-to-square"></i> Edit</a></li>
-                                <li><a href="{{ route('event-skema.delete', [$evt->id_event, $list->skema_id]) }}"
-                                        class="dropdown-item text-danger" data-confirm-delete="true"><i
-                                            class="fa-regular fa-trash-can pe-none"></i>
-                                        Delete</a>
-                                </li>                               
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                    <tr>
+                        <th scope="row">{{ $loop->index + 1 }}</th>
+                             <td>{{ \App\Models\Skema::find($list->skema_id)->nama_skema }}</td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ route('event-skema.show', [$evt->id_event, $list->id_event_skema]) }}"
+                                    class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-1">
+                                    <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                    <span>Rincian</span>
+                                </a>
+
+                                <a href="{{ route('event-skema.edit', [$evt->id_event, $list->id_event_skema]) }}"
+                                    class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
+                                    <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                    <span>Edit</span>
+                                </a>
+
+                                <form id="deleteForm-{{ $evt->id_event }}-{{ $list->skema_id }}"
+                                    action="{{ route('event-skema.delete', [$evt->id_event, $list->skema_id]) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1"
+                                        onclick="confirmDelete('{{ $evt->id_event }}-{{ $list->skema_id }}')">
+                                        <i class="fa-regular fa-trash-can" style="font-size: 0.75rem; color: white;"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <script>
+                                function confirmDelete(id) {
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Yes, delete it!',
+                                        cancelButtonText: 'Cancel'
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            document.getElementById('deleteForm-' + id).submit();
+                                        }
+                                    });
+                                }
+                            </script>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
