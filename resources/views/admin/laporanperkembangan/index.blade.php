@@ -529,23 +529,21 @@
                         url: '/laporanperkembangan/fetchEventData/' + eventID,
                         type: "GET",
                         dataType: "json",
-
                         success: function(response) {
                             console.log("Response from server: ", response);
                             if (response.data) {
                                 var data = response.data;
-
                                 $('#skema_select').empty();
-                                $('#skema_select').append(
-                                    '<option hidden disabled selected>Pilih Skema</option>');
-
+                                $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>');
                                 $.each(data, function(key, row) {
-                                    $('#skema_select').append('<option value="' + row
-                                        .id_skema + '">' + row.nama_skema +
-                                        '</option>');
+                                    $('#skema_select').append('<option value="' + row.id_skema + '">' + row.nama_skema + '</option>');
                                 });
-
                                 $('#skema_select').trigger("chosen:updated");
+                                // Restore skema_select from localStorage after options are loaded
+                                if (localStorage.getItem('skema_select')) {
+                                    $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
+                                    $('#search_btn').prop('disabled', false);
+                                }
                             }
                         },
                     });
@@ -569,14 +567,13 @@
                 $('input[type="date"]').val('');
                 $('input[type="checkbox"]').prop('checked', false);
 
+                // Alert hanya muncul jika user klik submit
                 Swal.fire({
                     icon: 'success',
                     title: 'Berhasil',
                     text: 'Data berhasil dicari.'
                 });
-
                 fetchDetailData(skemaID);
-
             });
 
 
@@ -1089,12 +1086,13 @@
             if (localStorage.getItem('event_select')) {
                 $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
             }
-            if (localStorage.getItem('skema_select')) {
-                setTimeout(function() {
-                    $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
-                    $('#search_btn').prop('disabled', false);
-                }, 500);
-            }
+            // Hapus blok setTimeout lama agar tidak bentrok dengan trigger di atas
+            // if (localStorage.getItem('skema_select')) {
+            //     setTimeout(function() {
+            //         $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
+            //         $('#search_btn').prop('disabled', false);
+            //     }, 500);
+            // }
 
             $('#event_select').on('change', function() {
                 localStorage.setItem('event_select', $(this).val());
@@ -1107,6 +1105,18 @@
                 localStorage.setItem('event_select', $('#event_select').val());
                 localStorage.setItem('skema_select', $('#skema_select').val());
             });
+            // --- Tambahan agar data tetap muncul setelah refresh ---
+            if (localStorage.getItem('event_select') && localStorage.getItem('skema_select')) {
+                var skemaID = localStorage.getItem('skema_select');
+                // Set value dropdown sesuai localStorage
+                $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
+                // Tunggu dropdown skema terisi, lalu set dan fetch data tanpa alert
+                setTimeout(function() {
+                    $('#skema_select').val(skemaID).trigger('change');
+                    $('#search_btn').prop('disabled', false);
+                    fetchDetailData(skemaID); // Tidak ada alert di sini
+                }, 600); // delay agar skema_select sudah terisi
+            }
         });
     </script>
 @endpush

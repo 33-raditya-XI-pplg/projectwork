@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
                 <button id="store_sertifikat_btn" class="btn btn-secondary rounded-3" value="1" disabled>Tambah</button>
 
@@ -70,10 +70,10 @@
             <div class="card-header">
                 <form id="export-form" action="{{ route('exportToPDF') }}" method="POST">
                     @csrf
-                    
-                    <input type="hidden" name="event_skema_id" id="event_skema_id">                    
+
+                    <input type="hidden" name="event_skema_id" id="event_skema_id">
                     <button type="button" class="btn btn-secondary rounded-3 mb-3" id="cetak_sertifikat_btn"
-                        onclick="submitForm()" disabled>Cetak 
+                        onclick="submitForm()" disabled>Cetak
                     </button>
 
                     <table id="example" class="table">
@@ -116,7 +116,7 @@
                     <label for="edit_nama_skema" class="form-label">Skema</label>
                     <input type="text" class="form-control mb-4" id="edit_nama_skema" disabled>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="edit_tgl_terbit" class="form-label">Tanggal Terbit</label>
                     <input type="date" class="form-control" id="edit_tgl_terbit">
@@ -129,7 +129,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white" 
+                <button type="submit" class="btn btn-success rounded-3 text-white"
                     id="store_sertifikat_btn" value="0">Simpan</button>
             </div>
         </div>
@@ -142,14 +142,14 @@
     $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder');
-            
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
-    }); 
+    });
     </script>
 
 <script>
@@ -166,7 +166,7 @@
                 Swal.showLoading();
             }
         });
-        form.submit(); 
+        form.submit();
     }
 
     // checkbox if Checked function
@@ -194,14 +194,14 @@
 
             if (target && target.id === 'selected_ids') {
                 var checkboxes = table.querySelectorAll('#selected_ids:checked');
-                
+
                 if (checkboxes.length > 0) {
                     printButton.disabled = false;
                 } else {
                     printButton.disabled = true;
                 }
             }
-            
+
         });
     });
 
@@ -219,7 +219,7 @@
 
         return day + ' ' + months[parseInt(month) - 1] + ' ' + year;
     }
-    
+
     // ajax Request Here
     $(document).ready(function() {
         var skemaID;
@@ -266,22 +266,22 @@
                 url: '/sertifikat/fetchPesertaData/' + skemaID,
                 type: "GET",
                 dataType: "json",
-                
+
                 success: function(response) {
                     Swal.close();
-                    
+
                     if(response){
                         var data_skema = response.data_skema;
                         var data_peserta = response.data_peserta;
                         var data_sertifikat = response.data_sertifikat;
-                        
+
                         var total_peserta = response.total_peserta;
                         var peserta_tanpa_nilai = response.data_peserta_tanpa_nilai.length;
                         var peserta_tanpa_sertifikat = response.data_peserta_tanpa_sertifikat.length;
 
-                        event_skemaID = data_skema.id_event_skema; // update Variable 
+                        event_skemaID = data_skema.id_event_skema; // update Variable
 
-                        // Input Disabled 
+                        // Input Disabled
                         $('#nama_skema').val(data_skema.nama_skema);
                         $('#peserta_select').empty();
                         $('#event_skema_id').val(event_skemaID);
@@ -306,11 +306,11 @@
 
                                 $('#peserta_select').append('<option hidden disabled selected>\
                                     <span style="color: red; font-weight: bold;">Nilai peserta kurang</span>\
-                                </option>'); 
+                                </option>');
                             } else {
                                 if (peserta_tanpa_sertifikat != 0) {
                                     // console.log('Peserta Kurang' + peserta_tanpa_sertifikat)
-                                    
+
                                     $('#create_tgl_terbit').prop('disabled', false);
                                     $('#create_tgl_berakhir').prop('disabled', false);
                                     $('#peserta_select').prop('disabled', false);
@@ -318,7 +318,7 @@
 
                                     $('#peserta_select').append('<option hidden disabled selected>\
                                         <span style="color: green; font-weight: bold;">Sertifikat siap dibuat</span>\
-                                    </option>'); 
+                                    </option>');
                                     $('#peserta_select').append('<option value="all">Semua Peserta</option>')
                                 } else {
                                     // console.log('Semua Peserta Memiliki Nilai')
@@ -330,7 +330,7 @@
 
                                     $('#peserta_select').append('<option hidden disabled selected>\
                                         <span style="color: red; font-weight: bold;">Semua Peserta telah memiliki Sertifikat</span>\
-                                    </option>'); 
+                                    </option>');
                                 }
                             }
                         } else {
@@ -354,8 +354,8 @@
                         $('#peserta_select').trigger("chosen:updated");
 
                         // Memeriksa apakah tabel memiliki data
-                        data_sertifikat == 0 ? 
-                            $('#checkAll').prop('disabled', true) : 
+                        data_sertifikat == 0 ?
+                            $('#checkAll').prop('disabled', true) :
                             $('#checkAll').prop('disabled', false)
 
                         // Table daftar peserta
@@ -365,7 +365,7 @@
                         $.each(data_sertifikat, function(index, row) {
                             var num = index + 1;
 
-                            var buttonAction = 
+                            var buttonAction =
                             '<li>\
                                 <a href="#" class="dropdown-item text-success print_sertifikat_btn" onclick="printCertificate(' + row.id_peserta + ')"">\
                                     <i class="fa-solid fa-book-open"></i>\
@@ -407,7 +407,7 @@
 
                         });
                         $("#example").DataTable();
-                        
+
                     }
                 },
                 error: function() {
@@ -417,7 +417,7 @@
                         text: 'Tidak dapat mengambil data dari server!'
                     });
                 }
-                
+
             });
 
         }
@@ -438,8 +438,8 @@
                             var data = response.data;
 
                             $('#skema_select').empty();
-                            $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>'); 
-                            
+                            $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>');
+
                             $.each(data, function(key, row){
                                 $('select[id="skema_select"]').append('<option value="'+ row.id_skema +'">' + row.nama_skema+ '</option>');
                             });
@@ -482,9 +482,33 @@
                 title: 'Berhasil',
                 text: 'Data berhasil dicari.'
             });
-            
+
             fetchDetailData(skemaID);
-        
+        });
+
+        // --- Tambahan agar data tetap muncul setelah refresh ---
+        if (localStorage.getItem('event_select')) {
+            $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
+        }
+        if (localStorage.getItem('skema_select')) {
+            setTimeout(function() {
+                $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
+                $('#search_btn').prop('disabled', false);
+                // Auto-fetch data setelah refresh jika event & skema sudah dipilih
+                fetchDetailData(localStorage.getItem('skema_select'));
+            }, 500);
+        }
+
+        $('#event_select').on('change', function() {
+            localStorage.setItem('event_select', $(this).val());
+            localStorage.removeItem('skema_select');
+        });
+        $('#skema_select').on('change', function() {
+            localStorage.setItem('skema_select', $(this).val());
+        });
+        $('#search_btn').on('click', function() {
+            localStorage.setItem('event_select', $('#event_select').val());
+            localStorage.setItem('skema_select', $('#skema_select').val());
         });
 
         // Store function -- to store and update
@@ -539,9 +563,9 @@
                         });
 
                     }
-                        
+
                 });
-            } 
+            }
             else {                      // to Update Sertifikat Data
                 tgl_terbit = $('#edit_tgl_terbit').val();
                 tgl_berakhir = $('#edit_tgl_berakhir').val();
@@ -585,7 +609,7 @@
                         });
 
                     }
-                        
+
                 });
             }
 
@@ -603,7 +627,7 @@
 
                 success: function(response) {
                     var data_sertifikat_peserta = response.data_sertifikat_peserta;
-                    
+
                     $('#editSertifikatModal').modal('show');
 
                     $('#edit_nama_peserta').val(data_sertifikat_peserta.nama_lengkap);
@@ -611,9 +635,9 @@
 
                     $('#edit_tgl_terbit').val(data_sertifikat_peserta.tgl_terbit);
                     $('#edit_tgl_berakhir').val(data_sertifikat_peserta.tgl_berakhir);
-                    
+
                 }
-                
+
             });
         });
 
@@ -649,7 +673,9 @@
             });
         });
 
-    })
+
+
+    });
 
     function printCertificate(id) {
         var printFrame = document.getElementById('printFrame');
@@ -668,6 +694,8 @@
                 Swal.showLoading();
             }
         });
+
+
     }
 
 </script>

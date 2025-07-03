@@ -9,7 +9,7 @@
 
         <div class="d-flex flex-row mx-2">
             <div class="card-header me-2 w-100 mx-1">
-                <select id="event_select" name="event_select" class=" form-control js-example-basic-single" data-placeholder="Pilih Event" >              
+                <select id="event_select" name="event_select" class=" form-control js-example-basic-single" data-placeholder="Pilih Event" >
                     <option hidden disabled selected></option>
                     @foreach ($event as $row)
                         <option value="{{ $row->id_event }}">{{ $row->nama_event }}</option>
@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<div class="container mt-2"> 
+<div class="container mt-2">
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
@@ -88,8 +88,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>              
-                                    
+                                    </div>
+
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                         <th scope="col">No</th>
                         <th scope="col">Nama Perserta</th>
                         <th scope="col">Status Nilai</th>
-                        <th scope="col">Nilai Peserta 
+                        <th scope="col">Nilai Peserta
                             <span style="color: grey; font-size: 15px;">avg</span>
                         </th>
                         <th scope="col">Keterangan</th>
@@ -143,12 +143,12 @@
                         <!-- Input dinamis -- Ajax Request -->
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white" 
+                <button type="submit" class="btn btn-success rounded-3 text-white"
                     id="store_nilai_btn" value="1">Tambah</button>
             </div>
         </div>
@@ -181,18 +181,18 @@
                         <!-- Input dinamis -- Ajax Request -->
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white" 
+                <button type="submit" class="btn btn-success rounded-3 text-white"
                     id="store_nilai_btn" value="0">Simpan</button>
             </div>
         </div>
     </div>
 </div>
-            
+
 @endsection
 
 @push('script')
@@ -201,17 +201,17 @@
     $(document).ready(function() {
         $('.js-example-basic-single').each(function() {
             var placeholder = $(this).data('placeholder');
-            
+
             $(this).select2({
-                placeholder: placeholder, 
+                placeholder: placeholder,
                 allowClear: true,
-                minimumResultsForSearch: Infinity 
+                minimumResultsForSearch: Infinity
             });
         });
-    }); 
+    });
     </script> --}}
 <script>
-    
+
 
     $(document).ready(function() {
         var skemaID;
@@ -226,7 +226,7 @@
         function formatNumber(value) {
             var num = parseFloat(value);
             if (isNaN(num)) {
-                return '0'; 
+                return '0';
             }
             var fixedValue = num.toFixed(1);
 
@@ -289,7 +289,7 @@
                 url: '/penilaian/fetchSkemaData/' + skemaID,
                 type: "GET",
                 dataType: "json",
-                
+
                 success: function(response) {
                     Swal.close();
                     if(response){
@@ -299,8 +299,8 @@
                         data_nilai_peserta = response.data_nilai_peserta;
 
                         var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent;
-                        
-                        // Input Disabled 
+
+                        // Input Disabled
                         $('#nama_event').val(data_skema.nama_event);
                         $('#jenis_event').val(data_skema.nama_jenis_event);
 
@@ -315,7 +315,7 @@
                         var btnSedikit = document.getElementById('btnSedikit');
 
                         function renderPenguji(names) {
-                            listPenguji.innerHTML = ''; 
+                            listPenguji.innerHTML = '';
 
                             names.forEach(function(name) {
                                 var listItem = document.createElement('li');
@@ -345,8 +345,8 @@
                                 return penguji.nama_lengkap;
                             });
                             renderPenguji(allPenguji);
-                            btnSelengkapnya.style.display = 'none'; 
-                            btnSedikit.style.display = 'inline'; 
+                            btnSelengkapnya.style.display = 'none';
+                            btnSedikit.style.display = 'inline';
                         });
 
                         // Tambahkan event listener untuk tombol Sedikit
@@ -356,10 +356,10 @@
                                 return penguji.nama_lengkap;
                             });
                             renderPenguji(initialPenguji);
-                            btnSedikit.style.display = 'none'; 
-                            btnSelengkapnya.style.display = 'inline'; 
+                            btnSedikit.style.display = 'none';
+                            btnSelengkapnya.style.display = 'inline';
                         });
-                        
+
                         if (data_skema.status === "Aktif") {
                             $('#status').prop('checked', true);
                         } else {
@@ -374,11 +374,11 @@
                         $.each(data_nilai_peserta, function(index, row) {
                             event_skemaID = row.id_event_skema;
                             var num = index + 1;
-                            
+
                             // Kondisi -> Button aksi -- tabel nilai
                             var buttonAction;
                             if (row.banyak_nilai != null) {
-                                buttonAction = 
+                                buttonAction =
                                 '<li>\
                                     <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
                                         <i class="fa-regular fa-pen-to-square"></i>\
@@ -390,41 +390,41 @@
                                      Delete</a>\
                                 </li>'
                             } else {
-                                buttonAction = 
+                                buttonAction =
                                 '<li>\
                                     <a href="#" class="dropdown-item text-primary create_nilai_btn" data-id="' + row.id_peserta + '">\
                                         <i class="fa-regular fa-pen-to-square"></i>\
                                      Tambah</a>\
                                 </li>'
                             }
-                            
+
                             // Kondisi -> Keterangan nilai kosong -- tabel nilai
                             var banyakData, nilaiData;
                             if (row.banyak_nilai_nol == 0) {
                                 banyakData = 'Nilai Lengkap';
                                 nilaiData = formatNumber(row.avg_nilai)
 
-                                let color = (row.keterangan_rentang_nilai === "Sangat Kompeten" || row.keterangan_rentang_nilai === "Cukup Kompeten") ? 'green' : 
+                                let color = (row.keterangan_rentang_nilai === "Sangat Kompeten" || row.keterangan_rentang_nilai === "Cukup Kompeten") ? 'green' :
                                             (row.keterangan_rentang_nilai === "Kurang Kompeten" || row.keterangan_rentang_nilai === "Tidak Kompeten") ? 'red' : 'black';
 
                                 inisialNilaiData = '<span style="color: ' + color + '; font-weight: bold;">' + row.keterangan_rentang_nilai + '</span>';
 
-                                row.updated_at != null ? 
+                                row.updated_at != null ?
                                     timestampsNilaiData = formatTimestamps(row.updated_at) :
                                     timestampsNilaiData = formatTimestamps(row.created_at);
-                            } 
+                            }
                             else if (row.banyak_nilai_nol == null) {
                                 banyakData = '-';
                                 nilaiData = '-'
                                 inisialNilaiData = '-'
                                 timestampsNilaiData = '-'
-                            } 
+                            }
                             else {
                                 banyakData = '<span style="color: red; font-weight: bold;">Nilai kurang =  ' + row.banyak_nilai_nol + '</span>';
                                 nilaiData = '<span style="color: red; font-weight: bold;"> ' + formatNumber(row.avg_nilai) + '</span>'
                                 inisialNilaiData = '<span style="color: red; font-weight: bold;">Nilai Kurang</span>'
-                                
-                                row.updated_at != null ? 
+
+                                row.updated_at != null ?
                                     timestampsNilaiData = '<span style="color: red; font-weight: bold;">'+ formatTimestamps(row.updated_at) +'</span>' :
                                     timestampsNilaiData = '<span style="color: red; font-weight: bold;">'+ formatTimestamps(row.created_at) +'</span>';
                                     timestampsNilaiData = formatTimestamps(row.created_at);
@@ -463,7 +463,7 @@
                         text: 'Tidak dapat mengambil data dari server!'
                     });
                 }
-                
+
             });
         }
 
@@ -483,8 +483,8 @@
                             var data = response.data;
 
                             $('#skema_select').empty();
-                            $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>'); 
-                            
+                            $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>');
+
                             $.each(data, function(key, row){
                                 $('select[id="skema_select"]').append('<option value="'+ row.id_skema +'">' + row.nama_skema+ '</option>');
                             });
@@ -517,9 +517,9 @@
                 title: 'Berhasil',
                 text: 'Data berhasil dicari.'
             });
-            
+
             fetchDetailData(skemaID);
-        
+
         });
 
         // Create Modal Trigger
@@ -534,7 +534,7 @@
 
                 success: function(response) {
                     var data_peserta_create = response.data_peserta;
-                    
+
                     $('#createNilaiModal').modal('show');
                     $('#create_nama_peserta').val(data_peserta_create.nama_lengkap);
                     $('#create_nama_skema').val(data_skema.nama_skema);
@@ -555,11 +555,11 @@
                                 </div>\
                             </div>'
                         );
-                        
+
                     });
-                    
+
                 }
-                
+
             });
         });
 
@@ -575,7 +575,7 @@
 
                 success: function(response) {
                     var data_peserta_edit = response.data_nilai;
-                    
+
                     $('#editNilaiModal').modal('show');
                     $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
                     $('#edit_nama_skema').val(data_skema.nama_skema);
@@ -597,9 +597,9 @@
                         );
 
                     });
-                    
+
                 }
-                
+
             });
         });
 
@@ -632,7 +632,7 @@
                     create_nilai_data.push(nilai);
                 });
             }
-            
+
             // looping for Create Associative Array
             var nilaiSubSkemaArray = {};
             for (var i = 0; i < create_sub_skemaID.length; i++) {
@@ -683,10 +683,10 @@
                     });
 
                 }
-                    
+
             });
         })
-        
+
         // Delete function
         $(document).on('click', '.delete_nilai_btn', function(e) {
             e.preventDefault()
@@ -712,7 +712,30 @@
                 }
             });
         });
-        
+        if (localStorage.getItem('event_select')) {
+            $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
+        }
+        if (localStorage.getItem('skema_select')) {
+            setTimeout(function() {
+                $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
+                $('#search_btn').prop('disabled', false);
+                // Auto-fetch data setelah refresh jika event & skema sudah dipilih
+                fetchDetailData(localStorage.getItem('skema_select'));
+            }, 500);
+        }
+
+        $('#event_select').on('change', function() {
+            localStorage.setItem('event_select', $(this).val());
+            localStorage.removeItem('skema_select');
+        });
+        $('#skema_select').on('change', function() {
+            localStorage.setItem('skema_select', $(this).val());
+        });
+        $('#search_btn').on('click', function() {
+            localStorage.setItem('event_select', $('#event_select').val());
+            localStorage.setItem('skema_select', $('#skema_select').val());
+        });
+
     });
 
 </script>
