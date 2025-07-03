@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\kemampuan_dasar;
-use App\Models\LaporanPerkembangan;
-use App\Models\Event_Skema;
-use App\Models\Sub_Skema;
-use App\Models\User;
 use Carbon\Carbon;
-use Log;
+use App\Models\User;
 use App\Models\Event;
+use App\Models\Sub_Skema;
+use App\Models\Event_Skema;
 use Illuminate\Http\Request;
+use App\Models\kemampuan_dasar;
 use Illuminate\Support\Facades\DB;
+use App\Models\LaporanPerkembangan;
+use Illuminate\Support\Facades\Log;
 
 class LaporanPerkembanganController extends Controller
 {
@@ -192,7 +192,7 @@ class LaporanPerkembanganController extends Controller
             'saran' => 'required|string',
             // 'keterangan' => 'nullable|array',
             // 'keterangan.*' => 'in:kurang,cukup,baik,sangat baik',
-            // 'catatan' => 'required|string',    
+            // 'catatan' => 'required|string',
         ]);
 
         DB::beginTransaction();
