@@ -375,27 +375,21 @@
                             event_skemaID = row.id_event_skema;
                             var num = index + 1;
 
-                            // Kondisi -> Button aksi -- tabel nilai
+                            // Kondisi -> Button aksi -- tabel nilai (ubah dropdown menjadi button biasa)
                             var buttonAction;
                             if (row.banyak_nilai != null) {
                                 buttonAction =
-                                '<li>\
-                                    <a href="#" class="dropdown-item text-info edit_nilai_btn" data-id="' + row.id_peserta + '">\
-                                        <i class="fa-regular fa-pen-to-square"></i>\
-                                     Edit</a>\
-                                </li>\
-                                <li>\
-                                    <a href="#" class="dropdown-item text-danger delete_nilai_btn" data-id="' + row.id_peserta + '">\
-                                        <i class="fa-regular fa-trash-can pe-none"></i>\
-                                     Delete</a>\
-                                </li>'
+                                    '<button type="button" class="btn btn-info btn-sm edit_nilai_btn me-1 text-white rounded mb-1 " data-id="' + row.id_peserta + '">\
+                                        <i class="fa-regular fa-pen-to-square"></i> Edit\
+                                    </button>' +
+                                    '<button type="button" class="btn btn-danger btn-sm delete_nilai_btn rounded mb-1" data-id="' + row.id_peserta + '">\
+                                        <i class="fa-regular fa-trash-can pe-none"></i> Delete\
+                                    </button>';
                             } else {
                                 buttonAction =
-                                '<li>\
-                                    <a href="#" class="dropdown-item text-primary create_nilai_btn" data-id="' + row.id_peserta + '">\
-                                        <i class="fa-regular fa-pen-to-square"></i>\
-                                     Tambah</a>\
-                                </li>'
+                                    '<button type="button" class="btn btn-primary btn-sm create_nilai_btn rounded" data-id="' + row.id_peserta + '">\
+                                        <i class="fa-regular fa-pen-to-square"></i> Tambah\
+                                    </button>';
                             }
 
                             // Kondisi -> Keterangan nilai kosong -- tabel nilai
@@ -438,17 +432,7 @@
                                 <td>' + nilaiData +'</td>\
                                 <td>' + inisialNilaiData +'</td>\
                                 <td>' + timestampsNilaiData + '</td>\
-                                <td>\
-                                    <div class="dropdown px-3">\
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
-                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
-                                            <i class="fa-solid fa-bars"></i>\
-                                        </a>\
-                                        <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
-                                            '+ buttonAction +'\
-                                        </ul>\
-                                    </div>\
-                                </td>\
+                                <td class="px-3 text-white">' + buttonAction + '</td>\
                                 </tr>'
                             );
                         });

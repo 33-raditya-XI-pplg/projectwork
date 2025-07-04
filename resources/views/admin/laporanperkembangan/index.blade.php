@@ -139,7 +139,7 @@
                         <input type="hidden" id="event_skema_id" name="event_skema_id" value="">
                     </div>
                     <div>
-                        <label class="form-label" for="pengalaman_anak">Pengalaman anak di dunia komputer</label>
+                        <label class="form-label" for="pengalaman_anak">Keterangan Singkat</label>
                         <textarea class="form-control " name="pengalaman_anak" id="pengalaman_anak" rows="2"></textarea>
                     </div>
                     <div class="form-group kemampuan-wrapper-create mb-3 mt-3">
@@ -471,33 +471,24 @@
                                 // Jika tidak ada catatan, tampilkan tombol tambah
                                 else {
                                     buttonAction =
-                                        '<li>\
-                                    <a href="#" class="dropdown-item text-primary create_laporan_btn" data-id="' + row
+                                        '<a href="#" class="btn btn-info btn-sm rounded text-white mb-3 create_laporan_btn" data-id="' + row
                                         .id_peserta + '">\
-                                        <i class="fa-regular fa-pen-to-square"></i> Tambah</a>\
-                                </li>';
+                                        <i class="fa-regular fa-pen-to-square"></i> Tambah</a>';
                                 }
 
                                 // Tampilkan data ke dalam tabel
-                                $('tbody').append(
+                               $('tbody').append(
                                     '<tr>\
-                                    <td>' + num + '</td>\
-                                    <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
-                                    <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
-                                    <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) :
-                                        'Tanggal tidak tersedia') + '</td>\
-                                    <td>\
-                                        <div class="dropdown px-3">\
-                                            <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
-                                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
-                                                <i class="fa-solid fa-bars"></i>\
-                                            </a>\
-                                            <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
+                                        <td>' + num + '</td>\
+                                        <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
+                                        <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
+                                        <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) : 'Tanggal tidak tersedia') + '</td>\
+                                        <td>\
+                                            <div class="d-flex flex-column gap-2 px-3 ">\
                                                 ' + buttonAction + '\
-                                            </ul>\
-                                        </div>\
-                                    </td>\
-                                </tr>'
+                                            </div>\
+                                        </td>\
+                                    </tr>'
                                 );
                             });
 

@@ -1,7 +1,7 @@
 @extends('layouts.panel.index')
 @section('title', 'Kegiatan')
 @section('content')
-    <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
+    <div class="">
         <div class="card">
             <div class="card-body">
                 <div class="row">

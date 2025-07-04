@@ -28,7 +28,7 @@
                 <input type="text" class="form-control" name="nama_event" id="nama_event"
                 value="{{ $rn->implode(', ') }}" disabled readonly>
             </div>
-            
+
     </div>
 
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
@@ -36,8 +36,8 @@
             <div class="d-flex justify-content-between">
               <span class="h3 fw-bold">Daftar Peserta</span>
               <div>
-                <a class="btn btn-danger rounded" href="{{ route('event.rincian', $evt) }}">< Back</a>
-                <a class="btn btn-primary rounded" href="{{ route('event-skema.add', [$evt, $evtSkema->id_event_skema]) }}"><i class="fa-solid fa-user-plus text-white"></i></a>
+                <a class="btn btn-danger rounded" href="{{ route('event.rincian', $evt) }}">Hapus Peserta</a>
+                <a class="btn btn-primary rounded" href="{{ route('event-skema.add', [$evt, $evtSkema->id_event_skema]) }}">Tambah Peserta<i class=" text-white"></i></a>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@
                         <td>{{ $loop->index +1}}</td>
                         <td >{{ $list->nama_lengkap }}</td>
                         <td class="text-capitalize text-center">{{ $list->jenis_kelamin }}</td>
-                        <td><a href="{{ route('event-skema.delete-student', [$evtSkema, $list->id_user]) }}" data-confirm-delete="true"><i class="fa-solid fa-user-minus text-danger pe-none"></i></a></td>
+                        <td><a href="{{ route('event-skema.delete-student', [$evtSkema, $list->id_user]) }}" data-confirm-delete="true" class="btn btn-danger text-white rounded">Hapus<i class="text-danger pe-none"></i></a></td>
                     </tr>
                 @endforeach
             </tbody>

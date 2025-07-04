@@ -366,22 +366,15 @@
                             var num = index + 1;
 
                             var buttonAction =
-                            '<li>\
-                                <a href="#" class="dropdown-item text-success print_sertifikat_btn" onclick="printCertificate(' + row.id_peserta + ')"">\
-                                    <i class="fa-solid fa-book-open"></i>\
-                                    Lihat</a>\
-                            </li>\
-                            <li>\
-                                <a href="#" class="dropdown-item text-info edit_sertifikat_btn" data-id="' + row.id_peserta + '">\
-                                    <i class="fa-regular fa-pen-to-square"></i>\
-                                    Edit</a>\
-                            </li>\
-                            <li>\
-                            <li>\
-                                <a href="#" class="dropdown-item text-danger delete_sertifikat_btn" data-id="' + row.id_peserta + '">\
-                                    <i class="fa-regular fa-trash-can pe-none"></i>\
-                                    Delete</a>\
-                            </li>'
+                                '<button type="button" class="rounded mb-1 btn btn-success btn-sm print_sertifikat_btn me-1 text-white" onclick="printCertificate(' + row.id_peserta + ')">\
+                                    <i class="fa-solid fa-book-open"></i> Lihat\
+                                </button>' +
+                                '<button type="button" class="rounded mb-1 btn btn-info btn-sm edit_sertifikat_btn me-1 text-white" data-id="' + row.id_peserta + '">\
+                                    <i class="fa-regular fa-pen-to-square"></i> Edit\
+                                </button>' +
+                                '<button type="button" class="rounded mb-1 btn btn-danger btn-sm delete_sertifikat_btn" data-id="' + row.id_peserta + '">\
+                                    <i class="fa-regular fa-trash-can pe-none"></i> Delete\
+                                </button>';
 
                             $('tbody').append(
                                 '<tr>\
@@ -391,17 +384,7 @@
                                 <td>' + row.nomor_sertifikat +'</td>\
                                 <td>' + formatTimestamps(row.tgl_terbit) +'</td>\
                                 <td>' + row.masa_berlaku +'</td>\
-                                <td>\
-                                    <div class="dropdown px-3">\
-                                        <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"\
-                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">\
-                                            <i class="fa-solid fa-bars"></i>\
-                                        </a>\
-                                        <ul id="dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">\
-                                            '+ buttonAction +'\
-                                        </ul>\
-                                    </div>\
-                                </td>\
+                                <td class="px-3">' + buttonAction + '</td>\
                                 </tr>'
                             );
 
