@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->string('nomor_sertifikat');
 
             $table->date('tgl_terbit');
-            $table->date('tgl_berakhir');
+            $table->date('tgl_berakhir')->nullable();
 
             $table->string('masa_berlaku');
             $table->string('keterangan')->nullable();

@@ -157,7 +157,7 @@ class SertifikatController extends Controller
     {
         $option = $request->option;
         $tgl_terbit = $request->tgl_terbit;
-        $tgl_berakhir = $request->tgl_berakhir;
+        $tgl_berakhir = $request->tgl_berakhir ?? null;
         $event_skemaID = $request->event_skemaID;
         $created_by = $request->created_by;
 
@@ -204,21 +204,25 @@ class SertifikatController extends Controller
                                 ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
                                 ->first();
 
-                            $a = Carbon::parse($tgl_terbit);
-                            $b = Carbon::parse($tgl_berakhir);
 
-                            // Hitung masa berlaku dalam tahun
-                            $masa_berlaku_diff = $a->diffInYears($b);
-                            if ($masa_berlaku_diff == 0) {
-                                $masa_berlaku_diff = $a->diffInMonths($b);
-                                if ($masa_berlaku_diff == 0) {
-                                    $masa_berlaku_diff = $a->diffInDays($b);
-                                    $masa_berlaku = $masa_berlaku_diff . ' Hari';
-                                } else {
-                                    $masa_berlaku = $masa_berlaku_diff . ' Bulan';
-                                }
+                            if (empty($tgl_berakhir)) {
+                                $masa_berlaku = 'Seumur Hidup';
                             } else {
-                                $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                                $a = Carbon::parse($tgl_terbit);
+                                $b = Carbon::parse($tgl_berakhir);
+                                // Hitung masa berlaku dalam tahun
+                                $masa_berlaku_diff = $a->diffInYears($b);
+                                if ($masa_berlaku_diff == 0) {
+                                    $masa_berlaku_diff = $a->diffInMonths($b);
+                                    if ($masa_berlaku_diff == 0) {
+                                        $masa_berlaku_diff = $a->diffInDays($b);
+                                        $masa_berlaku = $masa_berlaku_diff . ' Hari';
+                                    } else {
+                                        $masa_berlaku = $masa_berlaku_diff . ' Bulan';
+                                    }
+                                } else {
+                                    $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                                }
                             }
 
                             Sertifikat::create([
@@ -270,21 +274,25 @@ class SertifikatController extends Controller
                 ->first();
 
             if ($sertifikat) {
-                $a = Carbon::parse($tgl_terbit);
-                $b = Carbon::parse($tgl_berakhir);
 
-                // Hitung masa berlaku dalam tahun
-                $masa_berlaku_diff = $a->diffInYears($b);
-                if ($masa_berlaku_diff == 0) {
-                    $masa_berlaku_diff = $a->diffInMonths($b);
-                    if ($masa_berlaku_diff == 0) {
-                        $masa_berlaku_diff = $a->diffInDays($b);
-                        $masa_berlaku = $masa_berlaku_diff . ' Hari';
-                    } else {
-                        $masa_berlaku = $masa_berlaku_diff . ' Bulan';
-                    }
+                if (empty($tgl_berakhir)) {
+                    $masa_berlaku = 'Seumur Hidup';
                 } else {
-                    $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                    $a = Carbon::parse($tgl_terbit);
+                    $b = Carbon::parse($tgl_berakhir);
+                    // Hitung masa berlaku dalam tahun
+                    $masa_berlaku_diff = $a->diffInYears($b);
+                    if ($masa_berlaku_diff == 0) {
+                        $masa_berlaku_diff = $a->diffInMonths($b);
+                        if ($masa_berlaku_diff == 0) {
+                            $masa_berlaku_diff = $a->diffInDays($b);
+                            $masa_berlaku = $masa_berlaku_diff . ' Hari';
+                        } else {
+                            $masa_berlaku = $masa_berlaku_diff . ' Bulan';
+                        }
+                    } else {
+                        $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                    }
                 }
 
                 // Update sertifikat yang sudah ada
@@ -319,21 +327,25 @@ class SertifikatController extends Controller
                     ->where('rentang_atas', '>=', $nilai_peserta->avg_nilai)
                     ->first();
 
-                $a = Carbon::parse($tgl_terbit);
-                $b = Carbon::parse($tgl_berakhir);
 
-                // Hitung masa berlaku dalam tahun
-                $masa_berlaku_diff = $a->diffInYears($b);
-                if ($masa_berlaku_diff == 0) {
-                    $masa_berlaku_diff = $a->diffInMonths($b);
-                    if ($masa_berlaku_diff == 0) {
-                        $masa_berlaku_diff = $a->diffInDays($b);
-                        $masa_berlaku = $masa_berlaku_diff . ' Hari';
-                    } else {
-                        $masa_berlaku = $masa_berlaku_diff . ' Bulan';
-                    }
+                if (empty($tgl_berakhir)) {
+                    $masa_berlaku = 'Seumur Hidup';
                 } else {
-                    $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                    $a = Carbon::parse($tgl_terbit);
+                    $b = Carbon::parse($tgl_berakhir);
+                    // Hitung masa berlaku dalam tahun
+                    $masa_berlaku_diff = $a->diffInYears($b);
+                    if ($masa_berlaku_diff == 0) {
+                        $masa_berlaku_diff = $a->diffInMonths($b);
+                        if ($masa_berlaku_diff == 0) {
+                            $masa_berlaku_diff = $a->diffInDays($b);
+                            $masa_berlaku = $masa_berlaku_diff . ' Hari';
+                        } else {
+                            $masa_berlaku = $masa_berlaku_diff . ' Bulan';
+                        }
+                    } else {
+                        $masa_berlaku = $masa_berlaku_diff . ' Tahun';
+                    }
                 }
 
                 // Buat sertifikat baru

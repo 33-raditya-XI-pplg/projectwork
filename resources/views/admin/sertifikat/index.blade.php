@@ -51,7 +51,7 @@
                                     <input type="text" class="form-control" id="nama_skema" placeholder="Pilih Skema Dulu" disabled>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="create_tgl_berakhir" class="form-label">Tanggal Berakhir</label>
+                                    <label for="create_tgl_berakhir" class="form-label">Tanggal Berakhir (Opsional)</label>
                                     <input type="date" class="form-control" id="create_tgl_berakhir" disabled>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                     <input type="date" class="form-control" id="edit_tgl_terbit">
                 </div>
                 <div class="mb-3">
-                    <label for="edit_tgl_berakhir" class="form-label">Tanggal Berakhir</label>
+                    <label for="edit_tgl_berakhir" class="form-label">Tanggal Berakhir </label>
                     <input type="date" class="form-control" id="edit_tgl_berakhir">
                 </div>
             </div>
