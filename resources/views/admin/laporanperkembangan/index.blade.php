@@ -62,10 +62,10 @@
                                             <input type="text" class="form-control" id="tgl_mulai"
                                                 placeholder="dd-mm-yyyy" disabled>
                                         </div>
-                                        <div class="form-check form-switch mt-3">
+                                        {{-- <div class="form-check form-switch mt-3">
                                             <label class="form-check-label" for="status">Status</label>
                                             <input class="form-check-input" type="checkbox" id="status" disabled>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
