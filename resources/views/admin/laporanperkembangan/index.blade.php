@@ -457,16 +457,16 @@
                                 // Jika ada catatan, tampilkan tombol edit dan delete
                                 if (row.catatan != null) {
                                     buttonAction =
-                                        '<li>\
-                                    <a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row
-                                        .id_peserta + '">\
-                                        <i class="fa-regular fa-pen-to-square"></i> Edit</a>\
-                                </li>\
-                                <li>\
-                                    <a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row
-                                        .id_peserta + '">\
-                                        <i class="fa-regular fa-trash-can"></i> Delete</a>\
-                                </li>';
+                                        '<li style="list-style: none;">\
+                                            <a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">\
+                                                <i class="fa-regular fa-pen-to-square"></i> Edit\
+                                            </a>\
+                                        </li>\
+                                        <li style="list-style: none;">\
+                                            <a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row.id_peserta + '">\
+                                                <i class="fa-regular fa-trash-can"></i> Delete\
+                                            </a>\
+                                        </li>';
                                 }
                                 // Jika tidak ada catatan, tampilkan tombol tambah
                                 else {
