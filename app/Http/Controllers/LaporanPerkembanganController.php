@@ -39,88 +39,98 @@ class LaporanPerkembanganController extends Controller
 
 
     public function fetchSkemaData($id)
-    {
-
-        if (!$id) {
-            return response()->json(['message' => 'ID tidak ditemukan'], 400);
-        }
-        // Ambil data skema
-        $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-            ->select(
-                'tb_event_skema.id_event_skema',
-                'tb_event.id_event',
-                'tb_event.nama_event',
-                'tb_event.tgl_mulai',
-                'tb_event.tgl_berakhir',
-                'tb_event.status',
-                'tb_jenis_event.nama_jenis_event',
-                'tb_skema.nama_skema',
-                'tb_tempat.nama_tempat'
-            )
-            ->where('tb_event_skema.skema_id', $id)
-            ->first();
-
-        // Ambil data penguji
-        $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
-            ->select('id_event_skema')
-            ->with(
-                [
-                    'event_skemaMenguji' => function ($query) {
-                        $query->select('id_user', 'nama_lengkap');
-                    }
-                ]
-            )
-            ->first();
-
-        // Ambil data sub skema
-        $data_sub_skema = DB::table('tb_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-            ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
-            ->select('tb_event_skema.id_event_skema', 'tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub')
-            ->where('tb_event_skema.skema_id', $id)
-            ->get();
-
-        // Ambil hanya id_event_skema dan id_peserta
-        $data_peserta = DB::table('tb_peserta')
-            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-            ->leftJoin('tb_laporan_perkembangan', 'tb_peserta.id_peserta', '=', 'tb_laporan_perkembangan.peserta_id')
-            ->select(
-                'tb_peserta.id_peserta',  // id_peserta
-                'tb_user.nama_lengkap',
-                'tb_event_skema.id_event_skema', // id_event_skema
-                'tb_laporan_perkembangan.catatan',
-                'tb_laporan_perkembangan.tanggal_penilaian',
-            )
-            ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
-            ->get();
-
-        // Ambil jumlah sub skema per event
-        $jumlahSubSkemaPerEvent = DB::table('tb_event_skema')
-            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-            ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
-            ->select(
-                'tb_event_skema.id_event_skema',
-                'tb_skema.nama_skema',
-                DB::raw('COUNT(tb_sub_skema.id_sub_skema) as jumlah_sub_skema')
-            )
-            ->groupBy('tb_event_skema.id_event_skema', 'tb_skema.nama_skema')
-            ->where('tb_event_skema.skema_id', $id)
-            ->first();
-
-        return response()->json([
-            'data_skema' => $data_skema,
-            'data_penguji' => $data_penguji,
-            'data_sub_skema' => $data_sub_skema,
-            'data_peserta' => $data_peserta,
-            'jumlahSubSkemaPerEvent' => $jumlahSubSkemaPerEvent
-        ]);
+{
+    if (!$id) {
+        return response()->json(['message' => 'ID tidak ditemukan'], 400);
     }
 
+
+    // Ambil data skema
+    $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+        ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+        ->select(
+            'tb_event_skema.id_event_skema',
+            'tb_event.id_event',
+            'tb_event.nama_event',
+            'tb_event.tgl_mulai',
+            'tb_event.tgl_berakhir',
+            'tb_event.status',
+            'tb_jenis_event.nama_jenis_event',
+            'tb_skema.nama_skema',
+            'tb_tempat.nama_tempat'
+        )
+        ->where('tb_event_skema.skema_id', $id)
+        ->first();
+
+
+
+
+    // Ambil data penguji
+    $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
+        ->select('id_event_skema')
+        ->with([
+            'event_skemaMenguji' => function ($query) {
+                $query->select('id_user', 'nama_lengkap');
+            }
+        ])
+        ->first();
+
+    // Ambil data sub skema
+    $data_sub_skema = DB::table('tb_event_skema')
+        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+        ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
+        ->select('tb_event_skema.id_event_skema', 'tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub')
+        ->where('tb_event_skema.skema_id', $id)
+        ->get();
+
+    // Ambil hanya id_event_skema dan id_peserta
+    $data_peserta = DB::table('tb_peserta')
+        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+        ->leftJoin('tb_laporan_perkembangan', 'tb_peserta.id_peserta', '=', 'tb_laporan_perkembangan.peserta_id')
+        ->select(
+            'tb_peserta.id_peserta',
+            'tb_user.nama_lengkap',
+            'tb_event_skema.id_event_skema',
+            'tb_laporan_perkembangan.catatan',
+            'tb_laporan_perkembangan.tanggal_penilaian',
+        )
+        ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
+        ->get();
+
+    // Ambil jumlah sub skema per event
+    $jumlahSubSkemaPerEvent = DB::table('tb_event_skema')
+        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+        ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
+        ->select(
+            'tb_event_skema.id_event_skema',
+            'tb_skema.nama_skema',
+            DB::raw('COUNT(tb_sub_skema.id_sub_skema) as jumlah_sub_skema')
+        )
+        ->groupBy('tb_event_skema.id_event_skema', 'tb_skema.nama_skema')
+        ->where('tb_event_skema.skema_id', $id)
+        ->first();
+// ✅ PERBAIKAN UTAMA: Tambahkan pengecekan null sebelum mengakses property
+    if (!$data_skema) {
+         return response()->json([
+        'data_skema' => $data_skema,
+        'data_penguji' => $data_penguji,
+        'data_sub_skema' => $data_sub_skema,
+        'data_peserta' => $data_peserta,
+        'jumlahSubSkemaPerEvent' => $jumlahSubSkemaPerEvent
+    ]);
+    }
+    return response()->json([
+        'data_skema' => $data_skema,
+        'data_penguji' => $data_penguji,
+        'data_sub_skema' => $data_sub_skema,
+        'data_peserta' => $data_peserta,
+        'jumlahSubSkemaPerEvent' => $jumlahSubSkemaPerEvent
+    ]);
+}
 
 
     public function fetchPesertaData($id)

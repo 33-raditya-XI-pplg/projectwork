@@ -530,7 +530,6 @@
                                     $('#skema_select').append('<option value="' + row.id_skema + '">' + row.nama_skema + '</option>');
                                 });
                                 $('#skema_select').trigger("chosen:updated");
-                                // Restore skema_select from localStorage after options are loaded
                                 if (localStorage.getItem('skema_select')) {
                                     $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
                                     $('#search_btn').prop('disabled', false);
@@ -835,7 +834,14 @@
                                     'Terjadi kesalahan saat membuat data.',
                             });
                         }
-                        fetchDetailData(eventSkemaID);
+                        $('#skema_select').on('change', function() {
+                            skemaID = $(this).val();
+
+                            if (skemaID) {
+                                $('#search_btn').prop('disabled', false);
+                            }
+                        });
+                        fetchDetailData(skemaID);
                     },
                     error: function(xhr) {
                         var errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
@@ -1085,29 +1091,29 @@
             //     }, 500);
             // }
 
-            $('#event_select').on('change', function() {
-                localStorage.setItem('event_select', $(this).val());
-                localStorage.removeItem('skema_select');
-            });
-            $('#skema_select').on('change', function() {
-                localStorage.setItem('skema_select', $(this).val());
-            });
-            $('#search_btn').on('click', function() {
-                localStorage.setItem('event_select', $('#event_select').val());
-                localStorage.setItem('skema_select', $('#skema_select').val());
-            });
-            // --- Tambahan agar data tetap muncul setelah refresh ---
-            if (localStorage.getItem('event_select') && localStorage.getItem('skema_select')) {
-                var skemaID = localStorage.getItem('skema_select');
-                // Set value dropdown sesuai localStorage
-                $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
-                // Tunggu dropdown skema terisi, lalu set dan fetch data tanpa alert
-                setTimeout(function() {
-                    $('#skema_select').val(skemaID).trigger('change');
-                    $('#search_btn').prop('disabled', false);
-                    fetchDetailData(skemaID); // Tidak ada alert di sini
-                }, 600); // delay agar skema_select sudah terisi
-            }
+            // $('#event_select').on('change', function() {
+            //     localStorage.setItem('event_select', $(this).val());
+            //     localStorage.removeItem('skema_select');
+            // });
+            // $('#skema_select').on('change', function() {
+            //     localStorage.setItem('skema_select', $(this).val());
+            // });
+            // $('#search_btn').on('click', function() {
+            //     localStorage.setItem('event_select', $('#event_select').val());
+            //     localStorage.setItem('skema_select', $('#skema_select').val());
+            // });
+            // // --- Tambahan agar data tetap muncul setelah refresh ---
+            // if (localStorage.getItem('event_select') && localStorage.getItem('skema_select')) {
+            //     var skemaID = localStorage.getItem('skema_select');
+            //     // Set value dropdown sesuai localStorage
+            //     $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
+            //     // Tunggu dropdown skema terisi, lalu set dan fetch data tanpa alert
+            //     setTimeout(function() {
+            //         $('#skema_select').val(skemaID).trigger('change');
+            //         $('#search_btn').prop('disabled', false);
+            //         fetchDetailData(skemaID); // Tidak ada alert di sini
+            //     }, 600); // delay agar skema_select sudah terisi
+            // }
         });
     </script>
 @endpush

@@ -470,29 +470,29 @@
         });
 
         // --- Tambahan agar data tetap muncul setelah refresh ---
-        if (localStorage.getItem('event_select')) {
-            $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
-        }
-        if (localStorage.getItem('skema_select')) {
-            setTimeout(function() {
-                $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
-                $('#search_btn').prop('disabled', false);
+        // if (localStorage.getItem('event_select')) {
+        //     $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
+        // }
+        // if (localStorage.getItem('skema_select')) {
+        //     setTimeout(function() {
+        //         $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
+        //         $('#search_btn').prop('disabled', false);
                 // Auto-fetch data setelah refresh jika event & skema sudah dipilih
-                fetchDetailData(localStorage.getItem('skema_select'));
-            }, 500);
-        }
+        //         fetchDetailData(localStorage.getItem('skema_select'));
+        //     }, 500);
+        // }
 
-        $('#event_select').on('change', function() {
-            localStorage.setItem('event_select', $(this).val());
-            localStorage.removeItem('skema_select');
-        });
-        $('#skema_select').on('change', function() {
-            localStorage.setItem('skema_select', $(this).val());
-        });
-        $('#search_btn').on('click', function() {
-            localStorage.setItem('event_select', $('#event_select').val());
-            localStorage.setItem('skema_select', $('#skema_select').val());
-        });
+        // $('#event_select').on('change', function() {
+        //     localStorage.setItem('event_select', $(this).val());
+        //     localStorage.removeItem('skema_select');
+        // });
+        // $('#skema_select').on('change', function() {
+        //     localStorage.setItem('skema_select', $(this).val());
+        // });
+        // $('#search_btn').on('click', function() {
+        //     localStorage.setItem('event_select', $('#event_select').val());
+        //     localStorage.setItem('skema_select', $('#skema_select').val());
+        // });
 
         // Store function -- to store and update
         $(document).on('click', '#store_sertifikat_btn', function (e) {
