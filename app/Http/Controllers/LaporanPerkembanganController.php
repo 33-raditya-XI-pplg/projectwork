@@ -197,6 +197,7 @@ class LaporanPerkembanganController extends Controller
             'event_skema_id' => 'required|integer',
             'pesertaID' => 'required|integer',
             'pengalaman_anak' => 'required|string',
+            'kemampuan_dasar' => 'nullable|array',
             'peralatan_penunjang' => 'required|string',
             'saran' => 'required|string',
             'keterangan' => 'nullable|array',
