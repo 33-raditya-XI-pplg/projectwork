@@ -41,7 +41,7 @@ class UploadPembayaranController extends Controller
                 ->where('tb_event.biaya_regis', '>', 0)
                 ->get();
 
-            $Title = 'Upload Pembayaran';
+            $Title = 'Verifikasi Pembayaran';
             return view('admin.upload.index', compact('upload', 'Title'));
         } elseif (auth()->user()->level === 'Pengguna') {
             $userId = auth()->user()->id_user;
