@@ -13,21 +13,21 @@
 
     .img-container {
     position: relative;
-    padding-top: 10%; 
+    padding-top: 10%;
     padding-bottom: 10%;
     }
 
     .img-container img {
-        width: 200px; 
-        height: 200px; 
-        border-radius: 50%; 
-        object-fit: cover; 
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
         display: block;
         margin: 0 auto;
     }
     .deskripsi {
         display: -webkit-box;
-        -webkit-line-clamp: 2; 
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -35,7 +35,7 @@
     .rincian-btn{
         padding: 2px 1px 1px 1px;
         font-size: 14px;
-        border-radius:5px; 
+        border-radius:5px;
     }
     .rincian-btn i{
         font-size: 17px;
@@ -94,7 +94,7 @@
 
             </div>
         </div>
-    </div> 
+    </div>
 
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -110,11 +110,22 @@
                             <h5>{{ $row->nama_event }}</h5>
                             <p class="deskripsi">{!! strip_tags($row->deskripsi) !!}</p>
                         </div>
-                        <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
-                            <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
-                            <a href="{{ route('event-user.show', $row->id_event) }}" class="btn btn-warning rincian-btn">
-                                <i class="fa-solid fa-code "></i> Rincian</a>
-                        </div>
+                       <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
+                        <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
+                        <a href="{{ route('event-user.show', $row->id_event) }}"
+                        class="btn rincian-btn px-4 py-2 rounded-3 shadow-sm"
+                        style="background-color: #ffc107; color: #212529; font-weight: 500; transition: 0.3s;">
+                            Rincian
+                        </a>
+                    </div>
+
+                    <style>
+                        .rincian-btn:hover {
+                            background-color: #e0a800 !important;
+                            color: #fff !important;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+                        }
+                    </style>
                     </div>
                 </div>
             </div>
