@@ -296,7 +296,8 @@
     <script>
         $(document).ready(function() {
             var skemaID;
-            var event_skemaID
+            var eventID; // Tambahkan deklarasi eventID
+            var event_skemaID;
             var pesertaID;
 
             var data_laporan_perkembangan;
@@ -361,7 +362,7 @@
                 });
 
                 $.ajax({
-                    url: '/laporanperkembangan/fetchSkemaData/' + skemaID,
+                    url: '/laporanperkembangan/fetchSkemaData/' + skemaID + '/' + eventID,
                     type: "GET",
                     dataType: "json",
 
@@ -474,7 +475,7 @@
                                 }
 
                                 // Tampilkan data ke dalam tabel
-                               $('tbody').append(
+                            $('tbody').append(
                                     '<tr>\
                                         <td>' + num + '</td>\
                                         <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
@@ -509,7 +510,7 @@
 
             // Event Dropdown
             $('#event_select').on('change', function() {
-                var eventID = $(this).val();
+                eventID = $(this).val(); // Set eventID dari dropdown
                 $('#search_btn').prop('disabled', true);
 
                 if (eventID) {
@@ -589,7 +590,7 @@
             // Fungsi untuk menghapus input Sub-Skema
             $(document).on('click', '.removeKemampuan', function() {
                 $(this).closest('.kemampuan_dasar-input-create')
-            .remove(); // Hapus elemen input yang terkait
+                .remove(); // Hapus elemen input yang terkait
 
                 // Check if there are no more inputs left
                 if ($('.kemampuan_dasar-input-create').length === 0) {

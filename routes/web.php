@@ -273,7 +273,7 @@ Route::get('/getSkema/{id_event}', [UploadPembayaranController::class, 'getSkema
 
 // AJAX Request -- Menu Laporan
 Route::get('/laporanperkembangan/fetchEventData/{id}', [LaporanPerkembanganController::class, 'fetchEventData']);
-Route::get('laporanperkembangan/fetchSkemaData/{id}', [LaporanperkembanganController::class, 'fetchSkemaData']);
+Route::get('laporanperkembangan/fetchSkemaData/{id}/{event_id}', [LaporanperkembanganController::class, 'fetchSkemaData']);
 Route::get('laporanperkembangan/fetchPesertaData/{id}', [LaporanperkembanganController::class, 'fetchPesertaData']);
 Route::post('laporanperkembangan/storeNilaiData/{id}', [LaporanperkembanganController::class, 'storeNilaiData']);
 Route::get('laporanperkembangan/fetchLaporanData/{id}', [LaporanperkembanganController::class, 'fetchLaporanData']);

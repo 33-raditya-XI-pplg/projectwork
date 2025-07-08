@@ -38,12 +38,11 @@ class LaporanPerkembanganController extends Controller
     }
 
 
-    public function fetchSkemaData($id)
+    public function fetchSkemaData($id, $event_id)
 {
     if (!$id) {
         return response()->json(['message' => 'ID tidak ditemukan'], 400);
     }
-
 
     // Ambil data skema
     $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
@@ -62,10 +61,8 @@ class LaporanPerkembanganController extends Controller
             'tb_tempat.nama_tempat'
         )
         ->where('tb_event_skema.skema_id', $id)
+        ->where('tb_event_skema.event_id', $event_id)
         ->first();
-
-
-
 
     // Ambil data penguji
     $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
