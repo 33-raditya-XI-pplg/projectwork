@@ -155,7 +155,7 @@ class LaporanPerkembanganController extends Controller
             ->select(
                 'tb_laporan_perkembangan.id_laporan_perkembangan',
                 'tb_laporan_perkembangan.event_skema_id',
-                'tb_laporan_perkembangan.sub_skema_id',
+                // 'tb_laporan_perkembangan.sub_skema_id',
                 'tb_laporan_perkembangan.peserta_id',
                 'tb_laporan_perkembangan.tanggal_penilaian',
                 'tb_laporan_perkembangan.catatan',
@@ -197,11 +197,10 @@ class LaporanPerkembanganController extends Controller
             'event_skema_id' => 'required|integer',
             'pesertaID' => 'required|integer',
             'pengalaman_anak' => 'required|string',
-            // 'kemampuan_dasar' => 'nullable|array',
             'peralatan_penunjang' => 'required|string',
             'saran' => 'required|string',
-            // 'keterangan' => 'nullable|array',
-            // 'keterangan.*' => 'in:kurang,cukup,baik,sangat baik',
+            'keterangan' => 'nullable|array',
+            'keterangan.*' => 'in:kurang,cukup,baik,sangat baik',
             // 'catatan' => 'required|string',
         ]);
 
@@ -212,7 +211,6 @@ class LaporanPerkembanganController extends Controller
                 'event_skema_id' => $validatedData['event_skema_id'],
                 'peserta_id' => $validatedData['pesertaID'],
                 'pengalaman_anak' => $validatedData['pengalaman_anak'],
-                // 'kemampuan_dasar' => $validatedData['kemampuan_dasar'],
                 'peralatan_penunjang' => $validatedData['peralatan_penunjang'],
                 'saran' => $validatedData['saran'],
                 'tanggal_penilaian' => Carbon::now(),
@@ -224,7 +222,7 @@ class LaporanPerkembanganController extends Controller
                 foreach ($request->kemampuan_dasar as $index => $kemampuan) {
                     kemampuan_dasar::create([
                         'laporan_perkembangan_id' => $laporan->id_laporan_perkembangan,
-                        'kemampuan_dasar' => $kemampuan,
+                        'kemampuan' => $kemampuan,
                         'keterangan' => $request->keterangan[$index],
                     ]);
                 }
@@ -275,7 +273,7 @@ class LaporanPerkembanganController extends Controller
                     $kemampuan = Kemampuan_dasar::find($item['id']);
                     if ($kemampuan) {
                         $kemampuan->update([
-                            'kemampuan_dasar' => $item['kemampuan_dasar'],
+                            'kemampuan' => $item['kemampuan_dasar'],
                             'keterangan' => $item['keterangan'],
                         ]);
 

@@ -452,28 +452,25 @@
 
                             $.each(data_peserta, function(index, row) {
                                 var num = index + 1;
-                                var buttonAction;
+                                var buttonAction = '';
 
-                                // Jika ada catatan, tampilkan tombol edit dan delete
-                                if (row.catatan != null) {
+                                if (row.catatan) { // Misalnya kalau ada properti 'catatan' di row
                                     buttonAction =
-                                        '<li style="list-style: none;">\
-                                            <a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">\
-                                                <i class="fa-regular fa-pen-to-square"></i> Edit\
-                                            </a>\
-                                        </li>\
-                                        <li style="list-style: none;">\
-                                            <a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row.id_peserta + '">\
-                                                <i class="fa-regular fa-trash-can"></i> Delete\
-                                            </a>\
-                                        </li>';
-                                }
-                                // Jika tidak ada catatan, tampilkan tombol tambah
-                                else {
+                                        '<li style="list-style: none;">' +
+                                            '<a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">' +
+                                                '<i class="fa-regular fa-pen-to-square"></i> Edit' +
+                                            '</a>' +
+                                        '</li>' +
+                                        '<li style="list-style: none;">' +
+                                            '<a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row.id_peserta + '">' +
+                                                '<i class="fa-regular fa-trash-can"></i> Delete' +
+                                            '</a>' +
+                                        '</li>';
+                                } else {
                                     buttonAction =
-                                        '<a href="#" class="btn btn-info btn-sm rounded text-white mb-3 create_laporan_btn" data-id="' + row
-                                        .id_peserta + '">\
-                                        <i class="fa-regular fa-pen-to-square"></i> Tambah</a>';
+                                        '<a href="#" class="btn btn-info btn-sm rounded text-white mb-3 create_laporan_btn" data-id="' + row.id_peserta + '">' +
+                                            '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
+                                        '</a>';
                                 }
 
                                 // Tampilkan data ke dalam tabel
@@ -729,7 +726,7 @@
                 // var saran = $('#saran').val();
 
                 var kemampuanDasar = [];
-                $('input[name="create_kemampuan_dasar[]"]').each(function() {
+                $('input[name="create_kemampuan_dasar[]"]').each(function(e) {
                     var value = $(this).val();
                     if (value) {
                         kemampuanDasar.push(value);
@@ -834,14 +831,7 @@
                                     'Terjadi kesalahan saat membuat data.',
                             });
                         }
-                        $('#skema_select').on('change', function() {
-                            skemaID = $(this).val();
-
-                            if (skemaID) {
-                                $('#search_btn').prop('disabled', false);
-                            }
-                        });
-                        fetchDetailData(skemaID);
+                        fetchDetailData(eventSkemaID);
                     },
                     error: function(xhr) {
                         var errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
@@ -899,15 +889,15 @@
                                 $('.kemampuan-wrapper-edit').append(`<div class="row kemampuan_dasar-input-edit">
                                         <div class="col-md-7">
                                             <input type="hidden" name="kemampuan_dasar_ids[]" value="${item.id_kemampuan_dasar}">
-                                            <input type="text" class="form-control" name="edit_kemampuan_dasar[${item.id_kemampuan_dasar}]" value="${item.kemampuan_dasar}" placeholder="Kemampuan Dasar" required>
+                                            <input type="text" class="form-control" name="edit_kemampuan_dasar[${item.id_kemampuan_dasar}]" value="${item.kemampuan}" placeholder="Kemampuan Dasar" required>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 mb-2">
                                             <select class="form-control" name="edit_keterangan[${item.id_kemampuan_dasar}]" required style="">
                                                 <option value="" disabled>Pilih Keterangan</option>
-                                                <option value="kurang"  (${item.keterangan} === 'kurang' ? 'selected' : '')>Kurang</option>
-                                                <option value="cukup"  (${item.keterangan} === 'cukup' ? 'selected' : '')>Cukup</option>
-                                                <option value="baik"  (${item.keterangan} === 'baik' ? 'selected' : '')>Baik</option>
-                                                <option value="sangat baik"  (${item.keterangan} === 'sangat baik' ? 'selected' : '')>Sangat Baik</option>
+                                                <option value="kurang"  ${item.keterangan  === 'kurang' ? 'selected' : ''}>Kurang</option>
+                                                <option value="cukup"  ${item.keterangan  === 'cukup' ? 'selected' : ''}>Cukup</option>
+                                                <option value="baik"  ${item.keterangan  === 'baik' ? 'selected' : ''}>Baik</option>
+                                                <option value="sangat baik"  ${item.keterangan  === 'sangat baik' ? 'selected' : ''}>Sangat Baik</option>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
@@ -1041,8 +1031,8 @@
                         // Tampilkan pesan error
                         Swal.fire({
                             icon: 'error',
-                            title: 'Oops!',
-                            text: 'Terjadi kesalahan saat memproses permintaan.',
+                            title: 'Gagal',
+                            text: errorMessage
                         });
                     }
                 });
