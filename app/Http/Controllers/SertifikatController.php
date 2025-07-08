@@ -206,7 +206,7 @@ class SertifikatController extends Controller
 
 
                             if (empty($tgl_berakhir)) {
-                                $masa_berlaku = 'Seumur Hidup';
+                                $masa_berlaku = '-';
                             } else {
                                 $a = Carbon::parse($tgl_terbit);
                                 $b = Carbon::parse($tgl_berakhir);
@@ -276,7 +276,7 @@ class SertifikatController extends Controller
             if ($sertifikat) {
 
                 if (empty($tgl_berakhir)) {
-                    $masa_berlaku = 'Seumur Hidup';
+                    $masa_berlaku = '-';
                 } else {
                     $a = Carbon::parse($tgl_terbit);
                     $b = Carbon::parse($tgl_berakhir);
@@ -329,7 +329,7 @@ class SertifikatController extends Controller
 
 
                 if (empty($tgl_berakhir)) {
-                    $masa_berlaku = 'Seumur Hidup';
+                    $masa_berlaku = '-';
                 } else {
                     $a = Carbon::parse($tgl_terbit);
                     $b = Carbon::parse($tgl_berakhir);
