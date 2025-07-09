@@ -25,15 +25,33 @@ class EventController extends Controller
 
         $evt = Event::get();
         $today = Carbon::today();
+        $todayString = $today->format('Y-m-d');
+
         foreach ($evt as $event) {
             if ($event->status !== 'Draft') {
-                if ($today->lte($event->tgl_mulai)) {
+                $tglMulai = $event->tgl_mulai;
+                $tglBerakhir = $event->tgl_berakhir;
+
+                // Konversi ke string format Y-m-d jika perlu
+                if ($tglMulai instanceof Carbon) {
+                    $tglMulai = $tglMulai->format('Y-m-d');
+                }
+                if ($tglBerakhir instanceof Carbon) {
+                    $tglBerakhir = $tglBerakhir->format('Y-m-d');
+                }
+
+                // Perbandingan manual menggunakan string comparison
+                if ($todayString < $tglMulai) {
+                    // Hari ini sebelum tanggal mulai
                     $event->status = 'Publish';
-                } elseif ($today->gt($event->tgl_mulai) && $today->lte($event->tgl_berakhir)) {
+                } elseif ($todayString >= $tglMulai && $todayString <= $tglBerakhir) {
+                    // Hari ini di antara tanggal mulai dan berakhir (termasuk hari mulai dan berakhir)
                     $event->status = 'Berlangsung';
-                } elseif ($today->gt($event->tgl_berakhir)) {
+                } elseif ($todayString > $tglBerakhir) {
+                    // Hari ini setelah tanggal berakhir
                     $event->status = 'Selesai';
                 }
+
                 $event->save();
             }
         }
