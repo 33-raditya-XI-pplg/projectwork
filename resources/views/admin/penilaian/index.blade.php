@@ -215,7 +215,7 @@
 
    $(document).ready(function() {
     var skemaID;
-    var event_skemaID;
+    var eventID;
     var pesertaID;
 
     var data_nilai_peserta;
@@ -295,7 +295,7 @@
         });
 
         $.ajax({
-            url: '/penilaian/fetchSkemaData/' + skemaID,
+            url: '/penilaian/fetchSkemaData/' + skemaID + '/' + eventID,
             type: "GET",
             dataType: "json",
             success: function(response) {
@@ -458,7 +458,7 @@
 
     // Event Dropdown Change Handler
     $('#event_select').on('change', function() {
-        var eventID = $(this).val();
+        eventID = $(this).val();
         $('#search_btn').prop('disabled', true);
 
         // Reset skema dropdown
@@ -503,6 +503,7 @@
     // Skema Dropdown Change Handler
     $('#skema_select').on('change', function() {
         skemaID = $(this).val();
+        event_skemaID = skemaID; // Pastikan event_skemaID di-set setiap kali skema dipilih
         if (skemaID) {
             $('#search_btn').prop('disabled', false);
         } else {
@@ -516,6 +517,9 @@
         $('input[type="text"]').val('');
         $('input[type="date"]').val('');
         $('input[type="checkbox"]').prop('checked', false);
+
+        // Selalu update event_skemaID sebelum submit
+        event_skemaID = $('#skema_select').val();
 
         if (skemaID) {
             Swal.fire({

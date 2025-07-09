@@ -281,7 +281,7 @@ Route::post('/laporanperkembangan/updateLaporan/{id}', [LaporanPerkembanganContr
 Route::delete('/laporanperkembangan/destroyLaporanData/{id}', [LaporanPerkembanganController::class, 'destroyLaporanData']);
 // AJAX Request -- Menu Penilaian
 Route::get('penilaian/fetchEventData/{id}', [PenilaianController::class, 'fetchEventData']);
-Route::get('penilaian/fetchSkemaData/{id}', [PenilaianController::class, 'fetchSkemaData']);
+Route::get('penilaian/fetchSkemaData/{id}/{event_id}', [PenilaianController::class, 'fetchSkemaData']);
 Route::get('penilaian/fetchPesertaData/{id}', [PenilaianController::class, 'fetchPesertaData']);
 Route::get('penilaian/fetchNilaiData/{id}', [PenilaianController::class, 'fetchNilaiData']);
 Route::get('penilaian/fetchInisialData', [PenilaianController::class, 'fetchInisialData']);
@@ -290,7 +290,7 @@ Route::post('penilaian/storeNilaiData', [PenilaianController::class, 'storeNilai
 Route::delete('penilaian/destroyNilaiData/{id}', [PenilaianController::class, 'destroyNilaiData']);
 
 // AJAX Request -- Menu Sertifikat
-Route::get('sertifikat/fetchPesertaData/{id}', [SertifikatController::class, 'fetchPesertaData']);
+Route::get('sertifikat/fetchPesertaData/{id}/{event_id}', [SertifikatController::class, 'fetchPesertaData']);
 Route::get('sertifikat/fetchSertifikatData/{id}', [SertifikatController::class, 'fetchSertifikatData']);
 Route::get('sertifikat/showSertifikat/{id}/pdf', [SertifikatController::class, 'showSertifikat']);
 Route::get('sertifikat/checkSertifikat/{part1}/{part2}/{part3}/{part4}/{part5}', [SertifikatController::class, 'checkSertifikat']);

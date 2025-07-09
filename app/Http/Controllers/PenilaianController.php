@@ -32,7 +32,7 @@ class PenilaianController extends Controller
         ]);
     }
 
-    public function fetchSkemaData($id)
+    public function fetchSkemaData($id, $event_id)
     {
         $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
             ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
@@ -50,6 +50,7 @@ class PenilaianController extends Controller
                 'tb_tempat.nama_tempat'
             )
             ->where('tb_event_skema.skema_id', $id)
+            ->where('tb_event_skema.event_id', $event_id)
             ->first();
 
 

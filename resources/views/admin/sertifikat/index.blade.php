@@ -223,7 +223,7 @@
     // ajax Request Here
     $(document).ready(function() {
         var skemaID;
-        var event_skemaID;
+        var eventID;
         var pesertaID;
 
         // delete Sweet Alert function
@@ -263,7 +263,7 @@
             });
 
             $.ajax({
-                url: '/sertifikat/fetchPesertaData/' + skemaID,
+                url: '/sertifikat/fetchPesertaData/' + skemaID + '/' + eventID,
                 type: "GET",
                 dataType: "json",
 
@@ -407,7 +407,7 @@
 
         // Event Dropdown
         $('#event_select').on('change', function() {
-            var eventID = $(this).val();
+            eventID = $(this).val();
             $('#search_btn').prop('disabled', true);
 
             if(eventID) {
