@@ -31,6 +31,7 @@
         }
     </style>
 @endpush
+
 @section('content')
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12">
@@ -87,10 +88,12 @@
                                 <tr>
                                     <td>{{ $num++ }}</td>
                                     <td>{{ $row->nama_skema }}</td>
-                                    <td><button type="button"
+                                    <td>
+                                        <button type="button"
                                             class="btn rounded-3 {{ $row->telah_terdaftar == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}"
                                             disabled>
-                                            {{ $row->telah_terdaftar == 1 ? 'Sudah Terdaftar' : 'Dapat Mendaftar' }}</button>
+                                            {{ $row->telah_terdaftar == 1 ? 'Sudah Terdaftar' : 'Dapat Mendaftar' }}
+                                        </button>
                                     </td>
 
                                     @if ($row->telah_terdaftar == 1)
@@ -100,28 +103,31 @@
                                                 <i class="fa fa-info"></i> Rincian</a>
                                         </td>
                                     @else
-                                       <td class="text-center">
-    <div class="d-flex justify-content-center gap-2">
-        <!-- Tombol Daftar -->
-        <form id="mendaftarForm-{{ $row->id_event_skema }}" class="mendaftarForm"
-            action="{{ route('mendaftar.event') }}" method="POST">
-            @csrf
-            <input type="hidden" name="event_skema_id" required value="{{ $row->id_event_skema }}">
-            <button type="submit" class="btn btn-success btn-sm text-white d-flex align-items-center gap-1">
-                <i class="fa-regular fa-pen-to-square small-icon" style="font-size: 0.75rem; color: white;"></i>
-                <span class="text-white">Daftar</span>
-            </button>
-        </form>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <!-- Tombol Daftar -->
+                                                <form id="mendaftarForm-{{ $row->id_event_skema }}" class="mendaftarForm"
+                                                    action="{{ route('mendaftar.event') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="event_skema_id" required
+                                                        value="{{ $row->id_event_skema }}">
+                                                    <button type="button"
+                                                        class="btn btn-success btn-sm text-white d-flex align-items-center gap-1 registerButton">
+                                                        <i class="fa-regular fa-pen-to-square small-icon"
+                                                            style="font-size: 0.75rem; color: white;"></i>
+                                                        <span class="text-white">Daftar</span>
+                                                    </button>
+                                                </form>
 
-        <!-- Tombol Rincian -->
-        <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}"
-            class="btn btn-danger btn-sm text-white d-flex align-items-center gap-1">
-            <i class="fa fa-info small-icon" style="font-size: 0.75rem; color: white;"></i>
-            <span class="text-white">Rincian</span>
-        </a>
-    </div>
-</td>
-
+                                                <!-- Tombol Rincian -->
+                                                <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}"
+                                                    class="btn btn-danger btn-sm text-white d-flex align-items-center gap-1">
+                                                    <i class="fa fa-info small-icon"
+                                                        style="font-size: 0.75rem; color: white;"></i>
+                                                    <span class="text-white">Rincian</span>
+                                                </a>
+                                            </div>
+                                        </td>
                                     @endif
 
                                 </tr>
@@ -134,17 +140,9 @@
 
         </div>
     </div>
-@endsection
-
-@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Hide the button when the page loads
-            var tambahBtn = document.getElementById('tambahBtn');
-            if (tambahBtn) {
-                tambahBtn.style.display = 'none';
-            }
-
             // Handle all register buttons
             var registerButtons = document.querySelectorAll('.registerButton');
             registerButtons.forEach(function(button, index) {
@@ -158,7 +156,8 @@
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Daftar'
+                        confirmButtonText: 'Daftar',
+                        cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Get the correct form using the index
@@ -172,4 +171,4 @@
             });
         });
     </script>
-@endpush
+@endsection
