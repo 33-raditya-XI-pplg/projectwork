@@ -76,10 +76,10 @@
                         <tbody class="table-responsive" style="vertical-align: middle">
                             @php $num = 1 @endphp
                             @foreach ($data_gabungan as $row)
-                                <?php 
+                                <?php
                                     if ($row->keterangan_rentang_nilai === "Sangat Kompeten" || $row->keterangan_rentang_nilai === "Cukup Kompeten") {
                                         $color = 'color: green; font-weight: bold;';
-                                    } 
+                                    }
                                     elseif ($row->keterangan_rentang_nilai === "Kurang Kompeten" || $row->keterangan_rentang_nilai === "Tidak Kompeten") {
                                         $color = 'color: red; font-weight: normal;';
                                     } else {
@@ -93,33 +93,25 @@
                                         <td><button type="button" class="btn rounded-3 btn-outline-success fw-bold" disabled>Dapat Dicetak</button></td>
                                         <td>{{ $row->avg_nilai }}</td>
                                         <td style="{{ $color }}">{{ $row->keterangan_rentang_nilai }}</td>
-                                        <td class="text-center">
-                                            <div class="dropdown">
-                                                <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fa-solid fa-bars"></i>
-                                                </a>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                    <li><a href="{{ route('cetak-sertifikat.cetak', $row->id_event_skema) }}" class="dropdown-item text-primary">
-                                                        <i class="fa fa-print"></i> Cetak</a>
-                                                    </li>
-                                                    <li><a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="dropdown-item text-secondary">
-                                                        <i class="fa fa-info"></i> Rincian</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                       <td class="text-center">
+                                            <a href="{{ route('cetak-sertifikat.cetak', $row->id_event_skema) }}" class="btn btn-primary btn-sm rounded text-white mb-2">
+                                                <i class="fa fa-print" style="font-size: 0.75rem;"></i> Cetak
+                                            </a><br>
+                                            <a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded text-white mb-2">
+                                                <i class="fa fa-info" style="font-size: 0.75rem;"></i> Rincian
+                                            </a>
                                         </td>
 
                                     @else
                                         <td><button type="button" class="btn rounded-3 btn-outline-danger fw-bold" disabled>Belum Siap</button></td>
-                                        <td>-</td>  
+                                        <td>-</td>
                                         <td>-</td>
                                         <td class="text-center">
                                             <a href="{{ route('sertifikat.rincian-skema', $row->id_event_skema) }}" class="btn btn-secondary btn-sm rounded btn-custom">
                                                 <i class="fa fa-info fa-sm"></i> Rincian</a>
                                         </td>
                                     @endif
-                                    
+
                                 </tr>
                             @endforeach
                         </tbody>
