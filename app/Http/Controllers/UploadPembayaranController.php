@@ -43,6 +43,7 @@ class UploadPembayaranController extends Controller
                 ->get();
 
             $Title = 'Verifikasi Pembayaran';
+
             return view('admin.upload.index', compact('upload', 'Title'));
         } elseif (auth()->user()->level === 'Pengguna') {
             $userId = auth()->user()->id_user;
@@ -72,6 +73,7 @@ class UploadPembayaranController extends Controller
                 ->get();
 
             $Title = 'Upload Pembayaran';
+            // dd($upload);
             return view('user.upload.index', compact('upload', 'Title'));
         }
     }
@@ -99,7 +101,6 @@ class UploadPembayaranController extends Controller
         }
         // Upload file ke penyimpanan (misal ke folder 'uploads')
         $path = $request->file('upload_file')->store('uploads', 'public');
-
         // Simpan data ke database
         $upload = Upload_pembayaran::create([
             'event_skema_id' => $request->event_skema_id,
@@ -108,7 +109,6 @@ class UploadPembayaranController extends Controller
             'bukti_pembayaran' => $path,
         ]);
 
-        // dd($request->all());
 
         if ($upload) {
             return redirect()->back()->with('success', 'Pembayaran berhasil diunggah. Status: Menunggu');
@@ -124,14 +124,13 @@ class UploadPembayaranController extends Controller
         $upload = Upload_pembayaran::findOrFail($id_upload_pembayaran);
         $upload->status_pembayaran = $request->input('status');
         $upload->save();
+        // dd($upload->status_pembayaran);
 
-        if ($request->input('status') == 'Ditolak') {
+        if ($upload->status_pembayaran == 'Ditolak') {
             // Hapus data "Menunggu" dari tabel terkait, misalnya tabel tb_peserta
-            DB::table('tb_upload_pembayaran')
-                ->where('user_id', $upload->user_id)
-                ->where('id_upload_pembayaran', $id_upload_pembayaran)
-
-                ->delete();
+            $upload->status_pembayaran = 'Ditolak';
+            $upload->save()
+;
 
             // Tambahkan Alert jika pembayaran ditolak
             // Alert::error('Pembayaran Ditolak', 'Pembayaran telah ditolak dan data menunggu dihapus.');
@@ -149,6 +148,7 @@ class UploadPembayaranController extends Controller
         });
         return redirect()->back();
     }
+
     public function getSkema($eventId)
     {
         // Ambil semua event skema yang memiliki id_event yang sama

@@ -57,7 +57,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <button type="submit" class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1"
-                                                    name="status" value="Belum Dibayar">
+                                                    name="status" value="Ditolak">
                                                     <i class="fa-solid fa-x" style="font-size: 0.75rem; color: white;"></i>
                                                     <span class="text-white">Ditolak</span>
                                                 </button>
