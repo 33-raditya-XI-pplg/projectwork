@@ -150,7 +150,8 @@
                 </table>
 
                 <?php
-                $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat;
+                $url = config('app.url');
+                $qrCodeData = $url . '/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat;
                 $qrCode = QrCode::format('svg') // biarin errornya wir -- mlaku kok iki
                     ->size(80)
                     ->errorCorrection('H')

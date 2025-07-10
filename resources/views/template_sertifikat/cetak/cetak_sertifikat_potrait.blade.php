@@ -18,7 +18,7 @@
             page-break-after: avoid;
         }
         .signature img {
-            max-width: 100px; 
+            max-width: 100px;
             max-height: 100px;
         }
     </style>
@@ -42,7 +42,7 @@
                 <p>Terbit: {{ \Carbon\Carbon::parse($row->tgl_terbit)->format('d-F-Y') }}</p>
                 <p>Berakhir: {{ \Carbon\Carbon::parse($row->tgl_berakhir)->format('d-F-Y') }}</p>
                 <p>Masa Berlaku: {{ $row->masa_berlaku }}</p>
-                
+
                 <table style="width: 100%;">
                     <tr>
                         @foreach ($data_penadatangan as $row2)
@@ -60,7 +60,8 @@
                 </table>
 
                 <?php
-                    $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/'. $row->nomor_sertifikat;  
+                    $url = config('app.url');
+                    $qrCodeData = $url . '/sertifikat/checkSertifikat/'. $row->nomor_sertifikat;
                     $qrCode = QrCode::format('svg') // biarin errornya wir -- mlaku kok iki
                             ->size(80)
                             ->errorCorrection('H')

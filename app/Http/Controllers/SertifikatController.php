@@ -501,7 +501,8 @@ class SertifikatController extends Controller
                 ->where('tb_sertifikat.nomor_sertifikat', $nomor_sertifikat)
                 ->first();
 
-            $qrCodeData = 'http://127.0.0.1:8000/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat;
+            $url = config('app.url');
+            $qrCodeData = $url . '/sertifikat/checkSertifikat/' . $data_sertifikat_peserta->nomor_sertifikat;
             $qrCode = QrCode::format('svg')->size(80)->errorCorrection('H')
                 ->generate($qrCodeData);
 
