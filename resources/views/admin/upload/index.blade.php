@@ -17,11 +17,22 @@
             .table-responsive {
                 border-radius: 0 0 0.5rem 0.5rem;
             }
+
+            .card-upload {
+                padding: 1px;
+                display: grid;
+                gap: 1rem;
+                background-color: var(--extra-light);
+                border-radius: 5px;
+                box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
         </style>
     @endpush
 
     <div class="container mt-4">
-        <div class="card">
+        <div class="card-upload">
             <div class="card-header">
                 <nav>
                     <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
@@ -53,23 +64,23 @@
                                 </thead>
                                 <tbody class="table-responsive" style="vertical-align: middle">
                                     @php $num = 1 @endphp
-                                    @foreach ($upload as $row)
-                                        <tr class="clickable-row event-row" data-id="{{ $row->id_upload_pembayaran }}">
+                                    @foreach ($uploadPending as $pending)
+                                        <tr class="clickable-row event-row" data-id="{{ $pending->id_upload_pembayaran }}">
                                             <td>{{ $num++ }}</td>
-                                            <td>{{ $row->nama_lengkap }}</td>
-                                            <td>{{ $row->nama_event }}</td>
-                                            <td>{{ $row->nama_skema }}</td>
-                                            <td>{{ $row->tgl_mulai }}</td>
-                                            <td>{{ $row->tgl_berakhir }}</td>
-                                            <td>{{ $row->status_pembayaran ?? 'Belum Dibayar' }}</td>
+                                            <td>{{ $pending->nama_lengkap }}</td>
+                                            <td>{{ $pending->nama_event }}</td>
+                                            <td>{{ $pending->nama_skema }}</td>
+                                            <td>{{ $pending->tgl_mulai }}</td>
+                                            <td>{{ $pending->tgl_berakhir }}</td>
+                                            <td>{{ $pending->status_pembayaran ?? 'Belum Dibayar' }}</td>
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}" target="_blank"
+                                                    <a href="{{ asset('storage/' . $pending->bukti_pembayaran) }}" target="_blank"
                                                         class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
                                                         <i class="fa fa-eye" style="font-size: 0.75rem; color: white;"></i>
                                                         <span class="text-white">Lihat</span>
                                                     </a>
-                                                    <form action="{{ route('upload.updateStatus', $row->id_upload_pembayaran) }}" method="POST">
+                                                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <button type="submit" class="btn btn-success btn-sm rounded text-white d-flex align-items-center gap-1"
@@ -78,7 +89,7 @@
                                                             <span class="text-white">Selesaikan</span>
                                                         </button>
                                                     </form>
-                                                    <form action="{{ route('upload.updateStatus', $row->id_upload_pembayaran) }}" method="POST">
+                                                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
                                                         <button type="submit" class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1"
@@ -113,41 +124,23 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-responsive" style="vertical-align: middle">
-                                    @php $num = 1 @endphp
-                                    @foreach ($upload->where('status_pembayaran', 'Draft') as $row)
-                                        <tr class="clickable-row event-row" data-id="{{ $row->id_upload_pembayaran }}">
-                                            <td>{{ $num++ }}</td>
-                                            <td>{{ $row->nama_lengkap }}</td>
-                                            <td>{{ $row->nama_event }}</td>
-                                            <td>{{ $row->nama_skema }}</td>
-                                            <td>{{ $row->tgl_mulai }}</td>
-                                            <td>{{ $row->tgl_berakhir }}</td>
-                                            <td>{{ $row->status_pembayaran ?? 'Draft' }}</td>
+                                    @php $num2 = 1 @endphp
+                                    @foreach ($uploadAll as $uploadall)
+                                        <tr class="clickable-row event-row" data-id="{{ $uploadall->id_upload_pembayaran }}">
+                                            <td>{{ $num2++ }}</td>
+                                            <td>{{ $uploadall->nama_lengkap }}</td>
+                                            <td>{{ $uploadall->nama_event }}</td>
+                                            <td>{{ $uploadall->nama_skema }}</td>
+                                            <td>{{ $uploadall->tgl_mulai }}</td>
+                                            <td>{{ $uploadall->tgl_berakhir }}</td>
+                                            <td>{{ $uploadall->status_pembayaran ?? 'Draft' }}</td>
                                             <td class="text-center">
                                                 <div class="d-flex justify-content-center gap-2">
-                                                    <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}" target="_blank"
+                                                    <a href="{{ asset('storage/' . $uploadall->bukti_pembayaran) }}" target="_blank"
                                                         class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-1">
                                                         <i class="fa fa-eye" style="font-size: 0.75rem; color: white;"></i>
                                                         <span class="text-white">Lihat</span>
                                                     </a>
-                                                    <form action="{{ route('upload.updateStatus', $row->id_upload_pembayaran) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button type="submit" class="btn btn-success btn-sm rounded text-white d-flex align-items-center gap-1"
-                                                            name="status" value="Sudah Dibayar">
-                                                            <i class="fa fa-check" style="font-size: 0.75rem; color: white;"></i>
-                                                            <span class="text-white">Selesaikan</span>
-                                                        </button>
-                                                    </form>
-                                                    <form action="{{ route('upload.updateStatus', $row->id_upload_pembayaran) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button type="submit" class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-1"
-                                                            name="status" value="Ditolak">
-                                                            <i class="fa-solid fa-x" style="font-size: 0.75rem; color: white;"></i>
-                                                            <span class="text-white">Ditolak</span>
-                                                        </button>
-                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
