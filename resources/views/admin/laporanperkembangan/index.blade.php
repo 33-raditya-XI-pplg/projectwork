@@ -201,7 +201,7 @@
                         <input type="text" class="form-control" id="edit_nama_peserta" readonly disabled>
                     </div>
                     <div>
-                        <label class="form-label" for="pengalaman_anak">Pengalaman anak di dunia komputer</label>
+                        <label class="form-label" for="pengalaman_anak">Keterangan Singkat</label>
                         <textarea class="form-control " name="pengalaman_anak" id="edit_pengalaman_anak" rows="2" hidden></textarea>
                     </div>
                     <div class="form-group kemampuan-wrapper-edit mb-3 mt-3">
