@@ -70,8 +70,18 @@ class UploadPembayaranController extends Controller
                     'tb_event.tgl_berakhir',
                     'tb_event.status'
                 )
+                ->groupBy(
+                    'tb_event_skema.id_event_skema',
+                    'tb_event_skema.event_id',
+                    'tb_skema.nama_skema',
+                    'tb_event.nama_event',
+                    'tb_upload_pembayaran.bukti_pembayaran',
+                    'tb_upload_pembayaran.status_pembayaran',
+                    'tb_event.tgl_mulai',
+                    'tb_event.tgl_berakhir',
+                    'tb_event.status'
+                )
                 ->orderByDesc('tb_upload_pembayaran.id_upload_pembayaran')
-                ->limit(1)
                 ->get();
 
             $Title = 'Upload Pembayaran';
