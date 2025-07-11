@@ -58,7 +58,7 @@ class UploadPembayaranController extends Controller
                 })
                 ->where('tb_peserta.user_id', $userId)
                 ->where('tb_event.biaya_regis', '>', 0)
-                ->whereIn('tb_event.status', ['Berlangsung', 'Publish'])
+                ->whereIn('tb_event.status', ['Publish'])
                 ->select(
                     'tb_event_skema.id_event_skema',
                     'tb_event_skema.event_id',
