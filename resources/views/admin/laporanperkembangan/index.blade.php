@@ -295,9 +295,9 @@
     </script> --}}
     <script>
         $(document).ready(function() {
-            var skemaID;
-            var eventID; // Tambahkan deklarasi eventID
-            var event_skemaID;
+            var skemaID; // ID skema yang dipilih dari dropdown
+            var eventID; // ID event yang dipilih dari dropdown
+            var event_skemaID; // ID dari tabel event_skema (relasi antara event dan skema)
             var pesertaID;
 
             var data_laporan_perkembangan;
@@ -311,7 +311,6 @@
                     return '0';
                 }
                 var fixedValue = num.toFixed(1);
-
                 return fixedValue.endsWith('.0') ? parseInt(fixedValue) : fixedValue;
             }
 
@@ -344,14 +343,24 @@
             function checkEmptyInput(context) {
                 var inputs = $(context).find('.kemampuan_dasar-input-create .kemampuan_dasar-input-edit');
                 if (inputs.length === 0) {
-                    $(context).find('#empty-input-message').show(); // Tampilkan pesan jika tidak ada input tersisa
+                    $(context).find('#empty-input-message').show();
                 } else {
-                    $(context).find('#empty-input-message').hide(); // Sembunyikan pesan jika masih ada input
+                    $(context).find('#empty-input-message').hide();
                 }
             }
 
-            // format Timestamps function
-            function fetchDetailData(skemaID) {
+            // PERBAIKAN: Fungsi fetchDetailData yang menggunakan skemaID dan eventID yang benar
+            function fetchDetailData(selectedSkemaID, selectedEventID) {
+                // Validasi parameter
+                if (!selectedSkemaID || !selectedEventID) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Skema ID atau Event ID tidak valid!'
+                    });
+                    return;
+                }
+
                 Swal.fire({
                     title: 'Memuat...',
                     text: 'Sedang Memproses!',
@@ -361,11 +370,11 @@
                     }
                 });
 
+                // PERBAIKAN: Menggunakan selectedSkemaID dan selectedEventID
                 $.ajax({
-                    url: '/laporanperkembangan/fetchSkemaData/' + skemaID + '/' + eventID,
+                    url: '/laporanperkembangan/fetchSkemaData/' + selectedSkemaID + '/' + selectedEventID,
                     type: "GET",
                     dataType: "json",
-
                     success: function(response) {
                         Swal.close();
                         if (response) {
@@ -380,20 +389,18 @@
                             // Input Disabled
                             $('#nama_event').val(data_skema.nama_event);
                             $('#jenis_event').val(data_skema.nama_jenis_event);
-
                             $('#nama_skema').val(data_skema.nama_skema);
                             $('#tempat_skema').val(data_skema.nama_tempat);
-
                             $('#tgl_mulai').val(formatDate(data_skema.tgl_mulai));
                             $('#tgl_selesai').val(formatDate(data_skema.tgl_berakhir));
 
+                            // Logic untuk penguji
                             var listPenguji = document.getElementById('list_penguji');
                             var btnSelengkapnya = document.getElementById('btnSelengkapnya');
                             var btnSedikit = document.getElementById('btnSedikit');
 
                             function renderPenguji(names) {
                                 listPenguji.innerHTML = '';
-
                                 names.forEach(function(name) {
                                     var listItem = document.createElement('li');
                                     listItem.textContent = name;
@@ -402,25 +409,21 @@
                                 });
                             }
 
-                            // Tampilkan hanya 2 penguji awal
                             var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
                                 function(penguji) {
                                     return penguji.nama_lengkap;
                                 });
                             renderPenguji(initialPenguji);
 
-                            // Tentukan apakah tombol "Selengkapnya" perlu ditampilkan
                             if (data_penguji.event_skema_menguji.length <= 2) {
                                 btnSelengkapnya.style.display = 'none';
                             } else {
                                 btnSelengkapnya.style.display = '';
                             }
 
-                            // Tambahkan event listener untuk tombol Selengkapnya
                             btnSelengkapnya.addEventListener('click', function(event) {
                                 event.preventDefault();
-                                var allPenguji = data_penguji.event_skema_menguji.map(function(
-                                    penguji) {
+                                var allPenguji = data_penguji.event_skema_menguji.map(function(penguji) {
                                     return penguji.nama_lengkap;
                                 });
                                 renderPenguji(allPenguji);
@@ -428,13 +431,12 @@
                                 btnSedikit.style.display = 'inline';
                             });
 
-                            // Tambahkan event listener untuk tombol Sedikit
                             btnSedikit.addEventListener('click', function(event) {
                                 event.preventDefault();
-                                var initialPenguji = data_penguji.event_skema_menguji.slice(0,
-                                    2).map(function(penguji) {
-                                    return penguji.nama_lengkap;
-                                });
+                                var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
+                                    function(penguji) {
+                                        return penguji.nama_lengkap;
+                                    });
                                 renderPenguji(initialPenguji);
                                 btnSedikit.style.display = 'none';
                                 btnSelengkapnya.style.display = 'inline';
@@ -455,9 +457,9 @@
                                 var num = index + 1;
                                 var buttonAction = '';
 
-                                if (row.catatan) { // Misalnya kalau ada properti 'catatan' di row
+                                if (row.catatan) {
                                     buttonAction =
-                                        '<li style="list-style: none;">' +
+                                       '<li style="list-style: none;">' +
                                             '<a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">' +
                                                 '<i class="fa-regular fa-pen-to-square"></i> Edit' +
                                             '</a>' +
@@ -470,12 +472,11 @@
                                 } else {
                                     buttonAction =
                                         '<a href="#" class="btn btn-info btn-sm rounded text-white mb-3 create_laporan_btn" data-id="' + row.id_peserta + '">' +
-                                            '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
+                                        '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
                                         '</a>';
                                 }
 
-                                // Tampilkan data ke dalam tabel
-                            $('tbody').append(
+                                $('tbody').append(
                                     '<tr>\
                                         <td>' + num + '</td>\
                                         <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
@@ -491,22 +492,18 @@
                             });
 
                             $("#example").DataTable();
-
                         }
                     },
                     error: function() {
+                        Swal.close();
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal memuat data',
                             text: 'Tidak dapat mengambil data dari server!'
                         });
                     }
-
                 });
             }
-
-
-            ///////
 
             // Event Dropdown
             $('#event_select').on('change', function() {
@@ -525,6 +522,7 @@
                                 $('#skema_select').empty();
                                 $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>');
                                 $.each(data, function(key, row) {
+
                                     $('#skema_select').append('<option value="' + row.id_skema + '">' + row.nama_skema + '</option>');
                                 });
                                 $('#skema_select').trigger("chosen:updated");
@@ -536,105 +534,108 @@
                         },
                     });
                 }
-
             });
 
-            /////
 
             $('#skema_select').on('change', function() {
                 skemaID = $(this).val();
+                console.log('Selected skemaID:', skemaID);
 
                 if (skemaID) {
                     $('#search_btn').prop('disabled', false);
                 }
             });
 
-            // Search Button -- fetch Detail Data
+
             $('#search_btn').on('click', function() {
                 $('input[type="text"]').val('');
                 $('input[type="date"]').val('');
                 $('input[type="checkbox"]').prop('checked', false);
 
-                // Alert hanya muncul jika user klik submit
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: 'Data berhasil dicari.'
-                });
-                fetchDetailData(skemaID);
+                if (!skemaID || !eventID) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Silakan pilih Event dan Skema terlebih dahulu!'
+                    });
+                    return;
+                }
+
+                console.log('Search button clicked with skemaID:', skemaID, 'and eventID:', eventID);
+
+
+                fetchDetailData(skemaID, eventID);
             });
 
 
-            //muncul create kemampuan
             $('#addKemampuanCreate').click(function() {
                 $('.kemampuan-wrapper-create').append(`<div class="row mb-3 kemampuan_dasar-input-create">
-                <div class="col-md-7">
-                    <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control" name="create_keterangan[]" required style="">
-                        <option value="" disabled selected>Pilih Keterangan</option>
-                        <option value="kurang">Kurang</option>
-                        <option value="cukup">Cukup</option>
-                        <option value="baik">Baik</option>
-                        <option value="sangat baik">Sangat Baik</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
-                </div>
-            </div>`);
-                $('#empty-input-message').hide(); // Sembunyikan pesan jika input tidak kosong
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" name="create_keterangan[]" required style="">
+                            <option value="" disabled selected>Pilih Keterangan</option>
+                            <option value="kurang">Kurang</option>
+                            <option value="cukup">Cukup</option>
+                            <option value="baik">Baik</option>
+                            <option value="sangat baik">Sangat Baik</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
+                    </div>
+                </div>`);
+                $('#empty-input-message').hide();
             });
 
-            // Fungsi untuk menghapus input Sub-Skema
+
             $(document).on('click', '.removeKemampuan', function() {
                 $(this).closest('.kemampuan_dasar-input-create')
-                .remove(); // Hapus elemen input yang terkait
+                .remove();
 
-                // Check if there are no more inputs left
+
                 if ($('.kemampuan_dasar-input-create').length === 0) {
-                    $('#empty-input-message').show(); // Show the message if no inputs are left
+                    $('#empty-input-message').show();
                 }
             });
 
-            //muncul edit kemampuan
+
             $('#addKemampuanEdit').click(function() {
                 $('.kemampuan-wrapper-edit').append(`<div class="row mb-3 kemampuan_dasar-input-create">
-                <div class="col-md-7">
-                    <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-control" name="create_keterangan[]" required style="">
-                        <option value="" disabled selected>Pilih Keterangan</option>
-                        <option value="kurang">Kurang</option>
-                        <option value="cukup">Cukup</option>
-                        <option value="baik">Baik</option>
-                        <option value="sangat baik">Sangat Baik</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
-                </div>
-            </div>`);
-                checkEmptyInput('#empty-input-message'); // Sembunyikan pesan jika input tidak kosong
-            });
+                    <div class="col-md-7">
+                        <input type="text" class="form-control" name="create_kemampuan_dasar[]" placeholder="Kemampuan Dasar" required>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control" name="create_keterangan[]" required style="">
+                            <option value="" disabled selected>Pilih Keterangan</option>
+                            <option value="kurang">Kurang</option>
+                            <option value="cukup">Cukup</option>
+                            <option value="baik">Baik</option>
+                            <option value="sangat baik">Sangat Baik</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-danger rounded removeKemampuan" type="button">Hapus</button>
+                    </div>
+                </div>`);
+                checkEmptyInput('#empty-input-message');
 
-            // Fungsi untuk menghapus input Sub-Skema
+
             $(document).on('click', '.removeKemampuan', function() {
-                $(this).closest('.kemampuan_dasar-input-edit').remove(); // Hapus elemen input yang terkait
+                $(this).closest('.kemampuan_dasar-input-edit').remove();
 
-                // Check if there are no more inputs left
+
                 if ($('.kemampuan_dasar-input-edit').length === 0) {
-                    $('#empty-input-message').show(); // Show the message if no inputs are left
+                    $('#empty-input-message').show();
                 }
             });
 
-            // Create Modal Trigger
+
             $(document).on('click', '.create_laporan_btn', function(e) {
                 e.preventDefault();
 
-                var pesertaID = $(this).data('id'); // Mengambil ID peserta dari tombol yang diklik
+                var pesertaID = $(this).data('id');
                 console.log(pesertaID);
 
                 $('#create_name_peserta').val('');
@@ -652,15 +653,14 @@
                     $(this).val('');
                 });
 
-
-                $('.kemampuan_dasar-input-create').remove(); // Clear only the inputs
+                $('.kemampuan_dasar-input-create').remove();
                 $('#empty-input-message').show();
 
                 ['pengalaman_anak', 'peralatan_penunjang', 'saran'].forEach(function(field) {
                     if (editors[field]) {
                         editors[field].destroy()
                             .then(() => {
-                                delete editors[field]; // Hapus dari daftar editors
+                                delete editors[field];
                             })
                             .catch(error => {
                                 console.error(error);
@@ -669,7 +669,6 @@
                 });
 
 
-                // Mengambil data peserta berdasarkan ID
                 $.ajax({
                     url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
                     type: "GET",
@@ -678,10 +677,10 @@
                         console.log(response);
                         var data_peserta = response.data_peserta;
 
-                        // Tampilkan modal
+
                         $('#createLaporanModal').modal('show');
                         $('#create_nama_peserta').val(data_peserta
-                        .nama_lengkap); // Mengisi nama peserta ke input
+                        .nama_lengkap); 
                         $('#peserta_id').val(data_peserta.id_peserta);
                         $('#event_skema_id').val(data_peserta.event_skema_id);
 
@@ -710,7 +709,6 @@
                 });
             });
 
-
             // Store function -- to store and update
             $(document).on('click', '#store_laporan_btn', function() {
                 // Mengambil nilai dari input
@@ -718,13 +716,8 @@
                 var pesertaID = $('#peserta_id').val();
                 var eventSkemaID = $('#event_skema_id').val();
                 var pengalamanAnak = editors['pengalaman_anak'] ? editors['pengalaman_anak'].getData() : '';
-                var peralatanPenunjang = editors['peralatan_penunjang'] ? editors['peralatan_penunjang']
-                    .getData() : '';
+                var peralatanPenunjang = editors['peralatan_penunjang'] ? editors['peralatan_penunjang'].getData() : '';
                 var saran = editors['saran'] ? editors['saran'].getData() : '';
-                // var pengalamanAnak = $('#pengalaman_anak').val();
-                // var kemampuanDasar = $('#kemampuan_dasar').val();
-                // var peralatanPenunjang = $('#peralatan_penunjang').val();
-                // var saran = $('#saran').val();
 
                 var kemampuanDasar = [];
                 $('input[name="create_kemampuan_dasar[]"]').each(function(e) {
@@ -760,6 +753,7 @@
                     });
                     return;
                 }
+
                 console.log('Pengalaman Anak:', pengalamanAnak);
                 console.log('Peralatan Penunjang:', peralatanPenunjang);
                 console.log('Saran:', saran);
@@ -815,28 +809,28 @@
                             ['pengalaman_anak', 'peralatan_penunjang', 'saran'].forEach(
                                 function(field) {
                                     if (editors[field]) {
-                                        editors[field].setData(
-                                        ''); // Clear the editor's content
+                                        editors[field].setData(''); // Clear the editor's content
                                     }
                                 });
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sukses!',
                                 text: response.message,
                             });
+
+                            // FIX: Pass both skemaID and eventID to fetchDetailData
+                            fetchDetailData(skemaID, eventID);
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops!',
-                                text: response.message ||
-                                    'Terjadi kesalahan saat membuat data.',
+                                text: response.message || 'Terjadi kesalahan saat membuat data.',
                             });
                         }
-                        fetchDetailData(eventSkemaID);
                     },
                     error: function(xhr) {
-                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
-                            'Terjadi Error';
+                        var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi Error';
                         console.log('AJAX Error:', errorMessage);
                         Swal.fire({
                             icon: 'error',
@@ -872,14 +866,9 @@
 
                         $('#editLaporanModal').modal('show');
 
-
                         $('#edite_id').val(response.data_laporan.peserta_id);
 
                         $('#edit_nama_peserta').val(response.data_laporan.nama_lengkap);
-                        // $('#edit_pengalaman_anak').val(response.data_laporan.pengalaman_anak);
-                        // // $('#edit_kemampuan_dasar').val(response.data_laporan.kemampuan_dasar);
-                        // $('#edit_peralatan_penunjang').val(response.data_laporan.peralatan_penunjang);
-                        // $('#edit_saran').val(response.data_laporan.saran);
 
                         $('.kemampuan_dasar-input-edit').empty();
 
@@ -943,8 +932,7 @@
                 });
             });
 
-
-            //update function
+            // Lanjutan dari update function
             $(document).on('click', '#update_laporan_btn', function(e) {
                 e.preventDefault();
 
@@ -959,6 +947,7 @@
                     });
                     return;
                 }
+
                 fieldsToInitialize.forEach(field => {
                     if (editors[field]) {
                         // Transfer CKEditor data to the corresponding textarea
@@ -966,21 +955,15 @@
                     }
                 });
 
-                let pengalamanAnak = $('#edit_pengalaman_anak').val() ||
-                ''; // Default ke string kosong jika tidak ada
+                let pengalamanAnak = $('#edit_pengalaman_anak').val() || ''; // Default ke string kosong jika tidak ada
                 let peralatanPenunjang = $('#edit_peralatan_penunjang').val() || '';
                 let saran = $('#edit_saran').val() || '';
 
-
                 let kemampuanDasar = [];
-                // let isValid = true; // Tambahkan flag untuk validasi
-
                 $('.kemampuan_dasar-input-edit').each(function() {
                     let id = $(this).find('input[name="kemampuan_dasar_ids[]"]').val();
-                    let kemampuan = $(this).find('input[name="edit_kemampuan_dasar[' + id + ']"]')
-                        .val();
-                    let keterangan = $(this).find('select[name="edit_keterangan[' + id + ']"]')
-                    .val();
+                    let kemampuan = $(this).find('input[name="edit_kemampuan_dasar[' + id + ']"]').val();
+                    let keterangan = $(this).find('select[name="edit_keterangan[' + id + ']"]').val();
 
                     if (id && kemampuan && keterangan) {
                         kemampuanDasar.push({
@@ -998,7 +981,6 @@
                     peralatan_penunjang: peralatanPenunjang,
                     saran: saran,
                 });
-
 
                 $.ajax({
                     url: '/laporanperkembangan/updateLaporan/' + pesertaID,
@@ -1018,6 +1000,8 @@
                                 title: 'Sukses!',
                                 text: 'Laporan berhasil diupdate!',
                             });
+                            // PERBAIKAN: Panggil fetchDetailData dengan parameter yang benar
+                            fetchDetailData(skemaID, eventID);
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -1025,11 +1009,10 @@
                                 text: 'Terjadi kesalahan saat mengupdate data.',
                             });
                         }
-                        fetchDetailData(skemaID);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', xhr.responseText);
-                        // Tampilkan pesan error
+                        let errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi kesalahan saat mengupdate data.';
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal',
@@ -1037,74 +1020,58 @@
                         });
                     }
                 });
-            })
-
-
-            // Delete function
-            $(document).on('click', '.delete_laporan_btn', function(e) {
-                e.preventDefault()
-                pesertaID = $(this).data('id')
-                console.log('Peserta ID untuk hapus:', pesertaID);
-
-                confirmDelete('Hapus Laporan Perkembangan Peserta', 'Apakah kamu yakin untuk menghapus?')
-                    .then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                url: '/laporanperkembangan/destroyLaporanData/' + pesertaID,
-                                type: 'DELETE',
-                                data: {
-                                    _token: '{{ csrf_token() }}',
-                                    pesertaID: pesertaID
-                                },
-                                success: function(response) {
-                                    console.log(
-                                        'Laporan perkembangan peserta berhasil dihapus');
-                                    fetchDetailData(skemaID)
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error(
-                                        'Terjadi kesalahan saat menghapus nilai peserta:',
-                                        error);
-                                }
-                            });
-                        }
-                    });
             });
+
+
+            // PERBAIKAN: Delete function
+                $(document).on('click', '.delete_laporan_btn', function(e) {
+                    e.preventDefault();
+                    pesertaID = $(this).data('id');
+                    console.log('Peserta ID untuk hapus:', pesertaID);
+
+                    confirmDelete('Hapus Laporan Perkembangan Peserta', 'Apakah kamu yakin untuk menghapus?')
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/laporanperkembangan/destroyLaporanData/' + pesertaID,
+                                    type: 'DELETE',
+                                    data: {
+                                        _token: $('meta[name="csrf-token"]').attr('content'),
+                                        pesertaID: pesertaID
+                                    },
+                                    success: function(response) {
+                                        console.log('Laporan perkembangan peserta berhasil dihapus');
+
+                                        // Tampilkan alert sukses
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Sukses!',
+                                            text: 'Laporan perkembangan peserta berhasil dihapus!',
+                                        });
+
+                                        // PERBAIKAN: Panggil fetchDetailData dengan parameter yang benar
+                                        fetchDetailData(skemaID, eventID);
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('Terjadi kesalahan saat menghapus nilai peserta:', error);
+
+                                        // Tampilkan alert error
+                                        let errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Terjadi kesalahan saat menghapus data.';
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal',
+                                            text: errorMessage
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                });
 
             if (localStorage.getItem('event_select')) {
                 $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
             }
-            // Hapus blok setTimeout lama agar tidak bentrok dengan trigger di atas
-            // if (localStorage.getItem('skema_select')) {
-            //     setTimeout(function() {
-            //         $('#skema_select').val(localStorage.getItem('skema_select')).trigger('change');
-            //         $('#search_btn').prop('disabled', false);
-            //     }, 500);
-            // }
 
-            // $('#event_select').on('change', function() {
-            //     localStorage.setItem('event_select', $(this).val());
-            //     localStorage.removeItem('skema_select');
-            // });
-            // $('#skema_select').on('change', function() {
-            //     localStorage.setItem('skema_select', $(this).val());
-            // });
-            // $('#search_btn').on('click', function() {
-            //     localStorage.setItem('event_select', $('#event_select').val());
-            //     localStorage.setItem('skema_select', $('#skema_select').val());
-            // });
-            // // --- Tambahan agar data tetap muncul setelah refresh ---
-            // if (localStorage.getItem('event_select') && localStorage.getItem('skema_select')) {
-            //     var skemaID = localStorage.getItem('skema_select');
-            //     // Set value dropdown sesuai localStorage
-            //     $('#event_select').val(localStorage.getItem('event_select')).trigger('change');
-            //     // Tunggu dropdown skema terisi, lalu set dan fetch data tanpa alert
-            //     setTimeout(function() {
-            //         $('#skema_select').val(skemaID).trigger('change');
-            //         $('#search_btn').prop('disabled', false);
-            //         fetchDetailData(skemaID); // Tidak ada alert di sini
-            //     }, 600); // delay agar skema_select sudah terisi
-            // }
         });
     </script>
 @endpush
