@@ -164,7 +164,7 @@
                 background-color: var(--danger-color);
                 border-color: var(--danger-color);
                 color: white;
-            }
+           36
 
             /* Responsive adjustments */
             @media (max-width: 768px) {
@@ -191,6 +191,25 @@
     @endpush
 
     <div class="container">
+        <!-- Modal Konfirmasi -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Konfirmasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin menyelesaikan pembayaran ini?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-success" id="confirmSubmit">Selesaikan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card-upload">
             <div class="card-header">
                 <nav>
@@ -242,13 +261,14 @@
                                                         class="btn btn-custom btn-info">
                                                         <i class="fa fa-eye"></i> Lihat
                                                     </a>
-                                                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST">
+                                                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
                                                         @csrf
                                                         @method('PUT')
-                                                        <button type="submit" class="btn btn-custom btn-success"
-                                                            name="status" value="Sudah Dibayar">
+                                                        <button type="button" class="btn btn-custom btn-success complete-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmModal">
                                                             <i class="fa fa-check"></i> Selesaikan
                                                         </button>
+                                                        <input type="hidden" name="status" value="Sudah Dibayar">
                                                     </form>
                                                     <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST">
                                                         @csrf
@@ -327,6 +347,22 @@
                         e.preventDefault();
                         new bootstrap.Tab(tab).show();
                     });
+                });
+
+                // Handle konfirmasi untuk tombol Selesaikan
+                const confirmSubmitButton = document.getElementById('confirmSubmit');
+                let currentForm = null;
+
+                document.querySelectorAll('.complete-btn').forEach(button => {
+                    button.addEventListener('click', () => {
+                        currentForm = button.closest('form');
+                    });
+                });
+
+                confirmSubmitButton.addEventListener('click', () => {
+                    if (currentForm) {
+                        currentForm.submit();
+                    }
                 });
 
                 // Handle modal for upload
