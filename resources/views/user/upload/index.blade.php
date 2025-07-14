@@ -42,10 +42,101 @@
                 padding-left: 20px;
                 /* Atau bisa juga margin-left jika lebih tepat */
             }
+
+            .alert-rejected {
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+                color: #721c24;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+
+            .status-badge {
+                display: inline-block;
+                padding: 0.25em 0.5em;
+                font-size: 0.875em;
+                font-weight: 500;
+                line-height: 1;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: baseline;
+                border-radius: 0.25rem;
+            }
+
+            .status-ditolak {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .status-menunggu {
+                background-color: #ffc107;
+                color: #212529;
+            }
+
+            .status-dibayar {
+                background-color: #28a745;
+                color: white;
+            }
+
+            .status-belum {
+                background-color: #6c757d;
+                color: white;
+            }
         </style>
     @endpush
 
     <div class="container mt-2">
+        <!-- Alert untuk pembayaran yang ditolak -->
+        @if(session('payment_rejected'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Pembayaran Ditolak!</strong> {{ session('payment_rejected') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Alert untuk pembayaran yang berhasil diupload -->
+        @if(session('payment_success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Berhasil!</strong> {{ session('payment_success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Alert untuk error upload -->
+        @if(session('payment_error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> {{ session('payment_error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Periksa apakah ada pembayaran yang ditolak -->
+        @php
+            $hasRejectedPayment = false;
+            $rejectedPayments = [];
+            foreach($upload as $row) {
+                if($row->status_pembayaran === 'Ditolak') {
+                    $hasRejectedPayment = true;
+                    $rejectedPayments[] = $row;
+                }
+            }
+        @endphp
+
+        @if($hasRejectedPayment)
+            <div class="alert alert-danger alert-dismissible fade show p-3 d-block" role="alert">
+                <h6 class=""><i class="fa fa-exclamation-triangle"></i> Pembayaran Ditolak</h6>
+                <p>Terdapat pembayaran yang ditolak. Silakan upload ulang bukti pembayaran yang sesuai:</p>
+                <ul class="mb-0">
+                    @foreach($rejectedPayments as $rejected)
+                        <li><strong>{{ $rejected->nama_event }}</strong> - {{ $rejected->nama_skema }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="tab-content" id="pills-tabContent">
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
                 <table id="example" class="table">
@@ -81,13 +172,45 @@
                                 <td>{{ $row->nama_skema }}</td>
                                 <td>{{ $row->tgl_mulai }}</td>
                                 <td>{{ $row->tgl_berakhir }}</td>
-                                <td>{{ $row->status_pembayaran ?? 'Belum Dibayar' }}</td>
+                                <td>
+                                    @php
+                                        $status = $row->status_pembayaran ?? 'Belum Dibayar';
+                                        $badgeClass = '';
+                                        switch($status) {
+                                            case 'Ditolak':
+                                                $badgeClass = 'status-ditolak';
+                                                break;
+                                            case 'Menunggu':
+                                                $badgeClass = 'status-menunggu';
+                                                break;
+                                            case 'Sudah Dibayar':
+                                                $badgeClass = 'status-dibayar';
+                                                break;
+                                            default:
+                                                $badgeClass = 'status-belum';
+                                        }
+                                    @endphp
+                                    <span class="status-badge {{ $badgeClass }}">{{ $status }}</span>
+
+                                    @if($row->status_pembayaran === 'Ditolak')
+                                        <div class="mt-1">
+                                            <small class="text-danger">
+                                                <i class="fa fa-info-circle"></i>
+                                                Silakan upload ulang bukti pembayaran
+                                            </small>
+                                        </div>
+                                    @endif
+                                </td>
 
                                 <td class="text-center">
                                     @if (($row->status_pembayaran === 'Menunggu' || $row->status_pembayaran === 'Sudah Dibayar') && $row->bukti_pembayaran)
                                         <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}"
                                             class="btn btn-success btn-sm rounded text-light" target="_blank">
                                             <i class="fa fa-eye"></i> Lihat
+                                        </a>
+                                    @elseif($row->status_pembayaran === 'Ditolak')
+                                        <a href="#" class="btn btn-warning btn-sm rounded" data-id="{{ $row->id_event_skema }}">
+                                            <i class="fa fa-upload"></i> Upload Ulang
                                         </a>
                                     @else
                                         <a href="#" class="btn btn-secondary btn-sm rounded" data-id="{{ $row->id_event_skema }}">
@@ -117,9 +240,8 @@
                     {{-- Hapus value statis, biarkan JavaScript yang mengisi --}}
                     <input type="hidden" name="event_skema_id" id="event_skema_id" value="">
 
-
                     <div class="form-group mb-2">
-                        <label class="control-label mb-2">Upload Foto Pengguna <span class="text-danger">*</span></label>
+                        <label class="control-label mb-2">Upload Bukti Pembayaran <span class="text-danger">*</span></label>
                         <div class="dropzone-wrapper">
                             <div class="dropzone-desc">
                                 <i class="glyphicon glyphicon-download-alt"></i>
@@ -160,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.status) {
                         // Set nilai yang benar ke input hidden
                         document.getElementById('event_skema_id').value = eventId;
-                        document.getElementById('debug_id').value = eventId; // Untuk debugging
 
                         console.log('Input hidden diset dengan value:', eventId); // Debug log
 
@@ -182,6 +303,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Terjadi kesalahan saat memproses permintaan.',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        alert('Terjadi kesalahan saat memproses permintaan.');
+                    }
                 });
         });
     });
@@ -210,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function() {
             var fileInput = document.getElementById('upload_file');
             var previewImg = document.getElementById('preview_image');
             var hiddenInput = document.getElementById('event_skema_id');
-            var debugInput = document.getElementById('debug_id');
 
             if (fileInput) fileInput.value = '';
             if (previewImg) {
@@ -218,82 +349,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 previewImg.style.display = 'none';
             }
             if (hiddenInput) hiddenInput.value = '';
-            if (debugInput) debugInput.value = '';
         });
     }
-});
-</script>
 
-    {{-- <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var eventRows = document.querySelectorAll('.event-row');
-
-    eventRows.forEach(function(row) {
-        row.addEventListener('click', function() {
-            var eventId = this.getAttribute('data-event-id');
-            var skemaRow = document.getElementById('skema-row-' + eventId);
-
-            if (!skemaRow) {
-                skemaRow = document.createElement('tr');
-                skemaRow.id = 'skema-row-' + eventId;
-                skemaRow.classList.add('skema-row');
-                skemaRow.innerHTML = `
-                    <td colspan="6">
-                        <div id="skema-container-${eventId}" style="padding-left:150px;"></div>
-                    </td>
-                `;
-                this.parentNode.insertBefore(skemaRow, this.nextSibling);
-            }
-
-            if (skemaRow.style.display === 'none' || skemaRow.style.display === '') {
-                skemaRow.style.display = 'table-row';
-
-                var skemaContainer = document.getElementById('skema-container-' + eventId);
-                if (!skemaContainer.innerHTML) {
-                    fetch(`/getSkema/${eventId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.length > 0) {
-                                var table = document.createElement('table');
-                                table.classList.add('table', 'table-sm', 'table-bordered');
-
-                                var thead = document.createElement('thead');
-                                thead.innerHTML = `
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Skema</th>
-                                    </tr>
-                                `;
-                                table.appendChild(thead);
-
-                                var tbody = document.createElement('tbody');
-                                data.forEach(function(skema, index) {
-                                    var row = document.createElement('tr');
-                                    row.innerHTML = `
-                                        <td>${index + 1}</td>
-                                        <td>${skema.nama_skema}</td>
-                                    `;
-                                    tbody.appendChild(row);
-                                });
-                                table.appendChild(tbody);
-                                skemaContainer.innerHTML = '';
-                                skemaContainer.appendChild(table);
-                            } else {
-                                skemaContainer.innerHTML = '<p>Tidak ada skema untuk event ini.</p>';
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching skema:', error);
-                            skemaContainer.innerHTML = '<p>Terjadi kesalahan saat memuat skema.</p>';
-                        });
-                }
-            } else {
-                skemaRow.style.display = 'none';
+    // Auto-dismiss alerts after 5 seconds
+    setTimeout(function() {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            if (alert.querySelector('.btn-close')) {
+                alert.querySelector('.btn-close').click();
             }
         });
-    });
+    }, 5000);
 });
-</script> --}}
+</script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -315,6 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     </script>
+
     {{-- upload gambar  --}}
     <script>
         Dropzone.options.path_file = {
@@ -328,57 +398,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
     </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.btn[data-id]').forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var eventId = this.getAttribute('data-id');
-                    fetch('/cek-peserta/' + eventId)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.status) {
-                                var uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
-                                uploadModal.show();
-                                document.getElementById('event_skema_id').value = eventId;
-                            } else {
-                                if (typeof Swal !== 'undefined') {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Tidak Bisa Upload',
-                                        text: data.message,
-                                        confirmButtonColor: '#3085d6',
-                                        confirmButtonText: 'OK'
-                                    });
-                                } else {
-                                    alert(data.message);
-                                }
-                            }
-                        });
-                });
-            });
-        });
-    </script>
-{{--
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var uploadModalEl = document.getElementById('uploadModal');
-            if (uploadModalEl) {
-                uploadModalEl.addEventListener('hidden.bs.modal', function () {
-                    var fileInput = document.getElementById('upload_file');
-                    var previewImg = document.getElementById('preview_image');
-                    if (fileInput) fileInput.value = '';
-                    if (previewImg) {
-                        previewImg.src = '';
-                        previewImg.style.display = 'none';
-                    }
-
-                    document.getElementsByClassName('modal-backdrop').forEach(function(element) {
-                        element.remove();
-                    });
-                });
-            }
-        });
-    </script> --}}
 @endsection
