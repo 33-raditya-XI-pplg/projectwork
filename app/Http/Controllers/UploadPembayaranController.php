@@ -71,30 +71,39 @@ class UploadPembayaranController extends Controller
         } elseif (auth()->user()->level === 'Pengguna') {
             $userId = auth()->user()->id_user;
 
-            $upload = DB::table('tb_peserta')
-                ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-                ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-                ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-                ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
-                    $join->on('tb_peserta.event_skema_id', '=', 'tb_upload_pembayaran.event_skema_id')
-                        ->where('tb_upload_pembayaran.user_id', '=', $userId);
-                })
-                ->where('tb_peserta.user_id', $userId)
-                ->where('tb_event.biaya_regis', '>', 0)
-                ->whereIn('tb_event.status', ['Publish'])
-                ->select(
-                    'tb_event_skema.id_event_skema',
-                    'tb_event_skema.event_id',
-                    'tb_skema.nama_skema',
-                    'tb_event.nama_event',
-                    'tb_upload_pembayaran.bukti_pembayaran',
-                    'tb_upload_pembayaran.status_pembayaran',
-                    'tb_event.tgl_mulai',
-                    'tb_event.tgl_berakhir',
-                    'tb_event.status'
-                )
-                ->orderByDesc('tb_upload_pembayaran.id_upload_pembayaran')
-                ->get();
+          $upload = DB::table('tb_peserta')
+    ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+    ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+    ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+    ->leftJoin('tb_upload_pembayaran', function ($join) use ($userId) {
+        $join->on('tb_peserta.event_skema_id', '=', 'tb_upload_pembayaran.event_skema_id')
+             ->where('tb_upload_pembayaran.user_id', '=', $userId);
+    })
+    ->where('tb_peserta.user_id', $userId)
+    ->where('tb_event.biaya_regis', '>', 0)
+    ->whereIn('tb_event.status', ['Publish'])
+    ->select(
+        'tb_event_skema.id_event_skema',
+        'tb_event_skema.event_id',
+        'tb_skema.nama_skema',
+        'tb_event.nama_event',
+        DB::raw('MAX(tb_upload_pembayaran.bukti_pembayaran) as bukti_pembayaran'),
+        DB::raw('MAX(tb_upload_pembayaran.status_pembayaran) as status_pembayaran'),
+        'tb_event.tgl_mulai',
+        'tb_event.tgl_berakhir',
+        'tb_event.status'
+    )
+    ->groupBy(
+        'tb_event_skema.id_event_skema',
+        'tb_event_skema.event_id',
+        'tb_skema.nama_skema',
+        'tb_event.nama_event',
+        'tb_event.tgl_mulai',
+        'tb_event.tgl_berakhir',
+        'tb_event.status'
+    )
+    // ->orderByDesc('tb_upload_pembayaran.id_upload_pembayaran')
+    ->get();
 
             $Title = 'Upload Pembayaran';
             // dd($upload);

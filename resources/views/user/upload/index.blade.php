@@ -40,17 +40,6 @@
 
             .shift-right {
                 padding-left: 20px;
-                /* Atau bisa juga margin-left jika lebih tepat */
-            }
-
-            .alert-rejected {
-                background-color: #f8d7da;
-                border-color: #f5c6cb;
-                color: #721c24;
-                padding: 10px;
-                margin: 10px 0;
-                border: 1px solid transparent;
-                border-radius: 4px;
             }
 
             .status-badge {
@@ -84,13 +73,38 @@
                 background-color: #6c757d;
                 color: white;
             }
+
+            /* Custom styling untuk alert yang lebih menonjol */
+            .alert-rejection-summary {
+                border-left: 4px solid #dc3545;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+
+            .alert-rejection-summary .alert-heading {
+                color: #721c24;
+                font-weight: 600;
+            }
+
+            .alert-rejection-summary ul {
+                margin-bottom: 0;
+            }
+
+            .alert-rejection-summary li {
+                margin-bottom: 0.25rem;
+            }
+
+            .alert-rejection-summary .btn-close {
+                filter: invert(1);
+            }
         </style>
     @endpush
 
     <div class="container mt-2">
-        <!-- Alert untuk pembayaran yang ditolak -->
+        <!-- Alert untuk pembayaran yang ditolak dari session -->
         @if(session('payment_rejected'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
                 <strong>Pembayaran Ditolak!</strong> {{ session('payment_rejected') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -99,6 +113,7 @@
         <!-- Alert untuk pembayaran yang berhasil diupload -->
         @if(session('payment_success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i>
                 <strong>Berhasil!</strong> {{ session('payment_success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -107,12 +122,13 @@
         <!-- Alert untuk error upload -->
         @if(session('payment_error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-times-circle me-2"></i>
                 <strong>Error!</strong> {{ session('payment_error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
-        <!-- Periksa apakah ada pembayaran yang ditolak -->
+        <!-- Alert untuk ringkasan pembayaran yang ditolak -->
         @php
             $hasRejectedPayment = false;
             $rejectedPayments = [];
@@ -125,14 +141,52 @@
         @endphp
 
         @if($hasRejectedPayment)
-            <div class="alert alert-danger alert-dismissible fade show p-3 d-block" role="alert">
-                <h6 class=""><i class="fa fa-exclamation-triangle"></i> Pembayaran Ditolak</h6>
-                <p>Terdapat pembayaran yang ditolak. Silakan upload ulang bukti pembayaran yang sesuai:</p>
-                <ul class="mb-0">
-                    @foreach($rejectedPayments as $rejected)
-                        <li><strong>{{ $rejected->nama_event }}</strong> - {{ $rejected->nama_skema }}</li>
-                    @endforeach
-                </ul>
+            <div class="alert alert-danger alert-dismissible fade show alert-rejection-summary" role="alert">
+                <div class="d-flex align-items-start">
+                    <i class="fas fa-exclamation-triangle me-3 mt-1" style="font-size: 1.2rem;"></i>
+                    <div class="flex-grow-1">
+                        <h6 class="alert-heading mb-2">
+                            <i class="fas fa-ban me-1"></i>
+                            Pembayaran Ditolak ({{ count($rejectedPayments) }} item)
+                        </h6>
+                        <p class="mb-2">Terdapat pembayaran yang ditolak oleh admin. Silakan upload ulang bukti pembayaran yang sesuai untuk item berikut:</p>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="border rounded p-2 bg-light">
+                                    @foreach($rejectedPayments as $index => $rejected)
+                                        <div class="d-flex justify-content-between align-items-center py-1 {{ $index < count($rejectedPayments) - 1 ? 'border-bottom' : '' }}">
+                                            <div>
+                                                <strong class="text-danger">{{ $rejected->nama_event }}</strong>
+                                                <span class="text-muted">-</span>
+                                                <span class="text-dark">{{ $rejected->nama_skema }}</span>
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                {{ date('d/m/Y', strtotime($rejected->tgl_mulai)) }}
+                                            </small>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Klik tombol "Upload Ulang" pada tabel di bawah untuk mengupload bukti pembayaran yang baru.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Alert khusus jika ada lebih dari 3 pembayaran ditolak -->
+        @if(count($rejectedPayments) > 3)
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Perhatian!</strong> Anda memiliki banyak pembayaran yang ditolak.
+                Pastikan untuk mengupload bukti pembayaran yang jelas dan sesuai dengan instruksi.
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
@@ -155,19 +209,19 @@
                     <tbody class="table-responsive" style="vertical-align: middle">
                         @php
                             $num = 1;
-                            $previousEventName = ''; // Variable to track the previous event name
+                            $previousEventName = '';
                         @endphp
 
                         @foreach ($upload as $row)
                             @if ($row->nama_event !== $previousEventName)
                                 @php
-                                    $previousEventName = $row->nama_event; // Update previous event name
-                                    $num = 1; // Reset number when event name changes
+                                    $previousEventName = $row->nama_event;
+                                    $num = 1;
                                 @endphp
                             @endif
 
                             <tr class="event-row" data-event-id="{{ $row->id_event_skema }}">
-                                <td>{{ $num++ }}</td> <!-- Display current number -->
+                                <td>{{ $num++ }}</td>
                                 <td>{{ $row->nama_event }}</td>
                                 <td>{{ $row->nama_skema }}</td>
                                 <td>{{ $row->tgl_mulai }}</td>
@@ -195,7 +249,7 @@
                                     @if($row->status_pembayaran === 'Ditolak')
                                         <div class="mt-1">
                                             <small class="text-danger">
-                                                <i class="fa fa-info-circle"></i>
+                                                <i class="fas fa-info-circle"></i>
                                                 Silakan upload ulang bukti pembayaran
                                             </small>
                                         </div>
@@ -206,15 +260,15 @@
                                     @if (($row->status_pembayaran === 'Menunggu' || $row->status_pembayaran === 'Sudah Dibayar') && $row->bukti_pembayaran)
                                         <a href="{{ asset('storage/' . $row->bukti_pembayaran) }}"
                                             class="btn btn-success btn-sm rounded text-light" target="_blank">
-                                            <i class="fa fa-eye"></i> Lihat
+                                            <i class="fas fa-eye"></i> Lihat
                                         </a>
                                     @elseif($row->status_pembayaran === 'Ditolak')
                                         <a href="#" class="btn btn-warning btn-sm rounded" data-id="{{ $row->id_event_skema }}">
-                                            <i class="fa fa-upload"></i> Upload Ulang
+                                            <i class="fas fa-upload"></i> Upload Ulang
                                         </a>
                                     @else
                                         <a href="#" class="btn btn-secondary btn-sm rounded" data-id="{{ $row->id_event_skema }}">
-                                            <i class="fa fa-money-bill-1-wave"></i> Bayar
+                                            <i class="fas fa-money-bill-wave"></i> Bayar
                                         </a>
                                     @endif
                                 </td>
@@ -226,166 +280,149 @@
         </div>
     </div>
 
-    {{-- Modal untuk membuka modal --}}
-<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadModalLabel">Upload Pembayaran</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="uploadForm" action="{{ route('uploadPembayaran-user.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    {{-- Hapus value statis, biarkan JavaScript yang mengisi --}}
-                    <input type="hidden" name="event_skema_id" id="event_skema_id" value="">
+    {{-- Modal untuk upload pembayaran --}}
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Upload Pembayaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadForm" action="{{ route('uploadPembayaran-user.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="event_skema_id" id="event_skema_id" value="">
 
-                    <div class="form-group mb-2">
-                        <label class="control-label mb-2">Upload Bukti Pembayaran <span class="text-danger">*</span></label>
-                        <div class="dropzone-wrapper">
-                            <div class="dropzone-desc">
-                                <i class="glyphicon glyphicon-download-alt"></i>
-                                <p>Pilih gambar atau seret ke sini.</p>
+                        <div class="form-group mb-2">
+                            <label class="control-label mb-2">Upload Bukti Pembayaran <span class="text-danger">*</span></label>
+                            <div class="dropzone-wrapper">
+                                <div class="dropzone-desc">
+                                    <i class="glyphicon glyphicon-download-alt"></i>
+                                    <p>Pilih gambar atau seret ke sini.</p>
+                                </div>
+                                <input type="file" name="upload_file" class="dropzone" id="upload_file" accept="image/*" required>
+                                <div id="image_preview" class="mt-3">
+                                    <img id="preview_image" src="" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                                </div>
                             </div>
-                            <input type="file" name="upload_file" class="dropzone" id="upload_file" accept="image/*" required>
-                            <div id="image_preview" class="mt-3">
-                                <img id="preview_image" src="" alt="Image preview" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                            <div class="mt-1">
+                                <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
                             </div>
+                            @error('path_foto')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-                        <div class="mt-1">
-                            <small style="color: red;">Format harus berupa: .jpg, .jpeg, .png, .bmp dan ukuran maksimal 2mb</small>
-                        </div>
-                        @error('path_foto')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </form>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle tombol bayar
-    document.querySelectorAll('.btn[data-id]').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            var eventId = this.getAttribute('data-id');
-
-            console.log('Tombol diklik, Event ID:', eventId); // Debug log
-
-            fetch('/cek-peserta/' + eventId)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status) {
-                        // Set nilai yang benar ke input hidden
-                        document.getElementById('event_skema_id').value = eventId;
-
-                        console.log('Input hidden diset dengan value:', eventId); // Debug log
-
-                        var uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
-                        uploadModal.show();
-                    } else {
-                        if (typeof Swal !== 'undefined') {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Tidak Bisa Upload',
-                                text: data.message,
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'OK'
-                            });
-                        } else {
-                            alert(data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    if (typeof Swal !== 'undefined') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Terjadi kesalahan saat memproses permintaan.',
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
-                    } else {
-                        alert('Terjadi kesalahan saat memproses permintaan.');
-                    }
-                });
-        });
-    });
-
-    // Preview image on file input change
-    var uploadFileInput = document.getElementById('upload_file');
-    if (uploadFileInput) {
-        uploadFileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const preview = document.getElementById('preview_image');
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
-    // Reset form saat modal ditutup
-    var uploadModalEl = document.getElementById('uploadModal');
-    if (uploadModalEl) {
-        uploadModalEl.addEventListener('hidden.bs.modal', function () {
-            var fileInput = document.getElementById('upload_file');
-            var previewImg = document.getElementById('preview_image');
-            var hiddenInput = document.getElementById('event_skema_id');
-
-            if (fileInput) fileInput.value = '';
-            if (previewImg) {
-                previewImg.src = '';
-                previewImg.style.display = 'none';
-            }
-            if (hiddenInput) hiddenInput.value = '';
-        });
-    }
-
-    // Auto-dismiss alerts after 5 seconds
-    setTimeout(function() {
-        var alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            if (alert.querySelector('.btn-close')) {
-                alert.querySelector('.btn-close').click();
-            }
-        });
-    }, 5000);
-});
-</script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Preview image on file input change
-            var uploadFileInput = document.getElementById('upload_file');
-            if (uploadFileInput) {
-                uploadFileInput.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    const preview = document.getElementById('preview_image');
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            preview.src = e.target.result;
-                            preview.style.display = 'block';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle tombol bayar
+        document.querySelectorAll('.btn[data-id]').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var eventId = this.getAttribute('data-id');
+
+                console.log('Tombol diklik, Event ID:', eventId);
+
+                fetch('/cek-peserta/' + eventId)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status) {
+                            document.getElementById('event_skema_id').value = eventId;
+                            console.log('Input hidden diset dengan value:', eventId);
+
+                            var uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
+                            uploadModal.show();
+                        } else {
+                            // Show Bootstrap alert instead of SweetAlert
+                            showBootstrapAlert('warning', 'Tidak Bisa Upload', data.message);
                         }
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showBootstrapAlert('danger', 'Error', 'Terjadi kesalahan saat memproses permintaan.');
+                    });
+            });
         });
+
+        // Function to show Bootstrap alert
+        function showBootstrapAlert(type, title, message) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <i class="fas fa-${type === 'danger' ? 'times-circle' : 'exclamation-triangle'} me-2"></i>
+                    <strong>${title}!</strong> ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+            // Insert alert at the top of the container
+            const container = document.querySelector('.container.mt-2');
+            container.insertAdjacentHTML('afterbegin', alertHtml);
+
+            // Auto-dismiss after 5 seconds
+            setTimeout(function() {
+                const alert = container.querySelector('.alert');
+                if (alert) {
+                    const closeBtn = alert.querySelector('.btn-close');
+                    if (closeBtn) {
+                        closeBtn.click();
+                    }
+                }
+            }, 5000);
+        }
+
+        // Preview image on file input change
+        var uploadFileInput = document.getElementById('upload_file');
+        if (uploadFileInput) {
+            uploadFileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const preview = document.getElementById('preview_image');
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Reset form saat modal ditutup
+        var uploadModalEl = document.getElementById('uploadModal');
+        if (uploadModalEl) {
+            uploadModalEl.addEventListener('hidden.bs.modal', function () {
+                var fileInput = document.getElementById('upload_file');
+                var previewImg = document.getElementById('preview_image');
+                var hiddenInput = document.getElementById('event_skema_id');
+
+                if (fileInput) fileInput.value = '';
+                if (previewImg) {
+                    previewImg.src = '';
+                    previewImg.style.display = 'none';
+                }
+                if (hiddenInput) hiddenInput.value = '';
+            });
+        }
+
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                if (alert.querySelector('.btn-close')) {
+                    alert.querySelector('.btn-close').click();
+                }
+            });
+        }, 5000);
+    });
     </script>
 
-    {{-- upload gambar  --}}
+    {{-- Upload gambar script --}}
     <script>
         Dropzone.options.path_file = {
             maxFilesize: 2,
