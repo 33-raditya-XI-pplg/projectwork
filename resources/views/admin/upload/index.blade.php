@@ -16,17 +16,6 @@
                 --border-color: #e2e8f0;
             }
 
-            /* Dark mode support */
-            @media (prefers-color-scheme: dark) {
-                :root {
-                    --background-color: #1a202c;
-                    --card-bg: #2d3748;
-                    --text-color: #e2e8f0;
-                    --text-muted: #a0aec0;
-                    --border-color: #4a5568;
-                }
-            }
-
             body {
                 background-color: var(--background-color);
                 color: var(--text-color);
