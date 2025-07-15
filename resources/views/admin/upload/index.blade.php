@@ -291,10 +291,17 @@
                     <div class="modal-body">
                         Apakah Anda yakin ingin menyelesaikan pembayaran ini?
                     </div>
+                    @foreach ($uploadPending as $pending)
+                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
+                        @csrf
+                        @method('PUT')
                     <div class="modal-footer">
+                        <input type="hidden" name="status" value="Sudah Dibayar">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-success" id="confirmSubmit">Selesaikan</button>
+                        <button type="submit" class="btn btn-success" id="confirmSubmit">Selesaikan</button>
                     </div>
+                    </form>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -419,15 +426,12 @@
                                                         class="btn btn-custom btn-info">
                                                         <i class="fa fa-eye"></i> Lihat
                                                     </a>
-                                                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
-                                                        @csrf
-                                                        @method('PUT')
+
                                                         <button type="button" class="btn btn-custom btn-success complete-btn"
                                                             data-bs-toggle="modal" data-bs-target="#confirmModal">
                                                             <i class="fa fa-check"></i> Selesaikan
                                                         </button>
-                                                        <input type="hidden" name="status" value="Sudah Dibayar">
-                                                    </form>
+
                                                     <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')

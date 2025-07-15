@@ -144,6 +144,7 @@ class UploadPembayaranController extends Controller
     public function updateStatus(Request $request, $id_upload_pembayaran)
     {
         // dd($request->all(), $id_upload_pembayaran);
+        // dd($request);
 
         $upload = Upload_pembayaran::findOrFail($id_upload_pembayaran);
         $upload->status_pembayaran = $request->input('status');
