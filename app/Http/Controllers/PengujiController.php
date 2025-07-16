@@ -63,7 +63,7 @@ class PengujiController extends Controller
             ]);
         }
 
-        dd($request->all());
+        // dd($request->all());
         ;
         $data = $request->all();
         if ($request->hasFile('path_foto')) {
