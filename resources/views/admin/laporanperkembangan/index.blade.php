@@ -620,7 +620,7 @@
                     </div>
                 </div>`);
                 checkEmptyInput('#empty-input-message');
-
+            });
 
             $(document).on('click', '.removeKemampuan', function() {
                 $(this).closest('.kemampuan_dasar-input-edit').remove();
