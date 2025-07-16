@@ -31,7 +31,8 @@ class PengujiController extends Controller
                 !empty($user->keahlian);
         }
         // $instansi = Instansi::all();
-        $page = Page::all();
+        $page = Page::where('status', 1)->get();
+        $allPages = Page::where('status', 1)->get();
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $regencies = DB::table('regencies')->pluck('name', 'id');
         $isProfileComplete = !empty($user->nama_lengkap) && !empty($user->alamat) && !empty($user->jenis_kelamin)
