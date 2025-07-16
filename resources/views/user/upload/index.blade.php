@@ -141,7 +141,7 @@
         @endphp
 
         @if($hasRejectedPayment)
-            <div class="alert alert-danger alert-dismissible fade show alert-rejection-summary" role="alert">
+            <div class="alert alert-danger alert-dismissible fade show alert-rejection-summary p-3" role="alert">
                 <div class="d-flex align-items-start">
                     <i class="fas fa-exclamation-triangle me-3 mt-1" style="font-size: 1.2rem;"></i>
                     <div class="flex-grow-1">
