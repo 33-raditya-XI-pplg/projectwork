@@ -21,7 +21,9 @@ class EventController extends Controller
         $instansi = Instansi::get();
         $tempat = Tempat::get();
         $jenisEvt = JenisEvt::get();
-        $page = Page::get();
+
+        $page = Page::where('status', 1)->get();
+        $allPages = Page::where('status', 1)->get();
 
         $evt = Event::get();
         $today = Carbon::today();

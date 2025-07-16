@@ -310,6 +310,7 @@
                         {{-- form --}}
                         <div class="container">
                             <div class="row">
+                           <!-- Modal Create - Bagian Page Select (untuk form tambah) -->
                                 <div class="mb-3">
                                     <label for="page_id" class="form-label">Page Id</label>
                                     <select class="form-select js-example-basic-single" name="page_id"
@@ -320,6 +321,9 @@
                                         @endforeach
                                     </select>
                                 </div>
+
+                    
+
                                 <div class="col">
                                     {{-- kanan --}}
                                     <div class="mb-3">
