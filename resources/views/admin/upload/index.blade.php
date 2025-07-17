@@ -312,21 +312,21 @@
                         <h5 class="modal-title" id="tolakModalLabel">Konfirmasi</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="alasanPenolakan" class="form-label">Tulis alasan penolakan:</label>
-                            <textarea class="form-control" id="alasanPenolakan" name="alasanPenolakan" rows="4" placeholder="Contoh: Bukti pembayaran tidak valid, data tidak sesuai, dll."></textarea>
-                        </div>
-                    </div>
                     @foreach ($uploadPending as $pending)
                     <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
                         @csrf
                         @method('PUT')
-                    <div class="modal-footer">
-                        <input type="hidden" name="status" value="Ditolak">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger" id="tolakSubmit">Tolak</button>
-                    </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="alasanPenolakan" class="form-label">Tulis alasan penolakan:</label>
+                                <textarea class="form-control" id="alasanPenolakan" name="alasanPenolakan" rows="4" placeholder="Contoh: Bukti pembayaran tidak valid, data tidak sesuai, dll."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" name="status" value="Ditolak">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-danger" id="tolakSubmit">Tolak</button>
+                        </div>
                     </form>
                     @endforeach
                 </div>

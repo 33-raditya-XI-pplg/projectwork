@@ -162,7 +162,7 @@ class UploadPembayaranController extends Controller
 
         if ($upload->status_pembayaran == 'Ditolak') {
             // Hapus data "Menunggu" dari tabel terkait, misalnya tabel tb_peserta
-            
+            $upload->alasan = $request->input('alasanPenolakan');
             $upload->status_pembayaran = 'Ditolak';
             $upload->save()
 ;
