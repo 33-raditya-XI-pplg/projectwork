@@ -138,7 +138,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
     Route::resource('sertifikat', SertifikatController::class);
 
     Route::resource('uploadPembayaran', UploadPembayaranController::class);
-    
+
     Route::put('/update-status/{id_upload_pembayaran}', [UploadPembayaranController::class, 'updateStatus'])->name('upload.updateStatus');
 
 
@@ -329,4 +329,6 @@ Route::get('/testimoni-user', [TestimoniUserController::class, 'index'])->name('
 Route::put('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'update'])->name('testimoni-user.update');
 // Route::get('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
 Route::get('/cek-peserta/{event_skema_id}', [UploadPembayaranController::class, 'cekPeserta']);
+
+
 

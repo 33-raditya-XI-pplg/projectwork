@@ -28,6 +28,8 @@
                 margin: 0 auto;
             }
 
+
+
             .card-upload {
                 background-color: var(--card-bg);
                 border-radius: 16px;
@@ -154,7 +156,7 @@
                 background-color: var(--danger-color);
                 border-color: var(--danger-color);
                 color: white;
-            }
+           36
 
             /* Responsive adjustments */
             @media (max-width: 768px) {
@@ -176,12 +178,109 @@
                     padding: 0.4rem 0.8rem;
                     font-size: 0.8rem;
                 }
+
+                /* .alert {
+                    padding: 0.75rem 1rem;
+                    font-size: 0.9rem;
+                } */
+
+                /* Alert Styles */
+                /* .alert {
+                    padding: 1rem 1.5rem;
+                    border-radius: 12px;
+                    border: 1px solid var(--border-color);
+                    margin-bottom: 1.5rem;
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    font-weight: 500;
+                    animation: slideDown 0.3s ease-out;
+                    background-color: white;
+                    color: var(--text-color);
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                }
+
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .alert-success,
+                .alert-danger,
+                .alert-warning,
+                .alert-info {
+                    background-color: white;
+                    border-color: var(--border-color);
+                    color: var(--text-color);
+                }
+
+                .alert .alert-icon {
+                    font-size: 1.2rem;
+                    flex-shrink: 0;
+                }
+
+                .alert .alert-content {
+                    flex: 1;
+                }
+
+                .alert .alert-title {
+                    font-weight: 600;
+                    margin-bottom: 0.25rem;
+                }
+
+                .alert .alert-message {
+                    margin: 0;
+                    opacity: 0.9;
+                }
+
+                .alert .alert-close {
+                    background: none;
+                    border: none;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    opacity: 0.7;
+                    transition: opacity 0.2s ease;
+                    color: currentColor;
+                    padding: 0;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .alert .alert-close:hover {
+                    opacity: 1;
+                }
+                @media (prefers-color-scheme: dark) {
+                    .alert {
+                        background-color: var(--card-bg);
+                        color: var(--text-color);
+                        border-color: var(--border-color);
+                    }
+
+                    .alert-success,
+                    .alert-danger,
+                    .alert-warning,
+                    .alert-info {
+                        background-color: var(--card-bg);
+                        color: var(--text-color);
+                        border-color: var(--border-color);
+                    }
+                } */
             }
         </style>
     @endpush
 
     <div class="container">
-        <!-- Modal Konfirmasi Selesaikan -->
+        <!-- Modal Konfirmasi -->
         <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -192,37 +291,47 @@
                     <div class="modal-body">
                         Apakah Anda yakin ingin menyelesaikan pembayaran ini?
                     </div>
+                    @foreach ($uploadPending as $pending)
+                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
+                        @csrf
+                        @method('PUT')
                     <div class="modal-footer">
+                        <input type="hidden" name="status" value="Sudah Dibayar">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-success" id="confirmSubmit">Selesaikan</button>
+                        <button type="submit" class="btn btn-success" id="confirmSubmit">Selesaikan</button>
                     </div>
+                    </form>
+                    @endforeach
                 </div>
             </div>
         </div>
-
-        <!-- Modal Konfirmasi Ditolak -->
-        <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="rejectModalLabel">Konfirmasi Penolakan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="alasanPenolakan" class="form-label">Tulis alasan penolakan:</label>
-                    <textarea class="form-control" id="alasanPenolakan" name="alasanPenolakan" rows="4" placeholder="Contoh: Bukti pembayaran tidak valid, data tidak sesuai, dll."></textarea>
+        <div class="modal fade" id="tolakModal" tabindex="-1" aria-labelledby="tolakModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tolakModalLabel">Konfirmasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="alasanPenolakan" class="form-label">Tulis alasan penolakan:</label>
+                            <textarea class="form-control" id="alasanPenolakan" name="alasanPenolakan" rows="4" placeholder="Contoh: Bukti pembayaran tidak valid, data tidak sesuai, dll."></textarea>
+                        </div>
+                    </div>
+                    @foreach ($uploadPending as $pending)
+                    <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
+                        @csrf
+                        @method('PUT')
+                    <div class="modal-footer">
+                        <input type="hidden" name="status" value="Ditolak">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger" id="tolakSubmit">Tolak</button>
+                    </div>
+                    </form>
+                    @endforeach
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-danger" id="rejectSubmit">Tolak</button>
-            </div>
         </div>
-    </div>
-</div>
-
-
         <!-- Alert Messages -->
         @if (session('success'))
             <div class="alert alert-success" id="successAlert">
@@ -310,12 +419,6 @@
                     <!-- Persetujuan Pembayaran Tab -->
                     <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
                         <div class="table-responsive">
-                            <!-- Reusable Form for Status Updates -->
-                            <form id="statusUpdateForm" action="" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="status" id="statusInput">
-                            </form>
                             <table class="table" id="verifikasi-table">
                                 <thead>
                                     <tr>
@@ -350,15 +453,16 @@
                                                         class="btn btn-custom btn-info">
                                                         <i class="fa fa-eye"></i> Lihat
                                                     </a>
-                                                    <button type="button" class="btn btn-custom btn-success complete-btn"
-                                                        data-bs-toggle="modal" data-bs-target="#confirmModal">
-                                                        <i class="fa fa-check"></i> Selesaikan
-                                                    </button>
-                                                    <button type="button" class="btn btn-custom btn-danger reject-btn"
-                                                        data-bs-toggle="modal" data-bs-target="#rejectModal"
-                                                        data-id="{{ $pending->id_upload_pembayaran }}">
-                                                        <i class="fa-solid fa-x"></i> Ditolak
-                                                    </button>
+
+                                                        <button type="button" class="btn btn-custom btn-success complete-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                                            <i class="fa fa-check"></i> Selesaikan
+                                                        </button>
+                                                        <button type="button" class="btn btn-custom btn-danger complete-btn"
+                                                            data-bs-toggle="modal" data-bs-target="#tolakModal">
+                                                            <i class="fa-solid fa-x"></i> Ditolak
+                                                        </button>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -430,44 +534,36 @@
                     });
                 });
 
-                // Handle konfirmasi untuk tombol Selesaikan dan Tolak
-                const statusUpdateForm = document.getElementById('statusUpdateForm');
-                const statusInput = document.getElementById('statusInput');
+                // Handle konfirmasi untuk tombol Selesaikan
                 const confirmSubmitButton = document.getElementById('confirmSubmit');
-                const rejectSubmitButton = document.getElementById('rejectSubmit');
-                let currentId = null;
+                let currentForm = null;
 
-                // Handle Complete button
                 document.querySelectorAll('.complete-btn').forEach(button => {
                     button.addEventListener('click', () => {
-                        currentId = button.closest('.event-row').dataset.id;
-                        statusUpdateForm.action = `/upload/update-status/${currentId}`;
-                        statusInput.value = 'Sudah Dibayar';
+                        currentForm = button.closest('form');
                     });
                 });
 
-                // Handle Reject button
-                document.querySelectorAll('.reject-btn').forEach(button => {
-                    button.addEventListener('click', () => {
-                        currentId = button.dataset.id;
-                        statusUpdateForm.action = `/upload/update-status/${currentId}`;
-                        statusInput.value = 'Ditolak';
-                    });
-                });
-
-                // Submit form on confirm
                 confirmSubmitButton.addEventListener('click', () => {
-                    if (currentId) {
-                        statusUpdateForm.submit();
+                    if (currentForm) {
+                        currentForm.submit();
                     }
                 });
 
-                // Submit form on reject
-                rejectSubmitButton.addEventListener('click', () => {
-                    if (currentId) {
-                        statusUpdateForm.submit();
-                    }
-                });
+                // Handle modal for upload
+                const uploadModal = document.getElementById('uploadModal');
+                if (uploadModal) {
+                    uploadModal.addEventListener('show.bs.modal', e => {
+                        const button = e.relatedTarget;
+                        const eventId = button.getAttribute('data-id');
+                        const eventInput = document.getElementById('event_id');
+                        if (eventInput) {
+                            eventInput.value = eventId;
+                        } else {
+                            console.error('Hidden input with ID "event_id" not found.');
+                        }
+                    });
+                }
 
                 // Auto-hide alerts after 5 seconds
                 const alerts = document.querySelectorAll('.alert');

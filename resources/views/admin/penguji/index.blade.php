@@ -101,7 +101,7 @@
                            <td>
     <div class="d-flex flex-column gap-2 px-3">
         <!-- Tombol Rincian -->
-        <a class="btn btn-secondary btn-sm rounded text-white d-flex align-items-center gap-2"
+        <a class="btn btn-primary btn-sm rounded text-white d-flex align-items-center gap-2"
            href="{{ route('penguji.show', $row->id_user) }}">
             <i class="fa-solid fa-code"></i>
             <span>Rincian</span>
