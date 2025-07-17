@@ -98,28 +98,32 @@
                                 {{ $statusLabel}}
                             </button>
                             </td>
-                            <td>
-                                <div class="dropdown">
-                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm rounded-3"
-                                        id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li><a class="dropdown-item text-black" href="{{ route('penguji.show', $row->id_user) }}">
-                                            <i class="fa-solid fa-code pe-none"></i>
-                                            Rincian</a>
-                                        </li>
-                                        <li><a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                data-bs-target="#edit{{ $row->id_user }}"><i
-                                                    class="fa-regular fa-pen-to-square"></i> Edit</a>
-                                        </li>
-                                        <li><a href="{{ route('penguji.destroy', $row->id_user) }}" class="dropdown-item text-danger"
-                                                data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
-                                                Delete</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
+                           <td>
+    <div class="d-flex flex-column gap-2 px-3">
+        <!-- Tombol Rincian -->
+        <a class="btn btn-secondary btn-sm rounded text-white d-flex align-items-center gap-2"
+           href="{{ route('penguji.show', $row->id_user) }}">
+            <i class="fa-solid fa-code"></i>
+            <span>Rincian</span>
+        </a>
+
+        <!-- Tombol Edit (Modal) -->
+        <a class="btn btn-info btn-sm rounded text-white d-flex align-items-center gap-2"
+           href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_user }}">
+            <i class="fa-regular fa-pen-to-square"></i>
+            <span>Edit</span>
+        </a>
+
+        <!-- Tombol Delete -->
+        <a href="{{ route('penguji.destroy', $row->id_user) }}"
+           class="btn btn-danger btn-sm rounded text-white d-flex align-items-center gap-2"
+           data-confirm-delete="true">
+            <i class="fa-regular fa-trash-can"></i>
+            <span>Delete</span>
+        </a>
+    </div>
+</td>
+
                         </tr>
                     @endforeach
                 </tbody>
