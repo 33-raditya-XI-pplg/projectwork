@@ -43,6 +43,7 @@ class UploadPembayaranController extends Controller
                 ->get();
 
             // Query Semua Upload (termasuk yang sudah diverifikasi/ditolak)
+            // dd($uploadPending);
             $uploadAll = DB::table('tb_event_skema')
                 ->leftJoin('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
                 ->leftJoin('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')

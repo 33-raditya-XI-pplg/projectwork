@@ -295,13 +295,13 @@
                     <form action="{{ route('upload.updateStatus', $pending->id_upload_pembayaran) }}" method="POST" class="complete-form">
                         @csrf
                         @method('PUT')
+                        @endforeach
                     <div class="modal-footer">
                         <input type="hidden" name="status" value="Sudah Dibayar">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success" id="confirmSubmit">Selesaikan</button>
                     </div>
                     </form>
-                    @endforeach
                 </div>
             </div>
         </div>
