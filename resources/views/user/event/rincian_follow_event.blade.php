@@ -114,57 +114,60 @@
                                             {{ $row->telah_terdaftar == 1 ? 'Sudah Terdaftar' : 'Dapat Mendaftar' }}
                                         </button>
                                     </td>
-
                                     @if ($row->telah_terdaftar == 1)
                                         <td class="text-center">
-                                            <div class="action-buttons">
+                                            <div class="d-flex flex-wrap justify-content-center gap-2">
                                                 <!-- Tombol Rincian -->
                                                 <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}"
-                                                    class="btn btn-secondary btn-sm rounded">
-                                                    <i class="fa fa-info"></i> Rincian
+                                                class="btn btn-secondary btn-sm px-3 py-1 rounded d-flex align-items-center">
+                                                    <i class="fa fa-info me-1" style="font-size: 0.9rem;"></i>
+                                                    <span style="font-size: 0.8rem;">Rincian</span>
                                                 </a>
 
                                                 <!-- Tombol Sertifikat -->
-                                                <button type="button" class="btn btn-success btn-sm rounded text-white print-certificate-btn"
-                                                onclick="printCertificate({{ $row->id_peserta }})"
+                                                <button type="button"
+                                                        class="btn btn-success btn-sm px-3 py-1 rounded text-white d-flex align-items-center print-certificate-btn"
+                                                        onclick="printCertificate({{ $row->id_peserta }})"
                                                         data-peserta-id="{{ $row->id_peserta }}">
-                                                    <i class="fa fa-certificate"></i> Sertifikat
+                                                    <i class="fa fa-certificate me-1" style="font-size: 0.9rem;"></i>
+                                                    <span style="font-size: 0.8rem;">Sertifikat</span>
                                                 </button>
 
                                                 <!-- Tombol Penilaian -->
                                                 <a href="{{ route('event.penilaian', $row->id_event_skema) }}"
-                                                    class="btn btn-warning btn-sm rounded">
-                                                    <i class="fa fa-star"></i> Penilaian
+                                                class="btn btn-danger btn-sm px-3 py-1 rounded d-flex align-items-center text-dark">
+                                                    <i class="fa fa-star me-1" style="font-size: 1rem;"></i>
+                                                    <span style="font-size: 0.8rem;">Penilaian</span>
                                                 </a>
 
                                                 <!-- Tombol Laporan Perkembangan -->
                                                 <a href="{{ route('event.laporan-perkembangan', $row->id_event_skema) }}"
-                                                    class="btn btn-info btn-sm rounded">
-                                                    <i class="fa fa-chart-line"></i> Laporan
+                                                class="btn btn-info btn-sm px-3 py-1 rounded d-flex align-items-center text-white">
+                                                    <i class="fa fa-chart-line me-1" style="font-size: 0.9rem;"></i>
+                                                    <span style="font-size: 0.8rem;">Laporan</span>
                                                 </a>
                                             </div>
                                         </td>
                                     @else
                                         <td class="text-center">
-                                            <div class="action-buttons">
+                                            <div class="d-flex flex-wrap justify-content-center gap-2">
                                                 <!-- Tombol Daftar -->
                                                 <form id="mendaftarForm-{{ $row->id_event_skema }}" class="mendaftarForm"
                                                     action="{{ route('mendaftar.event') }}" method="POST">
                                                     @csrf
-                                                    <input type="hidden" name="event_skema_id" required
-                                                        value="{{ $row->id_event_skema }}">
+                                                    <input type="hidden" name="event_skema_id" required value="{{ $row->id_event_skema }}">
                                                     <button type="button"
-                                                        class="btn btn-success btn-sm text-white registerButton">
-                                                        <i class="fa-regular fa-pen-to-square"></i>
-                                                        <span class="text-white">Daftar</span>
+                                                            class="btn btn-success btn-sm px-3 py-1 rounded text-white registerButton d-flex align-items-center">
+                                                        <i class="fa-regular fa-pen-to-square me-1" style="font-size: 0.9rem;"></i>
+                                                        <span style="font-size: 0.8rem;">Daftar</span>
                                                     </button>
                                                 </form>
 
                                                 <!-- Tombol Rincian -->
                                                 <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}"
-                                                    class="btn btn-danger btn-sm text-white">
-                                                    <i class="fa fa-info"></i>
-                                                    <span class="text-white">Rincian</span>
+                                                class="btn btn-secondary btn-sm px-3 py-1 rounded text-white d-flex align-items-center">
+                                                    <i class="fa fa-info me-1" style="font-size: 0.9rem;"></i>
+                                                    <span style="font-size: 0.8rem;">Rincian</span>
                                                 </a>
                                             </div>
                                         </td>
