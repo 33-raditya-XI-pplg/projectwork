@@ -53,7 +53,7 @@
                         border-width: 0.1px;
                         border-color:black !important;
             }
-    
+
             .select2-close-mask{
             z-index: 2099 !important;
             }
@@ -80,14 +80,14 @@
                             <li class="breadcrumb-item text-body-emphasis text-capitalize h3 fw-semibold d-inline ms-3">
                                 {{ $Title }}
                             </li>
-                        
+
                             @if (!empty($subtitle) && count(Request::segments()) >= 3)
                             <span class="h4 fw-normal text-body-emphasis"> > </span>
                             <li class="breadcrumb-item text-capitalize h4 d-inline">
                                 {{ $subtitle }}  <!-- Diambil dari controller -->
                             </li>
                             @endif
-                            
+
                             @if (!empty($subTitle) && count(Request::segments()) >= 4)
                             <span class="h5"> - </span>
                             <li class="breadcrumb-item h5 d-inline">
@@ -95,7 +95,7 @@
                             </li>
                         @endif
                         </ol>
-                        
+
                     </div>
                     <div>
                         @php
@@ -106,11 +106,11 @@
                             <button class="btn btn-primary rounded" id="add">+ Tambah</button>
                         @elseif (in_array($menu,
                                     [
-                                        'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat',
+                                        'dashboard', 'skema', 'penilaian', 'create', 'user', 'edit', 'profile', 'sertifikat', 'follow-event', 'follow-show-event',
                                         'event-user', 'sertifikat-user', 'nilai', 'rincian-sertifikat','rincian','profile-user','profile-penguji','uploadPembayaran-user','uploadPembayaran','laporanperkembangan','add-student','detail','rincian','penguji{$id}','profile-admin'
                                     ]
                                 )
-                            )                            
+                            )
                         @else
                             <button class="btn btn-primary rounded" id="tambahBtn" data-bs-toggle="modal" data-bs-target="#add">+
                                 Tambah</button>
@@ -138,7 +138,7 @@
     <script src="{{ asset('assets/js/swithbutton.js') }}">
     </script>
     {{-- <script src="{{ asset('assets/js/ckeditor.js') }}"></script> --}}
-    
+
     <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     <script src="{{ asset('') }}vendor/DataTables/datatables.js"></script>
     <script src="{{ asset('') }}vendor/simditor/site/assets/scripts/module.js"></script>
@@ -152,17 +152,17 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     <script></script>
-    
+
     {{-- inisialisasi js --}}
     <script>
         $(document).ready(function() {
               $('.js-example-basic-single').each(function() {
-                  var placeholder = $(this).data('placeholder'); 
-                  
+                  var placeholder = $(this).data('placeholder');
+
                   $(this).select2({
-                      placeholder: placeholder, 
+                      placeholder: placeholder,
                       allowClear: true,
-                      minimumResultsForSearch: Infinity 
+                      minimumResultsForSearch: Infinity
                   });
               });
           });
@@ -173,10 +173,10 @@
             placeholder: "Pilih Rating",
             templateResult: formatState,
             templateSelection: formatState,
-            minimumResultsForSearch: Infinity 
+            minimumResultsForSearch: Infinity
         });
     });
-    
+
     function formatState(state) {
         if (!state.id) {
             return state.text;
@@ -321,7 +321,7 @@ $(document).ready(function() {
 });
 
     </script>
-    
+
 
 
     @stack('script')

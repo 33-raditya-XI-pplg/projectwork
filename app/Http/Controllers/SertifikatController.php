@@ -45,6 +45,7 @@ class SertifikatController extends Controller
             ->first();
 
         $eventSkemaID = $data_skema->id_event_skema;
+        
         $data_peserta = DB::table('tb_peserta')
             ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
             ->leftJoinSub(function ($query) {

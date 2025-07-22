@@ -45,6 +45,7 @@
         </style>
     @endpush
 
+    @if($route == 'user/event-user')
     <div class="filter-training mb-4" id="shadow">
         <div class="card border-0">
             <div class="card-header bg-primary text-white">
@@ -95,6 +96,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -112,7 +114,13 @@
                         </div>
                        <div class="d-flex mt-3 mb-3 justify-content-between align-items-center">
                         <span>{{ \Carbon\Carbon::parse($row->tgl_mulai)->format('d, F Y') }}</span>
-                        <a href="{{ route('event-user.show', $row->id_event) }}"
+
+                        @if($route == 'user/event-user')
+                            <a href="{{ route('event-user.show', $row->id_event) }}"
+                        @elseif($route == 'user/follow-event')
+                            <a href="{{ route('follow-show-event', $row->id_event) }}"
+                        @endif
+
                         class="btn rincian-btn px-4 py-2 rounded-3 shadow-sm"
                         style="background-color: #ffc107; color: #212529; font-weight: 500; transition: 0.3s;">
                             Rincian

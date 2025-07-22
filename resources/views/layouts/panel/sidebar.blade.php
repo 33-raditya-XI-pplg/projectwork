@@ -76,6 +76,13 @@
                     <span>Upload Bukti Pembayaran </span>
                 </a>
             </li>
+            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'follow-event' ? 'active' : '' }} position-relative">
+                {{-- <li class="sidebar-menu-item devider {{ request()->routeIs('follow-event') ? 'active' : '' }} position-relative"> --}}
+                <a href="{{route('follow-event')}}" class="item-link">
+                    <i class="fas fa-file-arrow-up"></i>
+                    <span>Event Yang Diikuti</span>
+                </a>
+            </li>
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'testimoni-user' ? 'active' : '' }} position-relative">
                 <a href="{{route('testimoni-user.index')}}" class="item-link">
                     <i class="fas fa-star"></i>

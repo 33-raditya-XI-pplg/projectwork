@@ -58,8 +58,15 @@ Route::get('/', fn() => redirect('/login'));
 Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']], function () {
     Route::get('dashboard', [DashboardController::class, 'user_index']);
     Route::resource('event-user', EventUsersController::class);
+
+    Route::get('/follow-event', [EventUsersController::class, 'index'])->name('follow-event');
+    Route::get('/follow-event/{id}', [EventUsersController::class, 'show'])->name('follow-show-event');
+
     Route::resource('sertifikat-user', SertifikatUsersController::class);
     Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
+    Route::get('event-user/sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'showSertifikat'])->name('event.sertifikat');
+    Route::get('event-user/penilaian/{event_skemaID}', [EventUsersController::class, 'showPenilaian'])->name('event.penilaian');
+    Route::get('event-user/laporan-perkembangan/{event_skemaID}', [EventUsersController::class, 'showLaporan'])->name('event.laporan-perkembangan');
     Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
 
     Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
@@ -72,7 +79,6 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']
 
     Route::resource('testimoni-user', TestimoniUserController::class)->except(['show']);
     Route::get('testimoni-user/{id}/detail', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
-
 
     //profile
     Route::resource('profile-user', ProfileController::class)->except(['edit', 'show'])->names([
