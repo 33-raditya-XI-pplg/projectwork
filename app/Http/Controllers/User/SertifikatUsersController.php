@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
+use Log;
+use Exception;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class SertifikatUsersController extends Controller
 {
@@ -109,68 +111,90 @@ class SertifikatUsersController extends Controller
     }
 
     // Method alternatif untuk cetak berdasarkan peserta_id langsung
-    public function cetakByPeserta($peserta_id)
+public function cetakByPeserta($peserta_id)
     {
-        $data_sertifikat_peserta = DB::table('tb_sertifikat')
-            ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
-            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-            ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
-            ->select(
-                'tb_user.nama_lengkap',
-                'tb_event.nama_event',
-                'tb_jenis_event.nama_jenis_event',
-                'tb_skema.nama_skema',
-                'tb_background.nama_bg',
-                'tb_background.orientasi_bg',
-                'tb_background.path_bg',
-                'tb_sertifikat.nomor_sertifikat',
-                'tb_sertifikat.tgl_terbit',
-                'tb_sertifikat.tgl_berakhir',
-                'tb_sertifikat.masa_berlaku',
-                'tb_sertifikat.nilai',
-                'tb_sertifikat.keterangan'
-            )
-            ->where('tb_peserta.user_id', Auth::user()->id_user)
-            ->where('tb_peserta.id_peserta', $peserta_id)
-            ->get();
+        try {
+            // Validasi peserta
+            $peserta_check = DB::table('tb_peserta')
+                ->where('id_peserta', $peserta_id)
+                ->where('user_id', Auth::user()->id_user)
+                ->first();
 
-        // Cek apakah data sertifikat ditemukan
-        if ($data_sertifikat_peserta->isEmpty()) {
-            return response()->json(['error' => 'Sertifikat tidak ditemukan'], 404);
+            if (!$peserta_check) {
+                return response()->view('errors.404', ['message' => 'Peserta tidak ditemukan atau tidak memiliki akses'], 404);
+            }
+
+            $data_sertifikat_peserta = DB::table('tb_sertifikat')
+                ->join('tb_peserta', 'tb_sertifikat.peserta_id', '=', 'tb_peserta.id_peserta')
+                ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+                ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+                ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+                ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+                ->join('tb_background', 'tb_event_skema.background_id', '=', 'tb_background.id_background')
+                ->select(
+                    'tb_user.nama_lengkap',
+                    'tb_event.nama_event',
+                    'tb_jenis_event.nama_jenis_event',
+                    'tb_skema.nama_skema',
+                    'tb_background.nama_bg',
+                    'tb_background.orientasi_bg',
+                    'tb_background.path_bg',
+                    'tb_sertifikat.nomor_sertifikat',
+                    'tb_sertifikat.tgl_terbit',
+                    'tb_sertifikat.tgl_berakhir',
+                    'tb_sertifikat.masa_berlaku',
+                    'tb_sertifikat.nilai',
+                    'tb_sertifikat.keterangan'
+                )
+                ->where('tb_peserta.user_id', Auth::user()->id_user)
+                ->where('tb_peserta.id_peserta', $peserta_id)
+                ->get();
+
+            // Cek apakah data sertifikat ditemukan
+            if ($data_sertifikat_peserta->isEmpty()) {
+                return response()->view('errors.404', ['message' => 'Sertifikat tidak ditemukan atau belum tersedia'], 404);
+            }
+
+            $event_skema_id = $peserta_check->event_skema_id;
+
+            $data_penadatangan = DB::table('tb_event_skema')
+                ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
+                ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
+                ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
+                ->where('tb_penandatangan.event_skema_id', $event_skema_id)
+                ->get();
+
+            // Validasi file background
+            $templateBg = public_path($data_sertifikat_peserta[0]->path_bg);
+            if (!file_exists($templateBg)) {
+                \Log::error('Template background not found: ' . $templateBg);
+                return response()->view('errors.500', ['message' => 'Template sertifikat tidak ditemukan'], 500);
+            }
+
+            $fileName = 'Sertif-' . $data_sertifikat_peserta[0]->nomor_sertifikat . '.pdf';
+
+            // Generate PDF
+            if ($data_sertifikat_peserta[0]->orientasi_bg != 'landscape') {
+                $pdf = PDF::loadView(
+                    'template_sertifikat.cetak.cetak_sertifikat_potrait',
+                    compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
+                )->setPaper('a4', 'portrait'); // Perbaiki typo: potrait -> portrait
+            } else {
+                $pdf = PDF::loadView(
+                    'template_sertifikat.cetak.cetak_sertifikat_landscape',
+                    compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
+                )->setPaper('a4', 'landscape');
+            }
+
+            return $pdf->stream($fileName);
+
         }
 
-        $event_skema_id = DB::table('tb_peserta')
-            ->where('id_peserta', $peserta_id)
-            ->value('event_skema_id');
-
-        $data_penadatangan = DB::table('tb_event_skema')
-            ->join('tb_penandatangan', 'tb_event_skema.id_event_skema', '=', 'tb_penandatangan.event_skema_id')
-            ->join('tb_ttd', 'tb_penandatangan.ttd_id', '=', 'tb_ttd.id_ttd')
-            ->select('tb_ttd.nama_ttd', 'tb_ttd.jabatan', 'tb_ttd.path_ttd')
-            ->where('tb_penandatangan.event_skema_id', $event_skema_id)
-            ->get();
-
-        $templateBg = public_path($data_sertifikat_peserta[0]->path_bg);
-        $fileName = 'Sertif-' . $data_sertifikat_peserta[0]->nomor_sertifikat . '.pdf';
-
-        $pdf = "";
-        if ($data_sertifikat_peserta[0]->orientasi_bg != 'landscape') {
-            $pdf = PDF::loadView(
-                'template_sertifikat.cetak.cetak_sertifikat_potrait',
-                compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
-            )->setPaper('a4', 'potrait');
-        } else {
-            $pdf = PDF::loadView(
-                'template_sertifikat.cetak.cetak_sertifikat_landscape',
-                compact('data_sertifikat_peserta', 'data_penadatangan', 'templateBg')
-            )->setPaper('a4', 'landscape');
+        catch (Exception $e) {
+            Log::error('Error generating certificate PDF: ' . $e->getMessage());
+            return response()->view('errors.500', ['message' => 'Terjadi kesalahan saat membuat sertifikat'], 500);
         }
-
-        return $pdf->stream($fileName);
     }
 
     public function show($eventID)
