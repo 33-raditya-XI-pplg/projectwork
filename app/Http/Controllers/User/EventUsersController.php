@@ -183,17 +183,4 @@ class EventUsersController extends Controller
         Alert::success('Berhasil Mendaftar!', 'Anda berhasil terdaftar.');
         return redirect()->back();
     }
-
-
-
-    public function showpenilaian(Request $request, $eventSkemaID)
-    {
-        $eventSkema = Event_Skema::findOrFail($eventSkemaID);
-
-        $Title = 'Event';
-        $subtitle = 'Penilaian';
-
-        return view('user.event.penilaian', compact('Title', 'subtitle', 'eventSkema'));
-    }
-
 }

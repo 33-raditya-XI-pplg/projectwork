@@ -137,6 +137,7 @@
                                                 <button type="button" class="btn btn-danger btn-sm penilaian_btn me-1 text-white rounded mb-1 "
                                                     data-id="{{ $row->id_event_skema }}"
                                                     data-peserta-id="{{ $row->id_peserta }}"
+                                                    data-nama-skema="{{ $row->nama_skema }}"
                                                     >
                                                   <i class="fa fa-star me-1" style="font-size: 1rem;"></i>
                                                     <span style="font-size: 0.8rem;">Penilaian</span>
@@ -191,7 +192,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Nilai Peserta</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Hasil Penilaian</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -212,12 +213,6 @@
                     </div>
                 </div>
 
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success rounded-3 text-white"
-                    id="store_nilai_btn" value="0">Simpan</button>
             </div>
         </div>
     </div>
@@ -349,9 +344,10 @@
             $(document).on('click', '.penilaian_btn', function (e) {
                 e.preventDefault();
                 pesertaID = $(this).data('peserta-id');
+                nama_skema = $(this).data('nama-skema');
 
                 $.ajax({
-                    url: '/',
+                    url: '/penilaian/fetchNilaiData/' + pesertaID,
                     type: "GET",
                     dataType: "json",
                     success: function(response) {
@@ -359,7 +355,7 @@
 
                         $('#editNilaiModal').modal('show');
                         $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
-                        $('#edit_nama_skema').val(data_skema.nama_skema);
+                        $('#edit_nama_skema').val(nama_skema);
 
                         $('#edit-nilai-sub-skema-wrapper').html("");
                         $('.nilai_sub_skema').val('');
@@ -371,9 +367,8 @@
                                     <div class="col-sm-4 d-flex justify-content-end">\
                                         <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
                                             style="height: 35px;">Nilai</label>\
-                                        <input type="hidden" class="edit_id_sub_skema" value="' + row.sub_skema_id + '">\
                                         <input type="number" class="form-control rounded-0 rounded-end edit_nilai_sub_skema"\
-                                            style="width: 100px; height: 35px;" value="' + row.nilai + '">\
+                                            style="width: 100px; height: 35px;" value="' + row.nilai + '" readonly>\
                                     </div>\
                                 </div>'
                             );
