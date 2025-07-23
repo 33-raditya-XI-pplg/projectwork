@@ -269,42 +269,79 @@
                 }
             });
 
-            printFrame.src = '/sertifikat/showSertifikat/' + id + '/pdf';
+    // Reset iframe src untuk memastikan event handler berfungsi dengan baik
+    printFrame.src = 'about:blank';
 
-            printFrame.onload = function() {
-                // Add delay to ensure PDF is fully loaded
-                setTimeout(function() {
-                    try {
-                        window.frames['printFrame'].print();
+    // Set event handlers sebelum mengatur src
+    printFrame.onload = function() {
+        // Pastikan URL yang dimuat bukan about:blank
+        if (this.src.indexOf('about:blank') === -1) {
+            // Add delay to ensure PDF is fully loaded
+            setTimeout(function() {
+                try {
+                    // Cek apakah konten iframe adalah PDF yang valid
+                    var frameDocument = printFrame.contentDocument || printFrame.contentWindow.document;
 
-                        // Close loading alert and show success message
-                        Swal.fire({
-                            title: 'Berhasil!',
-                            text: 'Sertifikat siap dicetak',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                    } catch (error) {
-                        // Close loading alert and show error message
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Gagal membuka dialog cetak',
-                            icon: 'error'
-                        });
+                    // Jika dokumen kosong atau error, anggap gagal
+                    if (!frameDocument || frameDocument.body.innerHTML.includes('error') ||
+                        frameDocument.body.innerHTML.includes('404') ||
+                        frameDocument.title.toLowerCase().includes('error')) {
+                        throw new Error('PDF tidak dapat dimuat');
                     }
-                }, 1000); // Wait 1 second for PDF to fully load
-            };
 
-            // Handle error case
-            printFrame.onerror = function() {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Gagal memuat sertifikat',
-                    icon: 'error'
-                });
-            };
+                    // Coba cetak
+                    window.frames['printFrame'].print();
+
+                    // Close loading alert and show success message
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Sertifikat siap dicetak',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } catch (error) {
+                    console.error('Error saat mencetak:', error);
+                    // Close loading alert and show error message
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Gagal mencetak sertifikat atau sertifikat tidak tersedia',
+                        icon: 'error'
+                    });
+                }
+            }, 2000); // Tunggu 2 detik untuk memastikan PDF fully loaded
         }
+    };
+
+    // Handle error case
+    printFrame.onerror = function() {
+        console.error('Error loading iframe');
+        Swal.fire({
+            title: 'Error!',
+            text: 'Gagal memuat sertifikat',
+            icon: 'error'
+        });
+    };
+
+    // Tambahkan timeout sebagai fallback jika PDF tidak load dalam waktu tertentu
+    var loadTimeout = setTimeout(function() {
+        if (Swal.isLoading()) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Timeout: Gagal memuat sertifikat dalam waktu yang ditentukan',
+                icon: 'error'
+            });
+        }
+    }, 10000); // 10 detik timeout
+
+    // Set src setelah event handlers diatur
+    printFrame.src = '/sertifikat/showSertifikat/' + id + '/pdf';
+
+    // Clear timeout jika berhasil load
+    printFrame.addEventListener('load', function() {
+        clearTimeout(loadTimeout);
+    });
+}
     </script>
 
     <script>

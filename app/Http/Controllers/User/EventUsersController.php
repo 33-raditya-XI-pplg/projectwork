@@ -22,6 +22,16 @@ class EventUsersController extends Controller
         $route = Route::current();
         $route = $route->uri;
 
+        $userID = Auth::user()->id_user;
+        $isRegistered = DB::table('tb_peserta')
+            ->where('user_id', $userID)
+            // ->where('event_skema_id', $request->event_skema_id)
+            ->exists();
+
+            // dd($isRegistered);
+
+            // dd($route);
+
         $data_jenis_event = Jenis_Event::get();
         $data_tempat = Tempat::get();
         $query = Event::query();
@@ -52,7 +62,17 @@ class EventUsersController extends Controller
 
         $Title = 'Event';
         // dd($query->toSql(), $query->getBindings());
-        return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route'));
+        // dd($data_event);
+        if($route == 'user/event-user'){
+            // $route = 'user.event.index';
+            return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'isRegistered'));
+        }else if($route == 'user/follow-event'){
+            // $route = 'user.event.follow_event';
+            return view('user.event.follow_event', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'isRegistered'));
+        }else{
+            Alert::error('Error', 'Halaman tidak ditemukan.');
+            return redirect()->back();
+        }
 
     }
 
