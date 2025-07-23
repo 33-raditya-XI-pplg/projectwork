@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Event_Skema;
 
 class EventUsersController extends Controller
 {
@@ -163,5 +164,16 @@ class EventUsersController extends Controller
         return redirect()->back();
     }
 
+
+
+    public function showpenilaian(Request $request, $eventSkemaID)
+    {
+        $eventSkema = Event_Skema::findOrFail($eventSkemaID);
+
+        $Title = 'Event';
+        $subtitle = 'Penilaian';
+
+        return view('user.event.penilaian', compact('Title', 'subtitle', 'eventSkema'));
+    }
 
 }

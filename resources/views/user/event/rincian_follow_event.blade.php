@@ -134,11 +134,13 @@
                                                 </button>
 
                                                 <!-- Tombol Penilaian -->
-                                                <a href="{{ route('event.penilaian', $row->id_event_skema) }}"
-                                                class="btn btn-danger btn-sm px-3 py-1 rounded d-flex align-items-center text-dark">
-                                                    <i class="fa fa-star me-1" style="font-size: 1rem;"></i>
+                                                <button type="button" class="btn btn-danger btn-sm penilaian_btn me-1 text-white rounded mb-1 "
+                                                    data-id="{{ $row->id_event_skema }}"
+                                                    data-peserta-id="{{ $row->id_peserta }}"
+                                                    >
+                                                  <i class="fa fa-star me-1" style="font-size: 1rem;"></i>
                                                     <span style="font-size: 0.8rem;">Penilaian</span>
-                                                </a>
+                                                </button>
 
                                                 <!-- Tombol Laporan Perkembangan -->
                                                 <a href="{{ route('event.laporan-perkembangan', $row->id_event_skema) }}"
@@ -183,7 +185,47 @@
 
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <div class="modal fade" id="editNilaiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Nilai Peserta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="created_by" value="{{ Auth::user()->id_user }}">
+                <div class="mb-3">
+                    <label for="edit_nama_peserta" class="form-label">Nama Peserta</label>
+                    <input type="text" class="form-control" id="edit_nama_peserta" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="edit_nama_skema" class="form-label">Skema</label>
+                    <input type="text" class="form-control mb-4" id="edit_nama_skema" disabled>
+                </div>
+                <label for="edit_nama_sub_skema" class="form-label">Sub-Skema</label>
+                <div class="form-group" id="edit-nilai-sub-skema-wrapper">
+                    <div class="input-group mb-3 nilai-sub-skema">
+                        <!-- Input dinamis -- Ajax Request -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success rounded-3 text-white"
+                    id="store_nilai_btn" value="0">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Handle all register buttons
@@ -214,54 +256,101 @@
             });
         });
 
-function printCertificate(id) {
-    var printFrame = document.getElementById('printFrame');
+        function printCertificate(id) {
+            var printFrame = document.getElementById('printFrame');
 
-    // Show loading alert
-    Swal.fire({
-        title: 'Memuat...',
-        text: 'Sedang Memproses!',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
+            // Show loading alert
+            Swal.fire({
+                title: 'Memuat...',
+                text: 'Sedang Memproses!',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-    printFrame.src = '/sertifikat/showSertifikat/' + id + '/pdf';
+            printFrame.src = '/sertifikat/showSertifikat/' + id + '/pdf';
 
-    printFrame.onload = function() {
-        // Add delay to ensure PDF is fully loaded
-        setTimeout(function() {
-            try {
-                window.frames['printFrame'].print();
+            printFrame.onload = function() {
+                // Add delay to ensure PDF is fully loaded
+                setTimeout(function() {
+                    try {
+                        window.frames['printFrame'].print();
 
-                // Close loading alert and show success message
-                Swal.fire({
-                    title: 'Berhasil!',
-                    text: 'Sertifikat siap dicetak',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            } catch (error) {
-                // Close loading alert and show error message
+                        // Close loading alert and show success message
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: 'Sertifikat siap dicetak',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } catch (error) {
+                        // Close loading alert and show error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Gagal membuka dialog cetak',
+                            icon: 'error'
+                        });
+                    }
+                }, 1000); // Wait 1 second for PDF to fully load
+            };
+
+            // Handle error case
+            printFrame.onerror = function() {
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Gagal membuka dialog cetak',
+                    text: 'Gagal memuat sertifikat',
                     icon: 'error'
                 });
-            }
-        }, 1000); // Wait 1 second for PDF to fully load
-    };
-
-    // Handle error case
-    printFrame.onerror = function() {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Gagal memuat sertifikat',
-            icon: 'error'
-        });
-    };
-}
+            };
+        }
     </script>
-@endsection
+
+    <script>
+        $(document).ready(function() {
+            $(document).on('click', '.penilaian_btn', function (e) {
+                e.preventDefault();
+                pesertaID = $(this).data('peserta-id');
+
+                $.ajax({
+                    url: '/',
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        var data_peserta_edit = response.data_nilai;
+
+                        $('#editNilaiModal').modal('show');
+                        $('#edit_nama_peserta').val(data_peserta_edit[0].nama_lengkap);
+                        $('#edit_nama_skema').val(data_skema.nama_skema);
+
+                        $('#edit-nilai-sub-skema-wrapper').html("");
+                        $('.nilai_sub_skema').val('');
+
+                        $.each(data_peserta_edit, function(index, row) {
+                            $('#edit-nilai-sub-skema-wrapper').append(
+                                '<div class="px-1 mb-3 row">\
+                                    <label class="col-sm-8 col-form-label" style="font-size: 18px;">' + row.judul_sub + '</label>\
+                                    <div class="col-sm-4 d-flex justify-content-end">\
+                                        <label for="input nilai" class="text-white center bg-secondary rounded-start px-4 py-1"\
+                                            style="height: 35px;">Nilai</label>\
+                                        <input type="hidden" class="edit_id_sub_skema" value="' + row.sub_skema_id + '">\
+                                        <input type="number" class="form-control rounded-0 rounded-end edit_nilai_sub_skema"\
+                                            style="width: 100px; height: 35px;" value="' + row.nilai + '">\
+                                    </div>\
+                                </div>'
+                            );
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Gagal memuat data nilai!'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
