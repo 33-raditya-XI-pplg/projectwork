@@ -1,3 +1,4 @@
+
 @extends('layouts.panel.index')
 @section('title', 'Rincian')
 

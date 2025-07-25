@@ -54,15 +54,16 @@ class EventUsersController extends Controller
         // dd($request->all());
 
         $data_event = $query
+            ->select('tb_event.*', 'tb_jenis_event.nama_jenis_event', 'tb_tempat.nama_tempat')
             ->where('tb_event.visibilitas', 'publik')
-            ->whereIn('tb_event.status', ['Publish'])
+            ->whereIn('tb_event.status', ['Publish', 'Berlangsung', 'Selesai'])
             ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
             ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
             ->paginate(9);
 
         $Title = 'Event';
         // dd($query->toSql(), $query->getBindings());
-        // dd($data_event);
+        // dd($data_event[0]->status);
         if($route == 'user/event-user'){
             // $route = 'user.event.index';
             return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'isRegistered'));
