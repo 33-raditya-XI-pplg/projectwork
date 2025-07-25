@@ -45,6 +45,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TestimoniController;
 use App\Http\Controllers\LaporanPerkembanganController;
+use App\Http\Controllers\LaporanController;
 
 
 /*
@@ -335,6 +336,8 @@ Route::get('/testimoni-user', [TestimoniUserController::class, 'index'])->name('
 Route::put('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'update'])->name('testimoni-user.update');
 // Route::get('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
 Route::get('/cek-peserta/{event_skema_id}', [UploadPembayaranController::class, 'cekPeserta']);
+Route::get('/laporan-perkembangan', [LaporanController::class, 'index'])->name('laporan.perkembangan');
+
 
 
 

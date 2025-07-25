@@ -144,8 +144,8 @@
                                                 </button>
 
                                                 <!-- Tombol Laporan Perkembangan -->
-                                                <a href="{{ route('event.laporan-perkembangan', $row->id_event_skema) }}"
-                                                class="btn btn-info btn-sm px-3 py-1 rounded d-flex align-items-center text-white">
+                                                <a href="{{ route('laporan.perkembangan') }}"
+                                                     class="btn btn-info btn-sm px-3 py-1 rounded d-flex align-items-center">
                                                     <i class="fa fa-chart-line me-1" style="font-size: 0.9rem;"></i>
                                                     <span style="font-size: 0.8rem;">Laporan</span>
                                                 </a>
