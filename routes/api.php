@@ -183,6 +183,7 @@ Route::put('/page/{id}', [Api\Page\PageController::class, 'update']);
 Route::delete('/page/{id}', [Api\Page\PageController::class, 'destroy']);
 // page end
 
+Route::get('/get-peserta-data', [App\Http\Controllers\LaporanController::class, 'fetchPesertaData'])->name('fetch.peserta.data');
 
 
 

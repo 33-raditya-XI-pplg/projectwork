@@ -12,12 +12,15 @@ use App\Models\kemampuan_dasar;
 use Illuminate\Support\Facades\DB;
 use App\Models\LaporanPerkembangan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 class LaporanPerkembanganController extends Controller
 {
     public function index()
     {
+        $currentRoute = Route::current();
         $events = Event::where('status', 'Selesai')->get(); // Ganti nama variabel ke $events
+        // dd($currentRoute);
         // $laporan = LaporanPerkembangan::all();
         $kemampuan = kemampuan_dasar::all();
         $Title = 'Laporan Perkembangan';
@@ -251,6 +254,7 @@ class LaporanPerkembanganController extends Controller
                 'peralatan_penunjang' => 'required',
                 'saran' => 'required',
             ]);
+            dd($request->all());
 
             $laporan = LaporanPerkembangan::where('peserta_id', $pesertaID)->first();
 

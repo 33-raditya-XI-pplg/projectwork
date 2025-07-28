@@ -88,6 +88,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']
     ]);
     Route::get('profile-user/edit', [ProfileController::class, 'edit'])->name('profile.edit-user');
 
+    Route::get('/laporan-perkembangan/{id}', [LaporanController::class, 'index'])->name('laporan.perkembangan');
 });
 
 Route::group(['prefix' => 'penguji', 'middleware' => ['auth', 'checkRole:Penguji']], function () {
@@ -281,6 +282,7 @@ Route::get('/getSkema/{id_event}', [UploadPembayaranController::class, 'getSkema
 
 // AJAX Request -- Menu Laporan
 Route::get('/laporanperkembangan/fetchEventData/{id}', [LaporanPerkembanganController::class, 'fetchEventData']);
+// =====debugging=====
 Route::get('laporanperkembangan/fetchSkemaData/{id}/{event_id}', [LaporanperkembanganController::class, 'fetchSkemaData']);
 Route::get('laporanperkembangan/fetchPesertaData/{id}', [LaporanperkembanganController::class, 'fetchPesertaData']);
 Route::post('laporanperkembangan/storeNilaiData/{id}', [LaporanperkembanganController::class, 'storeNilaiData']);
@@ -336,7 +338,6 @@ Route::get('/testimoni-user', [TestimoniUserController::class, 'index'])->name('
 Route::put('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'update'])->name('testimoni-user.update');
 // Route::get('/testimoni-user/{testimoni}', [TestimoniUserController::class, 'show'])->name('testimoni-user.show');
 Route::get('/cek-peserta/{event_skema_id}', [UploadPembayaranController::class, 'cekPeserta']);
-Route::get('/laporan-perkembangan', [LaporanController::class, 'index'])->name('laporan.perkembangan');
 
 
 
