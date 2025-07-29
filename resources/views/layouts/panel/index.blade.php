@@ -116,7 +116,7 @@
                                 )
                             )
                         @else
-                            <button class="btn btn-primary rounded" id="tambahBtn" data-bs-toggle="modal" data-bs-target="#add">+
+                            <button class="btn btn-primary roundedz" id="tambahBtn" data-bs-toggle="modal" data-bs-target="#add">+
                                 Tambah</button>
                         @endif
 

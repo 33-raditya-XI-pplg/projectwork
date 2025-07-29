@@ -267,6 +267,7 @@
                 type: "GET",
                 dataType: "json",
 
+
                 success: function(response) {
                     Swal.close();
 
@@ -274,6 +275,8 @@
                         var data_skema = response.data_skema;
                         var data_peserta = response.data_peserta;
                         var data_sertifikat = response.data_sertifikat;
+                        
+
 
                         var total_peserta = response.total_peserta;
                         var peserta_tanpa_nilai = response.data_peserta_tanpa_nilai.length;
@@ -610,6 +613,7 @@
 
                 success: function(response) {
                     var data_sertifikat_peserta = response.data_sertifikat_peserta;
+
 
                     $('#editSertifikatModal').modal('show');
 

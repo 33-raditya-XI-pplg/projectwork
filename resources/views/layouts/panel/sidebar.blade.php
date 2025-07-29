@@ -64,12 +64,12 @@
                     <span>Event</span>
                 </a>
             </li>
-            <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat-user' ? 'active' : '' }} position-relative">
+            {{-- <li class="sidebar-menu-item devider {{ Request::segment(2) == 'sertifikat-user' ? 'active' : '' }} position-relative">
                 <a href="{{route('sertifikat-user.index')}}" class="item-link">
                     <i class="fas fa-award link-icon"></i>
                     <span>Sertifikat</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'uploadPembayaran-user' ? 'active' : '' }} position-relative">
                 <a href="{{route('uploadPembayaran-user.index')}}" class="item-link">
                     <i class="fas fa-file-arrow-up"></i>
@@ -79,7 +79,7 @@
             <li class="sidebar-menu-item devider {{ Request::segment(2) == 'follow-event' ? 'active' : '' }} position-relative">
                 {{-- <li class="sidebar-menu-item devider {{ request()->routeIs('follow-event') ? 'active' : '' }} position-relative"> --}}
                 <a href="{{route('follow-event')}}" class="item-link">
-                    <i class="fas fa-file-arrow-up"></i>
+                    <i class="fas fa-bullhorn link-icon"></i>
                     <span>Event Yang Diikuti</span>
                 </a>
             </li>
