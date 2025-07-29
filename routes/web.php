@@ -2,50 +2,50 @@
 
 
 
-use App\Http\Controllers\User\TestimoniUserController;
-use App\Http\Controllers\UploadPembayaranController;
 use App\Models\Upload_pembayaran;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SkemaController;
 use App\Http\Controllers\VideoController;
-
 use App\Http\Controllers\GaleriController;
+
+use App\Http\Controllers\SliderController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\LaporanController;
 
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PengujiController;
 use App\Http\Controllers\ProfileController;
+
+
+
+
 use App\Http\Controllers\InstansiController;
-
-
-
-
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\SignatureController;
+use App\Http\Controllers\TestimoniController;
 use App\Http\Controllers\BackgroundController;
+
 use App\Http\Controllers\EventSkemaController;
 use App\Http\Controllers\JenisEventController;
 use App\Http\Controllers\SertifikatController;
-
 use App\Http\Controllers\RentangNilaiController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EventUsersController;
-use App\Http\Controllers\ProfilPerusahaanController;
-use App\Http\Controllers\User\RincianSkemaController;
-use App\Http\Controllers\User\SertifikatUsersController;
 
-use App\Http\Controllers\BlogKategoriController;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\SliderController;
-use App\Http\Controllers\TestimoniController;
+use App\Http\Controllers\ProfilPerusahaanController;
+use App\Http\Controllers\UploadPembayaranController;
+use App\Http\Controllers\User\RincianSkemaController;
+use App\Http\Controllers\User\TestimoniUserController;
 use App\Http\Controllers\LaporanPerkembanganController;
-use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\User\SertifikatUsersController;
+use App\Http\Controllers\Api\BlogKategori\BlogKategoriController;
 
 
 /*
@@ -92,13 +92,13 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth', 'checkRole:Pengguna']
 
 Route::group(['prefix' => 'penguji', 'middleware' => ['auth', 'checkRole:Penguji']], function () {
     Route::get('dashboard', [DashboardController::class, 'penguji_index']);
-    // Route::resource('event', EventUsersController::class);
-    // Route::resource('sertifikat', SertifikatUsersController::class);
+    Route::resource('event', EventUsersController::class);
+    Route::resource('sertifikat', SertifikatUsersController::class);
     // Route::get('event-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('event.rincian-skema');
-    // Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
+    Route::get('sertifikat-user/rincian-skema/{event_skemaID}', [RincianSkemaController::class, 'rincian_skema'])->name('sertifikat.rincian-skema');
 
-    // Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
-    // Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
+    Route::get('cetak-sertifikat/{event_skemaID}', [SertifikatUsersController::class, 'cetak'])->name('cetak-sertifikat.cetak');
+    Route::get('cetak-sertifikat', [SertifikatUsersController::class, 'cetak1']);
     // Route::post('event-user/mendaftar', [EventUsersController::class, 'mendaftar'])->name('mendaftar.event');
 
     //profile
@@ -110,10 +110,10 @@ Route::group(['prefix' => 'penguji', 'middleware' => ['auth', 'checkRole:Penguji
 
 });
 
-// Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
-//     Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
-//     Route::put('profile-penguji/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-// });
+Route::group(['previx' => 'penguji', 'middleware' => 'auth'], function () {
+    Route::resource('profile', ProfileController::class)->except(['edit', 'show']);
+    Route::put('profile-penguji/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+});
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']], function () {
 
@@ -136,6 +136,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
 
     //Laporan perkembangan
     Route::resource('/laporanperkembangan', LaporanPerkembanganController::class);
+    Route::get('/laporanperkembangan/{id}/tambah', [LaporanPerkembanganController::class, 'tambahLaporan'])->name('laporanperkembangan.tambah');
+
 
 
     //penilaian
@@ -230,11 +232,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'checkRole:Admin']],
         Route::put('/profil/{id}', [ProfilPerusahaanController::class, 'update'])->name('profil.update');
         Route::delete('/profil/{id}', [ProfilPerusahaanController::class, 'destroy'])->name('profil.destroy');
 
-        // Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
-        // Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
-        // // Correct route for updating blogkategori
-        // Route::put('/blogkategori/{id}', [BlogKategoriController::class, 'update'])->name('blogkategori.update');
-        // Route::delete('/blogkategori/{id_blog_kategori}', [BlogKategoriController::class, 'destroy'])->name('blogkategori.destroy');
+        Route::get('/blogkategori', [BlogKategoriController::class, 'index'])->name('blogkategori.index');
+        Route::post('/blogkategori', [BlogKategoriController::class, 'store'])->name('blogkategori.store');
+        // Correct route for updating blogkategori
+        Route::put('/blogkategori/{id}', [BlogKategoriController::class, 'update'])->name('blogkategori.update');
+        Route::delete('/blogkategori/{id_blog_kategori}', [BlogKategoriController::class, 'destroy'])->name('blogkategori.destroy');
 
         // Partner
         Route::get('/partner', [PartnerController::class, 'index'])->name('partner.index');

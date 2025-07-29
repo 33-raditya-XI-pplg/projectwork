@@ -2,118 +2,28 @@
 @section('title', 'Laporan Perkembangan')
 @section('content')
 
-    <div class="container mt-4">
-        <div class="bg-white rounded-4 px-3 py-4 mb-3 shadow-lg">
-            <div class="card-title mb-3 fw-semibold" style="font-size:18px">Pilih Event & Skema</div>
-
-            <div class="d-flex flex-row mx-2">
-                <div class="card-header me-2 w-100 mx-1">
-                    <select id="event_select" name="event_select" class=" form-control js-example-basic-single"
-                        data-placeholder="Pilih Event">
-                        <option hidden disabled selected> </option>
-                        @foreach ($events as $event)
-                            <option value="{{ $event->id_event }}">{{ $event->nama_event }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="card-header me-2 w-100 mx-1">
-                    <select id="skema_select" name="skema_select" class="form-control js-example-basic-single"
-                        data-placeholder="Pilih Event Dahulu">
-                        <option hidden disabled selected></option>
-                    </select>
-                </div>
-                <button id="search_btn" class="btn btn-secondary rounded-3 w-25 mx-1" disabled>Submit</button>
-            </div>
-        </div>
-    </div>
-
     <div class="container mt-2">
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
                 tabindex="0">
+
                 <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
-                    <div class="card-title mb-4 fw-semibold" style="font-size:18px">Detail Event</div>
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="nama_event" class="form-label">Nama Event</label>
-                                            <input type="text" class="form-control" id="nama_event" placeholder="kosong"
-                                                disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="nama_skema" class="form-label">Nama Skema</label>
-                                            <input type="text" class="form-control" id="nama_skema" placeholder="kosong"
-                                                disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
-                                            <input type="text" class="form-control" id="tgl_mulai"
-                                                placeholder="dd-mm-yyyy" disabled>
-                                        </div>
-                                        {{-- <div class="form-check form-switch mt-3">
-                                            <label class="form-check-label" for="status">Status</label>
-                                            <input class="form-check-input" type="checkbox" id="status" disabled>
-                                        </div> --}}
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="mb-3">
-                                            <label for="jenis_event" class="form-label">Jenis Event</label>
-                                            <input type="text" class="form-control" id="jenis_event" placeholder="kosong"
-                                                disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="tempat_skema" class="form-label">TUK</label>
-                                            <input type="text" class="form-control" id="tempat_skema"
-                                                placeholder="kosong" disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
-                                            <input type="text" class="form-control" id="tgl_selesai"
-                                                placeholder="dd-mm-yyyy" disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="list_penguji" class="form-label">Daftar Penguji</label>
-                                            <ol id="list_penguji" class="list-group list-group-numbered">
-                                                <!-- List Penguji Here -->
-                                            </ol>
-                                            <div id="buttonGroup">
-                                                <a href="#" id="btnSelengkapnya" class="text-primary mt-2"
-                                                    style="display: none;">Tampilkan Banyak</a>
-                                                <a href="#" id="btnSedikit" class="text-primary mt-2"
-                                                    style="display: none;">Tampilkan Sedikit</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-12 text-end">
+                            <a href="#"class="btn btn-primary btn-sm rounded text-white mb-3 create_laporan_btn "data-id="{{$peserta->id_peserta}}">
+                                <i class="fa-regular fa-pen-to-square"></i> Tambah</a>
                         </div>
                     </div>
-                </div>
-                <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
                     <table id="example" class="table">
                         <thead class="fw-normal">
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Nama Peserta</th>
-                                <th scope="col">Keterangan</th>
                                 <th scope="col">Tanggal</th>
                                 <th scope="col" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody style="vertical-align: middle">
-                            <!-- AJAX Response Here -->
                         </tbody>
                     </table>
                 </div>
@@ -122,21 +32,21 @@
     </div>
 
     <!-- Create -- Laporan Modal -->
-    <div class="modal fade" id="createLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="createLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg"> <!-- Modal Large -->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Laporan Perkembangan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Laporan</h5>
+                    <p>{{$peserta->event_skema_id}}</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="created_by" value="{{ Auth::user()->id }}">
+                    <input type="hidden" id="created_by" value="{{ $peserta->user_id }}">
                     <div class="mb-3">
                         <label for="create_nama_peserta" class="form-label">Nama Peserta</label>
-                        <input type="text" class="form-control" id="create_nama_peserta">
-                        <input type="hidden" id="peserta_id" value="">
-                        <input type="hidden" id="event_skema_id" name="event_skema_id" value="">
+                        <input type="text" class="form-control" id="create_nama_peserta" readonly value="{{$peserta->nama_lengkap}}">
+                        <input type="hidden" id="peserta_id" value="{{$peserta->id_peserta}}">
+                        <input type="hidden" id="event_skema_id" name="event_skema_id" value="{{$peserta->event_skema_id}}">
                     </div>
                     <div>
                         <label class="form-label" for="pengalaman_anak">Keterangan Singkat</label>
@@ -165,29 +75,19 @@
                         <label class="form-label" for="">Saran</label>
                         <textarea class="form-control " name="saran" id="saran" rows="2"></textarea>
                     </div>
-                    {{-- <div class="mb-3">
-                        <label for="create_nama_skema" class="form-label">Skema</label>
-                        <input type="text" class="form-control mb-4" id="create_nama_skema">
-                    </div>
-                    <label for="create_nama_sub_skema" class="form-label">Sub-Skema</label>
-                    <div class="form-group" id="create-nilai-sub-skema-wrapper">
-                        <div class="input-group mb-3 nilai-sub-skema">
-                            <!-- Input dinamis -- Ajax Request -->
-                        </div>
-                    </div> --}}
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success rounded-3 text-white" id="store_laporan_btn"
-                        value="1">Tambah</button>
+                        value="1">Tambah1</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Edit -- Laporan Modal -->
-    <div class="modal fade" id="editLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="editLaporanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -257,16 +157,6 @@
                         <label class="form-label" for="">Saran</label>
                         <textarea class="form-control " name="saran" id="edit_saran" rows="2" hidden></textarea>
                     </div>
-                    {{-- <div class="mb-3">
-                    <label for="edit_nama_skema" class="form-label">Skema</label>
-                    <input type="text" class="form-control mb-4" id="edit_nama_skema">
-                </div>
-                <label for="edit_nama_sub_skema" class="form-label">Sub-Skema</label>
-                <div class="form-group" id="edit-nilai-sub-skema-wrapper">
-                    <div class="input-group mb-3 nilai-sub-skema">
-                        <!-- Input dinamis -- Ajax Request -->
-                    </div>
-                </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
@@ -293,6 +183,7 @@
         });
     });
     </script> --}}
+
     <script>
         $(document).ready(function() {
             var skemaID; // ID skema yang dipilih dari dropdown
@@ -352,6 +243,9 @@
             // PERBAIKAN: Fungsi fetchDetailData yang menggunakan skemaID dan eventID yang benar
             function fetchDetailData(selectedSkemaID, selectedEventID) {
                 // Validasi parameter
+                console.log("Selected Skema ID:", selectedSkemaID);
+                console.log("Selected Event ID:", selectedEventID);
+
                 if (!selectedSkemaID || !selectedEventID) {
                     Swal.fire({
                         icon: 'error',
@@ -369,6 +263,7 @@
                         Swal.showLoading();
                     }
                 });
+
 
                 // PERBAIKAN: Menggunakan selectedSkemaID dan selectedEventID
                 $.ajax({
@@ -471,7 +366,7 @@
                                         '</li>';
                                 } else {
                                     buttonAction =
-                                        '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
+                                        '<a href="#" class="btn btn-info btn-sm rounded text-white mb-3 create_laporan_btn" data-id="' + row.id_peserta + '">' +
                                         '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
                                         '</a>';
                                 }
@@ -636,7 +531,7 @@
                 e.preventDefault();
 
                 var pesertaID = $(this).data('id');
-                console.log(pesertaID);
+                console.log('Peserta ID11:', pesertaID);
 
                 $('#create_name_peserta').val('');
                 $('#peserta_id').val('');
@@ -669,20 +564,29 @@
                 });
 
 
+
+                // ==
                 $.ajax({
                     url: '/laporanperkembangan/fetchPesertaData/' + pesertaID,
                     type: "GET",
                     dataType: "json",
+
                     success: function(response) {
-                        console.log('respons',response);
+                        console.log('response fetch data peserta',response);
+                        console.log('debug pesserta id', pesertaID);
+
                         var data_peserta = response.data_peserta;
+                        console.log('debug data peserta', data_peserta);
+
 
 
                         $('#createLaporanModal').modal('show');
                         $('#create_nama_peserta').val(data_peserta
                         .nama_lengkap);
                         $('#peserta_id').val(data_peserta.id_peserta);
-                        $('#event_skema_id').val(data_peserta.event_skema_id);
+                        console.log('debug 2', data_peserta);
+
+                        $('#event_skema_id').val(data_peserta.peserta_event_skema_id);
 
                         ['pengalaman_anak', 'peralatan_penunjang', 'saran'].forEach(function(
                             field) {
@@ -715,6 +619,10 @@
                 var createdBy = $('#created_by').val();
                 var pesertaID = $('#peserta_id').val();
                 var eventSkemaID = $('#event_skema_id').val();
+
+                // console.log(pesertaID);
+                console.log('eventSkemaIDdebug:', eventSkemaID);
+
                 var pengalamanAnak = editors['pengalaman_anak'] ? editors['pengalaman_anak'].getData() : '';
                 var peralatanPenunjang = editors['peralatan_penunjang'] ? editors['peralatan_penunjang'].getData() : '';
                 var saran = editors['saran'] ? editors['saran'].getData() : '';
@@ -820,7 +728,10 @@
                             });
 
                             // FIX: Pass both skemaID and eventID to fetchDetailData
-                            fetchDetailData(skemaID, eventID);
+                            //tanda
+                            console.log('debugggg', data_peserta);
+
+                            fetchDetailData(data_peserta.skema_id, data_peserta.event_id);
                         } else {
                             Swal.fire({
                                 icon: 'error',

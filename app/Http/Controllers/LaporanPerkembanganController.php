@@ -20,7 +20,9 @@ class LaporanPerkembanganController extends Controller
         $events = Event::where('status', 'Selesai')->get(); // Ganti nama variabel ke $events
         // $laporan = LaporanPerkembangan::all();
         $kemampuan = kemampuan_dasar::all();
+
         $Title = 'Laporan Perkembangan';
+        // dd($events);
         confirmDelete('Hapus Laporan Perkembangan', 'Apakah kamu yakin untuk menghapus?');
         return view('admin.laporanperkembangan.index', compact('events', 'Title', 'kemampuan', )); // Kirim $events ke view
     }
@@ -44,7 +46,6 @@ class LaporanPerkembanganController extends Controller
         return response()->json(['message' => 'ID tidak ditemukan'], 400);
     }
 
-    // Ambil data skema
     $data_skema = Event_Skema::join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
         ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
@@ -64,7 +65,6 @@ class LaporanPerkembanganController extends Controller
         ->where('tb_event_skema.event_id', $event_id)
         ->first();
 
-    // Ambil data penguji
     $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
         ->select('id_event_skema')
         ->with([
@@ -74,7 +74,6 @@ class LaporanPerkembanganController extends Controller
         ])
         ->first();
 
-    // Ambil data sub skema
     $data_sub_skema = DB::table('tb_event_skema')
         ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
@@ -83,7 +82,6 @@ class LaporanPerkembanganController extends Controller
         ->where('tb_event_skema.skema_id', $id)
         ->get();
 
-    // Ambil hanya id_event_skema dan id_peserta
     $data_peserta = DB::table('tb_peserta')
         ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
         ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
@@ -98,7 +96,6 @@ class LaporanPerkembanganController extends Controller
         ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
         ->get();
 
-    // Ambil jumlah sub skema per event
     $jumlahSubSkemaPerEvent = DB::table('tb_event_skema')
         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
         ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
@@ -110,7 +107,7 @@ class LaporanPerkembanganController extends Controller
         ->groupBy('tb_event_skema.id_event_skema', 'tb_skema.nama_skema')
         ->where('tb_event_skema.skema_id', $id)
         ->first();
-// ✅ PERBAIKAN UTAMA: Tambahkan pengecekan null sebelum mengakses property
+
     if (!$data_skema) {
          return response()->json([
         'data_skema' => $data_skema,
@@ -132,11 +129,24 @@ class LaporanPerkembanganController extends Controller
 
     public function fetchPesertaData($id)
     {
+        // tanda
         $data_peserta = DB::table('tb_peserta')
-            ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-            ->select('tb_peserta.id_peserta', 'tb_user.id_user', 'tb_user.nama_lengkap', 'tb_peserta.event_skema_id')
-            ->where('tb_peserta.id_peserta', $id)
-            ->first();
+        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+        ->join('tb_laporan_perkembangan', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
+        ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+        ->select(
+            'tb_peserta.id_peserta',
+            'tb_user.nama_lengkap',
+            'tb_peserta.event_skema_id as peserta_event_skema_id',
+            'tb_event_skema.event_id',
+            'tb_event_skema.skema_id',
+            'tb_laporan_perkembangan.id_laporan_perkembangan',
+            'tb_laporan_perkembangan.event_skema_id as laporan_event_skema_id',
+            'tb_laporan_perkembangan.tanggal_penilaian',
+            'tb_laporan_perkembangan.catatan'
+        )
+        ->where('tb_peserta.id_peserta', $id)
+        ->first();
 
         return response()->json([
             'data_peserta' => $data_peserta,
@@ -267,7 +277,7 @@ class LaporanPerkembanganController extends Controller
             if (is_array($request->kemampuan_dasar)) {
                 $count = [];
                 foreach ($request->kemampuan_dasar as $item) {
-                    // Assuming you want to update existing entries
+
                     $kemampuan = Kemampuan_dasar::find($item['id']);
                     if ($kemampuan) {
                         $kemampuan->update([
@@ -306,13 +316,13 @@ class LaporanPerkembanganController extends Controller
         Log::info('Menghapus data dengan pesertaID: ' . $pesertaID);
 
         try {
-            // Memeriksa data sebelum menghapus
+
             $laporan = LaporanPerkembangan::where('peserta_id', $pesertaID)->first();
             if (!$laporan) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
 
-            $deletedRows = $laporan->delete(); // Memanggil metode delete pada model
+            $deletedRows = $laporan->delete();
 
             if ($deletedRows) {
                 return response()->json(['message' => 'Laporan perkembangan berhasil dihapus'], 200);
@@ -324,5 +334,29 @@ class LaporanPerkembanganController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan saat menghapus laporan perkembangan: ' . $e->getMessage()], 500);
         }
     }
+
+   public function tambahLaporan($id)
+{
+    $Title = 'Tambah Laporan Perkembangan';
+
+    $peserta = DB::table('tb_peserta')
+        ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
+        ->join('tb_event_skema', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+        ->where('tb_peserta.id_peserta', $id)
+        ->select(
+            'tb_peserta.*',
+            'tb_user.nama_lengkap',
+            'tb_peserta.event_skema_id',
+            'tb_event_skema.skema_id'
+        )
+        ->first();
+
+    if (!$peserta) {
+        abort(404);
+    }
+
+    return view('admin.laporanperkembangan.tambah-laporan', compact('Title', 'peserta'));
+}
+
 
 }

@@ -34,6 +34,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $id = Auth::user()->id_user;
+       
         $instansi = Instansi::get();
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
         $user = User::findOrFail($id);
