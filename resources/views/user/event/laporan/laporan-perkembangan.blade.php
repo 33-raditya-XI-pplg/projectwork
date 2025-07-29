@@ -17,46 +17,70 @@
 
         <!-- Perkembangan Card -->
         <div class="row g-4">
-            @if ($detail['perkembangan'])
-            <div class="col-md-12">
-                <div class="card shadow-sm border-0">
-                    <span><i class="bi bi-graph-up-arrow"></i> Laporan Tanggal: {{ \Carbon\Carbon::parse($detail['perkembangan']->tanggal_penilaian)->format('d M Y') }}</span>
-                    
-                    <div class="card-body">
-                        <h6 class="fw-bold text-secondary mb-2">Pengalaman Anak</h6>
-                        <p class="text-muted">{!! $detail['perkembangan']->pengalaman_anak !!}</p>
+            @if (!empty($detail['perkembangan']))
+                @foreach ($detail['perkembangan'] as $item)
+                    <div class="col-12 col-md-6">
+                        <div class="card shadow-sm border-0 h-100">
+                            <div class="card-header bg-light">
+                                <span><i class="bi bi-graph-up-arrow"></i> Laporan Tanggal: {{ \Carbon\Carbon::parse($item['laporan']->tanggal_penilaian)->format('d M Y') }}</span>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="fw-bold text-secondary mb-2">Pengalaman Anak</h6>
+                                <p class="text-muted">{!! $item['laporan']->pengalaman_anak !!}</p>
 
-
-                        <h6 class="fw-bold text-secondary mb-3">Kemampuan Dasar</h6>
-                        @if (!empty($detail['kemampuan_dasar']))
-                                @foreach ($detail['kemampuan_dasar'] as $kd)
-                                        <div class=" me-auto mb-3 " class="text-muted">
+                                <h6 class="fw-bold text-secondary mb-3">Kemampuan Dasar</h6>
+                                @if (!empty($item['kemampuan_dasar']) && count($item['kemampuan_dasar']) > 0)
+                                    @foreach ($item['kemampuan_dasar'] as $kd)
+                                        <div class="me-auto mb-3 text-muted">
                                             {{ $kd->kemampuan }}
                                             <em>({{ $kd->keterangan }})</em>
-                                            {{-- @if ($kd->keterangan)
-                                            @endif --}}
                                         </div>
-                                @endforeach
-                        @else
-                            <p class="text-muted"><em>Tidak ada data kemampuan dasar.</em></p>
-                        @endif
+                                    @endforeach
+                                @else
+                                    <p class="text-muted"><em>Tidak ada data kemampuan dasar.</em></p>
+                                @endif
 
-                        <h6 class="fw-bold text-secondary mb-2">Peralatan Penunjang</h6>
-                        <p class="text-muted">{!! $detail['perkembangan']->peralatan_penunjang !!}</p>
+                                <h6 class="fw-bold text-secondary mb-2">Peralatan Penunjang</h6>
+                                <p class="text-muted">{!! $item['laporan']->peralatan_penunjang !!}</p>
 
-                        <h6 class="fw-bold text-secondary mb-2">Saran</h6>
-                        <p class="text-muted">{!! $detail['perkembangan']->saran !!}</p>
+                                <h6 class="fw-bold text-secondary mb-2">Saran</h6>
+                                <p class="text-muted">{!! $item['laporan']->saran !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-12">
+                    <div class="alert alert-secondary text-center">
+                        <i class="bi bi-info-circle-fill me-2"></i> Belum ada laporan perkembangan.
                     </div>
                 </div>
-            </div>
-            @else
-            <div class="col-12">
-                <div class="alert alert-secondary text-center">
-                    <i class="bi bi-info-circle-fill me-2"></i> Belum ada laporan perkembangan.
-                </div>
-            </div>
             @endif
         </div>
     </div>
 </div>
+
+<style>
+/* Menambahkan CSS untuk memastikan card memiliki tinggi yang seragam */
+.card.h-100 {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    flex-grow: 1;
+}
+
+/* Mengatur jarak antar card */
+.row.g-4 {
+    row-gap: 1.5rem;
+}
+
+/* Responsivitas tambahan untuk layar kecil */
+@media (max-width: 767px) {
+    .col-md-6 {
+        margin-bottom: 1.5rem;
+    }
+}
+</style>
 @endsection

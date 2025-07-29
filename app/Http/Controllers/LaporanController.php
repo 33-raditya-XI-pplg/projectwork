@@ -9,60 +9,70 @@ use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
+    /**
+     * Display the laporan perkembangan for a specific event skema.
+     *
+     * @param Request $request
+     * @param int $idEventSkema
+     * @return \Illuminate\View\View|\Illuminate\Http\Response
+     */
     public function index(Request $request, $idEventSkema)
 {
     $Title = 'Laporan perkembangan';
     $user = Auth::user();
 
-    // Ambil data utama peserta dan event
     $data = DB::table('tb_event_skema')
-        ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
-        ->join('tb_skema', 'tb_skema.id_skema', '=', 'tb_event_skema.skema_id')
-        ->join('tb_peserta', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
-        ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-        ->select(
-            'tb_event_skema.id_event_skema',
-            'tb_skema.nama_skema',
-            'tb_event.nama_event',
-            'tb_user.nama_lengkap',
-            'tb_peserta.id_peserta'
-        )
-        ->where('tb_user.id_user', $user->id_user)
-        ->where('tb_event_skema.id_event_skema', $idEventSkema)
-        ->first();
+    ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
+    ->join('tb_skema', 'tb_skema.id_skema', '=', 'tb_event_skema.skema_id')
+    ->join('tb_peserta', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+    ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
+    ->select(
+        'tb_event_skema.id_event_skema',
+        'tb_skema.nama_skema',
+        'tb_event.nama_event',
+        'tb_user.nama_lengkap',
+        'tb_peserta.id_peserta'
+    )
+    ->where('tb_user.id_user', $user->id_user)
+    ->where('tb_event_skema.id_event_skema', $idEventSkema)
+    ->get();
 
-    if (!$data) {
-        return abort(404, 'Data tidak ditemukan.');
-    }
+// Ambil item pertama dari collection
+$dataItem = $data->first();
 
-    // Ambil laporan perkembangan (satu saja)
-    $laporan = DB::table('tb_laporan_perkembangan')
-        ->where('event_skema_id', $data->id_event_skema)
-        ->where('peserta_id', $data->id_peserta)
-        ->first();
+if (!$dataItem) {
+    return abort(404, 'Data tidak ditemukan.');
+}
 
-    // Ambil kemampuan dasar (jika ada)
-    $kemampuanDasar = [];
+$laporanList = DB::table('tb_laporan_perkembangan')
+    ->where('event_skema_id', $dataItem->id_event_skema)
+    ->where('peserta_id', $dataItem->id_peserta)
+    ->get();
 
-    if ($laporan) {
-        $kemampuanDasar = DB::table('tb_kemampuan_dasar')
-            ->where('laporan_perkembangan_id', $laporan->id_laporan_perkembangan) // pastikan nama kolom foreign key benar
-            ->get();
-    }
+$daftarPerkembangan = [];
 
-    // Gabungkan semua ke $detail
-    $detail = [
-        'id_event_skema' => $data->id_event_skema,
-        'nama_skema' => $data->nama_skema,
-        'nama_event' => $data->nama_event,
-        'nama_lengkap' => $data->nama_lengkap,
-        'perkembangan' => $laporan,
+foreach ($laporanList as $laporan) {
+    $kemampuanDasar = DB::table('tb_kemampuan_dasar')
+        ->where('laporan_perkembangan_id', $laporan->id_laporan_perkembangan)
+        ->get();
+
+    $daftarPerkembangan[] = [
+        'laporan' => $laporan,
         'kemampuan_dasar' => $kemampuanDasar,
     ];
+}
 
-    // dd($detail['perkembangan']);
+$detail = [
+    'id_event_skema' => $dataItem->id_event_skema,
+    'nama_skema' => $dataItem->nama_skema,
+    'nama_event' => $dataItem->nama_event,
+    'nama_lengkap' => $dataItem->nama_lengkap,
+    'perkembangan' => $daftarPerkembangan, // array dari banyak laporan
+];
+
     return view('user.event.laporan.laporan-perkembangan', compact('Title', 'detail', 'user'));
 }
+
 
 
     public function fetchPesertaData()

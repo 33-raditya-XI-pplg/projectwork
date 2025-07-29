@@ -94,6 +94,7 @@ class LaporanPerkembanganController extends Controller
             'tb_user.nama_lengkap',
             'tb_event_skema.id_event_skema',
             'tb_laporan_perkembangan.catatan',
+            'tb_laporan_perkembangan.id_laporan_perkembangan',
             'tb_laporan_perkembangan.tanggal_penilaian',
         )
         ->where('tb_peserta.event_skema_id', $data_skema->id_event_skema)
