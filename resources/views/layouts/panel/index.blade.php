@@ -78,7 +78,11 @@
                         <ol class="breadcrumb d-inline">
                             <!-- Tampilkan Title -->
                             <li class="breadcrumb-item text-body-emphasis text-capitalize h3 fw-semibold d-inline ms-3">
+                                @if($Title === 'Laporan perkembangan1')
+                                    <p></p>
+                                @else
                                 {{ $Title }}
+                                @endif
                             </li>
 
                             @if (!empty($subtitle) && count(Request::segments()) >= 3)

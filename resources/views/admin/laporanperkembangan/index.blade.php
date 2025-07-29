@@ -376,6 +376,8 @@
                     type: "GET",
                     dataType: "json",
                     success: function(response) {
+                        console.log("Response from server: ", response);
+
                         Swal.close();
                         if (response) {
                             data_skema = response.data_skema;
@@ -458,6 +460,7 @@
                                 var buttonAction = '';
 
                                 if (row.catatan) {
+                                    // tanda
                                     buttonAction =
                                        '<li style="list-style: none;">' +
                                             '<a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">' +
@@ -1026,7 +1029,7 @@
             // PERBAIKAN: Delete function
                 $(document).on('click', '.delete_laporan_btn', function(e) {
                     e.preventDefault();
-                    pesertaID = $(this).data('id');
+                pesertaID = $(this).data('id');
                     console.log('Peserta ID untuk hapus:', pesertaID);
 
                     confirmDelete('Hapus Laporan Perkembangan Peserta', 'Apakah kamu yakin untuk menghapus?')
