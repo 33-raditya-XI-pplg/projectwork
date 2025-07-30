@@ -12,7 +12,9 @@
                         data-placeholder="Pilih Event">
                         <option hidden disabled selected> </option>
                         @foreach ($events as $event)
+
                             <option value="{{ $event->id_event }}">{{ $event->nama_event }}</option>
+
                         @endforeach
                     </select>
                 </div>
@@ -391,253 +393,8 @@ $(document).ready(function() {
                     var btnSedikit = document.getElementById('btnSedikit');
 
             // PERBAIKAN: Fungsi fetchDetailData yang menggunakan skemaID dan eventID yang benar
-            function fetchDetailData(selectedSkemaID, selectedEventID) {
-                // Validasi parameter
-                if (!selectedSkemaID || !selectedEventID) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Skema ID atau Event ID tidak valid!'
-                    });
-                    return;
                 }
-
-                Swal.fire({
-                    title: 'Memuat...',
-                    text: 'Sedang Memproses!',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                // PERBAIKAN: Menggunakan selectedSkemaID dan selectedEventID
-                $.ajax({
-                    url: '/laporanperkembangan/fetchSkemaData/' + selectedSkemaID + '/' + selectedEventID,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(response) {
-                        console.log("Response from server: ", response);
-
-                        Swal.close();
-                        if (response) {
-                            data_skema = response.data_skema;
-                            data_penguji = response.data_penguji;
-                            data_sub_skema = response.data_sub_skema;
-                            data_peserta = response.data_peserta;
-                            data_laporan_perkembangan = response.data_laporan_perkembangan;
-
-                            var data_jumlah_sub_skema = response.jumlahSubSkemaPerEvent;
-
-                            // Input Disabled
-                            $('#nama_event').val(data_skema.nama_event);
-                            $('#jenis_event').val(data_skema.nama_jenis_event);
-                            $('#nama_skema').val(data_skema.nama_skema);
-                            $('#tempat_skema').val(data_skema.nama_tempat);
-                            $('#tgl_mulai').val(formatDate(data_skema.tgl_mulai));
-                            $('#tgl_selesai').val(formatDate(data_skema.tgl_berakhir));
-
-                            // Logic untuk penguji
-                            var listPenguji = document.getElementById('list_penguji');
-                            var btnSelengkapnya = document.getElementById('btnSelengkapnya');
-                            var btnSedikit = document.getElementById('btnSedikit');
-
-                            function renderPenguji(names) {
-                                listPenguji.innerHTML = '';
-                                names.forEach(function(name) {
-                                    var listItem = document.createElement('li');
-                                    listItem.textContent = name;
-                                    listItem.classList.add('list-group-item');
-                                    listPenguji.appendChild(listItem);
-                                });
-                            }
-
-                            var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
-                                function(penguji) {
-                                    return penguji.nama_lengkap;
-                                });
-                            renderPenguji(initialPenguji);
-
-                            if (data_penguji.event_skema_menguji.length <= 2) {
-                                btnSelengkapnya.style.display = 'none';
-                            } else {
-                                btnSelengkapnya.style.display = '';
-                            }
-
-                            btnSelengkapnya.addEventListener('click', function(event) {
-                                event.preventDefault();
-                                var allPenguji = data_penguji.event_skema_menguji.map(function(penguji) {
-                                    return penguji.nama_lengkap;
-                                });
-                                renderPenguji(allPenguji);
-                                btnSelengkapnya.style.display = 'none';
-                                btnSedikit.style.display = 'inline';
-                            });
-
-                            btnSedikit.addEventListener('click', function(event) {
-                                event.preventDefault();
-                                var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
-                                    function(penguji) {
-                                        return penguji.nama_lengkap;
-                                    });
-                                renderPenguji(initialPenguji);
-                                btnSedikit.style.display = 'none';
-                                btnSelengkapnya.style.display = 'inline';
-                            });
-
-                            if (data_skema.status === "Aktif") {
-                                $('#status').prop('checked', true);
-                            } else {
-                                $('#status').prop('checked', false);
-                            }
-
-                            // Table daftar peserta
-                            $('#example').DataTable().destroy();
-                            $('tbody').html("");
-                            $('#dropdown-menu').html("");
-
-                            // Buat objek penampung untuk peserta unik berdasarkan id_peserta
-                            let uniquePeserta = {};
-
-                            $.each(data_peserta, function(index, row) {
-                                uniquePeserta[row.id_peserta] = row;
-                            });
-
-                            // Convert kembali ke array untuk digunakan dalam $.each
-                            let filteredPeserta = Object.values(uniquePeserta);
-
-                            // Tampilkan data ke tabel
-                            $.each(filteredPeserta, function(index, row) {
-                                var num = index + 1;
-                                var buttonAction = '';
-
-                                if (row.catatan) {
-                                    buttonAction =
-                                        '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
-                                        '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
-                                        '</a>';
-                                } else {
-                                    buttonAction =
-                                        '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
-                                        '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
-                                        '</a>';
-                                }
-
-                                $('tbody').append(
-                                    '<tr>\
-                                        <td>' + num + '</td>\
-                                        <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
-                                        \
-                                        \
-                                        <td>\
-                                            <div class="d-flex flex-column gap-2 px-3 ">' + buttonAction + '</div>\
-                                        </td>\
-                                    </tr>'
-                                );
-                            });
-
-                            $("#example").DataTable();
-
-                        }
-                    },
-                    error: function() {
-                        Swal.close();
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal memuat data',
-                            text: 'Tidak dapat mengambil data dari server!'
-                        });
-                    }
-
-                    var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
-                        function(penguji) {
-                            return penguji.nama_lengkap;
-                        });
-                    renderPenguji(initialPenguji);
-
-                    if (data_penguji.event_skema_menguji.length <= 2) {
-                        btnSelengkapnya.style.display = 'none';
-                    } else {
-                        btnSelengkapnya.style.display = '';
-                    }
-
-                    btnSelengkapnya.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        var allPenguji = data_penguji.event_skema_menguji.map(function(penguji) {
-                            return penguji.nama_lengkap;
-                        });
-                        renderPenguji(allPenguji);
-                        btnSelengkapnya.style.display = 'none';
-                        btnSedikit.style.display = 'inline';
-                    });
-
-                    btnSedikit.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
-                            function(penguji) {
-                                return penguji.nama_lengkap;
-                            });
-                        renderPenguji(initialPenguji);
-                        btnSedikit.style.display = 'none';
-                        btnSelengkapnya.style.display = 'inline';
-                    });
-
-                    if (data_skema.status === "Aktif") {
-                        $('#status').prop('checked', true);
-                    } else {
-                        $('#status').prop('checked', false);
-                    }
-
-                    // Table daftar peserta
-                    $('#example').DataTable().destroy();
-                    $('tbody').html("");
-                    $('#dropdown-menu').html("");
-
-                    $.each(data_peserta, function(index, row) {
-                        var num = index + 1;
-                        var buttonAction = '';
-
-                        console.log('Processing peserta:', row.id_peserta, 'with data:', row);
-
-                        if (row.catatan) {
-                            // tanda
-                            buttonAction =
-                               '<li style="list-style: none;">' +
-                                    '<a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">' +
-                                        '<i class="fa-regular fa-pen-to-square"></i> Edit' +
-                                    '</a>' +
-                                '</li>' +
-                                '<li style="list-style: none;">' +
-                                    '<a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row.id_peserta + '">' +
-                                        '<i class="fa-regular fa-trash-can"></i> Delete' +
-                                    '</a>' +
-                                '</li>';
-                        } else {
-                            buttonAction =
-                                '<a href="#" class="btn btn-info btn-sm rounded text-white mb-3 create_laporan_btn" data-id="' + row.id_peserta + '">' +
-                                '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
-                                '</a>';
-                        }
-
-                        $('tbody').append(
-                            '<tr>\
-                                <td>' + num + '</td>\
-                                <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
-                                <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
-                                <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) : 'Tanggal tidak tersedia') + '</td>\
-                                <td>\
-                                    <div class="d-flex flex-column gap-2 px-3 ">\
-                                        ' + buttonAction + '\
-                                    </div>\
-                                </td>\
-                            </tr>'
-                        );
-                    });
-
-                    $("#example").DataTable();
-                }
-            },
-            error: function() {
+            error: ()=> {
                 Swal.close();
                 Swal.fire({
                     icon: 'error',
@@ -645,12 +402,14 @@ $(document).ready(function() {
                     text: 'Tidak dapat mengambil data dari server!'
                 });
             }
-        });
+        }});
     }
 
     // Event Dropdown
     $('#event_select').on('change', function() {
         eventID = $(this).val(); // Set eventID dari dropdown
+        console.log('Selected eventID:', eventID);
+
         $('#search_btn').prop('disabled', true);
 
         if (eventID) {

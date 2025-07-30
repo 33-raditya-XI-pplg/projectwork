@@ -25,7 +25,7 @@ class LaporanPerkembanganController extends Controller
         $kemampuan = kemampuan_dasar::all();
 
         $Title = 'Laporan Perkembangan';
-        // dd($events);
+        // dd($kemampuan);
         confirmDelete('Hapus Laporan Perkembangan', 'Apakah kamu yakin untuk menghapus?');
         return view('admin.laporanperkembangan.index', compact('events', 'Title', 'kemampuan', )); // Kirim $events ke view
     }
