@@ -107,13 +107,11 @@
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Nama Peserta</th>
-                                <th scope="col">Keterangan</th>
-                                <th scope="col">Tanggal</th>
                                 <th scope="col" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody style="vertical-align: middle">
-                            <!-- AJAX Response Here -->
+
                         </tbody>
                     </table>
                 </div>
@@ -455,23 +453,26 @@
                             $('tbody').html("");
                             $('#dropdown-menu').html("");
 
+                            // Buat objek penampung untuk peserta unik berdasarkan id_peserta
+                            let uniquePeserta = {};
+
                             $.each(data_peserta, function(index, row) {
+                                uniquePeserta[row.id_peserta] = row;
+                            });
+
+                            // Convert kembali ke array untuk digunakan dalam $.each
+                            let filteredPeserta = Object.values(uniquePeserta);
+
+                            // Tampilkan data ke tabel
+                            $.each(filteredPeserta, function(index, row) {
                                 var num = index + 1;
                                 var buttonAction = '';
 
                                 if (row.catatan) {
-                                    // tanda
                                     buttonAction =
-                                       '<li style="list-style: none;">' +
-                                            '<a href="#" class="dropdown-item text-info edit_laporan_btn" data-id="' + row.id_peserta + '">' +
-                                                '<i class="fa-regular fa-pen-to-square"></i> Edit' +
-                                            '</a>' +
-                                        '</li>' +
-                                        '<li style="list-style: none;">' +
-                                            '<a href="#" class="dropdown-item text-danger delete_laporan_btn" data-id="' + row.id_peserta + '">' +
-                                                '<i class="fa-regular fa-trash-can"></i> Delete' +
-                                            '</a>' +
-                                        '</li>';
+                                        '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
+                                        '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
+                                        '</a>';
                                 } else {
                                     buttonAction =
                                         '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
@@ -483,18 +484,17 @@
                                     '<tr>\
                                         <td>' + num + '</td>\
                                         <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
-                                        <td>' + (row.catatan || 'Tidak ada catatan') + '</td>\
-                                        <td>' + (row.tanggal_penilaian ? formatDate(row.tanggal_penilaian) : 'Tanggal tidak tersedia') + '</td>\
+                                        \
+                                        \
                                         <td>\
-                                            <div class="d-flex flex-column gap-2 px-3 ">\
-                                                ' + buttonAction + '\
-                                            </div>\
+                                            <div class="d-flex flex-column gap-2 px-3 ">' + buttonAction + '</div>\
                                         </td>\
                                     </tr>'
                                 );
                             });
 
                             $("#example").DataTable();
+
                         }
                     },
                     error: function() {

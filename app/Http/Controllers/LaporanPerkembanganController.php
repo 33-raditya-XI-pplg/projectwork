@@ -135,7 +135,6 @@ class LaporanPerkembanganController extends Controller
         // tanda
         $data_peserta = DB::table('tb_peserta')
         ->join('tb_user', 'tb_peserta.user_id', '=', 'tb_user.id_user')
-        ->join('tb_laporan_perkembangan', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
         ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
         ->select(
             'tb_peserta.id_peserta',
@@ -143,21 +142,16 @@ class LaporanPerkembanganController extends Controller
             'tb_peserta.event_skema_id as peserta_event_skema_id',
             'tb_event_skema.event_id',
             'tb_event_skema.skema_id',
-            'tb_laporan_perkembangan.id_laporan_perkembangan',
-            'tb_laporan_perkembangan.event_skema_id as laporan_event_skema_id',
-            'tb_laporan_perkembangan.tanggal_penilaian',
-            'tb_laporan_perkembangan.catatan'
         )
         ->where('tb_peserta.id_peserta', $id)
         ->first();
 
         return response()->json([
             'data_peserta' => $data_peserta,
-
         ]);
     }
 
-    public function fetchLaporanData($pesertaID)
+    public function fetchLaporanData($laporanID)
     {
         $laporan = DB::table('tb_laporan_perkembangan')
             ->join('tb_peserta', 'tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta')
@@ -175,7 +169,7 @@ class LaporanPerkembanganController extends Controller
                 'tb_laporan_perkembangan.saran',
                 'tb_user.nama_lengkap'
             )
-            ->where('tb_laporan_perkembangan.peserta_id', $pesertaID)
+            ->where('tb_laporan_perkembangan.id_laporan_perkembangan', $laporanID)
             ->first();
 
         $kemampuan = DB::table('tb_kemampuan_dasar')
@@ -264,7 +258,7 @@ class LaporanPerkembanganController extends Controller
                 'peralatan_penunjang' => 'required',
                 'saran' => 'required',
             ]);
-            dd($request->all());
+
 
             $laporan = LaporanPerkembangan::where('peserta_id', $pesertaID)->first();
 
@@ -339,6 +333,7 @@ class LaporanPerkembanganController extends Controller
         }
     }
 
+
    public function tambahLaporan($id)
 {
     $Title = 'Tambah Laporan Perkembangan';
@@ -348,6 +343,7 @@ class LaporanPerkembanganController extends Controller
         ->join('tb_event_skema', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
         ->where('tb_peserta.id_peserta', $id)
         ->select(
+            'tb_peserta.id_peserta',
             'tb_peserta.*',
             'tb_user.nama_lengkap',
             'tb_peserta.event_skema_id',
@@ -355,11 +351,41 @@ class LaporanPerkembanganController extends Controller
         )
         ->first();
 
+        $laporan = DB::table('tb_peserta')
+            ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
+            ->join('tb_event_skema', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+            ->join('tb_laporan_perkembangan', 'tb_peserta.id_peserta', '=', 'tb_laporan_perkembangan.peserta_id')
+            ->join('tb_kemampuan_dasar', 'tb_laporan_perkembangan.id_laporan_perkembangan', '=', 'tb_kemampuan_dasar.laporan_perkembangan_id')
+            ->where('tb_peserta.id_peserta', $id)
+            ->select(
+                'tb_peserta.*',
+                'tb_user.nama_lengkap',
+                'tb_peserta.event_skema_id',
+                'tb_event_skema.skema_id',
+                'tb_kemampuan_dasar.keterangan',
+                'tb_laporan_perkembangan.tanggal_penilaian',
+                'tb_laporan_perkembangan.id_laporan_perkembangan',
+            )
+            ->groupBy(
+                'tb_peserta.id_peserta',
+                'tb_user.nama_lengkap',
+                'tb_peserta.event_skema_id',
+                'tb_event_skema.skema_id',
+                'tb_kemampuan_dasar.keterangan',
+                'tb_laporan_perkembangan.tanggal_penilaian',
+                'tb_laporan_perkembangan.id_laporan_perkembangan',
+            )
+            ->get();
+
+
     if (!$peserta) {
         abort(404);
     }
 
-    return view('admin.laporanperkembangan.tambah-laporan', compact('Title', 'peserta'));
+
+// dd($laporan);
+
+    return view('admin.laporanperkembangan.tambah-laporan', compact('Title', 'peserta','laporan'));
 }
 
 
