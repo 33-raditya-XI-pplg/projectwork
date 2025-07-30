@@ -26,12 +26,12 @@
                             </div>
                             <div class="card-body">
                                 <h6 class="fw-bold text-secondary mb-2">Pengalaman Anak</h6>
-                                <p class="text-muted">{!! $item['laporan']->pengalaman_anak !!}</p>
+                                <p class="">{!! $item['laporan']->pengalaman_anak !!}</p>
 
                                 <h6 class="fw-bold text-secondary mb-3">Kemampuan Dasar</h6>
                                 @if (!empty($item['kemampuan_dasar']) && count($item['kemampuan_dasar']) > 0)
                                     @foreach ($item['kemampuan_dasar'] as $kd)
-                                        <div class="me-auto mb-3 text-muted">
+                                        <div class="me-auto mb-3">
                                             {{ $kd->kemampuan }}
                                             <em>({{ $kd->keterangan }})</em>
                                         </div>
@@ -41,10 +41,10 @@
                                 @endif
 
                                 <h6 class="fw-bold text-secondary mb-2">Peralatan Penunjang</h6>
-                                <p class="text-muted">{!! $item['laporan']->peralatan_penunjang !!}</p>
+                                <p class="">{!! $item['laporan']->peralatan_penunjang !!}</p>
 
                                 <h6 class="fw-bold text-secondary mb-2">Saran</h6>
-                                <p class="text-muted">{!! $item['laporan']->saran !!}</p>
+                                <p class="">{!! $item['laporan']->saran !!}</p>
                             </div>
                         </div>
                     </div>
