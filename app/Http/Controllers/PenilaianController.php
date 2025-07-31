@@ -66,12 +66,11 @@ class PenilaianController extends Controller
             ->first();
 
         $data_sub_skema = DB::table('tb_event_skema')
-            ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
             ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-
             ->join('tb_sub_skema', 'tb_skema.id_skema', '=', 'tb_sub_skema.skema_id')
             ->select('tb_event_skema.id_event_skema', 'tb_sub_skema.id_sub_skema', 'tb_sub_skema.judul_sub')
             ->where('tb_event_skema.skema_id', $id)
+            ->where('tb_event_skema.event_id', $event_id)
             ->get();
 
         $eventSkemaId = $data_skema->id_event_skema;
