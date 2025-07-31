@@ -179,7 +179,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger rounded-3" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-success rounded-3 text-white" id="store_laporan_btn"
-                        value="1">Tambah</button>
+                        value="1">
+                    </button>
                 </div>
             </div>
         </div>
@@ -392,9 +393,103 @@ $(document).ready(function() {
                     var btnSelengkapnya = document.getElementById('btnSelengkapnya');
                     var btnSedikit = document.getElementById('btnSedikit');
 
-            // PERBAIKAN: Fungsi fetchDetailData yang menggunakan skemaID dan eventID yang benar
+                    function renderPenguji(names) {
+                        listPenguji.innerHTML = '';
+                        names.forEach(function(name) {
+                            var listItem = document.createElement('li');
+                            listItem.textContent = name;
+                            listItem.classList.add('list-group-item');
+                            listPenguji.appendChild(listItem);
+                        });
+                    }
+
+                    var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
+                        function(penguji) {
+                            return penguji.nama_lengkap;
+                        });
+                    renderPenguji(initialPenguji);
+
+                    if (data_penguji.event_skema_menguji.length <= 2) {
+                        btnSelengkapnya.style.display = 'none';
+                    } else {
+                        btnSelengkapnya.style.display = '';
+                    }
+
+                    btnSelengkapnya.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var allPenguji = data_penguji.event_skema_menguji.map(function(penguji) {
+                            return penguji.nama_lengkap;
+                        });
+                        renderPenguji(allPenguji);
+                        btnSelengkapnya.style.display = 'none';
+                        btnSedikit.style.display = 'inline';
+                    });
+
+                    btnSedikit.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        var initialPenguji = data_penguji.event_skema_menguji.slice(0, 2).map(
+                            function(penguji) {
+                                return penguji.nama_lengkap;
+                            });
+                        renderPenguji(initialPenguji);
+                        btnSedikit.style.display = 'none';
+                        btnSelengkapnya.style.display = 'inline';
+                    });
+
+                    if (data_skema.status === "Aktif") {
+                        $('#status').prop('checked', true);
+                    } else {
+                        $('#status').prop('checked', false);
+                    }
+
+                    // Table daftar peserta
+                    $('#example').DataTable().destroy();
+                    $('tbody').html("");
+                    $('#dropdown-menu').html("");
+
+                    // Buat objek penampung untuk peserta unik berdasarkan id_peserta
+                    let uniquePeserta = {};
+
+                    $.each(data_peserta, function(index, row) {
+                        uniquePeserta[row.id_peserta] = row;
+                    });
+
+                    // Convert kembali ke array untuk digunakan dalam $.each
+                    let filteredPeserta = Object.values(uniquePeserta);
+
+                    // Tampilkan data ke tabel
+                    $.each(filteredPeserta, function(index, row) {
+                        var num = index + 1;
+                        var buttonAction = '';
+
+                        if (row.catatan) {
+                            buttonAction =
+                                '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
+                                '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
+                                '</a>';
+                        } else {
+                            buttonAction =
+                                '<a href="/admin/laporanperkembangan/' + row.id_peserta + '/tambah" class="btn btn-info btn-sm rounded text-white mb-3" data-id="' + row.id_peserta + '">' +
+                                '<i class="fa-regular fa-pen-to-square"></i> Tambah' +
+                                '</a>';
+                        }
+
+                        $('tbody').append(
+                            '<tr>\
+                                <td>' + num + '</td>\
+                                <td>' + (row.nama_lengkap || 'Nama tidak tersedia') + '</td>\
+                                <td>\
+                                    <div class="d-flex flex-column gap-2 px-3 ">' + buttonAction + '</div>\
+                                </td>\
+                            </tr>'
+                        );
+                    });
+
+                    $("#example").DataTable();
+
                 }
-            error: ()=> {
+            },
+            error: function() {
                 Swal.close();
                 Swal.fire({
                     icon: 'error',
@@ -402,7 +497,7 @@ $(document).ready(function() {
                     text: 'Tidak dapat mengambil data dari server!'
                 });
             }
-        }});
+        });
     }
 
     // Event Dropdown
@@ -424,7 +519,6 @@ $(document).ready(function() {
                         $('#skema_select').empty();
                         $('#skema_select').append('<option hidden disabled selected>Pilih Skema</option>');
                         $.each(data, function(key, row) {
-
                             $('#skema_select').append('<option value="' + row.id_skema + '">' + row.nama_skema + '</option>');
                         });
                         $('#skema_select').trigger("chosen:updated");
@@ -433,7 +527,7 @@ $(document).ready(function() {
                             $('#search_btn').prop('disabled', false);
                         }
                     }
-                },
+                }
             });
         }
     });
