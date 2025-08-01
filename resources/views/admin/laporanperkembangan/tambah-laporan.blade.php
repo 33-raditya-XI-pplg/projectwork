@@ -25,28 +25,26 @@
                             </tr>
                         </thead>
                         <tbody style="vertical-align: middle">
-                            @foreach ($laporan as $index => $row)
+                            @if ($laporan)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $row->nama_lengkap }}</td>
-                                    <td>{{ $row->keterangan }}</td>
-                                    <td>{{ $row->tanggal_penilaian ?? 'Tanggal tidak tersedia' }}</td>
+                                    <td>1</td>
+                                    <td>{{ $peserta->nama_lengkap }}</td>
+                                    <td>{{ $laporan->catatan ?? '-' }}</td>
+                                    <td>{{ $laporan->tanggal_penilaian ?? 'Tanggal tidak tersedia' }}</td>
                                     <td class="text-center">
                                         <div class="d-flex flex-column gap-2 px-3">
-
-                                                <a href="#" class="btn btn-info btn-sm rounded text-white mb-2 edit_laporan_btn"
-                                                    data-id="{{ $row->id_laporan_perkembangan }}">
-                                                    <i class="fa-regular fa-pen-to-square"></i> Edit
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-sm rounded text-white mb-2 delete_laporan_btn"
-                                                    data-id="{{ $row->id_peserta }}">
-                                                    <i class="fa-regular fa-trash-can"></i> Delete
-                                                </a>
-
+                                            <a href="#" class="btn btn-info btn-sm rounded text-white mb-2 edit_laporan_btn"
+                                                data-id="{{ $laporan->id_laporan_perkembangan }}">
+                                                <i class="fa-regular fa-pen-to-square"></i> Edit
+                                            </a>
+                                            <a href="#" class="btn btn-danger btn-sm rounded text-white mb-2 delete_laporan_btn"
+                                                data-id="{{ $peserta->id_peserta }}">
+                                                <i class="fa-regular fa-trash-can"></i> Delete
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>
