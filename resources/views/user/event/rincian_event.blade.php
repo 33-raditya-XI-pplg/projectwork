@@ -87,18 +87,18 @@
                             @foreach ($data_skema as $row)
                                 <tr>
                                     <td>{{ $num++ }}</td>
-                                    <td>{{ $row->nama_skema }}</td>
+                                    <td>{{ $row['nama_skema'] }}</td>
                                     <td>
                                         <button type="button"
-                                            class="btn rounded-3 {{ $row->telah_terdaftar == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}"
+                                            class="btn rounded-3 {{ $row['telah_terdaftar'] == 1 ? 'btn-outline-success' : 'btn-outline-danger' }}"
                                             disabled>
-                                            {{ $row->telah_terdaftar == 1 ? 'Sudah Terdaftar' : 'Dapat Mendaftar' }}
+                                            {{ $row['telah_terdaftar'] == 1 ? 'Sudah Terdaftar' : 'Dapat Mendaftar' }}
                                         </button>
                                     </td>
 
-                                    @if ($row->telah_terdaftar == 1)
+                                    @if ($row['telah_terdaftar'] == 1)
                                         <td class="text-center">
-                                            <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}"
+                                            <a href="{{ route('event.rincian-skema', $row['id_event_skema']) }}"
                                                 class="btn btn-secondary btn-sm rounded custom-btn">
                                                 <i class="fa fa-info"></i> Rincian</a>
                                         </td>
@@ -106,11 +106,11 @@
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-2">
                                                 <!-- Tombol Daftar -->
-                                                <form id="mendaftarForm-{{ $row->id_event_skema }}" class="mendaftarForm"
+                                                <form id="mendaftarForm-{{ $row['id_event_skema'] }}" class="mendaftarForm"
                                                     action="{{ route('mendaftar.event') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="event_skema_id" required
-                                                        value="{{ $row->id_event_skema }}">
+                                                        value="{{ $row['id_event_skema'] }}">
                                                     <button type="button"
                                                         class="btn btn-success btn-sm text-white d-flex align-items-center gap-1 registerButton">
                                                         <i class="fa-regular fa-pen-to-square small-icon"
@@ -120,7 +120,7 @@
                                                 </form>
 
                                                 <!-- Tombol Rincian -->
-                                                <a href="{{ route('event.rincian-skema', $row->id_event_skema) }}"
+                                                <a href="{{ route('event.rincian-skema', $row['id_event_skema']) }}"
                                                     class="btn btn-danger btn-sm text-white d-flex align-items-center gap-1">
                                                     <i class="fa fa-info small-icon"
                                                         style="font-size: 0.75rem; color: white;"></i>

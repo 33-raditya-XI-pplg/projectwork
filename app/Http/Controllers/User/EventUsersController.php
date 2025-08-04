@@ -78,66 +78,86 @@ class EventUsersController extends Controller
     }
 
     public function show($eventID)
-    {
-        $route = Route::current();
-        // dd($route);
-        // $route = $route->uri;
+{
+    $route = Route::current();
+    confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?');
+    $userID = Auth::user()->id_user;
 
-        confirmDelete('Hapus Nilai Peserta', 'Apakah kamu yakin untuk menghapus?'); // Include SweetAlert to View
-        $userID = Auth::user()->id_user;
+    // Ambil data event
+    $data_event = Event::findOrFail($eventID)
+        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+        ->select(
+            'tb_event.nama_event',
+            'tb_event.deskripsi',
+            'tb_event.path_banner',
+            'tb_event.tgl_mulai',
+            'tb_event.biaya_regis',
+            'tb_event.tgl_berakhir',
+            'tb_tempat.nama_tempat'
+        )
+        ->where('tb_event.id_event', $eventID)
+        ->first();
 
-        $data_event = Event::findOrFail($eventID)
-            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-            ->select(
-                'tb_event.nama_event',
-                'tb_event.deskripsi',
-                'tb_event.path_banner',
-                'tb_event.tgl_mulai',
-                'tb_event.biaya_regis',
-                'tb_event.tgl_berakhir',
-                'tb_tempat.nama_tempat'
-            )
-            ->where('tb_event.id_event', $eventID)
-            ->first();
+    // Ambil data skema + peserta + sertifikat + laporan + nilai
+    $raw_data_skema = DB::table('tb_event')
+        ->join('tb_event_skema', 'tb_event.id_event', '=', 'tb_event_skema.event_id')
+        ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
+        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+        ->leftJoin('tb_peserta', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+        ->leftJoin('tb_sertifikat', 'tb_peserta.id_peserta', '=', 'tb_sertifikat.peserta_id')
+        ->leftJoin('tb_laporan_perkembangan', function($join) {
+            $join->on('tb_laporan_perkembangan.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+                 ->on('tb_laporan_perkembangan.peserta_id', '=', 'tb_peserta.id_peserta');
+        })
+        ->leftJoin('tb_nilai_peserta', function($join) {
+            $join->on('tb_nilai_peserta.peserta_id', '=', 'tb_peserta.id_peserta')
+                 ->on('tb_nilai_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema');
+        })
+        ->select(
+            'tb_event_skema.id_event_skema',
+            'tb_skema.nama_skema',
+            'tb_peserta.id_peserta',
+            'tb_sertifikat.id_sertifikat',
+            'tb_sertifikat.nomor_sertifikat',
+            'tb_laporan_perkembangan.id_laporan_perkembangan',
+            'tb_nilai_peserta.id_nilai_peserta',
+            DB::raw('CASE WHEN tb_peserta.id_peserta IS NOT NULL THEN 1 ELSE 0 END as telah_terdaftar')
+        )
+        ->where('tb_event_skema.event_id', $eventID)
+        ->get();
 
-        $data_skema = DB::table('tb_event')
-            ->join('tb_event_skema', 'tb_event.id_event', '=', 'tb_event_skema.event_id')
-            ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+    // Kelompokkan per peserta dan buat array id_nilai_peserta
+    $data_skema = $raw_data_skema->groupBy('id_peserta')->map(function ($items) {
+        $first = $items->first();
+        return [
+            'id_event_skema' => $first->id_event_skema,
+            'nama_skema' => $first->nama_skema,
+            'id_peserta' => $first->id_peserta,
+            'id_sertifikat' => $first->id_sertifikat,
+            'nomor_sertifikat' => $first->nomor_sertifikat,
+            'id_laporan_perkembangan' => $first->id_laporan_perkembangan,
+            'telah_terdaftar' => $first->telah_terdaftar,
+            'id_nilai_peserta' => $items->pluck('id_nilai_peserta')->filter()->values(),
+        ];
+    })->values(); // Reset index
 
-            ->leftJoin('tb_peserta', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
-            ->leftJoin('tb_sertifikat', 'tb_peserta.id_peserta', '=', 'tb_sertifikat.peserta_id')
+    // Untuk debugging, bisa diaktifkan
+    // dd($data_skema);
 
+    $banner = asset($data_event->path_banner);
+    $Title = 'Rincian';
+    $subtitle = 'Event';
 
-            ->select(
-                'tb_event_skema.id_event_skema',
-                'tb_skema.nama_skema',
-                'tb_peserta.id_peserta',
-                'tb_sertifikat.peserta_id as peserta_sertifikat_id',
-                DB::raw('CASE WHEN tb_peserta.id_peserta IS NOT NULL THEN 1 ELSE 0 END as telah_terdaftar')
-            )
-            ->where('tb_event_skema.event_id', $eventID)
-            ->get();
-        // dd($data_skema);
-
-        $banner = asset($data_event->path_banner);
-
-        $Title = 'Rincian';
-        $subtitle = 'Event';
-
-        // dd($data_skema);
-
-        if($route->uri == 'user/event-user/{event_user}'){
-            return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner', 'Title', 'subtitle'));
-        }
-        elseif($route->uri == 'user/follow-event/{id}'){
-            return view('user.event.rincian_follow_event', compact('data_event', 'data_skema', 'banner', 'Title', 'subtitle'));
-        }
-        else{
-            Alert::error('Error', 'Halaman tidak ditemukan.');
-            return redirect()->back();
-        }
+    if ($route->uri == 'user/event-user/{event_user}') {
+        return view('user.event.rincian_event', compact('data_event', 'data_skema', 'banner', 'Title', 'subtitle'));
+    } elseif ($route->uri == 'user/follow-event/{id}') {
+        return view('user.event.rincian_follow_event', compact('data_event', 'data_skema', 'banner', 'Title', 'subtitle'));
+    } else {
+        Alert::error('Error', 'Halaman tidak ditemukan.');
+        return redirect()->back();
     }
+}
+
 
     public function mendaftar(Request $request)
     {

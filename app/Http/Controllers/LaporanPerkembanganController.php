@@ -67,6 +67,7 @@ class LaporanPerkembanganController extends Controller
         ->where('tb_event_skema.skema_id', $id)
         ->where('tb_event_skema.event_id', $event_id)
         ->first();
+        
 
     $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
         ->select('id_event_skema')
