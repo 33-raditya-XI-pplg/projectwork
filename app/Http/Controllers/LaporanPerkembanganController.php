@@ -67,7 +67,7 @@ class LaporanPerkembanganController extends Controller
         ->where('tb_event_skema.skema_id', $id)
         ->where('tb_event_skema.event_id', $event_id)
         ->first();
-        
+
 
     $data_penguji = Event_Skema::where('id_event_skema', $data_skema->id_event_skema)
         ->select('id_event_skema')
@@ -340,6 +340,7 @@ class LaporanPerkembanganController extends Controller
 {
     $Title = 'Tambah Laporan Perkembangan';
 
+    // Ambil data peserta
     $peserta = DB::table('tb_peserta')
         ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
         ->join('tb_event_skema', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
@@ -353,26 +354,50 @@ class LaporanPerkembanganController extends Controller
         )
         ->first();
 
-    $laporan = DB::table('tb_laporan_perkembangan')
-        ->where('peserta_id', $id)
-        ->orderByDesc('tanggal_penilaian')
-        ->first();
-
-    $kemampuan_dasar = collect();
-    if ($laporan) {
-        $kemampuan_dasar = DB::table('tb_kemampuan_dasar')
-            ->where('laporan_perkembangan_id', $laporan->id_laporan_perkembangan)
-            ->get();
-    }
-
+    // Jika peserta tidak ditemukan, abort 404
     if (!$peserta) {
         abort(404);
     }
 
-    // dd($laporan);
+    // Ambil semua data laporan (termasuk kemampuan dasar per laporan)
+    $rawLaporan = DB::table('tb_peserta')
+        ->join('tb_user', 'tb_user.id_user', '=', 'tb_peserta.user_id')
+        ->join('tb_event_skema', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+        ->join('tb_laporan_perkembangan', 'tb_peserta.id_peserta', '=', 'tb_laporan_perkembangan.peserta_id')
+        ->join('tb_kemampuan_dasar', 'tb_laporan_perkembangan.id_laporan_perkembangan', '=', 'tb_kemampuan_dasar.laporan_perkembangan_id')
+        ->where('tb_peserta.id_peserta', $id)
+        ->select(
+            'tb_peserta.*',
+            'tb_user.nama_lengkap',
+            'tb_event_skema.skema_id',
+            'tb_kemampuan_dasar.keterangan',
+            'tb_laporan_perkembangan.tanggal_penilaian',
+            'tb_laporan_perkembangan.id_laporan_perkembangan'
+        )
+        ->get();
 
-    return view('admin.laporanperkembangan.tambah-laporan', compact('Title', 'peserta', 'laporan', 'kemampuan_dasar'));
+    // Kelompokkan data berdasarkan id_laporan_perkembangan dan susun ulang dengan array keterangan
+    $laporan = $rawLaporan->groupBy('id_laporan_perkembangan')->map(function ($items) {
+        $first = $items->first();
+        return (object) [
+            'id_laporan_perkembangan' => $first->id_laporan_perkembangan,
+            'tanggal_penilaian' => $first->tanggal_penilaian,
+            'id_peserta' => $first->id_peserta,
+            'user_id' => $first->user_id,
+            'event_skema_id' => $first->event_skema_id,
+            'skema_id' => $first->skema_id,
+            'nama_lengkap' => $first->nama_lengkap,
+            'keterangan' => $items->pluck('keterangan')->toArray(),
+        ];
+    })->values(); // values() untuk reset index numerik
+
+    // Ambil semua keterangan untuk keperluan tambahan (opsional)
+    $arrayKeterangan = $rawLaporan->pluck('keterangan')->toArray();
+
+    // Kirim ke view
+    return view('admin.laporanperkembangan.tambah-laporan', compact('Title', 'peserta', 'laporan'));
 }
+
 
 
 }
