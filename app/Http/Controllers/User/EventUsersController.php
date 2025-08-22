@@ -98,12 +98,14 @@ class EventUsersController extends Controller
         ->where('tb_event.id_event', $eventID)
         ->first();
 
-    // Ambil data skema + peserta + sertifikat + laporan + nilai
-    $raw_data_skema = DB::table('tb_event')
-        ->join('tb_event_skema', 'tb_event.id_event', '=', 'tb_event_skema.event_id')
+
+    // Ambil semua skema pada event beserta data peserta jika ada
+    $data_skema = DB::table('tb_event_skema')
         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
-        ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-        ->leftJoin('tb_peserta', 'tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+        ->leftJoin('tb_peserta', function($join) use ($userID) {
+            $join->on('tb_event_skema.id_event_skema', '=', 'tb_peserta.event_skema_id')
+                 ->where('tb_peserta.user_id', '=', $userID);
+        })
         ->leftJoin('tb_sertifikat', 'tb_peserta.id_peserta', '=', 'tb_sertifikat.peserta_id')
         ->leftJoin('tb_laporan_perkembangan', function($join) {
             $join->on('tb_laporan_perkembangan.event_skema_id', '=', 'tb_event_skema.id_event_skema')
@@ -124,10 +126,11 @@ class EventUsersController extends Controller
             DB::raw('CASE WHEN tb_peserta.id_peserta IS NOT NULL THEN 1 ELSE 0 END as telah_terdaftar')
         )
         ->where('tb_event_skema.event_id', $eventID)
+        ->groupBy('tb_event_skema.id_event_skema', 'tb_skema.nama_skema', 'tb_peserta.id_peserta', 'tb_sertifikat.id_sertifikat', 'tb_sertifikat.nomor_sertifikat', 'tb_laporan_perkembangan.id_laporan_perkembangan', 'tb_nilai_peserta.id_nilai_peserta')
         ->get();
 
-    // Kelompokkan per peserta dan buat array id_nilai_peserta
-    $data_skema = $raw_data_skema->groupBy('id_peserta')->map(function ($items) {
+    // Kelompokkan per skema
+    $data_skema = $data_skema->groupBy('id_event_skema')->map(function ($items) {
         $first = $items->first();
         return [
             'id_event_skema' => $first->id_event_skema,
@@ -139,7 +142,7 @@ class EventUsersController extends Controller
             'telah_terdaftar' => $first->telah_terdaftar,
             'id_nilai_peserta' => $items->pluck('id_nilai_peserta')->filter()->values(),
         ];
-    })->values(); // Reset index
+    })->values();
 
     // Untuk debugging, bisa diaktifkan
     // dd($data_skema);
