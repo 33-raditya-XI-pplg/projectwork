@@ -301,5 +301,45 @@
     </script>
 @endif
 
+@push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] Perbaikan HTML untuk placeholder di modal Tambah
+        const addPageSelect = $('#add select[name="page_id"]');
+        if (addPageSelect.length) {
+            // Hapus opsi default yang bermasalah ([disabled][selected])
+            addPageSelect.find('option[disabled][selected]').remove();
+            
+            // Tambahkan opsi kosong yang bersih di awal (jika belum ada)
+            if (addPageSelect.find('option[value=""]').length === 0) {
+                 addPageSelect.prepend('<option value=""></option>');
+            }
 
+            // Atur nilainya menjadi kosong agar placeholder muncul
+            addPageSelect.val('').trigger('change');
+        }
+        
+        // Inisialisasi Select2 untuk semua elemen
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            });
+        });
+
+        // Mengatur placeholder untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = 'Cari Page...';
+            }
+        });
+    });
+</script>
+@endpush
 @endsection

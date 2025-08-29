@@ -622,5 +622,78 @@
 @endif
 @endpush
 
+@push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] Perbaikan HTML untuk placeholder di modal Tambah
+        // Target: select 'page_id', 'id_user', dan 'rating' di modal #add
+        const addModalSelects = $('#add select.js-example-basic-single');
+        addModalSelects.each(function() {
+            $(this).find('option[disabled][selected]').remove();
+            if ($(this).find('option[value=""]').length === 0) {
+                 $(this).prepend('<option value=""></option>');
+            }
+            $(this).val('').trigger('change');
+        });
 
+        // Inisialisasi Select2 untuk semua elemen
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+            var selectName = $(this).attr('name');
+
+            var selectOptions = {
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            };
+
+            // Menyembunyikan kotak pencarian untuk dropdown 'rating'
+            if (selectName === 'rating') {
+                selectOptions.minimumResultsForSearch = Infinity;
+            }
+
+            $(this).select2(selectOptions);
+        });
+
+        // Mengatur placeholder dinamis untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...'; // Default
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            } else if (name === 'id_user') {
+                placeholderText = 'Cari Pengguna...';
+            }
+            
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = placeholderText;
+            }
+        });
+
+        // Event listener untuk mengisi email otomatis saat nama dipilih
+        $('#id_user').on('change', function() {
+            var userId = $(this).val();
+            if (userId) {
+                $.ajax({
+                    url: "{{ url('/admin/management/getEmail') }}/" + userId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        $('#email').val(response.email || '');
+                    },
+                    error: function() {
+                        $('#email').val('');
+                    }
+                });
+            } else {
+                $('#email').val('');
+            }
+        });
+    });
+</script>
+@endpush
 @endsection

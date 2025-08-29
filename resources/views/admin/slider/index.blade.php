@@ -543,6 +543,52 @@
 @endif
 @endpush
 
+@push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] Perbaikan HTML untuk placeholder di modal Tambah
+        // Targetnya adalah select 'page_id' yang tidak punya opsi kosong
+        const addPageSelect = $('#add select[name="page_id"]');
+        if (addPageSelect.length) {
+             // Hapus opsi default yang bermasalah jika ada
+            addPageSelect.find('option[value=""]').remove();
+            // Tambahkan opsi kosong yang bersih di awal
+            addPageSelect.prepend('<option value=""></option>');
+            // Atur nilainya menjadi kosong agar placeholder muncul
+            addPageSelect.val('').trigger('change');
+        }
 
+        // Inisialisasi Select2 untuk semua elemen
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+            var selectName = $(this).attr('name');
+
+            var selectOptions = {
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            };
+
+            // Menyembunyikan kotak pencarian untuk dropdown 'position'
+            if (selectName === 'position') {
+                selectOptions.minimumResultsForSearch = Infinity;
+            }
+
+            $(this).select2(selectOptions);
+        });
+
+        // Mengatur placeholder untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            // Hanya berlaku untuk dropdown yang memiliki kotak pencarian
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = 'Cari Page...';
+            }
+        });
+    });
+</script>
+@endpush
 
 @endsection

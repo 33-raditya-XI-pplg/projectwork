@@ -62,4 +62,5 @@
             window.location.href = "{{ route('skema.create') }}";
         })
     </script>
+    
 @endpush

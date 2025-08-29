@@ -16,8 +16,8 @@ class LaporanPerkembanganSeeder extends Seeder
     {
         DB::table('tb_laporan_perkembangan')->insert([
             [
-                'event_skema_id' => 27,
-                'peserta_id' => 51,
+                'event_skema_id' => 1,
+                'peserta_id' => 2,
                 'tanggal_penilaian' => Carbon::now(),
                 'catatan' => 'Laporan perkembangan peserta 1',
                 'pengalaman_anak' => 'Peserta menunjukkan kemajuan yang signifikan dalam keterampilan yang telah diajarkan.',

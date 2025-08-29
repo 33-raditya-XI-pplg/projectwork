@@ -422,7 +422,29 @@
         });
     });
 </script>
-@endsection
+@push('script')
+<script>
+    $(document).ready(function() {
+        // Inisialisasi Select2 untuk semua elemen dengan kelas .js-example-basic-single
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal
+            });
+        });
+
+        // Menambahkan placeholder untuk kotak pencarian
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
+        });
+    });
+</script>
+@endpush
 
 @push('scripts')
 
@@ -520,5 +542,6 @@
             });
         });
     </script>
-
 @endpush
+@endsection
+

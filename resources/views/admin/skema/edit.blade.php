@@ -205,4 +205,27 @@
 
         button.style.display = 'none';
     </script>
+
+    <script>
+    $(document).ready(function() {
+        // Inisialisasi Select2 untuk elemen dengan kelas .js-example-basic-single
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5"
+                // Opsi dropdownParent tidak diperlukan karena ini bukan modal
+            });
+        });
+
+        // Menambahkan placeholder untuk kotak pencarian di dalam Select2
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
+        });
+
+        // ... (kode untuk Tambah Sub-Skema dan Dropzone biarkan saja) ...
+    });
+</script>
 @endpush

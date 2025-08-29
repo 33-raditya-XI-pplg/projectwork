@@ -2,17 +2,16 @@
 @section('title', 'Kegiatan')
 @section('content')
     @push('style')
+       
+
         <style>
             .ck-editor__editable {
                 min-height: 200px;
             }
 
-            .select2-close-mask {
-                z-index: 2099 !important;
-            }
-
-            .select2-dropdown {
-                z-index: 3051 !important;
+            /* z-index disesuaikan agar Select2 tampil di atas modal */
+            .select2-container--open {
+                z-index: 9999 !important;
             }
 
             .dropzone-wrapper {
@@ -46,14 +45,16 @@
                 object-fit: contain;
                 display: block;
             }
+
+
         </style>
     @endpush
 
     <div class="bg-white rounded-4 px-3 py-3 mb-5 shadow-lg">
         <nav>
             <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all" type="button"
-                    role="tab" aria-controls="nav-home" aria-selected="true">All</button>
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-all"
+                    type="button" role="tab" aria-controls="nav-home" aria-selected="true">All</button>
                 <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-draft" type="button"
                     role="tab" aria-controls="nav-home" aria-selected="true">Draft</button>
                 <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-publish"
@@ -91,27 +92,31 @@
                                         @if ($row->status == 'Publish') bg-primary
                                         @elseif ($row->status == 'Draft') bg-secondary
                                         @elseif ($row->status == 'Berlangsung') bg-danger
-                                        @elseif ($row->status == 'Selesai') bg-success
-                                        @endif
-                                        rounded-3" disabled>{{ $row->status }}</button></td>
-                                       <td class="text-center">
-                                            {{-- Tombol Rincian --}}
-                                            <a href="{{ route('event.rincian', $row->id_event) }}"
-                                                class="btn btn-primary btn-sm rounded text-white mb-3">
-                                                <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
-                                                <span class="text-white">Rincian</span>
-                                            </a>
+                                        @elseif ($row->status == 'Selesai') bg-success @endif
+                                        rounded-3"
+                                            disabled>{{ $row->status }}</button></td>
+                                    <td class="text-center">
+                                        {{-- Tombol Rincian --}}
+                                        <a href="{{ route('event.rincian', $row->id_event) }}"
+                                            class="btn btn-primary btn-sm rounded text-white mb-3">
+                                            <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
+                                            <span class="text-white">Rincian</span>
+                                        </a>
 
-                                            {{-- Tombol Edit (modal) --}}
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
-                                                class="btn btn-info btn-sm rounded text-white mb-3">
-                                                <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
-                                                <span class="text-white">Edit</span>
-                                            </a>
+                                        {{-- Tombol Edit (modal) --}}
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                            class="btn btn-info btn-sm rounded text-white mb-3">
+                                            <i class="fa-regular fa-pen-to-square"
+                                                style="font-size: 0.75rem; color: white;"></i>
+                                            <span class="text-white">Edit</span>
+                                        </a>
 
-                                            {{-- Tombol Delete --}}
-                                            <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
-                                        </td>
+                                        {{-- Tombol Delete --}}
+                                        <a href="{{ route('event.destroy', $row->id_event) }}"
+                                            class="btn btn-danger btn-sm rounded text-white mb-3"
+                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                            Delete</a>
+                                    </td>
 
                                 </tr>
                             @endforeach
@@ -133,7 +138,7 @@
                             <th scope="col">Aksi</th>
                         </thead>
                         <tbody class="" style="vertical-align: middle">
-                            @foreach ($evt_draft as $row )
+                            @foreach ($evt_draft as $row)
                                 <tr>
                                     <td>{{ $row->nama_event }}</td>
                                     <td>{{ \App\Models\Jenis_Event::find($row->jenis_event_id)->nama_jenis_event }}</td>
@@ -141,19 +146,24 @@
                                     <td>{{ $row->tgl_berakhir }}</td>
                                     <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
                                     <td><button type="button" style="" class="badge  bg-secondary rounded-3"
-                                        disabled>Draft</button></td>
+                                            disabled>Draft</button></td>
                                     <td>
-                                                <a href="{{ route('event.rincian', $row->id_event) }}"
+                                        <a href="{{ route('event.rincian', $row->id_event) }}"
                                             class="btn btn-primary btn-sm rounded text-white mb-3">
                                             <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Rincian</span>
                                         </a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                        <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#edit{{ $row->id_event }}"
                                             class="btn btn-info btn-sm rounded text-white mb-3">
-                                            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                            <i class="fa-regular fa-pen-to-square"
+                                                style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Edit</span>
                                         </a>
-                                        <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
+                                        <a href="{{ route('event.destroy', $row->id_event) }}"
+                                            class="btn btn-danger btn-sm rounded text-white mb-3"
+                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                            Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -175,27 +185,32 @@
                             <th scope="col">Aksi</th>
                         </thead>
                         <tbody class="" style="vertical-align: middle">
-                            @foreach ($evt_pub as $row )
+                            @foreach ($evt_pub as $row)
                                 <tr>
                                     <td>{{ $row->nama_event }}</td>
                                     <td>{{ \App\Models\Jenis_Event::find($row->jenis_event_id)->nama_jenis_event }}</td>
                                     <td>{{ $row->tgl_mulai }}</td>
                                     <td>{{ $row->tgl_berakhir }}</td>
                                     <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="badge bg-primary rounded-3"
+                                    <td><button type="button" class="badge bg-primary rounded-3"
                                             disabled>Publish</button></td>
-                                        <td>
-                                                <a href="{{ route('event.rincian', $row->id_event) }}"
+                                    <td>
+                                        <a href="{{ route('event.rincian', $row->id_event) }}"
                                             class="btn btn-primary btn-sm rounded text-white mb-3">
                                             <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Rincian</span>
                                         </a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                        <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#edit{{ $row->id_event }}"
                                             class="btn btn-info btn-sm rounded text-white mb-3">
-                                            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                            <i class="fa-regular fa-pen-to-square"
+                                                style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Edit</span>
                                         </a>
-                                            <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
+                                        <a href="{{ route('event.destroy', $row->id_event) }}"
+                                            class="btn btn-danger btn-sm rounded text-white mb-3"
+                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                            Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -217,27 +232,32 @@
                             <th scope="col">Aksi</th>
                         </thead>
                         <tbody class="" style="vertical-align: middle">
-                            @foreach ($evt_live as $row )
+                            @foreach ($evt_live as $row)
                                 <tr>
                                     <td>{{ $row->nama_event }}</td>
                                     <td>{{ \App\Models\Jenis_Event::find($row->jenis_event_id)->nama_jenis_event }}</td>
                                     <td>{{ $row->tgl_mulai }}</td>
                                     <td>{{ $row->tgl_berakhir }}</td>
                                     <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="badge bg-danger rounded-3"
+                                    <td><button type="button" class="badge bg-danger rounded-3"
                                             disabled>Berlangsung</button></td>
                                     <td>
-                                                <a href="{{ route('event.rincian', $row->id_event) }}"
+                                        <a href="{{ route('event.rincian', $row->id_event) }}"
                                             class="btn btn-primary btn-sm rounded text-white mb-3">
                                             <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Rincian</span>
                                         </a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                        <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#edit{{ $row->id_event }}"
                                             class="btn btn-info btn-sm rounded text-white mb-3">
-                                            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                            <i class="fa-regular fa-pen-to-square"
+                                                style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Edit</span>
                                         </a>
-                                            <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
+                                        <a href="{{ route('event.destroy', $row->id_event) }}"
+                                            class="btn btn-danger btn-sm rounded text-white mb-3"
+                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                            Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -259,27 +279,32 @@
                             <th scope="col">Aksi</th>
                         </thead>
                         <tbody class="" style="vertical-align: middle">
-                            @foreach ($evt_end as $row )
+                            @foreach ($evt_end as $row)
                                 <tr>
                                     <td>{{ $row->nama_event }}</td>
                                     <td>{{ \App\Models\Jenis_Event::find($row->jenis_event_id)->nama_jenis_event }}</td>
                                     <td>{{ $row->tgl_mulai }}</td>
                                     <td>{{ $row->tgl_berakhir }}</td>
                                     <td>{{ \App\Models\Instansi::find($row->instansi_id)->nama_instansi }}</td>
-                                        <td><button type="button" class="badge bg-success rounded-3"
+                                    <td><button type="button" class="badge bg-success rounded-3"
                                             disabled>Selesai</button></td>
                                     <td>
-                                                <a href="{{ route('event.rincian', $row->id_event) }}"
+                                        <a href="{{ route('event.rincian', $row->id_event) }}"
                                             class="btn btn-primary btn-sm rounded text-white mb-3">
                                             <i class="fa-solid fa-code" style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Rincian</span>
                                         </a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
+                                        <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#edit{{ $row->id_event }}"
                                             class="btn btn-info btn-sm rounded text-white mb-3">
-                                            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                            <i class="fa-regular fa-pen-to-square"
+                                                style="font-size: 0.75rem; color: white;"></i>
                                             <span class="text-white">Edit</span>
                                         </a>
-                                            <a href="{{ route('event.destroy', $row->id_event) }}" class="btn btn-danger btn-sm rounded text-white mb-3" data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i> Delete</a>
+                                        <a href="{{ route('event.destroy', $row->id_event) }}"
+                                            class="btn btn-danger btn-sm rounded text-white mb-3"
+                                            data-confirm-delete="true"><i class="fa-regular fa-trash-can pe-none"></i>
+                                            Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -295,7 +320,6 @@
     </div>
 
 
-    <!-- insert -->
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="add" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -311,12 +335,11 @@
                         {{-- form --}}
                         <div class="container">
                             <div class="row">
-                           <!-- Modal Create - Bagian Page Select (untuk form tambah) -->
                                 <div class="mb-3">
                                     <label for="page_id" class="form-label">Page Id</label>
                                     <select class="form-select js-example-basic-single" name="page_id"
                                         aria-label="Default select example" data-placeholder="Pilih Page id" required>
-                                        <option selected></option>
+                                        <option></option> {{-- Option kosong untuk placeholder --}}
                                         @foreach ($page as $row)
                                             <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                                         @endforeach
@@ -342,7 +365,7 @@
                                         <select class="form-select js-example-basic-single" name="jenis_event_id"
                                             aria-label="Default select example" data-placeholder="Pilih Jenis event"
                                             required>
-                                            <option selected></option>
+                                            <option></option> {{-- Option kosong untuk placeholder --}}
                                             @foreach ($jenisEvt as $row)
                                                 <option value="{{ $row->id_jenis_event }}">{{ $row->nama_jenis_event }}
                                                 </option>
@@ -353,7 +376,7 @@
                                         <label for="tempat_id" class="form-label">Tempat</label>
                                         <select class="form-select js-example-basic-single" name="tempat_id"
                                             aria-label="Default select example" data-placeholder="Pilih Kota" required>
-                                            <option selected></option>
+                                            <option></option> {{-- Option kosong untuk placeholder --}}
                                             @foreach ($tempat as $row)
                                                 <option value="{{ $row->id_tempat }}">{{ $row->nama_tempat }}</option>
                                             @endforeach
@@ -367,7 +390,7 @@
                                         <select class="form-select js-example-basic-single" name="instansi_id"
                                             aria-label="Default select example" data-placeholder="Pilih Instansi"
                                             required>
-                                            <option disabled selected></option>
+                                            <option></option> {{-- Option kosong untuk placeholder --}}
                                             @foreach ($instansi as $row)
                                                 <option value="{{ $row->id_instansi }}">{{ $row->nama_instansi }}
                                                 </option>
@@ -393,8 +416,8 @@
                                         <select class="form-select text-capitalize js-example-basic-single"
                                             name="visibilitas" aria-label="Default select example"
                                             data-placeholder="Pilih Visibilitas" required>
-                                            <option class="text-capitalize" selected>publik</option>
-                                            <option class="text-capitalize">privat</option>
+                                            <option value="publik" selected>Publik</option>
+                                            <option value="privat">Privat</option>
                                         </select>
                                     </div>
                                 </div>
@@ -525,7 +548,8 @@
                                         <div class="mb-3">
                                             <label for="instansi_id" class="form-label">Nama Instansi</label>
                                             <select class="form-select js-example-basic-single" name="instansi_id"
-                                                aria-label="Default select example" data-placeholder="" required>
+                                                aria-label="Default select example" data-placeholder="Pilih Instansi"
+                                                required>
                                                 @foreach ($instansi as $list)
                                                     <option value="{{ $list->id_instansi }}"
                                                         {{ $list->id_instansi == $row->instansi_id ? 'selected' : '' }}>
@@ -553,9 +577,9 @@
                                             <select class="form-select text-capitalize js-example-basic-single"
                                                 name="visibilitas" aria-label="Default select example"
                                                 data-placeholder="Pilih Visibilitas" required>
-                                                <option class="text-capitalize"
-                                                    {{ $row->visibilitas == 'publish' ? 'selected' : '' }}>publik</option>
-                                                <option class="text-capitalize"
+                                                <option class="text-capitalize" value="publik"
+                                                    {{ $row->visibilitas == 'publik' ? 'selected' : '' }}>publik</option>
+                                                <option class="text-capitalize" value="privat"
                                                     {{ $row->visibilitas == 'privat' ? 'selected' : '' }}>privat</option>
                                             </select>
                                         </div>
@@ -624,22 +648,59 @@
             </div>
         </div>
     @endforeach
-    <!-- Include JS Select2 -->
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
 
-    {{-- <script>
-  $(document).ready(function() {
-        $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder');
+    {{-- [START] Penambahan Script untuk Select2 --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-            $(this).select2({
-                placeholder: placeholder,
-                allowClear: true,
-                minimumResultsForSearch: Infinity
+    <script>
+        $(document).ready(function() {
+    const initSelect2 = (modalElement) => {
+        $(modalElement).find('.js-example-basic-single').each(function() {
+            var $this = $(this);
+            var placeholderText = $this.data('placeholder') || 'Pilih salah satu';
+            var searchPlaceholder = 'Cari ' + placeholderText.replace('Pilih ', '') + '...';
+
+            $this.select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $(modalElement)
+            });
+
+            // Saat dropdown dibuka...
+            $this.on('select2:open', function() {
+                
+                // --- [BAGIAN BARU - FIX ALTERNATIF DENGAN JS] ---
+                // Cari panel dropdown yang sedang terbuka
+                const dropdown = document.querySelector('.select2-dropdown');
+                
+                // Jika panelnya memiliki class untuk tampil di atas, kita paksa hapus
+                // dan ganti dengan class untuk tampil di bawah.
+                if (dropdown && dropdown.classList.contains('select2-dropdown--above')) {
+                    dropdown.classList.remove('select2-dropdown--above');
+                    dropdown.classList.add('select2-dropdown--below');
+                }
+                // --- [AKHIR BAGIAN BARU] ---
+                
+                // Atur placeholder (kode yang sudah ada sebelumnya)
+                setTimeout(function() {
+                    document.querySelector('.select2-search__field').setAttribute('placeholder', searchPlaceholder);
+                }, 50);
             });
         });
+    };
+
+    $('#add').on('shown.bs.modal', function () {
+        initSelect2(this);
     });
-    </script> --}}
+
+    $('div[id^="edit"]').on('shown.bs.modal', function () {
+        initSelect2(this);
+    });
+});
+    </script>
+    {{-- [END] Penambahan Script untuk Select2 --}}
+
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const statusCheckbox = document.getElementById('status');
@@ -737,8 +798,8 @@
     </script>
 
     <script src="
-        https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js
-        "></script>
+            https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js
+            "></script>
     <script>
         var cleave = document.getElementsByClassName('currency');
         for (let index = 0; index < cleave.length; index++) {

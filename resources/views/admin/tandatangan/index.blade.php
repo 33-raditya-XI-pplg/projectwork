@@ -411,5 +411,36 @@
         });
     });
 </script>
-
 @endsection
+@push('script')
+<script>
+    $(document).ready(function() {
+        // Inisialisasi Select2 untuk semua elemen dengan kelas .js-example-basic-single
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal'); // Menemukan modal terdekat
+
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal // Wajib ada karena form berada di dalam modal
+            });
+        });
+
+        // Menambahkan placeholder dinamis untuk kotak pencarian
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name'); // Mendapatkan nama elemen select
+            var placeholderText = 'Cari...'; // Teks default
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            } else if (name === 'instansi_id') {
+                placeholderText = 'Cari Instansi...';
+            }
+
+            document.querySelector('.select2-search__field').placeholder = placeholderText;
+        });
+    });
+</script>
+@endpush

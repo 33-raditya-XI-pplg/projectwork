@@ -538,3 +538,37 @@ document.querySelectorAll('[id^="logo_"]').forEach(input => {
 @endif
 
 @endsection
+@push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] untuk memastikan placeholder tampil di modal Tambah
+        const addPageSelect = $('#add select[name="page_id"]');
+        if (addPageSelect.length) {
+            // Menambahkan option kosong di awal jika belum ada
+            if (addPageSelect.find('option[value=""]').length === 0) {
+                 addPageSelect.prepend('<option value=""></option>');
+            }
+            // Mengosongkan pilihan awal agar placeholder bisa muncul
+            addPageSelect.val('').trigger('change');
+        }
+
+        // Inisialisasi Select2 untuk semua elemen dengan kelas .js-example-basic-single
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            });
+        });
+
+        // Mengatur placeholder untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
+        });
+    });
+</script>
+@endpush

@@ -612,4 +612,59 @@
         });
     }
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Menargetkan semua dropdown di modal Tambah, baik yang punya kelas khusus maupun tidak
+        const addModalSelects = $('#add .js-example-basic-single, #add select[name="rating"]');
+
+        // [Workaround] Perbaikan HTML untuk placeholder
+        addModalSelects.each(function() {
+            $(this).find('option[disabled][selected]').remove();
+            if ($(this).find('option[value=""]').length === 0) {
+                 $(this).prepend('<option value=""></option>');
+            }
+            $(this).val('').trigger('change');
+        });
+        
+        // Inisialisasi Select2 untuk semua elemen yang kita targetkan
+        addModalSelects.each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+            var selectName = $(this).attr('name');
+
+            var selectOptions = {
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            };
+
+            // Menyembunyikan kotak pencarian untuk dropdown 'rating'
+            if (selectName === 'rating') {
+                selectOptions.minimumResultsForSearch = Infinity;
+            }
+
+            $(this).select2(selectOptions);
+        });
+
+        // Mengatur placeholder dinamis untuk KOTAK PENCARIAN
+        addModalSelects.on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...';
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            }
+            
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = placeholderText;
+            }
+        });
+        
+        // Note: Skrip untuk Edit modal tidak diperlukan karena field-nya disabled (read-only)
+    });
+</script>
 @endpush
+

@@ -554,4 +554,58 @@
 
     @endpush
 
+    @push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] Perbaikan HTML untuk placeholder di modal Tambah
+        const addModalSelects = $('#add select.js-example-basic-single');
+        addModalSelects.each(function() {
+            // Hapus opsi default yang bermasalah ([disabled][selected] atau value="")
+            $(this).find('option[value=""]').remove();
+            
+            // Tambahkan opsi kosong yang bersih di awal
+            $(this).prepend('<option value=""></option>');
+
+            // Atur nilainya menjadi kosong agar placeholder muncul
+            $(this).val('').trigger('change');
+        });
+
+        // Inisialisasi Select2 untuk semua elemen
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+            var selectName = $(this).attr('name');
+
+            var selectOptions = {
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal
+            };
+
+            // Menyembunyikan kotak pencarian untuk dropdown 'kategori'
+            if (selectName === 'kategori') {
+                selectOptions.minimumResultsForSearch = Infinity;
+            }
+
+            $(this).select2(selectOptions);
+        });
+
+        // Mengatur placeholder dinamis untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...'; // Default
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            }
+            
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = placeholderText;
+            }
+        });
+    });
+</script>
+@endpush
 @endsection

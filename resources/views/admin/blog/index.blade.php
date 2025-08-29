@@ -497,4 +497,56 @@
 </script>
 @endif
 
+@push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] Perbaikan HTML untuk placeholder di modal Tambah Blog
+        // HTML asli Anda menggunakan <option disabled selected> yang bermasalah dengan placeholder Select2.
+        // Kode ini memperbaikinya secara dinamis tanpa mengubah file Blade.
+        // =================================================================
+        const addModalSelects = $('#add select.js-example-basic-single');
+        addModalSelects.each(function() {
+            // Hapus opsi default yang bermasalah
+            $(this).find('option[disabled][selected]').remove();
+            
+            // Tambahkan opsi kosong yang bersih di awal (jika belum ada)
+            if ($(this).find('option[value=""]').length === 0) {
+                 $(this).prepend('<option value=""></option>');
+            }
+
+            // Atur nilainya menjadi kosong agar placeholder bisa muncul
+            $(this).val('').trigger('change');
+        });
+        // =================================================================
+
+        // Inisialisasi Select2 untuk semua elemen (di modal Tambah dan Edit)
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            });
+        });
+
+        // Mengatur placeholder dinamis untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...'; // Teks default
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            } else if (name === 'kategori_id') {
+                placeholderText = 'Cari Kategori...';
+            }
+            
+            document.querySelector('.select2-search__field').placeholder = placeholderText;
+        });
+    });
+</script>
+@endpush
+
 @endsection

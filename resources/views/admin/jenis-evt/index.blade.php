@@ -183,25 +183,28 @@
             </div>
         </div>
         @endforeach
-
-<!-- Include CSS Select2 -->
-{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-
-<!-- Include JS Select2 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+@endsection
+@push('script')
     <script>
-    $(document).ready(function() {
-        $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder');
+        $(document).ready(function() {
+            // Inisialisasi Select2 untuk semua elemen dengan kelas .js-example-basic-single
+            $('.js-example-basic-single').each(function() {
+                var placeholder = $(this).data('placeholder');
+                var parentModal = $(this).closest('.modal'); // Menemukan modal terdekat
 
-            $(this).select2({
-                placeholder: placeholder,
-                allowClear: true,
-                minimumResultsForSearch: Infinity
+                $(this).select2({
+                    placeholder: placeholder,
+                    allowClear: true,
+                    theme: "bootstrap-5",
+                    dropdownParent: parentModal 
+                });
+            });
+
+            // ===== TAMBAHAN: Mengatur placeholder untuk KOTAK PENCARIAN =====
+            $('.js-example-basic-single').on('select2:open', function(e) {
+                // Saat dropdown Select2 dibuka, cari input pencariannya dan beri placeholder
+                document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
             });
         });
-    });
-    </script> --}}
-
-@endsection
+    </script>
+@endpush

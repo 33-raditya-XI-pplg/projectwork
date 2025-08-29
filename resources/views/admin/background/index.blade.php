@@ -324,3 +324,65 @@
   });
   </script>
 @endsection('content')
+@push('script')
+<script>
+    $(document).ready(function() {
+        // =====================================================================
+        // [WORKAROUND] Memaksa Placeholder untuk Dropdown Orientation di Modal Tambah
+        // =====================================================================
+        // 1. Kita cari dropdown 'orientasi_bg' HANYA di dalam modal 'Tambah' (id="add")
+        var orientationSelect = $('#add select[name="orientasi_bg"]');
+
+        // 2. Jika ditemukan, kita tambahkan <option> kosong di paling atas
+        if (orientationSelect.length) {
+            orientationSelect.prepend('<option></option>');
+
+            // 3. Lalu kita kosongkan nilainya agar tidak ada yang terpilih secara default
+            orientationSelect.val('');
+        }
+        // =====================================================================
+
+
+        // Inisialisasi Select2 untuk SEMUA dropdown (logika ini tetap sama)
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+            var selectName = $(this).attr('name');
+
+            // Memberi placeholder default jika tidak ada di HTML
+            if (selectName === 'orientasi_bg' && !placeholder) {
+                placeholder = 'Pilih Orientasi';
+            }
+
+            var selectOptions = {
+                placeholder: placeholder,
+                allowClear: !!placeholder,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal
+            };
+
+            // Menyembunyikan kotak pencarian untuk dropdown 'orientasi_bg'
+            if (selectName === 'orientasi_bg') {
+                selectOptions.minimumResultsForSearch = Infinity;
+            }
+
+            $(this).select2(selectOptions);
+        });
+
+        // Menambahkan placeholder dinamis untuk kotak pencarian
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...';
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            }
+            
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                 searchField.placeholder = placeholderText;
+            }
+        });
+    });
+</script>
+@endpush

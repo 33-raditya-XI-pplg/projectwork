@@ -36,7 +36,6 @@
         @include('layouts.home.footer')
 
         <div id="language_translator_globe"></div>
-
     </div>
     
 <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
