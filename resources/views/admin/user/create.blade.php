@@ -110,9 +110,9 @@
                         <label for="alamat_kota" class="form-label">Kota</label>
                         <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota" data-placeholder="Pilih Kota" required>
                             <option disabled selected></option> 
-                            @foreach ($regencies as $id => $name)
+                            {{-- @foreach ($regencies as $id => $name)
                             <option value="{{ $name }}" {{ (old('alamat_kota', isset($pengguna) ? $pengguna->alamat_kota : '') == $name) ? 'selected' : '' }}>{{ $name }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                         @error('alamat_kota')
                         <div class="text-danger">{{ $message }}</div>
@@ -198,9 +198,9 @@
                         <label for="alamat_kota_perusahaan" class="form-label">Kota</label>
                         <select class="form-select js-example-basic-single" name="alamat_kota_perusahaan" id="alamat_kota_perusahaan" data-placeholder="Pilih Kota Perusahaan" >
                             <option disabled selected></option> 
-                            @foreach ($regencies as $id => $name)
+                            {{-- @foreach ($regencies as $id => $name)
                             <option value="{{ $name }}" {{old('alamat_kota_perusahaan', (isset($pengguna) ? $pengguna->alamat_kota_perusahaan : '') == $id) ? 'selected' : '' }}>{{ $name }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                         @error('alamat_kota_perusahaan')
                         <div class="text-danger">{{ $message }}</div>
@@ -263,6 +263,40 @@
 </div>
 
 @endsection
+@push('script')
+<script>
+    $(document).ready(function() {
+        // Inisialisasi Select2 untuk semua elemen dengan kelas .js-example-basic-single
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5"
+                // Opsi dropdownParent tidak diperlukan karena ini bukan modal
+            });
+        });
+
+        // Mengatur placeholder dinamis untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...'; // Default
+
+            if (name === 'instansi_id') {
+                placeholderText = 'Cari Instansi...';
+            } else if (name === 'alamat_kota' || name === 'alamat_kota_perusahaan') {
+                placeholderText = 'Cari Kota...';
+            }
+            
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = placeholderText;
+            }
+        });
+    });
+</script>
+@endpush
 
 @push('script')
     {{-- <script>

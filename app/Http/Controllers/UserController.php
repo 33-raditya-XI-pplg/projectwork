@@ -35,10 +35,10 @@ class UserController extends Controller
     public function create(User $user)
     {
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
-        $regencies = DB::table('regencies')->pluck('name', 'id');
+        // $regencies = DB::table('regencies')->pluck('name', 'id');
         $Title = 'Master Data';
         $subtitle = 'Pengguna create';
-        return view('admin.user.create', compact('user', 'institutions', 'regencies', 'Title', 'subtitle'));
+        return view('admin.user.create', compact('user', 'institutions', /*'regencies',*/ 'Title', 'subtitle'));
     }
 
     public function store(Request $request)

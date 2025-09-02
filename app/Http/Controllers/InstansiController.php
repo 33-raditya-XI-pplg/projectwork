@@ -17,9 +17,9 @@ class InstansiController extends Controller
       $page = Page::all();
       $Title = 'Master Data';
       $subtitle = 'Instansi';
-      $regencies = DB::table('regencies')->pluck('name', 'id');
+      // $regencies = DB::table('regencies')->pluck('name', 'id');
       confirmDelete('Hapus Instansi', 'Apakah kamu yakin untuk mengapus instansi?');
-      return view('admin.instansi.index', compact('instansi', 'page', 'regencies', 'Title', 'subtitle'));
+      return view('admin.instansi.index', compact('instansi', 'page', /*'regencies',*/ 'Title', 'subtitle'));
    }
 
    public function store(Request $request)

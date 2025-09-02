@@ -16,11 +16,11 @@ class TempatController extends Controller
    {
       $tempat = Tempat::get();
       $page = Page::all();
-      $regencies = DB::table('regencies')->pluck('name', 'id');
+      // $regencies = DB::table('regencies')->pluck('name', 'id');
       $Title = 'Master Data';
       $subtitle = 'Tempat';
       confirmDelete('Hapus Tempat', 'Apakah kamu yakin untuk mengapus tempat?');
-      return view('admin.tempat.index', compact('tempat', 'page', 'regencies', 'Title', 'subtitle'));
+      return view('admin.tempat.index', compact('tempat', 'page', /*'regencies',*/ 'Title', 'subtitle'));
    }
 
    public function store(Request $request)

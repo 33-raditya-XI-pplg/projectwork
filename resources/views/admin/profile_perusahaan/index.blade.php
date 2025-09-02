@@ -185,15 +185,19 @@
                     @csrf
                     <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
-                    <div class="mb-3">
-                        <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                        <select class="form-select js-example-basic-single" name="page_id" aria-label="Default select example" data-placeholder="Pilih Page" required>
-                            <option value=""></option>
-                            @foreach ($page as $row)
-                            <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                  <div class="mb-3">
+    <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
+    <select id="page_id" 
+            class="form-select js-example-basic-single" 
+            name="page_id" 
+            data-placeholder="Pilih Page" 
+            required>
+        <option value=""></option>
+        @foreach ($page as $row)
+            <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
+        @endforeach
+    </select>
+</div>
 
                     <div class="mb-3">
                         <label for="tentang_kami" class="form-label">Tentang Kami <span class="text-danger">*</span></label>
@@ -424,25 +428,28 @@
 </script>
 @push('script')
 <script>
-    $(document).ready(function() {
-        // Inisialisasi Select2 untuk semua elemen dengan kelas .js-example-basic-single
-        $('.js-example-basic-single').each(function() {
-            var placeholder = $(this).data('placeholder');
-            var parentModal = $(this).closest('.modal');
+$(document).ready(function () {
+    // Inisialisasi Select2 hanya untuk select yang ada di dalam modal
+    $('.modal').each(function () {
+        const modal = $(this);
 
+        modal.find('.js-example-basic-single').each(function () {
             $(this).select2({
-                placeholder: placeholder,
+                theme: 'bootstrap-5',
+                dropdownParent: modal, // biar dropdown nempel ke modal
+                placeholder: $(this).data('placeholder') || 'Pilih Page',
                 allowClear: true,
-                theme: "bootstrap-5",
-                dropdownParent: parentModal
+                 width: '100%',
+                  dropdownParent: $('#yourModalId')
             });
         });
-
-        // Menambahkan placeholder untuk kotak pencarian
-        $('.js-example-basic-single').on('select2:open', function(e) {
-            document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
-        });
     });
+
+    // Tambahkan placeholder di search box Select2
+    $(document).on('select2:open', function () {
+        document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
+    });
+});
 </script>
 @endpush
 

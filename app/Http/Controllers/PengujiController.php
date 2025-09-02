@@ -34,14 +34,14 @@ class PengujiController extends Controller
         $page = Page::where('status', 1)->get();
         $allPages = Page::where('status', 1)->get();
         $institutions = DB::table('tb_instansi')->pluck('nama_instansi', 'id_instansi');
-        $regencies = DB::table('regencies')->pluck('name', 'id');
+        // $regencies = DB::table('regencies')->pluck('name', 'id');
         $isProfileComplete = !empty($user->nama_lengkap) && !empty($user->alamat) && !empty($user->jenis_kelamin)
             && !empty($user->tgl_lahir) && !empty($user->tempat_lahir) && !empty($user->nomor_induk) && !empty($user->nomor_induk)
             && !empty($user->alamat_kota) && !empty($user->penguji) && !empty($user->type_penguji);
         $Title = 'Master Data';
         $subtitle = 'Mentor';
         confirmDelete('Hapus Penguji', 'Apakah kamu yakin untuk menghapus?');
-        return view('admin.penguji.index', compact('penguji', 'page', 'institutions', 'regencies', 'Title', 'subtitle'));
+        return view('admin.penguji.index', compact('penguji', 'page', 'institutions',/*'regencies',*/  'Title', 'subtitle'));
     }
 
     public function store(Request $request)

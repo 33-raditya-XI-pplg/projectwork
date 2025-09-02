@@ -223,9 +223,9 @@
                                     <label for="alamat_kota" class="form-label">Kota</label>
                                     <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota" data-placeholder="Pilih Kota" required>
                                         <option value="" disabled selected></option>
-                                        @foreach ($regencies as $id => $name)
+                                        {{-- @foreach ($regencies as $id => $name)
                                         <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
-                                        @endforeach
+                                        @endforeach --}}
                                     </select>
                                     @error('alamat_kota')
                                         <div class="text-danger">{{ $message }}</div>
@@ -364,9 +364,9 @@
                                                     <label for="alamat_kota_{{ $row->id_user }}" class="form-label">Kota</label>
                                                     <select class="form-select js-example-basic-single" name="alamat_kota" id="alamat_kota_{{ $row->id_user }}" data-placeholder="Pilih Kota" required>
                                                         <option value="" disabled selected></option>
-                                                        @foreach ($regencies as $id => $name)
+                                                        {{-- @foreach ($regencies as $id => $name)
                                                             <option value="{{ $name }}" {{ old('alamat_kota', $row->alamat_kota) == $name ? 'selected' : '' }}>{{ $name }}</option>
-                                                        @endforeach
+                                                        @endforeach --}}
                                                     </select>
                                                     @error('alamat_kota')
                                                         <div class="text-danger">{{ $message }}</div>
@@ -408,7 +408,58 @@
             </div>
         </div>
     @endforeach
+@push('script')
+<script>
+    $(document).ready(function() {
+        // [Workaround] Perbaikan HTML untuk placeholder di modal Tambah
+        const addModalSelects = $('#add select.js-example-basic-single');
+        addModalSelects.each(function() {
+            // Hapus opsi default yang bermasalah ([disabled][selected])
+            $(this).find('option[disabled][selected]').remove();
+            
+            // Tambahkan opsi kosong yang bersih di awal (jika belum ada)
+            if ($(this).find('option[value=""]').length === 0) {
+                 $(this).prepend('<option value=""></option>');
+            }
 
+            // Atur nilainya menjadi kosong agar placeholder muncul
+            $(this).val('').trigger('change');
+        });
+        
+        // Inisialisasi Select2 untuk semua elemen
+        $('.js-example-basic-single').each(function() {
+            var placeholder = $(this).data('placeholder');
+            var parentModal = $(this).closest('.modal');
+
+            $(this).select2({
+                placeholder: placeholder,
+                allowClear: true,
+                theme: "bootstrap-5",
+                dropdownParent: parentModal 
+            });
+        });
+
+        // Mengatur placeholder dinamis untuk KOTAK PENCARIAN
+        $('.js-example-basic-single').on('select2:open', function(e) {
+            var name = $(this).attr('name');
+            var placeholderText = 'Cari...'; // Default
+
+            if (name === 'page_id') {
+                placeholderText = 'Cari Page...';
+            } else if (name === 'instansi_id') {
+                placeholderText = 'Cari Instansi...';
+            } else if (name === 'alamat_kota') {
+                placeholderText = 'Cari Kota...';
+            }
+            
+            var searchField = document.querySelector('.select2-search__field');
+            if (searchField) {
+                searchField.placeholder = placeholderText;
+            }
+        });
+    });
+</script>
+@endpush
 
 
 <!-- Include JS Select2 -->
