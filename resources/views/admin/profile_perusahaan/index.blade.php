@@ -4,6 +4,9 @@
 
     @push('style')
         <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-5-theme/1.5.2/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
         <style>
             .dropzone-wrapper {
                 display: flex;
@@ -96,6 +99,23 @@
                 color: #555;
             }
 
+            /* Ensure Select2 full width and bootstrap-5 appearance */
+            .select2-container {
+                width: 100% !important;
+            }
+            .select2-container--bootstrap-5 .select2-selection--single {
+                height: calc(1.5em + 0.75rem + 2px) !important;
+                padding: .375rem .75rem !important;
+                border-radius: .375rem !important;
+                border: 1px solid #ced4da !important;
+            }
+            .select2-selection__rendered {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.5;
+            }
+
             .select2-close-mask {
                 z-index: 2099 !important;
             }
@@ -116,10 +136,6 @@
                                 <tr>
                                     <th>No</th>
                                     <th scope="col">Page Id</th>
-                                    {{-- <th scope="col">Tentang Kami</th> --}}
-                                    <!--<th scope="col">Visi</th>
-                                    <th scope="col">Misi</th>
-                                    <th scope="col">Sejarah</th> -->
                                     <th scope="col">Status</th>
                                     <th scope="col">Actions</th>
                                 </tr>
@@ -129,10 +145,6 @@
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ \App\Models\Page::find($row->page_id)->nama_page ?? 'N/A' }}</td>
-                                        {{-- <td>{!! strip_tags($row->tentang_kami, '<br><strong><em>') !!}</td> --}}
-                                        <!-- <td>{!! strip_tags($row->visi, '<br><strong><em>') !!}</td>
-                                        <td>{!! strip_tags($row->misi, '<br><strong><em>') !!}</td>
-                                        <td>{!! strip_tags($row->sejarah, '<br><strong><em>') !!}</td> -->
                                         <td>
                                             <button type="button"
                                                 class="badge rounded-3
@@ -186,7 +198,7 @@
 
     <!-- Modal HTML for Adding Profile -->
     <div class="modal modal-lg fade" id="add" tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
                 <div class="modal-header bg-primary-gradient text-white">
                     <h5 class="modal-title" id="addLabel">Tambah Profil</h5>
@@ -194,15 +206,16 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('profil.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('profil.store') }}" method="POST" enctype="multipart/form-data" id="profilForm">
                         @csrf
                         <input type="hidden" name="created_by" value="{{ Auth::user()->id_user }}">
 
-                        <div class="mb-3">
+                        <div class="mb-3 ">
                             <label for="page_id" class="form-label">Page ID <span class="text-danger">*</span></label>
-                            <select class="form-select js-example-basic-single" name="page_id" data-placeholder="Pilih Page"
+                            <!-- Placeholder option supaya placeholder terlihat -->
+                            <select id="page_id" class="form-select js-example-basic-single" name="page_id" data-placeholder="Pilih Page"
                                 required>
-                                <option value=""></option>
+                                <option value="" disabled selected hidden>Pilih Page</option>
                                 @foreach ($page as $row)
                                     <option value="{{ $row->id_page }}">{{ $row->nama_page }}</option>
                                 @endforeach
@@ -223,7 +236,7 @@
                                     <i class="glyphicon glyphicon-download-alt"></i>
                                     <p>Pilih gambar atau seret ke sini .</p>
                                 </div>
-                                <input type="file" name="path_struktur_organisasi" class="dropzone" accept="image/*"
+                                <input type="file" name="path_struktur_organisasi" id="path_struktur_organisasi_create" class="dropzone" accept="image/*"
                                     required>
                                 <div id="image_preview_" class="mt-3">
                                     <img id="preview_image_create" src="" alt="Image preview"
@@ -292,9 +305,9 @@
                             <div class="mb-3">
                                 <label for="page_id" class="form-label">Page ID <span
                                         class="text-danger">*</span></label>
-                                <select class="form-select js-example-basic-single" name="page_id"
+                                <select id="edit_page_id_{{ $row->id_profil_perusahaan }}" class="form-select js-example-basic-single" name="page_id"
                                     aria-label="Default select example" data-placeholder="Pilih Page" required>
-                                    <option value=""></option>
+                                    <option value="" disabled hidden>Pilih Page</option>
                                     @foreach ($page as $pageOption)
                                         <option value="{{ $pageOption->id_page }}"
                                             {{ $row->page_id == $pageOption->id_page ? 'selected' : '' }}>
@@ -380,207 +393,101 @@
     @endforeach
 
 
+@push('script')
+    <!-- jQuery & Select2 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi preview image
-            const inputFile = document.querySelector('input[name="path_struktur_organisasi"]');
-            const preview = document.getElementById('preview_image_create');
 
 
-            if (preview) {
-                preview.style.display = 'none';
 
-                inputFile.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    const reader = new FileReader();
+    $(document).ready(function() {
+        // =======================
+        // INIT SELECT2 (only once)
+        // =======================
+        $('.js-example-basic-single').each(function() {
+            var $el = $(this);
+            var placeholder = $el.data('placeholder') || 'Pilih Page';
+            var $parentModal = $el.closest('.modal');
+            var dropdownParent = $parentModal.length ? $parentModal : $(document.body);
 
-                    reader.onload = function(e) {
-                        if (preview) { // Cek apakah preview tidak null
-                            preview.src = e.target.result;
-                            preview.style.display = 'block';
-                        } else {
-                            console.error('Preview element not found');
-                        }
-                    }
-
-                    if (file) {
-                        reader.readAsDataURL(file);
-                    } else {
-                        if (preview) {
-                            preview.src = '';
-                            preview.style.display = 'none';
-                        }
-                    }
-                });
-            } else {
-                console.error('Preview image element not found');
-            }
-
-
-            // Inisialisasi Dropzone
-            Dropzone.autoDiscover = false;
-            var myDropzone = new Dropzone(".dropzone-wrapper", {
-                url: "/profil", // URL server untuk unggahan
-                maxFilesize: 2,
-                acceptedFiles: "image/*",
-                init: function() {
-                    this.on("success", function(file, response) {
-                        // Tangani response sukses
-                        console.log("Upload successful");
-                    });
-                    this.on("error", function(file, response) {
-                        const errorElement = document.getElementById('image_error');
-                        if (errorElement) {
-                            errorElement.innerHTML = response.message || 'Upload failed';
-                        }
-                    });
+            $el.select2({
+                theme: "bootstrap-5",  // pake tema bootstrap
+                placeholder: placeholder,
+                allowClear: true,
+                width: '100%',
+                dropdownParent: dropdownParent,
+                minimumResultsForSearch: 0,
+                language: {
+                    noResults: function() { return 'Tidak ditemukan'; },
+                    searching: function() { return 'Mencari...'; }
                 }
             });
+
+            $el.on('select2:open', function() {
+                if ($parentModal.length) $parentModal.removeAttr('tabindex');
+                var $container = $('.select2-container--open');
+                $container.find('.select2-search__field').attr('placeholder', 'Cari Page...').focus();
+            });
+
+            $el.on('select2:close', function() {
+                if ($parentModal.length) $parentModal.attr('tabindex', '-1');
+            });
         });
-    </script>
 
-    <script>
-        document.querySelectorAll('[id^="path_struktur_organisasi"]').forEach(input => {
-            input.addEventListener('change', function(event) {
-                const id = this.id.split('_')[3];
-                const preview = document.getElementById(`preview_image_edit_${id}`);
-                const file = event.target.files[0];
-
+        // =======================
+        // IMAGE PREVIEW (CREATE)
+        // =======================
+        const inputFileCreate = document.querySelector('input#path_struktur_organisasi_create');
+        const previewCreate = document.getElementById('preview_image_create');
+        if (inputFileCreate && previewCreate) {
+            previewCreate.style.display = 'none';
+            inputFileCreate.addEventListener('change', function(e) {
+                const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
+                    reader.onload = function(ev) {
+                        previewCreate.src = ev.target.result;
+                        previewCreate.style.display = 'block';
                     }
                     reader.readAsDataURL(file);
                 } else {
-                    preview.src = '{{ asset($row->path_struktur_organisasi) }}';
-                    preview.style.display = 'block';
+                    previewCreate.src = '';
+                    previewCreate.style.display = 'none';
+                }
+            });
+        }
+
+        // =======================
+        // IMAGE PREVIEW (EDIT)
+        // =======================
+        document.querySelectorAll('[id^="path_struktur_organisasi_"]').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const parts = this.id.split('_');
+                const id = parts[3] || parts[parts.length - 1];
+                const preview = document.getElementById(`preview_image_edit_${id}`);
+                const file = e.target.files[0];
+                if (!preview) return;
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        preview.src = ev.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
                 }
             });
         });
+    });
     </script>
-    @push('script')
-        <script>
-            $(document).ready(function() {
-                // Inisialisasi Select2 hanya untuk select yang ada di dalam modal
-                $('.modal').each(function() {
-                    const modal = $(this);
 
-                    modal.find('.js-example-basic-single').each(function() {
-                        $(this).select2({
-                            theme: 'bootstrap-5',
-                            dropdownParent: modal,
-                            placeholder: $(this).data('placeholder') || 'Pilih Page',
-                            allowClear: true,
-                            width: '100%'
-                        });
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@endpush
 
-                    });
-                });
-
-                // Tambahkan placeholder di search box Select2
-                $(document).on('select2:open', function() {
-                    document.querySelector('.select2-search__field').placeholder = 'Cari Page...';
-                });
-            });
-        </script>
-    @endpush
-
-    @push('scripts')
-        <!-- Script untuk CKEditor -->
-        <script src="{{ asset('js/ckeditor.js') }}"></script>
-        <script>
-            function initializeCKEditor() {
-                const editors = document.querySelectorAll('.ck-editor');
-                editors.forEach(editor => {
-                    if (!editor.dataset.ckeditorInitialized) {
-                        ClassicEditor
-                            .create(editor)
-                            .then(editorInstance => {
-                                editor.dataset.ckeditorInitialized = true;
-                            })
-                            .catch(error => {
-                                console.error('Error initializing CKEditor:', error);
-                            });
-                    }
-                });
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                initializeCKEditor();
-            });
-
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('show.bs.modal', () => {
-                    initializeCKEditor();
-                });
-
-                modal.addEventListener('hidden.bs.modal', () => {
-                    const editors = document.querySelectorAll('.ck-editor');
-                    editors.forEach(editor => {
-                        if (editor.dataset.ckeditorInitialized) {
-                            editor.dataset.ckeditorInitialized = false;
-                            editor.nextSibling.innerHTML = ''; // Clear editor instance
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <!-- SweetAlert2 untuk form submission -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                // Function to handle form submission
-                document.getElementById('profilForm').addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    // Perform form submission with AJAX
-                    let form = this;
-                    let formData = new FormData(form);
-
-                    fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Show success alert
-                                Swal.fire({
-                                    position: 'top-end',
-                                    icon: 'success',
-                                    title: 'Your work has been saved',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(() => {
-                                    // Redirect or reload page if needed
-                                    window.location.reload();
-                                });
-                            } else {
-                                // Show error alert
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops...',
-                                    text: 'Something went wrong!',
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            // Show error alert
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Something went wrong!',
-                            });
-                        });
-                });
-            });
-        </script>
-    @endpush
 @endsection
