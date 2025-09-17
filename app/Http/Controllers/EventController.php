@@ -84,6 +84,17 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi: tidak boleh memilih tanggal mulai di masa lalu
+        $request->validate([
+            'tgl_mulai' => ['required', 'date', 'after_or_equal:today'],
+            'tgl_berakhir' => ['required', 'date', 'after_or_equal:tgl_mulai'],
+            'nama_event' => ['required', 'string'],
+            'biaya_regis' => ['required'],
+        ], [
+            'tgl_mulai.after_or_equal' => 'Tanggal mulai tidak boleh sebelum hari ini.',
+            'tgl_berakhir.after_or_equal' => 'Tanggal berakhir harus sama atau setelah tanggal mulai.',
+        ]);
+
         // if (!$request->has('status')) {
         //     $request->merge([
         //         'status' => 'Draft'
@@ -130,6 +141,15 @@ class EventController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Validasi: tidak boleh mengubah tanggal mulai menjadi tanggal di masa lalu
+        $request->validate([
+            'tgl_mulai' => ['required', 'date', 'after_or_equal:today'],
+            'tgl_berakhir' => ['required', 'date', 'after_or_equal:tgl_mulai'],
+        ], [
+            'tgl_mulai.after_or_equal' => 'Tanggal mulai tidak boleh sebelum hari ini.',
+            'tgl_berakhir.after_or_equal' => 'Tanggal berakhir harus sama atau setelah tanggal mulai.',
+        ]);
+
         // if (!$request->has('status')) {
         //     $request->merge([
         //         'status' => 'Draft'

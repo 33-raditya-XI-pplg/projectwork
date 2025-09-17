@@ -667,22 +667,15 @@
                 dropdownParent: $(modalElement)
             });
 
-            // Saat dropdown dibuka...
             $this.on('select2:open', function() {
 
-                // --- [BAGIAN BARU - FIX ALTERNATIF DENGAN JS] ---
-                // Cari panel dropdown yang sedang terbuka
                 const dropdown = document.querySelector('.select2-dropdown');
 
-                // Jika panelnya memiliki class untuk tampil di atas, kita paksa hapus
-                // dan ganti dengan class untuk tampil di bawah.
                 if (dropdown && dropdown.classList.contains('select2-dropdown--above')) {
                     dropdown.classList.remove('select2-dropdown--above');
                     dropdown.classList.add('select2-dropdown--below');
                 }
-                // --- [AKHIR BAGIAN BARU] ---
 
-                // Atur placeholder (kode yang sudah ada sebelumnya)
                 setTimeout(function() {
                     document.querySelector('.select2-search__field').setAttribute('placeholder', searchPlaceholder);
                 }, 50);
@@ -699,8 +692,6 @@
     });
 });
     </script>
-    {{-- [END] Penambahan Script untuk Select2 --}}
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -714,10 +705,10 @@
             });
         });
     </script>
-    {{-- dropzone create --}}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Inisialisasi preview image
+
             const inputFile = document.querySelector('input[name="path_banner"]');
             const preview = document.getElementById('preview_image_create');
 
@@ -730,7 +721,7 @@
                     const reader = new FileReader();
 
                     reader.onload = function(e) {
-                        if (preview) { // Cek apakah preview tidak null
+                        if (preview) {
                             preview.src = e.target.result;
                             preview.style.display = 'block';
                         } else {
@@ -751,16 +742,13 @@
                 console.error('Preview image element not found');
             }
 
-
-            // Inisialisasi Dropzone
             Dropzone.autoDiscover = false;
             var myDropzone = new Dropzone(".dropzone-wrapper", {
-                url: "/event", // URL server untuk unggahan
+                url: "/event",
                 maxFilesize: 2,
                 acceptedFiles: "image/*",
                 init: function() {
                     this.on("success", function(file, response) {
-                        // Tangani response sukses
                         console.log("Upload successful");
                     });
                     this.on("error", function(file, response) {
@@ -773,26 +761,26 @@
             });
         });
     </script>
-    {{-- dropzone edit --}}
+
     <script>
         document.querySelectorAll('[id^="path_banner"]').forEach(input => {
             input.addEventListener('change', function(event) {
-                const id = this.id.split('_')[2]; // Mengambil ID dari input
+                const id = this.id.split('_')[2];
                 const preview = document.getElementById(
-                    `preview_image_edit_${id}`); // Mengambil elemen preview yang sesuai
+                    `preview_image_edit_${id}`);
                 const file = event.target.files[0];
                 const reader = new FileReader();
 
                 reader.onload = function(e) {
                     preview.src = e.target.result;
-                    preview.style.display = 'block'; // Tampilkan preview gambar
+                    preview.style.display = 'block';
                 }
 
                 if (file) {
                     reader.readAsDataURL(file);
                 } else {
                     preview.src = '';
-                    preview.style.display = 'none'; // Sembunyikan gambar jika tidak ada file
+                    preview.style.display = 'none';
                 }
             });
         });
@@ -800,7 +788,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Handle tombol edit
+     
             const editLinks = document.querySelectorAll('[data-confirm-edit]');
             editLinks.forEach(function (element) {
                 element.addEventListener("click", function (event) {
@@ -846,5 +834,50 @@
         var myNumeral = numeral(1000);
 
         var value = myNumeral.value();
+    </script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${yyyy}-${mm}-${dd}`;
+
+            const createStart = document.querySelector('#add input[name="tgl_mulai"]');
+            const createEnd = document.querySelector('#add input[name="tgl_berakhir"]');
+            if (createStart) createStart.setAttribute('min', todayStr);
+            if (createEnd) createEnd.setAttribute('min', todayStr);
+
+            if (createStart && createEnd) {
+                createStart.addEventListener('change', function() {
+                    if (this.value) {
+                        createEnd.setAttribute('min', this.value);
+                        if (createEnd.value && createEnd.value < this.value) {
+                            createEnd.value = this.value;
+                        }
+                    } else {
+                        createEnd.setAttribute('min', todayStr);
+                    }
+                });
+            }
+
+            document.querySelectorAll('div[id^="edit"]').forEach(function(modal) {
+                const start = modal.querySelector('input[name="tgl_mulai"]');
+                const end = modal.querySelector('input[name="tgl_berakhir"]');
+                if (start) start.setAttribute('min', todayStr);
+                if (end) {
+
+                    end.setAttribute('min', start && start.value ? start.value : todayStr);
+                }
+                if (start && end) {
+                    start.addEventListener('change', function() {
+                        const minForEnd = this.value || todayStr;
+                        end.setAttribute('min', minForEnd);
+                        if (end.value && end.value < minForEnd) end.value = minForEnd;
+                    });
+                }
+            });
+        });
     </script>
 @endsection
