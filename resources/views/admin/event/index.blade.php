@@ -2,7 +2,7 @@
 @section('title', 'Kegiatan')
 @section('content')
     @push('style')
-       
+
 
         <style>
             .ck-editor__editable {
@@ -104,6 +104,17 @@
                                         </a>
 
                                         {{-- Tombol Edit (modal) --}}
+                                        <a href="#"
+                                            class="btn btn-info btn-sm rounded text-white mb-3"
+                                            data-confirm-edit="true"
+                                            data-bs-target="#edit{{ $row->id_event }}">
+                                            <i class="fa-regular fa-pen-to-square" style="font-size: 0.75rem; color: white;"></i>
+                                            <span class="text-white">Edit</span>
+                                        </a>
+
+
+
+
                                         <a href="#" data-bs-toggle="modal" data-bs-target="#edit{{ $row->id_event }}"
                                             class="btn btn-info btn-sm rounded text-white mb-3">
                                             <i class="fa-regular fa-pen-to-square"
@@ -668,11 +679,11 @@
 
             // Saat dropdown dibuka...
             $this.on('select2:open', function() {
-                
+
                 // --- [BAGIAN BARU - FIX ALTERNATIF DENGAN JS] ---
                 // Cari panel dropdown yang sedang terbuka
                 const dropdown = document.querySelector('.select2-dropdown');
-                
+
                 // Jika panelnya memiliki class untuk tampil di atas, kita paksa hapus
                 // dan ganti dengan class untuk tampil di bawah.
                 if (dropdown && dropdown.classList.contains('select2-dropdown--above')) {
@@ -680,7 +691,7 @@
                     dropdown.classList.add('select2-dropdown--below');
                 }
                 // --- [AKHIR BAGIAN BARU] ---
-                
+
                 // Atur placeholder (kode yang sudah ada sebelumnya)
                 setTimeout(function() {
                     document.querySelector('.select2-search__field').setAttribute('placeholder', searchPlaceholder);
@@ -796,6 +807,35 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle tombol edit
+            const editLinks = document.querySelectorAll('[data-confirm-edit]');
+            editLinks.forEach(function (element) {
+                element.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const targetModal = this.getAttribute("data-bs-target");
+
+                    Swal.fire({
+                        title: 'Edit data ini?',
+                        text: "Kamu akan membuka form edit.",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#aaa',
+                        confirmButtonText: 'Ya, lanjut edit'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const modal = new bootstrap.Modal(document.querySelector(targetModal));
+                            modal.show();
+                        }
+                    })
+                });
+            });
+        });
+    </script>
+
 
     <script src="
             https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/cleave.min.js
