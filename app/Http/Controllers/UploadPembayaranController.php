@@ -82,7 +82,8 @@ class UploadPembayaranController extends Controller
     })
     ->where('tb_peserta.user_id', $userId)
     ->where('tb_event.biaya_regis', '>', 0)
-    ->whereIn('tb_event.status', ['Publish'])
+    // Show events that the user is participating in and that are payable — include ongoing and finished events
+    ->whereIn('tb_event.status', ['Berlangsung', 'Selesai', 'Publish'])
     ->select(
         'tb_event_skema.id_event_skema',
         'tb_event_skema.event_id',
@@ -90,6 +91,7 @@ class UploadPembayaranController extends Controller
         'tb_event.nama_event',
         DB::raw('MAX(tb_upload_pembayaran.bukti_pembayaran) as bukti_pembayaran'),
         DB::raw('MAX(tb_upload_pembayaran.status_pembayaran) as status_pembayaran'),
+        DB::raw('MAX(tb_upload_pembayaran.alasan) as alasan'),
         'tb_event.tgl_mulai',
         'tb_event.tgl_berakhir',
         'tb_event.status'
@@ -167,6 +169,9 @@ class UploadPembayaranController extends Controller
             $upload->status_pembayaran = 'Ditolak';
             $upload->save()
 ;
+
+            // Flash alasan penolakan ke session agar user dapat melihatnya di halaman upload
+            session()->flash('payment_rejected', $upload->alasan);
 
             // Tambahkan Alert jika pembayaran ditolak
             // Alert::error('Pembayaran Ditolak', 'Pembayaran telah ditolak dan data menunggu dihapus.');

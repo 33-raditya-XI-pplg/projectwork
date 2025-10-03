@@ -19,14 +19,20 @@ class EventUsersController extends Controller
 {
     public function index(Request $request)
     {
-        $route = Route::current();
-        $route = $route->uri;
+
+    $route = Route::current();
+    $route = $route->uri;
+    $isEventUserRoute = request()->is('user/event-user*');
+    $isFollowEventRoute = request()->is('user/follow-event*');
 
         $userID = Auth::user()->id_user;
-        $isRegistered = DB::table('tb_peserta')
-            ->where('user_id', $userID)
-            // ->where('event_skema_id', $request->event_skema_id)
-            ->exists();
+
+        $registeredEventIds = DB::table('tb_peserta')
+            ->join('tb_event_skema', 'tb_peserta.event_skema_id', '=', 'tb_event_skema.id_event_skema')
+            ->where('tb_peserta.user_id', $userID)
+            ->pluck('tb_event_skema.event_id')
+            ->unique()
+            ->toArray();
 
             // dd($isRegistered);
 
@@ -34,7 +40,11 @@ class EventUsersController extends Controller
 
         $data_jenis_event = Jenis_Event::get();
         $data_tempat = Tempat::get();
-        $query = Event::query();
+
+        $query = Event::query()
+            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
+            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
+            ->select('tb_event.*', 'tb_jenis_event.nama_jenis_event', 'tb_tempat.nama_tempat');
 
         if ($request->has('tgl_mulai') && $request->tgl_mulai) {
             $query->whereDate('tb_event.tgl_mulai', '>=', Carbon::parse($request->tgl_mulai)->toDateString());
@@ -53,23 +63,31 @@ class EventUsersController extends Controller
         }
         // dd($request->all());
 
-        $data_event = $query
-            ->select('tb_event.*', 'tb_jenis_event.nama_jenis_event', 'tb_tempat.nama_tempat')
-            ->where('tb_event.visibilitas', 'publik')
-            ->whereIn('tb_event.status', ['Publish', 'Berlangsung', 'Selesai'])
-            ->join('tb_jenis_event', 'tb_event.jenis_event_id', '=', 'tb_jenis_event.id_jenis_event')
-            ->join('tb_tempat', 'tb_event.tempat_id', '=', 'tb_tempat.id_tempat')
-            ->paginate(9);
+
+        if ($isEventUserRoute) {
+            // Show both 'Publish' and 'Berlangsung' events on public listing
+            $query->where('tb_event.visibilitas', 'publik')
+                  ->whereIn('tb_event.status', ['Publish', 'Berlangsung']);
+        } elseif ($isFollowEventRoute) {
+            if (empty($registeredEventIds)) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->whereIn('tb_event.id_event', $registeredEventIds)
+                      ->whereIn('tb_event.status', ['Berlangsung', 'Selesai']);
+            }
+        }
+
+        $data_event = $query->paginate(9);
 
         $Title = 'Event';
         // dd($query->toSql(), $query->getBindings());
         // dd($data_event[0]->status);
-        if($route == 'user/event-user'){
-            // $route = 'user.event.index';
-            return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'isRegistered'));
-        }else if($route == 'user/follow-event'){
-            // $route = 'user.event.follow_event';
-            return view('user.event.follow_event', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'isRegistered'));
+        if($isEventUserRoute){
+
+            return view('user.event.index', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'registeredEventIds'));
+        }else if($isFollowEventRoute){
+
+            return view('user.event.follow_event', compact('data_event', 'data_jenis_event', 'data_tempat', 'Title', 'route', 'registeredEventIds'));
         }else{
             Alert::error('Error', 'Halaman tidak ditemukan.');
             return redirect()->back();
@@ -98,8 +116,6 @@ class EventUsersController extends Controller
         ->where('tb_event.id_event', $eventID)
         ->first();
 
-
-    // Ambil semua skema pada event beserta data peserta jika ada
     $data_skema = DB::table('tb_event_skema')
         ->join('tb_skema', 'tb_event_skema.skema_id', '=', 'tb_skema.id_skema')
         ->leftJoin('tb_peserta', function($join) use ($userID) {
@@ -129,7 +145,6 @@ class EventUsersController extends Controller
         ->groupBy('tb_event_skema.id_event_skema', 'tb_skema.nama_skema', 'tb_peserta.id_peserta', 'tb_sertifikat.id_sertifikat', 'tb_sertifikat.nomor_sertifikat', 'tb_laporan_perkembangan.id_laporan_perkembangan', 'tb_nilai_peserta.id_nilai_peserta')
         ->get();
 
-    // Kelompokkan per skema
     $data_skema = $data_skema->groupBy('id_event_skema')->map(function ($items) {
         $first = $items->first();
         return [
@@ -144,7 +159,6 @@ class EventUsersController extends Controller
         ];
     })->values();
 
-    // Untuk debugging, bisa diaktifkan
     // dd($data_skema);
 
     $banner = asset($data_event->path_banner);
@@ -166,7 +180,6 @@ class EventUsersController extends Controller
     {
         $userID = Auth::user()->id_user;
 
-        // Cek apakah sudah terdaftar
         $isRegistered = DB::table('tb_peserta')
             ->where('user_id', $userID)
             ->where('event_skema_id', $request->event_skema_id)
@@ -177,7 +190,6 @@ class EventUsersController extends Controller
             return redirect()->back();
         }
 
-        // Cek detail skema
         $eventSkema = DB::table('tb_event_skema')
             ->join('tb_event', 'tb_event_skema.event_id', '=', 'tb_event.id_event')
             ->where('id_event_skema', $request->event_skema_id)
@@ -189,7 +201,6 @@ class EventUsersController extends Controller
             return redirect()->back();
         }
 
-        // Simpan ke tabel peserta, tanpa cek status pembayaran
         $pesertaId = DB::table('tb_peserta')->insertGetId([
             'user_id' => $userID,
             'event_skema_id' => $request->event_skema_id,
@@ -197,13 +208,11 @@ class EventUsersController extends Controller
             'created_at' => now()
         ]);
 
-        // Jika event berbayar, arahkan ke halaman upload bukti pembayaran
         if ($eventSkema->biaya_regis > 0) {
             Alert::success('Berhasil Mendaftar!', 'Silakan unggah bukti pembayaran.');
-            return redirect()->route('uploadPembayaran-user.index'); // atau route ke halaman upload kamu
+            return redirect()->route('uploadPembayaran-user.index');
         }
 
-        // Jika gratis, selesai
         Alert::success('Berhasil Mendaftar!', 'Anda berhasil terdaftar.');
         return redirect()->back();
     }

@@ -103,7 +103,6 @@
         @if($data_event->count())
             @foreach ($data_event as $row)
             <div class="col">
-                @if($isRegistered)
                 <div class="card h-100">
                     <div class="img-container" id="shadow">
                         <img src="{{ asset($row->path_banner) }}" alt="">
@@ -137,7 +136,6 @@
                     </style>
                     </div>
                 </div>
-                @endif
             </div>
             @endforeach
             {!! $data_event->render('pagination::bootstrap-5') !!}

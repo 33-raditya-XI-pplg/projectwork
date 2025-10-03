@@ -101,14 +101,7 @@
     @endpush
 
     <div class="container mt-2">
-        <!-- Alert untuk pembayaran yang ditolak dari session -->
-        @if(session('payment_rejected'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Pembayaran Ditolak!</strong> {{ session('payment_rejected') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        <!-- (Session-based payment_rejected alert removed because SweetAlert is used) -->
 
         <!-- Alert untuk pembayaran yang berhasil diupload -->
         @if(session('payment_success'))
@@ -128,68 +121,27 @@
             </div>
         @endif
 
-        <!-- Alert untuk ringkasan pembayaran yang ditolak -->
+        {{-- Show per-payment rejection reasons from DB (so user sees admin's alasan) --}}
         @php
-            $hasRejectedPayment = false;
             $rejectedPayments = [];
-            foreach($upload as $row) {
-                if($row->status_pembayaran === 'Ditolak') {
-                    $hasRejectedPayment = true;
-                    $rejectedPayments[] = $row;
+            if(!empty($upload)){
+                foreach($upload as $u){
+                    if(isset($u->status_pembayaran) && $u->status_pembayaran === 'Ditolak' && !empty($u->alasan)){
+                        $rejectedPayments[] = $u;
+                    }
                 }
             }
         @endphp
 
-        @if($hasRejectedPayment)
-            <div class="alert alert-danger alert-dismissible fade show alert-rejection-summary p-3" role="alert">
-                <div class="d-flex align-items-start">
-                    <i class="fas fa-exclamation-triangle me-3 mt-1" style="font-size: 1.2rem;"></i>
-                    <div class="flex-grow-1">
-                        <h6 class="alert-heading mb-2">
-                            <i class="fas fa-ban me-1"></i>
-                            Pembayaran Ditolak ({{ count($rejectedPayments) }} item)
-                        </h6>
-                        <p class="mb-2">Terdapat pembayaran yang ditolak oleh admin. Silakan upload ulang bukti pembayaran yang sesuai untuk item berikut:</p>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="border rounded p-2 bg-light">
-                                    @foreach($rejectedPayments as $index => $rejected)
-                                        <div class="d-flex justify-content-between align-items-center py-1 {{ $index < count($rejectedPayments) - 1 ? 'border-bottom' : '' }}">
-                                            <div>
-                                                <strong class="text-danger">{{ $rejected->nama_event }}</strong>
-                                                <span class="text-muted">-</span>
-                                                <span class="text-dark">{{ $rejected->nama_skema }}</span>
-                                            </div>
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar-alt me-1"></i>
-                                                {{ date('d/m/Y', strtotime($rejected->tgl_mulai)) }}
-                                            </small>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Klik tombol "Upload Ulang" pada tabel di bawah untuk mengupload bukti pembayaran yang baru.
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <!-- Alert khusus jika ada lebih dari 3 pembayaran ditolak -->
-        @if(count($rejectedPayments) > 3)
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{-- @foreach($rejectedPayments as $rp)
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Perhatian!</strong> Anda memiliki banyak pembayaran yang ditolak.
-                Pastikan untuk mengupload bukti pembayaran yang jelas dan sesuai dengan instruksi.
+                <strong>Pembayaran Ditolak!</strong>
+                <span class="ms-2">{{ $rp->alasan }}</span>
+                <div class="mt-1"><small>{{ $rp->nama_event }} - {{ $rp->nama_skema }}</small></div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        @endif
+        @endforeach --}}
 
         <div class="tab-content" id="pills-tabContent">
             <div class="bg-white rounded-4 px-3 py-3 mb-3 shadow-lg">
@@ -434,5 +386,48 @@
                 });
             }
         };
+    </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Prepare rejected payments from server-side data
+            const rejected = @json($rejectedPayments ?? []);
+            if (Array.isArray(rejected) && rejected.length > 0) {
+                // Build a cleaner HTML block for the SweetAlert (centered)
+                let html = '<div style="text-align:center; max-height:360px; overflow:auto; padding-right:6px;">';
+                rejected.forEach(function(r) {
+                    const title = (r.nama_event ? r.nama_event : '') + (r.nama_skema ? ' — ' + r.nama_skema : '');
+                    const reason = r.alasan ? r.alasan : '-';
+                    html += '<div style="padding:10px 0; border-bottom:1px solid #eee;">';
+                    html += '<div style="font-weight:600; color:#222; margin-bottom:6px; text-align:center;">' + escapeHtml(title) + '</div>';
+                    html += '<div style="color:#6c757d; white-space:pre-wrap; text-align:center;">' + escapeHtml(reason) + '</div>';
+                    html += '</div>';
+                });
+                html += '</div>';
+
+                Swal.fire({
+                    title: 'Pembayaran Ditolak',
+                    html: html,
+                    icon: 'error',
+                    width: '620px',
+                    showCloseButton: true,
+                    confirmButtonText: 'Tutup',
+                    allowOutsideClick: false
+                });
+
+                // Helper to escape HTML to avoid rendering issues
+                function escapeHtml(text) {
+                    if (!text) return '';
+                    return String(text)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                }
+            }
+        });
     </script>
 @endsection

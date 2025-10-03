@@ -102,7 +102,6 @@
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @if($data_event->count())
             @foreach ($data_event as $row)
-            @if($row->status == 'Publish')
             <div class="col">
 
                 <div class="card h-100">
@@ -137,10 +136,9 @@
                         }
                     </style>
                     </div>
-                </div>
-            </div>
-            @endif
-            @endforeach
+                        </div>
+                    </div>
+                    @endforeach
             {!! $data_event->render('pagination::bootstrap-5') !!}
 
         @else

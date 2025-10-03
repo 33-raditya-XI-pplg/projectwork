@@ -19,7 +19,7 @@ class LaporanPerkembanganController extends Controller
     public function index()
     {
         $currentRoute = Route::current();
-        $events = Event::whereIn('status', ['Selesai', 'berlangsung'])->get();
+        $events = Event::whereIn('status', ['Selesai', 'Berlangsung'])->get();
         // dd($currentRoute);
         // $laporan = LaporanPerkembangan::all();
         $kemampuan = kemampuan_dasar::all();

@@ -85,7 +85,7 @@
                                             <input type="text" class="form-control" id="tgl_selesai"
                                                 placeholder="dd-mm-yyyy" disabled>
                                         </div>
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <label for="list_penguji" class="form-label">Daftar Penguji</label>
                                             <ol id="list_penguji" class="list-group list-group-numbered">
                                                 <!-- List Penguji Here -->
@@ -95,7 +95,7 @@
                                                     style="display: none;">Tampilkan Banyak</a>
                                                 <a href="#" id="btnSedikit" class="text-primary mt-2"
                                                     style="display: none;">Tampilkan Sedikit</a>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -324,7 +324,7 @@
                     .catch(error => { console.error(`Error initializing editor for #${id}:`, error); });
             });
         }
-        
+
         // ================== FUNGSI UTAMA (FETCH DATA & RENDER) ==================
         function fetchDetailData(selectedSkemaID, selectedEventID) {
             Swal.fire({
@@ -365,7 +365,7 @@
                     }
                     btnSelengkapnya.off('click').on('click', e => { e.preventDefault(); renderPenguji(data_penguji.event_skema_menguji); btnSelengkapnya.hide(); btnSedikit.show(); });
                     btnSedikit.off('click').on('click', e => { e.preventDefault(); renderPenguji(data_penguji.event_skema_menguji.slice(0, 2)); btnSedikit.hide(); btnSelengkapnya.show(); });
-                    
+
                     if ($.fn.DataTable.isDataTable('#example')) {
                         $('#example').DataTable().destroy();
                     }
@@ -392,7 +392,7 @@
             eventID = $(this).val();
             $('#search_btn').prop('disabled', true);
             $('#skema_select').prop('disabled', true).empty().append('<option></option>').trigger('change');
-            
+
             if (eventID) {
                 Swal.fire({ title: 'Memuat Skema...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
                 $.ajax({
