@@ -65,15 +65,16 @@ class EventUsersController extends Controller
 
 
         if ($isEventUserRoute) {
-            // Show both 'Publish' and 'Berlangsung' events on public listing
+                // Show only 'Publish' events on public listing
             $query->where('tb_event.visibilitas', 'publik')
-                  ->whereIn('tb_event.status', ['Publish', 'Berlangsung']);
+                  ->where('tb_event.status', 'Publish');
         } elseif ($isFollowEventRoute) {
             if (empty($registeredEventIds)) {
                 $query->whereRaw('1 = 0');
             } else {
+                // For followed/registered events, show events in any of these statuses
                 $query->whereIn('tb_event.id_event', $registeredEventIds)
-                      ->whereIn('tb_event.status', ['Berlangsung', 'Selesai']);
+                      ->whereIn('tb_event.status', ['Publish', 'Berlangsung', 'Selesai']);
             }
         }
 

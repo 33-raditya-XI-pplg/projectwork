@@ -188,7 +188,8 @@
             $('#export-form').submit();
         }
 
-        function printCertificate(id) {
+        // Make this function global so inline onclick handlers can call it
+        window.printCertificate = function(id) {
             Swal.fire({
                 title: 'Memuat Pratinjau...', text: 'Sedang memproses sertifikat!',
                 allowOutsideClick: false,
@@ -201,8 +202,8 @@
                 // Swal ditutup oleh event listener 'focus'
                 this.contentWindow.print();
             };
-        }
-        
+        };
+
         function formatTimestamps(dateString) {
             if (!dateString) return '-';
             let date = new Date(dateString);
@@ -230,11 +231,11 @@
                         Swal.fire('Error', 'Tidak ada respons dari server.', 'error');
                         return;
                     }
-                    
+
                     const { data_skema, data_peserta_tanpa_sertifikat, data_sertifikat, total_peserta, data_peserta_tanpa_nilai } = response;
                     const peserta_tanpa_nilai_count = data_peserta_tanpa_nilai.length;
                     const peserta_tanpa_sertifikat_count = data_peserta_tanpa_sertifikat.length;
-                    
+
                     event_skemaID = data_skema.id_event_skema;
                     $('#nama_skema').val(data_skema.nama_skema);
                     $('#event_skema_id').val(event_skemaID);
@@ -283,10 +284,10 @@
                         const num = index + 1;
                         const masaBerlaku = row.masa_berlaku || '-';
                         const buttonAction = `
-                            <button type="button" class="btn btn-success btn-sm me-1 text-white rounded mb-1" onclick="printCertificate(${row.id_peserta})"><i class="fa-solid fa-print"></i> Lihat</button>
+                            <button type="button" class="btn btn-success btn-sm me-1 text-white rounded mb-1 print_sertifikat_btn" data-id="${row.id_peserta}"><i class="fa-solid fa-print"></i> Lihat</button>
                             <button type="button" class="btn btn-info btn-sm edit_sertifikat_btn me-1 text-white rounded mb-1" data-id="${row.id_peserta}"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
                             <button type="button" class="btn btn-danger btn-sm delete_sertifikat_btn rounded mb-1" data-id="${row.id_peserta}"><i class="fa-regular fa-trash-can"></i> Delete</button>`;
-                        
+
                         $('#example tbody').append(`
                             <tr>
                                 <td><input type="checkbox" name="selected_ids[]" class="sertifikat_checkbox" value="${row.id_peserta}"></td>
@@ -334,7 +335,7 @@
             skemaID = $(this).val();
             $('#search_btn').prop('disabled', !skemaID);
         });
-        
+
         $('#peserta_select').on('change', function() {
             pesertaID = $(this).val();
             $('#store_sertifikat_btn[value="1"]').prop('disabled', !pesertaID);
@@ -356,14 +357,14 @@
             const btnIdentifier = $(this).val();
             const createdBy = $('#created_by').val();
             const isUpdate = btnIdentifier == 0;
-            
+
             const data = {
                 event_skemaID: event_skemaID,
                 tgl_terbit: isUpdate ? $('#edit_tgl_terbit').val() : $('#create_tgl_terbit').val(),
                 tgl_berakhir: isUpdate ? $('#edit_tgl_berakhir').val() : $('#create_tgl_berakhir').val(),
                 createdBy: createdBy
             };
-            
+
             if (isUpdate) {
                 data.pesertaID = pesertaID;
             } else {
@@ -373,7 +374,7 @@
             const url = isUpdate ? '/sertifikat/updateSertifikatData' : '/sertifikat/storeSertifikatData';
             const successMsg = `Sertifikat berhasil ${isUpdate ? 'diperbarui' : 'ditambahkan'}.`;
             const errorMsg = `Sertifikat gagal ${isUpdate ? 'diperbarui' : 'ditambahkan'}.`;
-            
+
             $.ajax({
                 url: url, type: 'POST',
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
@@ -424,6 +425,13 @@
             });
         });
 
+        // Delegated handler for printing certificate (replaces inline onclick)
+        $(document).on('click', '.print_sertifikat_btn', function(e) {
+            e.preventDefault();
+            const id = $(this).data('id');
+            if (id) window.printCertificate(id);
+        });
+
         // Event handler untuk checkbox
         $('#checkAll').on('click', function() {
             $('.sertifikat_checkbox').prop('checked', this.checked).trigger('change');
@@ -433,7 +441,7 @@
             const anyChecked = $('.sertifikat_checkbox:checked').length > 0;
             $('#cetak_sertifikat_btn').prop('disabled', !anyChecked);
         });
-        
+
         // Event listener untuk menutup swal loading setelah cetak
         window.addEventListener('focus', function() {
             if (Swal.isVisible() && Swal.isLoading()) {

@@ -30,9 +30,23 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $row->nama_lengkap }}</td>
                                     {{-- @foreach($row->keterangan as $keterangan) --}}
-                                    <td>{{ $row->keterangan[1] }}</td>
+                                    @php
+                                        $keteranganValue = null;
+                                        $raw = $row->keterangan ?? null;
+
+                                        if (is_array($raw)) {
+                                            $keteranganValue = $raw[1] ?? $raw[0] ?? null;
+                                        } elseif (is_string($raw)) {
+                                            $decoded = json_decode($raw, true);
+                                            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                                                $keteranganValue = $decoded[1] ?? $decoded[0] ?? null;
+                                            } else {y
+                                                $keteranganValue = $raw;
+                                            }
+                                        }
+                                    @endphp
+                                    <td>{{ $keteranganValue ?? 'Tidak ada keterangan' }}</td>
                                     {{-- @endforeach --}}
-                                    {{-- <td>{{ $row->keterangan ?? 'Tidak ada keterangan' }}</td> --}}
                                     <td>{{ $row->tanggal_penilaian ?? 'Tanggal tidak tersedia' }}</td>
                                     <td class="text-center">
                                         <div class="d-flex flex-column gap-2 px-3">

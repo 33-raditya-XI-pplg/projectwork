@@ -398,16 +398,16 @@ class SertifikatController extends Controller
         ]);
     }
 
-    public function destroySertifikatData(Request $request)
+    public function destroySertifikatData($id)
     {
-        $pesertaID = $request->pesertaID;
+        $pesertaID = $id;
 
         try {
             Sertifikat::where('peserta_id', $pesertaID)->delete();
 
-            return response()->json(['message' => 'Nilai peserta berhasil dihapus'], 200);
+            return response()->json(['message' => 'Sertifikat peserta berhasil dihapus'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat menghapus nilai peserta'], 500);
+            return response()->json(['message' => 'Terjadi kesalahan saat menghapus sertifikat peserta'], 500);
         }
     }
 

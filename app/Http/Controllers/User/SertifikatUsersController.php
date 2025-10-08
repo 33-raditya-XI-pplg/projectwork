@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use Log;
 use Exception;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 use Illuminate\Support\Facades\DB;
+
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -168,7 +168,7 @@ public function cetakByPeserta($peserta_id)
             // Validasi file background
             $templateBg = public_path($data_sertifikat_peserta[0]->path_bg);
             if (!file_exists($templateBg)) {
-                \Log::error('Template background not found: ' . $templateBg);
+                Log::error('Template background not found: ' . $templateBg);
                 return response()->view('errors.500', ['message' => 'Template sertifikat tidak ditemukan'], 500);
             }
 
